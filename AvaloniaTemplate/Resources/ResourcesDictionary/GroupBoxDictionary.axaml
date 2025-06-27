@@ -1,0 +1,117 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					x:ClassModifier="internal"
+					>
+
+	<!-- PreViewElement -->
+	<Design.PreviewWith>
+		<Border Padding="20" Width="250">
+			<StackPanel Spacing="15">
+				<HeaderedContentControl Header="Заголовок">
+					<Button Content="Внутренний элемент" />
+				</HeaderedContentControl>
+
+				<HeaderedContentControl Theme="{StaticResource HeaderWithCheckBox}" Header="Заголовок">
+					<Button Content="Внутренний элемент" />
+				</HeaderedContentControl>
+			</StackPanel>
+		</Border>
+	</Design.PreviewWith>
+
+	<!-- HeaderedContentControl -->
+	<ControlTheme x:Key="{x:Type HeaderedContentControl}" TargetType="HeaderedContentControl">
+		<Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+		<Setter Property="Background" Value="{DynamicResource SystemRegionBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
+		<Setter Property="CornerRadius" Value="5" />
+		<Setter Property="Padding" Value="3" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Background="{TemplateBinding Background}"
+						Padding="{TemplateBinding Padding}"
+						Margin="0,10,0,0"
+						>
+
+					<Grid RowDefinitions="auto *" ColumnDefinitions="auto *">
+						<ContentPresenter Name="PART_HeaderPresenter"
+										  FontFamily="Verdana"
+										  FontSize="12"
+										  FontWeight="Bold"
+										  Padding="7,0,7,0"
+										  Margin="5,-13,0,10"
+										  Background="{TemplateBinding Background}"
+										  Content="{TemplateBinding Header}"
+										  RecognizesAccessKey="True"
+										  ContentTemplate="{TemplateBinding HeaderTemplate}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  Grid.Row="0" />
+						<ContentPresenter Name="PART_ContentPresenter"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Content="{TemplateBinding Content}"
+										  RecognizesAccessKey="True"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  Grid.Row="1"
+										  Margin="1,0,1,1"
+										  Grid.ColumnSpan="2"/>
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+
+	<!-- HeaderWithCheckBox -->
+	<ControlTheme x:Key="HeaderWithCheckBox" TargetType="HeaderedContentControl">
+		<Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}" />
+		<Setter Property="Background" Value="{DynamicResource SystemRegionBrush}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource TextControlBorderBrush}" />
+		<Setter Property="BorderThickness" Value="{DynamicResource TextControlBorderThemeThickness}" />
+		<Setter Property="CornerRadius" Value="5" />
+		<Setter Property="Padding" Value="3" />
+		<Setter Property="Template">
+			<ControlTemplate>
+				<Border BorderBrush="{TemplateBinding BorderBrush}"
+						BorderThickness="{TemplateBinding BorderThickness}"
+						CornerRadius="{TemplateBinding CornerRadius}"
+						Background="{TemplateBinding Background}"
+						Padding="{TemplateBinding Padding}"
+						Margin="0,10,0,0"
+						>
+
+					<Grid RowDefinitions="auto *" ColumnDefinitions="auto *">
+						<ContentPresenter Name="PART_HeaderPresenter"
+										  FontFamily="Verdana"
+										  FontSize="12"
+										  FontWeight="Bold"
+										  Padding="7,0,7,0"
+										  Margin="5,-13,0,10"
+										  Background="{TemplateBinding Background}"
+										  Content="{TemplateBinding Header}"
+										  RecognizesAccessKey="True"
+										  ContentTemplate="{TemplateBinding HeaderTemplate}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  />
+
+						<ContentPresenter Name="PART_ContentPresenter"
+										  ContentTemplate="{TemplateBinding ContentTemplate}"
+										  Content="{TemplateBinding Content}"
+										  RecognizesAccessKey="True"
+										  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+										  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+										  Grid.Row="1"
+										  Margin="1,0,1,1"
+										  Grid.ColumnSpan="2"
+										  />
+					</Grid>
+				</Border>
+			</ControlTemplate>
+		</Setter>
+	</ControlTheme>
+	
+</ResourceDictionary>
