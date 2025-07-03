@@ -6,10 +6,8 @@ namespace AvaloniaTemplate.ViewModels
     {
         public MainWindowViewModel()
         {
-
             VersionApp = App.Version;
         }
-
 
         #region Текущая версия проекта
         private string versionApp;
