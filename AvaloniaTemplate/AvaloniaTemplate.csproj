@@ -27,4 +27,10 @@
     <PackageReference Include="ExcelDataReader" Version="3.7.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="CommonLib">
+      <HintPath>..\..\..\CommonLib\CommonLib\CommonLib\bin\Release\net8.0\CommonLib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>
