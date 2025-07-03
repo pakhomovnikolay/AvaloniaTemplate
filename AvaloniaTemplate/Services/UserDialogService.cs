@@ -118,7 +118,7 @@ namespace AvaloniaTemplate.Services
         public void OpenMainWindow()
         {
             if (pMainWindow is { } window) { window.Show(); return; }
-            window = App.GetServices().GetRequiredService<MainWindow>();
+            window = App.Services.GetRequiredService<MainWindow>();
             window.Closing += (s, e) => CloseMainWindow(e);
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterScreen;

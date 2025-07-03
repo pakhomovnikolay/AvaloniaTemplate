@@ -6,7 +6,21 @@ namespace AvaloniaTemplate.ViewModels
     {
         public MainWindowViewModel()
         {
-        
+
+            VersionApp = App.Version;
         }
+
+
+        #region Текущая версия проекта
+        private string versionApp;
+        /// <summary>
+        /// Текущая версия проекта
+        /// </summary>
+        public string VersionApp
+        {
+            get => versionApp;
+            set => SetProperty(ref versionApp, value);
+        }
+        #endregion
     }
 }

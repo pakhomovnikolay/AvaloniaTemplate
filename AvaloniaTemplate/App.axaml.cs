@@ -7,6 +7,7 @@ using AvaloniaTemplate.Services.Registrations;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace AvaloniaTemplate
 {
@@ -20,7 +21,19 @@ namespace AvaloniaTemplate
         /// Получить провайдера сервисов
         /// </summary>
         /// <returns></returns>
-        public static IServiceProvider GetServices() => services; 
+        public static IServiceProvider Services => services;
+        #endregion
+
+        #region Получить текущую версию проекта
+        /// <summary>
+        /// Получить текущую версию проекта
+        /// </summary>
+        /// <returns></returns>
+        public static string Version => $"Версия: v.{Assembly
+            .GetExecutingAssembly()
+            .GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version ??
+            Assembly.GetExecutingAssembly().GetName().Version?.ToString() ??
+            "0.0.0.0"}";
         #endregion
 
         public override void Initialize()
