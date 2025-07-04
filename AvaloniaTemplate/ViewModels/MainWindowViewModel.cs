@@ -4,6 +4,10 @@ namespace AvaloniaTemplate.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+        #region Конструктор
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public MainWindowViewModel()
         {
             Title = "AvaloniaTemplate";
@@ -13,7 +17,8 @@ namespace AvaloniaTemplate.ViewModels
 
             AppVersion = App.AppVersion;
             AppStatus = App.AppStatus;
-        }
+        } 
+        #endregion
 
         #region Текущая версия проекта
         private string appVersion;
