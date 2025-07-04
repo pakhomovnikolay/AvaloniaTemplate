@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaTemplate.Models.Enums.MessageTypes
 {
-    public enum MessageBoxButton
+    public enum MessageBoxButtonType
     {
         OK = 0,
         //

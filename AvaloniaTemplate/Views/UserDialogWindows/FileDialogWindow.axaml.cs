@@ -22,7 +22,7 @@ public partial class FileDialogWindow : Window
     /// Открыть окно выбора файла
     /// </summary>
     /// <returns></returns>
-    public static string SelectFile(OpenFileDialogOption openFileDialogOption, IStorageProvider provider)
+    public static string SelectFile(OpenFileDialogOptionType openFileDialogOption, IStorageProvider provider)
     {
         var SelectedFilePath = "";
         if (provider is not null)
@@ -67,7 +67,7 @@ public partial class FileDialogWindow : Window
     /// Открыть окно выбора пути
     /// </summary>
     /// <returns></returns>
-    public static string SelectFolder(OpenFileDialogOption openFileDialogOption, IStorageProvider provider = default)
+    public static string SelectFolder(OpenFileDialogOptionType openFileDialogOption, IStorageProvider provider = default)
     {
         var SelectedPath = "";
         if (provider is not null)

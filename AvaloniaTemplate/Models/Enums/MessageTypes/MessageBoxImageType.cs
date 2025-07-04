@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaTemplate.Models.Enums.MessageTypes
 {
-    public enum MessageBoxImage
+    public enum MessageBoxImageType
     {
         None = 0,
         //

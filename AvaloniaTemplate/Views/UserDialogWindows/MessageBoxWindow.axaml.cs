@@ -19,9 +19,9 @@ public partial class MessageBox : Window
 
     #region Поля класса
     private string Message { set => this.FindControl<TextBlock>("Contents").Text = value; }
-    private MessageBoxButton ButtonType { get; set; }
-    private MessageBoxImage ImageType { get; set; }
-    private MessageBoxResult ResultType { get; set; }
+    private MessageBoxButtonType ButtonType { get; set; }
+    private MessageBoxImageType ImageType { get; set; }
+    private MessageBoxResultType ResultType { get; set; }
     #endregion
 
     #region Метод вызова окна выдачи сообщений
@@ -34,7 +34,7 @@ public partial class MessageBox : Window
     /// <param name="messageBoxImagType">Конфигурация изображения</param>
     /// <param name="messageBoxResultType">Конфигурация результата диалога</param>
     /// <returns></returns>
-    public static MessageBoxResult Show(string title, string message, MessageBoxButton messageBoxButtonType, MessageBoxImage messageBoxImagType, MessageBoxResult messageBoxResultType, Window ownerWindow)
+    public static MessageBoxResultType Show(string title, string message, MessageBoxButtonType messageBoxButtonType, MessageBoxImageType messageBoxImagType, MessageBoxResultType messageBoxResultType, Window ownerWindow)
     {
         var dialog = new MessageBox
         {
@@ -47,7 +47,7 @@ public partial class MessageBox : Window
         };
 
         dialog.ButtonPanel = dialog.FindControl<StackPanel>("Buttons");
-        var tcs = new TaskCompletionSource<MessageBoxResult>();
+        var tcs = new TaskCompletionSource<MessageBoxResultType>();
 
         dialog.Closed += delegate { tcs.TrySetResult(dialog.ResultType); };
 
@@ -73,21 +73,21 @@ public partial class MessageBox : Window
             LoadImageSourceFromResource();
             switch (ButtonType)
             {
-                case MessageBoxButton.OKCancel:
-                    AddButton("Ок", MessageBoxResult.OK);
-                    AddButton("Отмена", MessageBoxResult.Cancel, true);
+                case MessageBoxButtonType.OKCancel:
+                    AddButton("Ок", MessageBoxResultType.OK);
+                    AddButton("Отмена", MessageBoxResultType.Cancel, true);
                     break;
-                case MessageBoxButton.YesNoCancel:
-                    AddButton("Да", MessageBoxResult.Yes);
-                    AddButton("Нет", MessageBoxResult.No);
-                    AddButton("Отмена", MessageBoxResult.Cancel, true);
+                case MessageBoxButtonType.YesNoCancel:
+                    AddButton("Да", MessageBoxResultType.Yes);
+                    AddButton("Нет", MessageBoxResultType.No);
+                    AddButton("Отмена", MessageBoxResultType.Cancel, true);
                     break;
-                case MessageBoxButton.YesNo:
-                    AddButton("Да", MessageBoxResult.Yes);
-                    AddButton("Нет", MessageBoxResult.No, true);
+                case MessageBoxButtonType.YesNo:
+                    AddButton("Да", MessageBoxResultType.Yes);
+                    AddButton("Нет", MessageBoxResultType.No, true);
                     break;
                 default:
-                    AddButton("Ок", MessageBoxResult.OK, true);
+                    AddButton("Ок", MessageBoxResultType.OK, true);
                     break;
             }
         }
@@ -101,7 +101,7 @@ public partial class MessageBox : Window
     /// <param name="caption"></param>
     /// <param name="r"></param>
     /// <param name="IsDefault"></param>
-    private void AddButton(string caption, MessageBoxResult r, bool IsDefault = false)
+    private void AddButton(string caption, MessageBoxResultType r, bool IsDefault = false)
     {
         var btn = new Button { Content = caption };
         btn.Click += (_, _) =>
@@ -128,10 +128,10 @@ public partial class MessageBox : Window
     {
         var icon = ImageType switch
         {
-            MessageBoxImage.Question => (Image)Application.Current.FindResource("MessageBoxImageQuestion"),
-            MessageBoxImage.Information => (Image)Application.Current.FindResource("MessageBoxImageInformation"),
-            MessageBoxImage.Warning => (Image)Application.Current.FindResource("MessageBoxImageWarning"),
-            MessageBoxImage.Error => (Image)Application.Current.FindResource("MessageBoxImageError"),
+            MessageBoxImageType.Question => (Image)Application.Current.FindResource("MessageBoxImageQuestion"),
+            MessageBoxImageType.Information => (Image)Application.Current.FindResource("MessageBoxImageInformation"),
+            MessageBoxImageType.Warning => (Image)Application.Current.FindResource("MessageBoxImageWarning"),
+            MessageBoxImageType.Error => (Image)Application.Current.FindResource("MessageBoxImageError"),
             _ => (Image)Application.Current.FindResource("MessageBoxImageNone"),
         };
 

@@ -78,7 +78,7 @@ namespace AvaloniaTemplate.Services
             Window Owner = null,
             IStorageProvider provider = default)
         {
-            return FileDialogWindow.SelectFile(new OpenFileDialogOption
+            return FileDialogWindow.SelectFile(new OpenFileDialogOptionType
             {
                 Title = Title,
                 Owner = Owner,
@@ -96,7 +96,7 @@ namespace AvaloniaTemplate.Services
             Window Owner = null,
             IStorageProvider provider = default)
         {
-            return FileDialogWindow.SelectFolder(new OpenFileDialogOption
+            return FileDialogWindow.SelectFolder(new OpenFileDialogOptionType
             {
                 Title = Title,
                 Owner = Owner,
@@ -134,7 +134,7 @@ namespace AvaloniaTemplate.Services
             if (pMainWindow is null) return;
 
             var msg = "Вы действительно хотите выйти?";
-            if (!SendMessage("Внимание!", msg, pMainWindow, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.Yes))
+            if (!SendMessage("Внимание!", msg, pMainWindow, MessageBoxButtonType.YesNo, MessageBoxImageType.Warning, MessageBoxResultType.Yes))
             {
                 e.Cancel = true;
                 return;
@@ -154,9 +154,9 @@ namespace AvaloniaTemplate.Services
             string Title,
             string Message,
             Window ownerWindow,
-            MessageBoxButton ButtonType = MessageBoxButton.OK,
-            MessageBoxImage ImageType = MessageBoxImage.Information,
-            MessageBoxResult ResultType = MessageBoxResult.OK)
+            MessageBoxButtonType ButtonType = MessageBoxButtonType.OK,
+            MessageBoxImageType ImageType = MessageBoxImageType.Information,
+            MessageBoxResultType ResultType = MessageBoxResultType.OK)
         => MessageBox.Show(Title, Message, ButtonType, ImageType, ResultType, ownerWindow) == ResultType; 
         #endregion
     }

@@ -19,9 +19,9 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="ResultType">Требуемый результат события от пользователя</param>
         /// <returns></returns>
         bool SendMessage(string Title, string Message, Window ownerWindow,
-            MessageBoxButton ButtonType = MessageBoxButton.OK,
-            MessageBoxImage ImageType = MessageBoxImage.Information,
-            MessageBoxResult ResultType = MessageBoxResult.OK
+            MessageBoxButtonType ButtonType = MessageBoxButtonType.OK,
+            MessageBoxImageType ImageType = MessageBoxImageType.Information,
+            MessageBoxResultType ResultType = MessageBoxResultType.OK
             );
         #endregion
 

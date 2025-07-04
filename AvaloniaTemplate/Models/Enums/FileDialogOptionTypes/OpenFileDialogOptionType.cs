@@ -3,7 +3,7 @@ using Avalonia.Platform.Storage;
 
 namespace AvaloniaTemplate.Models.Enums.FileDialogOptionTypes
 {
-    public class OpenFileDialogOption
+    public class OpenFileDialogOptionType
     {
         /// <summary>
         /// Заголовк окна

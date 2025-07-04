@@ -1,6 +1,6 @@
 ﻿namespace AvaloniaTemplate.Models.Enums.MessageTypes
 {
-    public enum MessageBoxResult
+    public enum MessageBoxResultType
     {
         //
         // Сводка:
