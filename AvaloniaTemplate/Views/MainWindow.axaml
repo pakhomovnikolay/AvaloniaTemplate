@@ -6,7 +6,14 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="AvaloniaTemplate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Title="AvaloniaTemplate">
+		Icon="/Assets/AppImage.ico"
+		CanResize="True"
+		WindowStartupLocation="CenterScreen"
+		
+		Title="{Binding Title}"
+		Height="{Binding WindowHeight}"
+		Width="{Binding WindowWidth}"
+		>
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>

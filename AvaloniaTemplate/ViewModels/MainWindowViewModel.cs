@@ -6,19 +6,45 @@ namespace AvaloniaTemplate.ViewModels
     {
         public MainWindowViewModel()
         {
-            VersionApp = App.Version;
+            Title = "AvaloniaTemplate";
+            WindowHeight = 750;
+            WindowWidth = 1000;
+            App.ChangeAppStatus += ChangeAppStatus;
+
+            AppVersion = App.AppVersion;
+            AppStatus = App.AppStatus;
         }
 
         #region Текущая версия проекта
-        private string versionApp;
+        private string appVersion;
         /// <summary>
         /// Текущая версия проекта
         /// </summary>
-        public string VersionApp
+        public string AppVersion
         {
-            get => versionApp;
-            set => SetProperty(ref versionApp, value);
+            get => appVersion;
+            set => SetProperty(ref appVersion, value);
         }
+        #endregion
+
+        #region Текущее состояние проекта
+        private string appStatus;
+        /// <summary>
+        /// Текущее состояние проекта
+        /// </summary>
+        public string AppStatus
+        {
+            get => appStatus;
+            set => SetProperty(ref appStatus, value);
+        }
+        #endregion
+
+        #region Событие изменения состояние приложения
+        /// <summary>
+        /// Событие изменения состояние приложения
+        /// </summary>
+        /// <param name="settings"></param>
+        private void ChangeAppStatus(string status) => AppStatus = status;
         #endregion
     }
 }
