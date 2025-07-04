@@ -71,15 +71,15 @@ namespace AvaloniaTemplate
         /// Установить статус приложения
         /// </summary>
         /// <param name="content"></param>
-        public static void SetAppStatus(string content)
+        public static void SetAppStatus(string content = "Готов")
         {
-            var status = "Текущее состояние:";
-            status += (string.IsNullOrEmpty(status) ? "Готов" : status);
+            var status = "Текущее состояние: ";
+            status += (string.IsNullOrEmpty(content) ? "Готов" : content);
 
-            if (appStatus != content)
+            if (appStatus != status)
             {
-                appStatus = content;
-                ChangeAppStatus?.Invoke(content);
+                appStatus = status;
+                ChangeAppStatus?.Invoke(status);
             }
         }
         #endregion
@@ -99,6 +99,7 @@ namespace AvaloniaTemplate
         {
             if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime app)
             {
+                SetAppStatus();
                 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
                 var Services = new ServiceCollection();
                 Services.AddServices();
