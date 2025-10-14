@@ -136,8 +136,8 @@
 										   DockPanel.Dock="Top"
 											   />
 								<ScrollViewer Name="PART_ScrollViewer"
-											  HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
-											  VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}"
+											  HorizontalScrollBarVisibility="Hidden"
+											  VerticalScrollBarVisibility="Hidden"
 											  IsScrollChainingEnabled="{TemplateBinding (ScrollViewer.IsScrollChainingEnabled)}"
 											  AllowAutoHide="{TemplateBinding (ScrollViewer.AllowAutoHide)}"
 											  BringIntoViewOnFocusChange="{TemplateBinding (ScrollViewer.BringIntoViewOnFocusChange)}">
