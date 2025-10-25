@@ -131,10 +131,11 @@ namespace AvaloniaTemplate.Services
         #region Событие закрытия главного окна
         public void CloseMainWindow(WindowClosingEventArgs e)
         {
-            if (pMainWindow is null) return;
+            var findResource = App.Current.FindResource("RequestConfirmCloseBeforeClosing");
+            if (pMainWindow is null || findResource is null || findResource is not bool requestConfirm) return;
 
             var msg = "Вы действительно хотите выйти?";
-            if (!SendMessage("Внимание!", msg, pMainWindow, MessageBoxButtonType.YesNo, MessageBoxImageType.Warning, MessageBoxResultType.Yes))
+            if (requestConfirm && !SendMessage("Внимание!", msg, pMainWindow, MessageBoxButtonType.YesNo, MessageBoxImageType.Warning, MessageBoxResultType.Yes))
             {
                 e.Cancel = true;
                 return;

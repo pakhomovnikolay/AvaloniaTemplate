@@ -25,6 +25,7 @@
 
 
 	<!-- Add Resources Here -->
+	<x:Boolean x:Key="RequestConfirmCloseBeforeClosing">false</x:Boolean>
 	<x:Double x:Key="TextControlThemeMinHeight">15</x:Double>
 	<x:Double x:Key="TextControlThemeMinWidth">15</x:Double>
 	<Thickness x:Key="TextControlThemePadding">5,6,6,5</Thickness>

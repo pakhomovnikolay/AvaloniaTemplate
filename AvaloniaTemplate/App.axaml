@@ -26,6 +26,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/ConvertersDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/DataGridDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/GroupBoxDictionary.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/TabControlDictionary.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
