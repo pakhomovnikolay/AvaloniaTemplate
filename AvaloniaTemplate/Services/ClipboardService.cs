@@ -7,9 +7,19 @@ namespace AvaloniaTemplate.Services
 {
     public class ClipboardService : IClipboardService
     {
+        /// <summary>
+        /// Системный буфер обмена
+        /// </summary>
         private static IClipboard Clipboard =>
             App.GetTopLevel()?.Clipboard
             ?? throw new InvalidOperationException("Clipboard недоступен");
+
+        #region Удалить после вставки
+        /// <summary>
+        /// Удалить после вставки
+        /// </summary>
+        public bool IsCut { get; set; }
+        #endregion
 
         #region Копировать данные в буфер обмена
         /// <summary>
@@ -26,14 +36,36 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Копировать данные в буфер обмена, с последующим удалением после вставки
+        /// <summary>
+        /// Копировать данные в буфер обмена, с последующим удалением после вставки
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public async Task CutTextAsync(string text)
+        {
+
+            if (string.IsNullOrWhiteSpace(text))
+                return;
+
+            IsCut = true;
+            await Clipboard.SetTextAsync(text);
+        }
+        #endregion
+
         #region Вставить данные из буфера обмена
         /// <summary>
         /// Вставить данные из буфера обмена
         /// </summary>
         /// <returns></returns>
         public async Task<string> PasteTextAsync()
-            => await Clipboard.TryGetTextAsync()
-                ?? string.Empty;
+        {
+            var buffer = await Clipboard.TryGetTextAsync() ?? string.Empty;
+            if (IsCut)
+                await ClearAsync();
+
+            return buffer;
+        }
         #endregion
 
         #region Очисть буфер обмена
