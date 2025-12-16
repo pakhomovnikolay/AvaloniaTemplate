@@ -1,4 +1,5 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -89,6 +90,15 @@ namespace AvaloniaTemplate
         /// Получить текущий контрол приложения
         /// </summary>
         public static IClassicDesktopStyleApplicationLifetime Desktop => desktop;
+        #endregion
+
+        #region Получить TopLevel
+        /// <summary>
+        /// Получить TopLevel
+        /// </summary>
+        /// <returns></returns>
+        public static TopLevel GetTopLevel()
+            => TopLevel.GetTopLevel(desktop.MainWindow);
         #endregion
 
         /// <summary>
