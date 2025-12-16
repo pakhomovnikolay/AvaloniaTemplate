@@ -6,29 +6,29 @@ namespace AvaloniaTemplate.ViewModels.Base
     public class ViewModelBase : ObservableObject, IViewModelBase
     {
         #region Title
-        private string pTitle;
+        private string title;
         public string Title
         {
-            get => pTitle;
-            set => SetProperty(ref pTitle, value);
+            get => title;
+            set => SetProperty(ref title, value);
         }
         #endregion
 
         #region WindowHeight
-        private int pWindowHeight = 800;
+        private int windowHeight = 800;
         public int WindowHeight
         {
-            get => pWindowHeight;
-            set => SetProperty(ref pWindowHeight, value);
+            get => windowHeight;
+            set => SetProperty(ref windowHeight, value);
         }
         #endregion
 
         #region WindowWidth
-        private int pWindowWidth = 1600;
+        private int windowWidth = 1600;
         public int WindowWidth
         {
-            get => pWindowWidth;
-            set => SetProperty(ref pWindowWidth, value);
+            get => windowWidth;
+            set => SetProperty(ref windowWidth, value);
         }
         #endregion
     }
