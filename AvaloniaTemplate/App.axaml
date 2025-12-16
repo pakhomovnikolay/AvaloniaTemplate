@@ -1,4 +1,4 @@
-<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+﻿<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 <Application xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              x:Class="AvaloniaTemplate.App"
@@ -22,10 +22,12 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/BaseDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/ButtonDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/CheckBoxDictionary.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/ComboBoxDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/CommandsDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/ConvertersDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/DataGridDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/GroupBoxDictionary.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/MenuDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/TabControlDictionary.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

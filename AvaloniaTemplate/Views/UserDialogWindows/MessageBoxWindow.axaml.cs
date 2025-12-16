@@ -1,7 +1,8 @@
-using Avalonia;
+п»їusing Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Threading;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,29 +11,29 @@ namespace AvaloniaTemplate.Views.UserDialogWindows;
 
 public partial class MessageBox : Window
 {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     /// <summary>
-    /// Контструктор
+    /// РљРѕРЅС‚СЃС‚СЂСѓРєС‚РѕСЂ
     /// </summary>
     public MessageBox() => InitializeComponent();
     #endregion
 
-    #region Поля класса
+    #region РџРѕР»СЏ РєР»Р°СЃСЃР°
     private string Message { set => this.FindControl<TextBlock>("Contents").Text = value; }
     private MessageBoxButtonType ButtonType { get; set; }
     private MessageBoxImageType ImageType { get; set; }
     private MessageBoxResultType ResultType { get; set; }
     #endregion
 
-    #region Метод вызова окна выдачи сообщений
+    #region РњРµС‚РѕРґ РІС‹Р·РѕРІР° РѕРєРЅР° РІС‹РґР°С‡Рё СЃРѕРѕР±С‰РµРЅРёР№
     /// <summary>
-    /// Метод вызова окна выдачи сообщений
+    /// РњРµС‚РѕРґ РІС‹Р·РѕРІР° РѕРєРЅР° РІС‹РґР°С‡Рё СЃРѕРѕР±С‰РµРЅРёР№
     /// </summary>
-    /// <param name="title">Заголовок окна</param>
-    /// <param name="message">Сообщение для пользователя</param>
-    /// <param name="messageBoxButtonType">Конфигурация кнопок управления</param>
-    /// <param name="messageBoxImagType">Конфигурация изображения</param>
-    /// <param name="messageBoxResultType">Конфигурация результата диалога</param>
+    /// <param name="title">Р—Р°РіРѕР»РѕРІРѕРє РѕРєРЅР°</param>
+    /// <param name="message">РЎРѕРѕР±С‰РµРЅРёРµ РґР»СЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ</param>
+    /// <param name="messageBoxButtonType">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РєРЅРѕРїРѕРє СѓРїСЂР°РІР»РµРЅРёСЏ</param>
+    /// <param name="messageBoxImagType">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ РёР·РѕР±СЂР°Р¶РµРЅРёСЏ</param>
+    /// <param name="messageBoxResultType">РљРѕРЅС„РёРіСѓСЂР°С†РёСЏ СЂРµР·СѓР»СЊС‚Р°С‚Р° РґРёР°Р»РѕРіР°</param>
     /// <returns></returns>
     public static MessageBoxResultType Show(string title, string message, MessageBoxButtonType messageBoxButtonType, MessageBoxImageType messageBoxImagType, MessageBoxResultType messageBoxResultType, Window ownerWindow)
     {
@@ -59,10 +60,10 @@ public partial class MessageBox : Window
     }
     #endregion
 
-    #region Инициализация StackPanel с кнопками управления
+    #region РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ StackPanel СЃ РєРЅРѕРїРєР°РјРё СѓРїСЂР°РІР»РµРЅРёСЏ
     private StackPanel buttonPanel;
     /// <summary>
-    /// Инициализация StackPanel с кнопками управления
+    /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ StackPanel СЃ РєРЅРѕРїРєР°РјРё СѓРїСЂР°РІР»РµРЅРёСЏ
     /// </summary>
     private StackPanel ButtonPanel
     {
@@ -74,29 +75,29 @@ public partial class MessageBox : Window
             switch (ButtonType)
             {
                 case MessageBoxButtonType.OKCancel:
-                    AddButton("Ок", MessageBoxResultType.OK);
-                    AddButton("Отмена", MessageBoxResultType.Cancel, true);
+                    AddButton("РћРє", MessageBoxResultType.OK);
+                    AddButton("РћС‚РјРµРЅР°", MessageBoxResultType.Cancel, true);
                     break;
                 case MessageBoxButtonType.YesNoCancel:
-                    AddButton("Да", MessageBoxResultType.Yes);
-                    AddButton("Нет", MessageBoxResultType.No);
-                    AddButton("Отмена", MessageBoxResultType.Cancel, true);
+                    AddButton("Р”Р°", MessageBoxResultType.Yes);
+                    AddButton("РќРµС‚", MessageBoxResultType.No);
+                    AddButton("РћС‚РјРµРЅР°", MessageBoxResultType.Cancel, true);
                     break;
                 case MessageBoxButtonType.YesNo:
-                    AddButton("Да", MessageBoxResultType.Yes);
-                    AddButton("Нет", MessageBoxResultType.No, true);
+                    AddButton("Р”Р°", MessageBoxResultType.Yes);
+                    AddButton("РќРµС‚", MessageBoxResultType.No, true);
                     break;
                 default:
-                    AddButton("Ок", MessageBoxResultType.OK, true);
+                    AddButton("РћРє", MessageBoxResultType.OK, true);
                     break;
             }
         }
     }
     #endregion
 
-    #region Добавление кнопок управления в StackPanel
+    #region Р”РѕР±Р°РІР»РµРЅРёРµ РєРЅРѕРїРѕРє СѓРїСЂР°РІР»РµРЅРёСЏ РІ StackPanel
     /// <summary>
-    /// Добавление кнопок управления в StackPanel
+    /// Р”РѕР±Р°РІР»РµРЅРёРµ РєРЅРѕРїРѕРє СѓРїСЂР°РІР»РµРЅРёСЏ РІ StackPanel
     /// </summary>
     /// <param name="caption"></param>
     /// <param name="r"></param>
@@ -120,19 +121,19 @@ public partial class MessageBox : Window
     }
     #endregion
 
-    #region Загрузка изображения из ресурсов
+    #region Р—Р°РіСЂСѓР·РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РёР· СЂРµСЃСѓСЂСЃРѕРІ
     /// <summary>
-    /// Загрузка изображения из ресурсов
+    /// Р—Р°РіСЂСѓР·РєР° РёР·РѕР±СЂР°Р¶РµРЅРёСЏ РёР· СЂРµСЃСѓСЂСЃРѕРІ
     /// </summary>
     private void LoadImageSourceFromResource()
     {
         var icon = ImageType switch
         {
-            MessageBoxImageType.Question => (Image)Application.Current.FindResource("MessageBoxImageQuestion"),
-            MessageBoxImageType.Information => (Image)Application.Current.FindResource("MessageBoxImageInformation"),
-            MessageBoxImageType.Warning => (Image)Application.Current.FindResource("MessageBoxImageWarning"),
-            MessageBoxImageType.Error => (Image)Application.Current.FindResource("MessageBoxImageError"),
-            _ => (Image)Application.Current.FindResource("MessageBoxImageNone"),
+            MessageBoxImageType.Question    => Helper.GetResource<Image>("MessageBoxImageQuestion"),
+            MessageBoxImageType.Information => Helper.GetResource<Image>("MessageBoxImageInformation"),
+            MessageBoxImageType.Warning     => Helper.GetResource<Image>("MessageBoxImageWarning"),
+            MessageBoxImageType.Error       => Helper.GetResource<Image>("MessageBoxImageError"),
+            _                               => Helper.GetResource<Image>("MessageBoxImageNone"),
         };
 
         if (icon.Source is not null)

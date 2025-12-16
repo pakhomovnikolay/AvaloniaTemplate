@@ -12,7 +12,9 @@ namespace AvaloniaTemplate.Infrastructures.Commands.Base
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             var provider = serviceProvider.GetRequiredService<ICommandProvider>();
-            return provider.GetCommand(Name);
+            return provider is null
+                ? throw new InvalidOperationException("ICommandProvider is not registered in AvaloniaLocator")
+                : (object)provider.GetCommand(Name);
         }
     }
 }

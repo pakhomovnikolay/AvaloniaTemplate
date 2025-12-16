@@ -1,20 +1,19 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					x:ClassModifier="internal"
 					>
 
-	<!-- PreViewElement -->
+	<!-- PreviewWith -->
 	<Design.PreviewWith>
 		<Border Padding="20" Width="250">
 			<StackPanel Spacing="20">
-				<StackPanel Orientation="Horizontal">
-					<Button Theme="{StaticResource AddButton}"/>
-					<Button Theme="{StaticResource RemoveButton}"/>
-				</StackPanel>
 				<Button Content="Click Me!" />
 				<Button Classes="accent" Content="Click Me!" />
 			</StackPanel>
 		</Border>
 	</Design.PreviewWith>
+
+	<!-- Add Resources Here -->
 
 	<!-- Button -->
 	<ControlTheme x:Key="{x:Type Button}" TargetType="Button">
@@ -105,143 +104,4 @@
 		</Style>
 	</ControlTheme>
 
-	<!-- AddButton -->
-	<ControlTheme x:Key="AddButton" TargetType="Button">
-		<Setter Property="FontFamily" Value="Verdana" />
-		<Setter Property="FontSize" Value="11" />
-		<Setter Property="FontWeight" Value="Bold" />
-		<Setter Property="Background" Value="Green" />
-		<Setter Property="Foreground" Value="{DynamicResource ButtonForeground}" />
-		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
-		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="CornerRadius" Value="5" />
-		<Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
-		<Setter Property="HorizontalAlignment" Value="Stretch" />
-		<Setter Property="VerticalAlignment" Value="Stretch" />
-		<Setter Property="HorizontalContentAlignment" Value="Center" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-		<Setter Property="RenderTransform" Value="none" />
-		<Setter Property="Width" Value="30" />
-		<Setter Property="Height" Value="25" />
-
-		<Setter Property="Transitions">
-			<Transitions>
-				<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-			</Transitions>
-		</Setter>
-
-		<Setter Property="Template">
-			<ControlTemplate>
-				<Grid>
-					<ContentPresenter x:Name="PART_ContentPresenter"
-								  Background="{TemplateBinding Background}"
-								  BorderBrush="{TemplateBinding BorderBrush}"
-								  BorderThickness="{TemplateBinding BorderThickness}"
-								  CornerRadius="{TemplateBinding CornerRadius}"
-								  Content="{TemplateBinding Content}"
-								  ContentTemplate="{TemplateBinding ContentTemplate}"
-								  Padding="{TemplateBinding Padding}"
-								  RecognizesAccessKey="True"
-								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-
-					<Image Source="/Assets/PlusImage.png" Margin="5,5,5,5"/>
-				</Grid>
-			</ControlTemplate>
-		</Setter>
-
-		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="DarkGreen" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPointerOver}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
-		</Style>
-
-		<Style Selector="^:pressed">
-			<Setter Property="RenderTransform" Value="scale(0.98)" />
-		</Style>
-
-		<Style Selector="^:pressed  /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="#FF3CB371" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
-		</Style>
-
-		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-		</Style>
-
-	</ControlTheme>
-
-	<!-- RemoveButton -->
-	<ControlTheme x:Key="RemoveButton" TargetType="Button">
-		<Setter Property="FontFamily" Value="Verdana" />
-		<Setter Property="FontSize" Value="16" />
-		<Setter Property="FontWeight" Value="Bold" />
-		<Setter Property="Background" Value="Red" />
-		<Setter Property="Foreground" Value="White" />
-		<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrush}" />
-		<Setter Property="BorderThickness" Value="1" />
-		<Setter Property="CornerRadius" Value="5" />
-		<Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
-		<Setter Property="HorizontalAlignment" Value="Stretch" />
-		<Setter Property="VerticalAlignment" Value="Stretch" />
-		<Setter Property="HorizontalContentAlignment" Value="Center" />
-		<Setter Property="VerticalContentAlignment" Value="Center" />
-		<Setter Property="RenderTransform" Value="none" />
-		<Setter Property="Width" Value="30" />
-		<Setter Property="Height" Value="25" />
-
-		<Setter Property="Transitions">
-			<Transitions>
-				<TransformOperationsTransition Property="RenderTransform" Duration="0:0:.075" />
-			</Transitions>
-		</Setter>
-
-		<Setter Property="Template">
-			<ControlTemplate>
-				<Grid>
-					<ContentPresenter x:Name="PART_ContentPresenter"
-								  Background="{TemplateBinding Background}"
-								  BorderBrush="{TemplateBinding BorderBrush}"
-								  BorderThickness="{TemplateBinding BorderThickness}"
-								  CornerRadius="{TemplateBinding CornerRadius}"
-								  Content="{TemplateBinding Content}"
-								  ContentTemplate="{TemplateBinding ContentTemplate}"
-								  Padding="{TemplateBinding Padding}"
-								  RecognizesAccessKey="True"
-								  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-								  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
-
-					<Image Source="/Assets/MinusImage.png" Margin="3,3,4,3"/>
-				</Grid>
-			</ControlTemplate>
-		</Setter>
-
-		<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="DarkRed" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPointerOver}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
-		</Style>
-
-		<Style Selector="^:pressed">
-			<Setter Property="RenderTransform" Value="scale(0.98)" />
-		</Style>
-
-		<Style Selector="^:pressed  /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="#FFFF6347" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
-		</Style>
-
-		<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-			<Setter Property="Background" Value="{DynamicResource ButtonBackgroundDisabled}" />
-			<Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushDisabled}" />
-			<Setter Property="Foreground" Value="{DynamicResource ButtonForegroundDisabled}" />
-		</Style>
-
-	</ControlTheme>
-	
-	
 </ResourceDictionary>

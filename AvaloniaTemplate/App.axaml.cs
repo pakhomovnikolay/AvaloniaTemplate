@@ -1,4 +1,4 @@
-using Avalonia;
+п»їusing Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
@@ -18,63 +18,63 @@ namespace AvaloniaTemplate
         private static IServiceProvider services;
         private static string appStatus;
 
-        #region Событие изменения статуса приложения
+        #region РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// <summary>
-        /// Событие изменения статуса приложения
+        /// РЎРѕР±С‹С‚РёРµ РёР·РјРµРЅРµРЅРёСЏ СЃС‚Р°С‚СѓСЃР° РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         public static event ChangedAppStatus ChangeAppStatus;
         public delegate void ChangedAppStatus(string status);
         #endregion
 
-        #region Получить провайдера сервисов
+        #region РџРѕР»СѓС‡РёС‚СЊ РїСЂРѕРІР°Р№РґРµСЂР° СЃРµСЂРІРёСЃРѕРІ
         /// <summary>
-        /// Получить провайдера сервисов
+        /// РџРѕР»СѓС‡РёС‚СЊ РїСЂРѕРІР°Р№РґРµСЂР° СЃРµСЂРІРёСЃРѕРІ
         /// </summary>
         /// <returns></returns>
         public static IServiceProvider Services => services;
         #endregion
 
-        #region Получить текущую версию проекта
+        #region РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰СѓСЋ РІРµСЂСЃРёСЋ РїСЂРѕРµРєС‚Р°
         /// <summary>
-        ///  Получить текущую версию проекта
+        ///  РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰СѓСЋ РІРµСЂСЃРёСЋ РїСЂРѕРµРєС‚Р°
         /// </summary>
-        public static string AppVersion => $"Версия: v.{Assembly
+        public static string AppVersion => $"Р’РµСЂСЃРёСЏ: v.{Assembly
             .GetExecutingAssembly()
             .GetCustomAttribute<AssemblyFileVersionAttribute>()?.Version ??
             Assembly.GetExecutingAssembly().GetName().Version?.ToString() ??
             "0.0.0.0"}";
         #endregion
 
-        #region Получить имя приложения
+        #region РџРѕР»СѓС‡РёС‚СЊ РёРјСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// <summary>
-        /// Получить имя приложения
+        /// РџРѕР»СѓС‡РёС‚СЊ РёРјСЏ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         public static string AppName => Assembly.GetEntryAssembly().GetName().Name;
         #endregion
 
-        #region Путь к директории хранения настроек
+        #region РџСѓС‚СЊ Рє РґРёСЂРµРєС‚РѕСЂРёРё С…СЂР°РЅРµРЅРёСЏ РЅР°СЃС‚СЂРѕРµРє
         /// <summary>
-        /// Путь к директории хранения настроек
+        /// РџСѓС‚СЊ Рє РґРёСЂРµРєС‚РѕСЂРёРё С…СЂР°РЅРµРЅРёСЏ РЅР°СЃС‚СЂРѕРµРє
         /// </summary>
         public static string FolderPath => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName} + Settings");
         #endregion
 
-        #region Текущий статус приложения
+        #region РўРµРєСѓС‰РёР№ СЃС‚Р°С‚СѓСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// <summary>
-        /// Текущий статус приложения
+        /// РўРµРєСѓС‰РёР№ СЃС‚Р°С‚СѓСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         public static string AppStatus => appStatus;
         #endregion
 
-        #region Установить статус приложения
+        #region РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃС‚Р°С‚СѓСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// <summary>
-        /// Установить статус приложения
+        /// РЈСЃС‚Р°РЅРѕРІРёС‚СЊ СЃС‚Р°С‚СѓСЃ РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         /// <param name="content"></param>
-        public static void SetAppStatus(string content = "Готов")
+        public static void SetAppStatus(string content = "Р“РѕС‚РѕРІ")
         {
-            var status = "Текущее состояние: ";
-            status += (string.IsNullOrEmpty(content) ? "Готов" : content);
+            var status = "РўРµРєСѓС‰РµРµ СЃРѕСЃС‚РѕСЏРЅРёРµ: ";
+            status += (string.IsNullOrEmpty(content) ? "Р“РѕС‚РѕРІ" : content);
 
             if (appStatus != status)
             {
@@ -84,8 +84,15 @@ namespace AvaloniaTemplate
         }
         #endregion
 
+        #region РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёР№ РєРѕРЅС‚СЂРѕР» РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// <summary>
-        /// Инициализация
+        /// РџРѕР»СѓС‡РёС‚СЊ С‚РµРєСѓС‰РёР№ РєРѕРЅС‚СЂРѕР» РїСЂРёР»РѕР¶РµРЅРёСЏ
+        /// </summary>
+        public static IClassicDesktopStyleApplicationLifetime Desktop => desktop;
+        #endregion
+
+        /// <summary>
+        /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ
         /// </summary>
         public override void Initialize()
         {
@@ -93,7 +100,7 @@ namespace AvaloniaTemplate
         }
 
         /// <summary>
-        /// Инициализация компонентов при старте приложения 
+        /// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРјРїРѕРЅРµРЅС‚РѕРІ РїСЂРё СЃС‚Р°СЂС‚Рµ РїСЂРёР»РѕР¶РµРЅРёСЏ 
         /// </summary>
         public override void OnFrameworkInitializationCompleted()
         {
@@ -102,11 +109,11 @@ namespace AvaloniaTemplate
                 SetAppStatus();
                 System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
                 var Services = new ServiceCollection();
+                Services.AddCommands();
                 Services.AddServices();
                 Services.AddViewModels();
                 Services.AddWindows();
                 services = Services.BuildServiceProvider();
-                services.GetRequiredService<IUserDialogService>().OpenMainWindow();
 
                 desktop = app;
                 desktop.MainWindow = services.GetRequiredService<IUserDialogService>().GetMainWindow();
@@ -116,7 +123,7 @@ namespace AvaloniaTemplate
         }
 
         /// <summary>
-        /// Действия выполняемые после инициализации старта приложения
+        /// Р”РµР№СЃС‚РІРёСЏ РІС‹РїРѕР»РЅСЏРµРјС‹Рµ РїРѕСЃР»Рµ РёРЅРёС†РёР°Р»РёР·Р°С†РёРё СЃС‚Р°СЂС‚Р° РїСЂРёР»РѕР¶РµРЅРёСЏ
         /// </summary>
         private static void DisableAvaloniaDataAnnotationValidation()
         {
@@ -126,9 +133,7 @@ namespace AvaloniaTemplate
 
             // remove each entry found
             foreach (var plugin in dataValidationPluginsToRemove)
-            {
                 BindingPlugins.DataValidators.Remove(plugin);
-            }
         }
     }
 }

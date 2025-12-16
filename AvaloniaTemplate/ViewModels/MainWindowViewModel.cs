@@ -17,7 +17,7 @@ namespace AvaloniaTemplate.ViewModels
 
             AppVersion = App.AppVersion;
             AppStatus = App.AppStatus;
-        } 
+        }
         #endregion
 
         #region Текущая версия проекта

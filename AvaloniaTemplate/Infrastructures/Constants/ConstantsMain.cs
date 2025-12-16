@@ -12,5 +12,8 @@
 
         public const string __ConfigNameOriginal = $"Config{__XmlExportFileSuffix}";
         public const string __ConfigNameEncrypted = $"Config{__EncryptedConfigFileSuffix}";
+
+        public const double __MinWidthText = 5;
+        public const double __MinHeightText = 16;
     }
 }

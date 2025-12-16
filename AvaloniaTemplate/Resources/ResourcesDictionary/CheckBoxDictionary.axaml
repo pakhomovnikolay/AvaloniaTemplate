@@ -1,8 +1,9 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+					x:ClassModifier="internal"
 					>
 
-	<!-- PreViewElement -->
+	<!-- PreviewWith -->
 	<Design.PreviewWith>
 		<Border Padding="20" >
 			<StackPanel Spacing="20">
@@ -13,6 +14,8 @@
 			</StackPanel>
 		</Border>
 	</Design.PreviewWith>
+
+	<!-- Add Resources Here -->
 
 	<!-- CheckBoxGroupBoxHeader -->
 	<ControlTheme x:Key="CheckBoxGroupBoxHeader" TargetType="CheckBox">

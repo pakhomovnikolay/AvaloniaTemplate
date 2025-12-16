@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Services.Interfaces;
@@ -131,7 +132,7 @@ namespace AvaloniaTemplate.Services
         #region Событие закрытия главного окна
         public void CloseMainWindow(WindowClosingEventArgs e)
         {
-            var findResource = App.Current.FindResource("RequestConfirmCloseBeforeClosing");
+            var findResource = Helper.GetResource<bool?>("RequestConfirmCloseBeforeClosing");
             if (pMainWindow is null || findResource is null || findResource is not bool requestConfirm) return;
 
             var msg = "Вы действительно хотите выйти?";
@@ -158,7 +159,7 @@ namespace AvaloniaTemplate.Services
             MessageBoxButtonType ButtonType = MessageBoxButtonType.OK,
             MessageBoxImageType ImageType = MessageBoxImageType.Information,
             MessageBoxResultType ResultType = MessageBoxResultType.OK)
-        => MessageBox.Show(Title, Message, ButtonType, ImageType, ResultType, ownerWindow) == ResultType; 
+        => MessageBox.Show(Title, Message, ButtonType, ImageType, ResultType, ownerWindow) == ResultType;
         #endregion
     }
 }

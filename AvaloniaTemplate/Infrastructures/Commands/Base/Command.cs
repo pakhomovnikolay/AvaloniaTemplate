@@ -79,7 +79,7 @@ namespace AvaloniaTemplate.Infrastructures.Commands.Base
         /// Метод исполнения запуска события команды (для доступа из класса команды)
         /// </summary>
         /// <param name="p"></param>
-        public void Invoke(object p) => Execute(p); 
+        public void Invoke(object p) => Execute(p);
         #endregion
     }
 }

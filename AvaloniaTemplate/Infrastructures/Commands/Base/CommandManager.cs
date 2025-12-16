@@ -9,7 +9,7 @@ namespace AvaloniaTemplate.Infrastructures.Commands.Base
         /// <summary>
         /// Событие подписки\отписки наблюдателя
         /// </summary>
-        public static event EventHandler RequerySuggested; 
+        public static event EventHandler RequerySuggested;
         #endregion
 
         #region Анализ возможности выполнения команды
@@ -26,7 +26,7 @@ namespace AvaloniaTemplate.Infrastructures.Commands.Base
                 Dispatcher.UIThread.Post(() => handler(null, EventArgs.Empty));
             else
                 handler(null, EventArgs.Empty);
-        } 
+        }
         #endregion
     }
 }
