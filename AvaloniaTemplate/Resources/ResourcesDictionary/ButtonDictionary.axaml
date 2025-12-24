@@ -17,14 +17,14 @@
                 <helpers:ToggleGroupPanel Orientation="Horizontal">
 					<ToggleButton Classes="highlighted" Content="Press Me!"
                               BorderThickness="0 0 0 2"
-                              BorderBrush="YellowGreen"
+                              BorderBrush="GreenYellow"
                               Background="Transparent"
                               CornerRadius="0"
                               />
 
                     <ToggleButton Classes="highlighted" Content="Click Me!"
                               BorderThickness="0 0 0 2"
-                              BorderBrush="YellowGreen"
+                              BorderBrush="GreenYellow"
                               Background="Transparent"
                               CornerRadius="0"
                               />
