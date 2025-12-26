@@ -1,10 +1,7 @@
-﻿using Avalonia;
-using Avalonia.Controls;
+﻿using Avalonia.Controls;
 using Avalonia.Input;
-using Avalonia.Threading;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Views.UserDialogWindows;
@@ -29,34 +26,25 @@ public partial class MessageBox : Window
     /// <summary>
     /// Метод вызова окна выдачи сообщений
     /// </summary>
-    /// <param name="title">Заголовок окна</param>
-    /// <param name="message">Сообщение для пользователя</param>
-    /// <param name="messageBoxButtonType">Конфигурация кнопок управления</param>
-    /// <param name="messageBoxImagType">Конфигурация изображения</param>
-    /// <param name="messageBoxResultType">Конфигурация результата диалога</param>
+    /// <param name="option"></param>
+    /// <param name="owner"></param>
     /// <returns></returns>
-    public static MessageBoxResultType Show(string title, string message, MessageBoxButtonType messageBoxButtonType, MessageBoxImageType messageBoxImagType, MessageBoxResultType messageBoxResultType, Window ownerWindow)
+    public static async Task<MessageBoxResultType> ShowAsync(OpenMessageDialogOptionType option, Window owner)
     {
         var dialog = new MessageBox
         {
-            Title = title,
-            Message = message,
-            ButtonType = messageBoxButtonType,
-            ImageType = messageBoxImagType,
-            ResultType = messageBoxResultType,
+            Title = option.Title,
+            Message = option.Message,
+            ButtonType = option.ButtonType,
+            ImageType = option.ImageType,
+            ResultType = option.ResultType,
             Topmost = true,
+            Icon = owner.Icon,
+            CanMinimize = false
         };
-
         dialog.ButtonPanel = dialog.FindControl<StackPanel>("Buttons");
-        var tcs = new TaskCompletionSource<MessageBoxResultType>();
-
-        dialog.Closed += delegate { tcs.TrySetResult(dialog.ResultType); };
-
-        using var source = new CancellationTokenSource();
-        dialog.ShowDialog(ownerWindow).ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-        Dispatcher.UIThread.MainLoop(source.Token);
+        await dialog.ShowDialog(owner);
         return dialog.ResultType;
-
     }
     #endregion
 
@@ -129,11 +117,11 @@ public partial class MessageBox : Window
     {
         var icon = ImageType switch
         {
-            MessageBoxImageType.Question    => Helper.GetResource<Image>("MessageBoxImageQuestion"),
+            MessageBoxImageType.Question => Helper.GetResource<Image>("MessageBoxImageQuestion"),
             MessageBoxImageType.Information => Helper.GetResource<Image>("MessageBoxImageInformation"),
-            MessageBoxImageType.Warning     => Helper.GetResource<Image>("MessageBoxImageWarning"),
-            MessageBoxImageType.Error       => Helper.GetResource<Image>("MessageBoxImageError"),
-            _                               => Helper.GetResource<Image>("MessageBoxImageNone"),
+            MessageBoxImageType.Warning => Helper.GetResource<Image>("MessageBoxImageWarning"),
+            MessageBoxImageType.Error => Helper.GetResource<Image>("MessageBoxImageError"),
+            _ => Helper.GetResource<Image>("MessageBoxImageNone"),
         };
 
         if (icon.Source is not null)

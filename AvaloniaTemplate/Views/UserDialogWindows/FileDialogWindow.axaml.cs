@@ -1,109 +1,118 @@
-using Avalonia.Controls;
+п»їusing Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using Avalonia.Threading;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
-using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Views.UserDialogWindows;
 
 public partial class FileDialogWindow : Window
 {
-    #region Конструктор
+    #region РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     /// <summary>
-    /// Конструктор
+    /// РљРѕРЅСЃС‚СЂСѓРєС‚РѕСЂ
     /// </summary>
     public FileDialogWindow() => InitializeComponent();
     #endregion
 
-    #region Открыть окно выбора файла
+    #region РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ РІС‹Р±РѕСЂР° С„Р°Р№Р»Р°
     /// <summary>
-    /// Открыть окно выбора файла
+    /// РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ РІС‹Р±РѕСЂР° С„Р°Р№Р»Р°
     /// </summary>
+    /// <param name="options"></param>
+    /// <param name="provider"></param>
     /// <returns></returns>
-    public static string SelectFile(OpenFileDialogOptionType openFileDialogOption, IStorageProvider provider)
+    public static async Task<string?> SelectFileAsync(OpenFileDialogOptionType options, IStorageProvider provider)
     {
-        var SelectedFilePath = "";
-        if (provider is not null)
+        var result = "";
+        var selectedPath = await provider.TryGetFolderFromPathAsync(options.SuggestedStartLocation);
+        if (selectedPath is { })
         {
-            var tcs = new TaskCompletionSource<IStorageFolder>();
-            using var source = new CancellationTokenSource();
-            var folderPath = provider.TryGetFolderFromPathAsync(openFileDialogOption.SuggestedStartLocation);
-            folderPath.ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-            Dispatcher.UIThread.MainLoop(source.Token);
-
-            if (folderPath is not null)
+            var dialog = await provider.OpenFilePickerAsync(new FilePickerOpenOptions
             {
-                var dialog = provider.OpenFilePickerAsync(new FilePickerOpenOptions
-                {
-                    Title = openFileDialogOption.Title,
-                    AllowMultiple = openFileDialogOption.AllowMultiple,
-                    FileTypeFilter = [openFileDialogOption.FileTypeFilter],
-                    SuggestedFileName = openFileDialogOption.SuggestedFileName,
-                    SuggestedStartLocation = folderPath.Result
-                });
+                Title = options.Title,
+                AllowMultiple = options.AllowMultiple,
+                FileTypeFilter = [options.FileTypeFilter],
+                SuggestedFileName = options.SuggestedFileName,
+                SuggestedStartLocation = selectedPath,
+                SuggestedFileType = options.FileTypeFilter
+            });
 
-                using var source1 = new CancellationTokenSource();
-                var tcs1 = new TaskCompletionSource<List<IStorageFile>>();
-                dialog.ContinueWith(t => source1.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-                Dispatcher.UIThread.MainLoop(source1.Token);
-
-                if (dialog is not null)
-                {
-                    foreach (var item in dialog.Result)
-                    {
-                        SelectedFilePath += item.TryGetLocalPath();
-                    }
-                }
+            if (dialog is not null && dialog.Count > 0)
+            {
+                if (!options.AllowMultiple)
+                    result = dialog[0].TryGetLocalPath();
+                else
+                    foreach (var path in dialog)
+                        result += path.TryGetLocalPath();
             }
         }
-        return SelectedFilePath;
+        return result;
     }
     #endregion
 
-    #region Открыть окно выбора пути
+    #region РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°
     /// <summary>
-    /// Открыть окно выбора пути
+    /// РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ СЃРѕС…СЂР°РЅРµРЅРёСЏ С„Р°Р№Р»Р°
     /// </summary>
+    /// <param name="options"></param>
+    /// <param name="provider"></param>
     /// <returns></returns>
-    public static string SelectFolder(OpenFileDialogOptionType openFileDialogOption, IStorageProvider provider = default)
+    public static async Task<string?> SelectFileAsSaveAsync(OpenFileDialogOptionType options, IStorageProvider provider)
     {
-        var SelectedPath = "";
-        if (provider is not null)
+        var result = "";
+        var selectedPath = await provider.TryGetFolderFromPathAsync(options.SuggestedStartLocation);
+        if (selectedPath is { })
         {
-            var tcs = new TaskCompletionSource<IStorageFolder>();
-            using var source = new CancellationTokenSource();
-            var folderPath = provider.TryGetFolderFromPathAsync(openFileDialogOption.SuggestedStartLocation);
-            folderPath.ContinueWith(t => source.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-            Dispatcher.UIThread.MainLoop(source.Token);
-
-            if (folderPath is not null)
+            var dialog = await provider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
-                var dialog = provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
-                {
-                    Title = openFileDialogOption.Title,
-                    AllowMultiple = false,
-                    SuggestedFileName = openFileDialogOption.SuggestedFileName,
-                    SuggestedStartLocation = folderPath.Result
-                });
+                Title = options.Title,
+                SuggestedFileName = options.SuggestedFileName,
+                SuggestedStartLocation = selectedPath,
+                DefaultExtension = options.FileTypeFilter.Name,
+                FileTypeChoices = [options.FileTypeFilter],
+                ShowOverwritePrompt = false,
+                SuggestedFileType = options.FileTypeFilter
+            });
 
-                using var source1 = new CancellationTokenSource();
-                var tcs1 = new TaskCompletionSource<List<IStorageFile>>();
-                dialog.ContinueWith(t => source1.Cancel(), TaskScheduler.FromCurrentSynchronizationContext());
-                Dispatcher.UIThread.MainLoop(source1.Token);
-
-                if (dialog is not null)
-                {
-                    foreach (var item in dialog.Result)
-                    {
-                        SelectedPath += item.TryGetLocalPath();
-                    }
-                }
-            }
+            if (dialog is not null)
+                result = dialog.TryGetLocalPath();
         }
-        return SelectedPath;
+        return result;
+    }
+    #endregion
 
+    #region РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ РІС‹Р±РѕСЂР° РїСѓС‚Рё
+    /// <summary>
+    /// РћС‚РєСЂС‹С‚СЊ РѕРєРЅРѕ РІС‹Р±РѕСЂР° РїСѓС‚Рё
+    /// </summary>
+    /// <param name="options"></param>
+    /// <param name="provider"></param>
+    /// <returns></returns>
+    public static async Task<string?> SelectFolder(OpenFileDialogOptionType options, IStorageProvider provider = default)
+    {
+        var result = "";
+        var selectedPath = await provider.TryGetFolderFromPathAsync(options.SuggestedStartLocation);
+        if (selectedPath is { })
+        {
+            var dialog = await provider.OpenFolderPickerAsync(new FolderPickerOpenOptions
+            {
+                AllowMultiple = options.AllowMultiple,
+                SuggestedFileName = options.SuggestedFileName,
+                SuggestedStartLocation = selectedPath,
+                Title = options.Title,
+            });
+
+            if (dialog is not null && dialog.Count > 0)
+            {
+                if (!options.AllowMultiple)
+                    result = dialog[0].TryGetLocalPath();
+                else
+                    foreach (var path in dialog)
+                        result += path.TryGetLocalPath();
+            }
+
+        }
+        return result;
     }
     #endregion
 }

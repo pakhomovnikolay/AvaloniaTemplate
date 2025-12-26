@@ -1,93 +1,91 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Views;
+using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
     public interface IUserDialogService
     {
-        #region Отправка сообщений пользователю
+        #region Отправка сообщения пользователю
         /// <summary>
-        /// Отправка сообщений пользователю
+        /// Отправка сообщения пользователю
         /// </summary>
-        /// <param name="Title">Заголовок окна</param>
-        /// <param name="Message">Сообщение</param> 
-        /// <param name="ownerWindow">Родительское окно</param>
-        /// <param name="ButtonType">Конфигурация кнопок</param
-        /// <param name="ImageType">Конфигурация изображения</param>
-        /// <param name="ResultType">Требуемый результат события от пользователя</param>
+        /// <param name="title"> Заголовок окна </param>
+        /// <param name="message"> Сообщение </param>
+        /// <param name="owner"> Родительское окно </param>
+        /// <param name="buttonType"> Конфигурация кнопок </param>
+        /// <param name="imageType"> Конфигурация изображения </param>
+        /// <param name="resultType"> Требуемый результат события от пользователя </param>
         /// <returns></returns>
-        bool SendMessage(string Title, string Message, Window ownerWindow,
-            MessageBoxButtonType ButtonType = MessageBoxButtonType.OK,
-            MessageBoxImageType ImageType = MessageBoxImageType.Information,
-            MessageBoxResultType ResultType = MessageBoxResultType.OK
+        Task<MessageBoxResultType> SendMessageAsync(string title, string message, Window owner,
+            MessageBoxButtonType buttonType = MessageBoxButtonType.OK,
+            MessageBoxImageType imageType = MessageBoxImageType.Information,
+            MessageBoxResultType resultType = MessageBoxResultType.OK
             );
         #endregion
 
-        #region Метод открытия диалогового окна выбора файла
+        #region Открыть диалоговое окно выбора файла
         /// <summary>
-        /// Метод открытия диалогового окна выбора файла
+        /// Открыть диалоговое окно выбора файла
         /// </summary>
-        /// <param name="Title">Заголовок окна</param>
-        /// <param name="DefaultPath">Путь к файлу по умолчанию</param>
-        /// <param name="AllowMultiple">Разрешить множественный выбор</param>
-        /// <param name="Filter">Фильтр расширения файлов</param>
+        /// <param name="title"> Заголовок окна </param>
+        /// <param name="dialogType"> Тип диалогового окна </param>
+        /// <param name="allowMultiple"> Разрешить множественный выбор </param>
+        /// <param name="defaultPath"> Путь к файлу по умолчанию </param>
+        /// <param name="filter"> Фильтр расширения файлов </param>
+        /// <param name="owner"> Родительское окно </param>
+        /// <param name="provider"> Провайдер данных </param>
         /// <returns></returns>
-        string SelectFile(string Title,
-            string DefaultPath = null,
-            bool AllowMultiple = false,
-            FilePickerFileType Filter = null,
-            Window Owner = null,
+        Task<string> SelectFile(string title,
+            FileDialogType dialogType = FileDialogType.Open,
+            bool allowMultiple = false,
+            string defaultPath = null,
+            FilePickerFileType filter = null,
+            Window owner = null,
             IStorageProvider provider = default);
         #endregion
 
-        #region Метод открытия диалогового окна выбора пути
+        #region Открыть диалоговое окно выбора пути
         /// <summary>
-        /// Метод открытия диалогового окна выбора пути
+        /// Открыть диалоговое окно выбора пути
         /// </summary>
-        /// <param name="Title">Заголовок окна</param>
-        /// <param name="DefaultPath">Путь по умолчанию</param>
+        /// <param name="title"> Заголовок окна </param>
+        /// <param name="defaultPath"> Путь по умолчанию </param>
+        /// <param name="provider"> Провайдер данных </param>
         /// <returns></returns>
-        string SelectFolder(string Title,
-            string DefaultPath = null,
-            Window Owner = null,
-            IStorageProvider provider = default);
+        Task<string> SelectFolder(string title, string defaultPath = null, IStorageProvider provider = default);
         #endregion
 
         #region Удалить файл
         /// <summary>
         /// Удалить файл
         /// </summary>
-        /// <param name="SelectedFile">Путь к файлу по умолчанию</param>
+        /// <param name="selectedFile"></param>
         /// <returns></returns>
-        bool DeleteFile(string SelectedFile);
+        Task<bool> DeleteFileAsync(string selectedFile);
         #endregion
 
         #region Сохранить данные
         /// <summary>
         /// Сохранить данные
         /// </summary>
-        /// <param name="content">Данные для сохранения</param>
-        /// <param name="path">Путь к файлу</param>
-        bool Save<T>(T content, string path);
+        /// <typeparam name="T"></typeparam>
+        /// <param name="content"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        Task<bool> Save<T>(T content, string path);
         #endregion
 
         #region Загрузить данные
         /// <summary>
         /// Загрузить данные
         /// </summary>
-        /// <param name="path">Путь к файлу</param>
+        /// <param name="path"> Путь к файлу </param>
         /// <returns></returns>
-        T Load<T>(string path);
-        #endregion
-
-        #region Открыть главное окно приложения
-        /// <summary>
-        /// Открыть главное окно приложения
-        /// </summary>
-        /// <returns></returns>
-        void OpenMainWindow();
+        Task<T> Load<T>(string path);
         #endregion
 
         #region Событие закрытия главного окна

@@ -8,158 +8,227 @@ using AvaloniaTemplate.Views;
 using AvaloniaTemplate.Views.UserDialogWindows;
 using Microsoft.Extensions.DependencyInjection;
 using System;
-using System.Diagnostics;
 using System.IO;
+using System.Threading.Tasks;
 using System.Xml.Serialization;
 
 namespace AvaloniaTemplate.Services
 {
     public class UserDialogService : IUserDialogService
     {
-        private MainWindow pMainWindow;
-
-        #region Удалить файл
-        public bool DeleteFile(string SelectedFile)
-        {
-            bool result = false;
-
-            if (File.Exists(SelectedFile))
+        #region Отправка сообщения пользователю
+        public async Task<MessageBoxResultType> SendMessageAsync(string title,
+            string message,
+            Window owner,
+            MessageBoxButtonType buttonType = MessageBoxButtonType.OK,
+            MessageBoxImageType imageType = MessageBoxImageType.Information,
+            MessageBoxResultType resultType = MessageBoxResultType.OK)
+            => await MessageBox.ShowAsync(new OpenMessageDialogOptionType
             {
-                File.Delete(SelectedFile);
-                result = true;
-            }
-            return result;
-        }
+                Title = title,
+                Message = message,
+                ButtonType = buttonType,
+                ImageType = imageType,
+                ResultType = resultType
+            }, owner ?? App.Desktop.MainWindow);
         #endregion
 
-        #region Загрузить данные
-        public T Load<T>(string path)
-        {
-            var settingsAppSerializer = new XmlSerializer(typeof(T));
-            T result = default;
-            try
-            {
-                using FileStream fs = new(path, FileMode.OpenOrCreate);
-                result = (T)settingsAppSerializer.Deserialize(fs);
+        #region Открыть диалоговое окно выбора файла
+        public async Task<string> SelectFile(string title,
+            FileDialogType dialogType = FileDialogType.Open,
+            bool allowMultiple = false, string defaultPath = null,
+            FilePickerFileType filter = null, Window owner = null,
+            IStorageProvider provider = default)
+            => dialogType == FileDialogType.Save
 
-            }
-            catch (Exception e)
+            ? await FileDialogWindow.SelectFileAsSaveAsync(new OpenFileDialogOptionType
             {
-                Debug.WriteLine($"Не удалось загрузить данные. Описание ошибки: " + e.Message);
+                Title = string.IsNullOrWhiteSpace(title) ? App.Desktop.MainWindow.Title : title,
+                AllowMultiple = allowMultiple,
+                FileTypeFilter = filter ?? FilePickerFileTypes.All,
+                SuggestedFileName = "",
+                SuggestedStartLocation = defaultPath ?? App.FolderPath
+            }, provider ?? App.GetTopLevel()?.StorageProvider)
+
+            : await FileDialogWindow.SelectFileAsync(new OpenFileDialogOptionType
+            {
+                Title = string.IsNullOrWhiteSpace(title) ? App.Desktop.MainWindow.Title : title,
+                AllowMultiple = allowMultiple,
+                FileTypeFilter = filter ?? FilePickerFileTypes.All,
+                SuggestedFileName = "",
+                SuggestedStartLocation = defaultPath ?? App.FolderPath
+            }, provider ?? App.GetTopLevel()?.StorageProvider);
+        #endregion
+
+        #region Открыть диалоговое окно выбора пути
+        /// <summary>
+        /// Открыть диалоговое окно выбора пути
+        /// </summary>
+        /// <param name="title"> Заголовок окна </param>
+        /// <param name="defaultPath"> Путь по умолчанию </param>
+        /// <param name="provider"> Провайдер данных </param>
+        /// <returns></returns>
+        public async Task<string> SelectFolder(string title,
+            string defaultPath = null,
+            IStorageProvider provider = default)
+            => await FileDialogWindow.SelectFolder(new OpenFileDialogOptionType
+            {
+                Title = string.IsNullOrWhiteSpace(title) ? App.Desktop.MainWindow.Title : title,
+                SuggestedFileName = "",
+                SuggestedStartLocation = defaultPath ?? App.FolderPath
+            }, provider ?? App.GetTopLevel()?.StorageProvider);
+        #endregion
+
+        #region Удалить файл
+        /// <summary>
+        /// Удалить файл
+        /// </summary>
+        /// <param name="selectedFile"> Путь к файлу по умолчанию </param>
+        /// <returns></returns>
+        public async Task<bool> DeleteFileAsync(string selectedFile)
+        {
+            var result = false;
+            if (!File.Exists(selectedFile))
+                await SendMessageAsync("Удаление файла",
+                    "Не удается найти указанный файл. Проверьте путь",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+            else
+            {
+                try
+                {
+                    File.Delete(selectedFile);
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    await SendMessageAsync("Удаление файла",
+                        $"В процессе удаления файла произошла ошибка: {e}",
+                        App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+                }
             }
             return result;
         }
         #endregion
 
         #region Сохранить данные
-        public bool Save<T>(T content, string path)
+        /// <summary>
+        /// Сохранить данные
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="content"></param>
+        /// <param name="path"></param>
+        /// <returns></returns>
+        public async Task<bool> Save<T>(T content, string path)
         {
-            bool result = false;
+            var result = false;
             var SettingsAppSerializer = new XmlSerializer(typeof(T));
 
             try
             {
                 using FileStream fs = new(path, FileMode.OpenOrCreate);
                 SettingsAppSerializer.Serialize(fs, content);
-
+                result = true;
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"Не удалось сохранить данные. Описание ошибки: " + e.Message);
+                await SendMessageAsync("Сохранение данных",
+                    $"В процессе сохранения данных произошла ошибка: {e}",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
             }
             return result;
         }
         #endregion
 
-        #region Метод открытия диалогового окна выбора файла
-        public string SelectFile(string Title,
-            string DefaultPath = null,
-            bool AllowMultiple = false,
-            FilePickerFileType Filter = null,
-            Window Owner = null,
-            IStorageProvider provider = default)
+        #region Загрузить данные
+        /// <summary>
+        /// Загрузить данные
+        /// </summary>
+        /// <param name="path"> Путь к файлу </param>
+        /// <returns></returns>
+        public async Task<T> Load<T>(string path)
         {
-            return FileDialogWindow.SelectFile(new OpenFileDialogOptionType
+            T result = default;
+            var settingsAppSerializer = new XmlSerializer(typeof(T));
+
+            try
             {
-                Title = Title,
-                Owner = Owner,
-                AllowMultiple = AllowMultiple,
-                FileTypeFilter = Filter,
-                SuggestedFileName = "",
-                SuggestedStartLocation = DefaultPath
-            }, provider);
-        }
-        #endregion
-
-        #region Метод открытия диалогового окна выбора пути
-        public string SelectFolder(string Title,
-            string DefaultPath = null,
-            Window Owner = null,
-            IStorageProvider provider = default)
-        {
-            return FileDialogWindow.SelectFolder(new OpenFileDialogOptionType
+                using FileStream fs = new(path, FileMode.OpenOrCreate);
+                result = (T)settingsAppSerializer.Deserialize(fs);
+            }
+            catch (Exception e)
             {
-                Title = Title,
-                Owner = Owner,
-                SuggestedFileName = "",
-                SuggestedStartLocation = DefaultPath
-            }, provider);
-        }
-        #endregion
-
-        #region Получить экземпляр главного окна
-        public MainWindow GetMainWindow()
-        {
-            OpenMainWindow();
-            return pMainWindow;
-        }
-        #endregion
-
-        #region Открыть главное окно приложения
-        public void OpenMainWindow()
-        {
-            if (pMainWindow is { } window) { window.Show(); return; }
-            window = App.Services.GetRequiredService<MainWindow>();
-            window.Closing += (s, e) => CloseMainWindow(e);
-            window.Opened += (s, e) => OpennedMainWindow();
-            window.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-
-            pMainWindow = window;
-            window.Show();
+                await SendMessageAsync("Загрузка данных",
+                    $"В процессе загрузки данных произошла ошибка: {e}",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+            }
+            return result;
         }
         #endregion
 
         #region Событие закрытия главного окна
+        /// <summary>
+        /// Событие закрытия главного окна
+        /// </summary>
+        /// <param name="e"></param>
         public void CloseMainWindow(WindowClosingEventArgs e)
         {
             var findResource = Helper.GetResource<bool?>("RequestConfirmCloseBeforeClosing");
-            if (pMainWindow is null || findResource is null || findResource is not bool requestConfirm) return;
+            if (App.Desktop?.MainWindow is not { } window
+                || findResource is null
+                || findResource is not bool requestConfirm)
+                return;
 
             var msg = "Вы действительно хотите выйти?";
-            if (requestConfirm && !SendMessage("Внимание!", msg, pMainWindow, MessageBoxButtonType.YesNo, MessageBoxImageType.Warning, MessageBoxResultType.Yes))
+            if (requestConfirm)
             {
-                e.Cancel = true;
-                return;
+                if (SendMessageAsync("Внимание!",
+                    msg,
+                    window,
+                    MessageBoxButtonType.YesNo,
+                    MessageBoxImageType.Question,
+                    MessageBoxResultType.Yes).Result != MessageBoxResultType.Yes)
+                {
+                    e.Cancel = true;
+                    return;
+                }
             }
         }
         #endregion
 
         #region Событие завершения открытия главного окна
-        public void OpennedMainWindow()
-        {
-
-        }
+        /// <summary>
+        /// Событие завершения открытия главного окна
+        /// </summary>
+        public void OpennedMainWindow() { }
         #endregion
 
-        #region Отправка сообщений пользователю
-        public bool SendMessage(
-            string Title,
-            string Message,
-            Window ownerWindow,
-            MessageBoxButtonType ButtonType = MessageBoxButtonType.OK,
-            MessageBoxImageType ImageType = MessageBoxImageType.Information,
-            MessageBoxResultType ResultType = MessageBoxResultType.OK)
-        => MessageBox.Show(Title, Message, ButtonType, ImageType, ResultType, ownerWindow) == ResultType;
+        #region Получить экземпляр главного окна
+        /// <summary>
+        /// Получить экземпляр главного окна
+        /// </summary>
+        /// <returns></returns>
+        public MainWindow GetMainWindow()
+            => App.Desktop.MainWindow is null
+            ? OpenMainWindow()
+            : (MainWindow)App.Desktop?.MainWindow;
+        #endregion
+
+        #region Открыть главное окно приложения
+        /// <summary>
+        /// Открыть главное окно приложения
+        /// </summary>
+        /// <returns></returns>
+        private MainWindow OpenMainWindow()
+        {
+            if (App.Desktop?.MainWindow is { } window) { window.Show(); return (MainWindow)window; }
+
+            window = App.Services.GetRequiredService<MainWindow>();
+            window.Closing += (s, e) => CloseMainWindow(e);
+            window.Opened += (s, e) => OpennedMainWindow();
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.Show();
+            return (MainWindow)window;
+        }
         #endregion
     }
 }
