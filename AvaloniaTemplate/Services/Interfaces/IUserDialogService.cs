@@ -93,7 +93,8 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Событие закрытия главного окна
         /// </summary>
         /// <param name="e"></param>
-        void CloseMainWindow(WindowClosingEventArgs e);
+        /// <returns></returns>
+        Task CloseMainWindow(WindowClosingEventArgs e);
         #endregion
 
         #region Событие завершения открытия главного окна
@@ -108,7 +109,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Получить экземпляр главного окна
         /// </summary>
         /// <returns></returns>
-        MainWindow GetMainWindow();
+        Window GetMainWindow();
         #endregion
     }
 }

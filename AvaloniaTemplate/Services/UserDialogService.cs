@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
-using AvaloniaTemplate.Infrastructures.Helpers;
+using Avalonia.Threading;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Services.Interfaces;
@@ -170,27 +170,27 @@ namespace AvaloniaTemplate.Services
         /// Событие закрытия главного окна
         /// </summary>
         /// <param name="e"></param>
-        public void CloseMainWindow(WindowClosingEventArgs e)
+        public async Task CloseMainWindow(WindowClosingEventArgs e)
         {
-            var findResource = Helper.GetResource<bool?>("RequestConfirmCloseBeforeClosing");
-            if (App.Desktop?.MainWindow is not { } window
-                || findResource is null
-                || findResource is not bool requestConfirm)
+            var requestConfirm = App.GetStateRequestConfirmCloseBeforeClosing();
+            if (App.Desktop?.MainWindow is not { } window || !requestConfirm)
                 return;
 
+            e.Cancel = true;
             var msg = "Вы действительно хотите выйти?";
-            if (requestConfirm)
+            if (await SendMessageAsync("Внимание!", msg, window,
+                MessageBoxButtonType.YesNo,
+                MessageBoxImageType.Question,
+                MessageBoxResultType.Yes) == MessageBoxResultType.Yes)
             {
-                if (SendMessageAsync("Внимание!",
-                    msg,
-                    window,
-                    MessageBoxButtonType.YesNo,
-                    MessageBoxImageType.Question,
-                    MessageBoxResultType.Yes).Result != MessageBoxResultType.Yes)
+                await Dispatcher.UIThread.InvokeAsync(() =>
                 {
-                    e.Cancel = true;
-                    return;
-                }
+                    // Устанавливаем флаг, чтобы избежать повторного запроса
+                    App.ChangeConfirmCloseBeforeClosing(false);
+
+                    // Закрываем окно (это не вызовет повторного WindowClosing)
+                    window.Close();
+                });
             }
         }
         #endregion
@@ -207,10 +207,10 @@ namespace AvaloniaTemplate.Services
         /// Получить экземпляр главного окна
         /// </summary>
         /// <returns></returns>
-        public MainWindow GetMainWindow()
+        public Window GetMainWindow()
             => App.Desktop.MainWindow is null
             ? OpenMainWindow()
-            : (MainWindow)App.Desktop?.MainWindow;
+            : App.Desktop?.MainWindow;
         #endregion
 
         #region Открыть главное окно приложения
@@ -218,16 +218,16 @@ namespace AvaloniaTemplate.Services
         /// Открыть главное окно приложения
         /// </summary>
         /// <returns></returns>
-        private MainWindow OpenMainWindow()
+        private Window OpenMainWindow()
         {
-            if (App.Desktop?.MainWindow is { } window) { window.Show(); return (MainWindow)window; }
+            if (App.Desktop?.MainWindow is { } window) { window.Show(); return window; }
 
             window = App.Services.GetRequiredService<MainWindow>();
-            window.Closing += (s, e) => CloseMainWindow(e);
+            window.Closing += async (s, e) => await CloseMainWindow(e);
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();
-            return (MainWindow)window;
+            return window;
         }
         #endregion
     }

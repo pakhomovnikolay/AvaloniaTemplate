@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.Services.Registrations;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,7 @@ namespace AvaloniaTemplate
         private static IClassicDesktopStyleApplicationLifetime desktop;
         private static IServiceProvider services;
         private static string appStatus;
+        private static bool requestConfirmCloseBeforeClosing = Helper.GetResource<bool>("RequestConfirmCloseBeforeClosing");
 
         #region Событие изменения статуса приложения
         /// <summary>
@@ -99,6 +101,24 @@ namespace AvaloniaTemplate
         /// <returns></returns>
         public static TopLevel GetTopLevel()
             => TopLevel.GetTopLevel(desktop.MainWindow);
+        #endregion
+
+        #region Получить текущее состояние необходимости запроса подтверждения закрытия приложения
+        /// <summary>
+        /// Получить текущее состояние необходимости запроса подтверждения закрытия приложения
+        /// </summary>
+        /// <returns></returns>
+        public static bool GetStateRequestConfirmCloseBeforeClosing()
+            => requestConfirmCloseBeforeClosing;
+        #endregion
+
+        #region Изменить необходимость подтверждения закрытия приложения
+        /// <summary>
+        /// Изменить необходимость подтверждения закрытия приложения
+        /// </summary>
+        /// <param name="confirm"></param>
+        public static void ChangeConfirmCloseBeforeClosing(bool confirm)
+            => requestConfirmCloseBeforeClosing = confirm;
         #endregion
 
         /// <summary>
