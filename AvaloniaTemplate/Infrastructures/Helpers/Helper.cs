@@ -20,7 +20,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         public static T? GetResource<T>(string name)
         {
             var result = default(T);
-            var resource = App.Desktop.MainWindow.FindResource(name);
+            var resource = App.Desktop?.MainWindow?.FindResource(name);
             if (resource is not null && resource is T found)
                 result = found;
 
