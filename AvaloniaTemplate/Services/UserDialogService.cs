@@ -177,20 +177,45 @@ namespace AvaloniaTemplate.Services
                 return;
 
             e.Cancel = true;
-            var msg = "Вы действительно хотите выйти?";
-            if (await SendMessageAsync("Внимание!", msg, window,
-                MessageBoxButtonType.YesNo,
-                MessageBoxImageType.Question,
-                MessageBoxResultType.Yes) == MessageBoxResultType.Yes)
+            if (App.GetStatusAppDataChanged())
             {
-                await Dispatcher.UIThread.InvokeAsync(() =>
-                {
-                    // Устанавливаем флаг, чтобы избежать повторного запроса
-                    App.ChangeConfirmCloseBeforeClosing(false);
+                var msg = "В приложение были внесены изменения\nВы хотите сохранить изменения?";
+                var result = await SendMessageAsync("Внимание!", msg, window,
+                    MessageBoxButtonType.YesNoCancel,
+                    MessageBoxImageType.Question,
+                    MessageBoxResultType.Cancel);
 
-                    // Закрываем окно (это не вызовет повторного WindowClosing)
-                    window.Close();
-                });
+                if (result != MessageBoxResultType.Cancel)
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        // Устанавливаем флаг, чтобы избежать повторного запроса
+                        App.ChangeStatusConfirmCloseBeforeClosing(false);
+
+                        // Закрываем окно (это не вызовет повторного WindowClosing)
+                        window.Close();
+                    });
+                }
+            }
+            else
+            {
+                var msg = "Вы действительно хотите выйти?";
+                var result = await SendMessageAsync("Внимание!", msg, window,
+                    MessageBoxButtonType.YesNo,
+                    MessageBoxImageType.Question,
+                    MessageBoxResultType.Yes);
+
+                if (result == MessageBoxResultType.Yes)
+                {
+                    await Dispatcher.UIThread.InvokeAsync(() =>
+                    {
+                        // Устанавливаем флаг, чтобы избежать повторного запроса
+                        App.ChangeStatusConfirmCloseBeforeClosing(false);
+
+                        // Закрываем окно (это не вызовет повторного WindowClosing)
+                        window.Close();
+                    });
+                }
             }
         }
         #endregion

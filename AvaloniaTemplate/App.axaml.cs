@@ -20,6 +20,7 @@ namespace AvaloniaTemplate
         private static IServiceProvider services;
         private static string appStatus;
         private static bool requestConfirmCloseBeforeClosing = Helper.GetResource<bool>("RequestConfirmCloseBeforeClosing");
+        private static bool appDataChanged = false;
 
         #region Событие изменения статуса приложения
         /// <summary>
@@ -119,6 +120,27 @@ namespace AvaloniaTemplate
         /// <param name="confirm"></param>
         public static void ChangeConfirmCloseBeforeClosing(bool confirm)
             => requestConfirmCloseBeforeClosing = confirm;
+        #endregion
+
+        #region Получить текущее состояние изменения данных в проекте
+        /// <summary>
+        /// Получить текущее состояние изменения данных в проекте
+        /// </summary>
+        /// <returns></returns>
+        public static bool GetStatusAppDataChanged()
+            => appDataChanged;
+        #endregion
+
+        #region Установить состояние изменения данных в проекте
+        /// <summary>
+        /// Установить состояние изменения данных в проекте
+        /// </summary>
+        /// <param name="change"></param>
+        public static void ChangeStatusAppDataChanged(bool change)
+        {
+            appDataChanged = change;
+            requestConfirmCloseBeforeClosing = requestConfirmCloseBeforeClosing || appDataChanged;
+        }
         #endregion
 
         /// <summary>
