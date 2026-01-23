@@ -190,7 +190,7 @@ namespace AvaloniaTemplate.Services
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         // Устанавливаем флаг, чтобы избежать повторного запроса
-                        App.ChangeStatusConfirmCloseBeforeClosing(false);
+                        App.ChangeConfirmCloseBeforeClosing(false);
 
                         // Закрываем окно (это не вызовет повторного WindowClosing)
                         window.Close();
@@ -210,7 +210,7 @@ namespace AvaloniaTemplate.Services
                     await Dispatcher.UIThread.InvokeAsync(() =>
                     {
                         // Устанавливаем флаг, чтобы избежать повторного запроса
-                        App.ChangeStatusConfirmCloseBeforeClosing(false);
+                        App.ChangeConfirmCloseBeforeClosing(false);
 
                         // Закрываем окно (это не вызовет повторного WindowClosing)
                         window.Close();
