@@ -60,7 +60,7 @@ namespace AvaloniaTemplate
         /// <summary>
         /// Путь к директории хранения настроек
         /// </summary>
-        public static string FolderPath => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName} + Settings");
+        public static string FolderPath => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName}Settings");
         #endregion
 
         #region Текущий статус приложения
