@@ -5,6 +5,7 @@ using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Constants;
 using System;
+using System.Collections.ObjectModel;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
@@ -129,6 +130,64 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 
             double measuredWidth = textLayout.Height + ConstantsMain.__MinHeightText;
             return measuredWidth;
+        }
+        #endregion
+
+        #region Получить возможный для выбора элемент
+        /// <summary>
+        /// Получить возможный для выбора элемент
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="index"></param>
+        /// <param name="collections"></param>
+        /// <returns></returns>
+        public static T GetSelectedElement<T>(int index, ObservableCollection<T> collections)
+        {
+            T selected = default;
+            if (collections.Count > 0)
+            {
+                if (index > 0 && index >= collections.Count)
+                    selected = collections[^1];
+                else if (index >= 0)
+                    selected = collections[index];
+                else
+                    selected = collections[0];
+            }
+            return selected;
+        }
+        #endregion
+
+        #region Установить бит
+        /// <summary>
+        /// Установить бит
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="state"></param>
+        /// <param name="b_num"></param>
+        public static ushort SetBit(ushort status, bool state, byte b_num)
+        {
+            var value = 0;
+
+
+            if (state)
+                value |= (ushort)(1 << b_num);
+            else
+                value &= (ushort)~(1 << b_num);
+
+            return (ushort)(value | status);
+        }
+        #endregion
+
+        #region Получить бит
+        /// <summary>
+        /// Получить бит
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="status"></param>
+        /// <param name="b_num"></param>
+        public static bool GetBit(ushort status, byte b_num)
+        {
+            return (status & (1 << b_num)) > 0;
         }
         #endregion
     }
