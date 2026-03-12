@@ -1,4 +1,6 @@
-﻿using AvaloniaTemplate.ViewModels.Base;
+﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
+using AvaloniaTemplate.ViewModels.Base;
+using System.Windows.Input;
 
 namespace AvaloniaTemplate.ViewModels
 {
@@ -50,6 +52,45 @@ namespace AvaloniaTemplate.ViewModels
         /// </summary>
         /// <param name="settings"></param>
         private void ChangeAppStatus(string status) => AppStatus = status;
+        #endregion
+
+
+        #region Текст
+        private string text;
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public string Text
+        {
+            get => text;
+            set => SetProperty(ref text, value);
+        }
+        #endregion
+
+        #region isEnabled
+        private bool isEnabled;
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public bool IsEnabled
+        {
+            get => isEnabled;
+            set => SetProperty(ref isEnabled, value);
+        }
+        #endregion
+
+
+        #region Команда - открыть
+        /// <summary>
+        /// Команда - открыть
+        /// </summary>
+        public ICommand Command_Enabled
+            => new RelayCommand(ExecuteCommand_Enabled);
+
+        private void ExecuteCommand_Enabled()
+        {
+            IsEnabled = !IsEnabled;
+        }
         #endregion
     }
 }

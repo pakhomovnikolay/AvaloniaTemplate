@@ -1,0 +1,79 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+    
+    <Design.PreviewWith>
+        <StackPanel Width="400" Spacing="10">
+            <StackPanel Background="{DynamicResource SystemRegionBrush}">
+                <controls:HeaderedContentBorderWithTextBoxl/>
+            </StackPanel>
+        </StackPanel>
+    </Design.PreviewWith>
+
+
+    <SolidColorBrush  x:Key="ExternalBorderControlBackgroundDisabled" Color="#FFC2C2C2"/>
+    <SolidColorBrush  x:Key="HeaderControlForegroundDisabled" Color="DarkGray"/>
+    <SolidColorBrush  x:Key="ContentControlForegroundDisabled" Color="White"/>
+    
+    <ControlTheme x:Key="{x:Type controls:HeaderedContentBorderWithTextBoxl}"
+                  TargetType="controls:HeaderedContentBorderWithTextBoxl"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+		<Setter Property="Background" Value="LightYellow"/>
+		<Setter Property="BorderBrush" Value="Gray"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="3"/>
+		<Setter Property="Padding" Value="5 5 0 5"/>
+
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border x:Name="PART_BorderElement"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="0 0 0 0"
+                        >
+
+                    <Grid ColumnDefinitions="auto 5 *">
+						<TextBlock Grid.Column="0"
+                                   x:Name="PART_HeaderElement"
+                                   Text="{TemplateBinding Header}"
+                                   FontFamily="{TemplateBinding HeaderFontFamily}"
+								   FontSize="{TemplateBinding HeaderFontSize}"
+								   FontWeight="{TemplateBinding HeaderFontWeight}"
+                                   Margin="{TemplateBinding Padding}"
+                                   VerticalAlignment="Center"
+                                   Padding="0"
+                                   />
+
+                        <TextBox Grid.Column="2"
+                                 x:Name="PART_ContentElement"
+                                 Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
+                                 CornerRadius="{TemplateBinding CornerRadius}"
+                                 Watermark="{TemplateBinding Watermark}"
+                                 FontFamily="{TemplateBinding FontFamily}"
+								 FontSize="{TemplateBinding FontSize}"
+								 FontWeight="{TemplateBinding FontWeight}"
+                                 Background="{TemplateBinding BackgroundText}"
+                                 VerticalContentAlignment="Center"
+                                 HorizontalContentAlignment="Left"
+                                 BorderThickness="1 0 0 0"
+                                 Padding="5 0 0 0"
+                                 Classes="headeredContentBorderWithTextBoxl"
+                                 >
+
+                        </TextBox>
+                    </Grid>
+					
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    
+    </ControlTheme>
+
+</ResourceDictionary>

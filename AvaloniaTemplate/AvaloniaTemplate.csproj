@@ -37,4 +37,10 @@
       <HintPath>..\..\..\CommonLib\CommonLib\CommonLib\bin\Release\net8.0\CommonLib.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\CustomResourcesDictionary\HeaderedContentBorderWithTextBoxl.axaml.cs">
+      <DependentUpon>HeaderedContentBorderWithTextBoxl.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

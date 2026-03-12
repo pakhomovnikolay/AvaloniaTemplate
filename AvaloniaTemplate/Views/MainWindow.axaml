@@ -3,8 +3,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-		xmlns:svg="clr-namespace:Avalonia.Svg;assembly=Avalonia.Svg"
 		xmlns:vm="using:AvaloniaTemplate.ViewModels"
+		xmlns:customResources="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
 
         x:Class="AvaloniaTemplate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -12,10 +12,36 @@
 		Icon="/Assets/AppImage.ico"
 		CanResize="True"
 		WindowStartupLocation="CenterScreen"
-		
+		Background="WhiteSmoke"
 		Title="{Binding Title}"
 		Height="{Binding WindowHeight}"
 		Width="{Binding WindowWidth}"
 		>
+
+	<StackPanel>
+		
+		<Button Margin="5"
+				Height="25"
+				HorizontalAlignment="Left"
+				Content="Отключить\Включить"
+				Command="{Binding Command_Enabled}"
+				/>
+
+
+		<customResources:HeaderedContentBorderWithTextBoxl Height="25"
+														   Width="250"
+														   HorizontalAlignment="Left"
+														   Watermark="Ну что-то нужно ввести"
+														   Margin="5"
+														   Header="Строка для ввода:"
+														   Text="{Binding Text}"
+														   IsEnabled="{Binding IsEnabled}"
+														   >
+		
+		</customResources:HeaderedContentBorderWithTextBoxl>
+
+	</StackPanel>
+
+	
 
 </Window>
