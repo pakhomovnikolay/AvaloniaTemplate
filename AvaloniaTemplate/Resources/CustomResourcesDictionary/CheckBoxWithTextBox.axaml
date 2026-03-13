@@ -4,7 +4,7 @@
         >
     
     <Design.PreviewWith>
-        <Border Padding="20">
+        <Border Padding="20" Width="250">
             <StackPanel Background="{DynamicResource SystemRegionBrush}">
                 <controls:CheckBoxWithTextBox />
             </StackPanel>
