@@ -2,15 +2,14 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class HeaderedContentBorderWithTextBoxl : TemplatedControl
+public class BorderWithTextBox : TemplatedControl
 {
     #region Шрифт заголовка
     public static readonly StyledProperty<FontFamily> HeaderFontFamilyProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, FontFamily>(
+        AvaloniaProperty.Register<BorderWithTextBox, FontFamily>(
             nameof(HeaderFontFamily),
             defaultValue: "Verdana");
 
@@ -26,7 +25,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Размер шрифта заголовка
     public static readonly StyledProperty<double> HeaderFontSizeProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, double>(
+        AvaloniaProperty.Register<BorderWithTextBox, double>(
             nameof(HeaderFontSize),
             defaultValue: 11);
 
@@ -42,7 +41,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Толщина шрифта заголовка
     public static readonly StyledProperty<FontWeight> HeaderFontWeightProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, FontWeight>(
+        AvaloniaProperty.Register<BorderWithTextBox, FontWeight>(
             nameof(HeaderFontWeight),
             defaultValue: FontWeight.Bold);
 
@@ -58,7 +57,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Заголовок
     public static readonly StyledProperty<string> HeaderProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, string>(
+        AvaloniaProperty.Register<BorderWithTextBox, string>(
             nameof(Header),
             defaultValue: "Заголовок");
 
@@ -74,7 +73,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Водяной знак
     public static readonly StyledProperty<string> WatermarkProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, string>(
+        AvaloniaProperty.Register<BorderWithTextBox, string>(
             nameof(Watermark),
             defaultValue: "Введите текст");
 
@@ -90,7 +89,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Текст
     public static readonly StyledProperty<string?> TextProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, string?>(
+        AvaloniaProperty.Register<BorderWithTextBox, string?>(
             nameof(Text),
             defaultValue: "215315",
             defaultBindingMode: BindingMode.TwoWay);
@@ -107,7 +106,7 @@ public class HeaderedContentBorderWithTextBoxl : TemplatedControl
 
     #region Цвет заднего фона для воодимого текста
     public static readonly StyledProperty<IBrush?> BackgroundTextProperty =
-        AvaloniaProperty.Register<HeaderedContentBorderWithTextBoxl, IBrush?>(
+        AvaloniaProperty.Register<BorderWithTextBox, IBrush?>(
             nameof(BackgroundText),
             defaultValue: Brushes.LightGray);
 

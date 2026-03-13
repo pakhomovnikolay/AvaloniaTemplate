@@ -28,17 +28,21 @@
 				/>
 
 
-		<customResources:HeaderedContentBorderWithTextBoxl Height="25"
-														   Width="250"
-														   HorizontalAlignment="Left"
-														   Watermark="Ну что-то нужно ввести"
-														   Margin="5"
-														   Header="Строка для ввода:"
-														   Text="{Binding Text}"
-														   IsEnabled="{Binding IsEnabled}"
-														   >
-		
-		</customResources:HeaderedContentBorderWithTextBoxl>
+		<customResources:BorderWithTextBox HorizontalAlignment="Left"
+										   Watermark="Ну что-то нужно ввести"
+										   Margin="5"
+										   Header="Строка для ввода:"
+										   Text="{Binding Text}"
+										   IsEnabled="{Binding IsEnabled}"
+										   />
+
+		<customResources:CheckBoxWithTextBox HorizontalAlignment="Left"
+											 Watermark="Ну что-то нужно ввести"
+											 Margin="5"
+											 Header="Строка для ввода:"
+											 Text="{Binding Text}"
+											 IsChecked="{Binding IsEnabled}"
+											 />
 
 	</StackPanel>
 

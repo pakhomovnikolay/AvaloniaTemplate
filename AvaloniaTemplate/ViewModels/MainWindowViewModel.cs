@@ -68,7 +68,7 @@ namespace AvaloniaTemplate.ViewModels
         #endregion
 
         #region isEnabled
-        private bool isEnabled;
+        private bool isEnabled = true;
         /// <summary>
         /// Текст
         /// </summary>

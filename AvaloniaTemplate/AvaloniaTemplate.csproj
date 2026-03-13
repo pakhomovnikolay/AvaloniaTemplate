@@ -39,8 +39,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\CustomResourcesDictionary\HeaderedContentBorderWithTextBoxl.axaml.cs">
-      <DependentUpon>HeaderedContentBorderWithTextBoxl.axaml</DependentUpon>
+    <Compile Update="Resources\CustomResourcesDictionary\BorderWithTextBox.axaml.cs">
+      <DependentUpon>BorderWithTextBox.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 </Project>

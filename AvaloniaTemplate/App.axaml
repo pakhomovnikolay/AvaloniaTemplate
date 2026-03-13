@@ -29,7 +29,9 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/GroupBoxDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/MenuDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/TabControlDictionary.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/HeaderedContentBorderWithTextBoxl.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/BorderWithTextBox.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/CheckBoxWithTextBox.axaml"/>
+				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>
