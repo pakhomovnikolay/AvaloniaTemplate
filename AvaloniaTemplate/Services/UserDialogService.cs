@@ -247,7 +247,7 @@ namespace AvaloniaTemplate.Services
         {
             if (App.Desktop?.MainWindow is { } window) { window.Show(); return window; }
 
-            window = App.Services.GetRequiredService<MainWindow>();
+            window = App.GetService<MainWindow>();
             window.Closing += async (s, e) => await CloseMainWindow(e);
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
