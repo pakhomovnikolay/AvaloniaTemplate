@@ -1,5 +1,6 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.ViewModels.Base;
+using System.Collections.ObjectModel;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.ViewModels
@@ -55,6 +56,13 @@ namespace AvaloniaTemplate.ViewModels
         #endregion
 
 
+
+
+
+        /// <summary>
+        /// ////////////////////////////////////////////////////////////////////////////////////////
+        /// </summary>
+
         #region Текст
         private string text;
         /// <summary>
@@ -90,6 +98,31 @@ namespace AvaloniaTemplate.ViewModels
         private void ExecuteCommand_Enabled()
         {
             IsEnabled = !IsEnabled;
+        }
+        #endregion
+
+
+        #region Текст
+        private ObservableCollection<string> sourceItems = ["Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "Item 6", "Item 7", "Item 8", "Item 9"];
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public ObservableCollection<string> SourceItems
+        {
+            get => sourceItems;
+            set => SetProperty(ref sourceItems, value);
+        }
+        #endregion
+
+        #region Текст
+        private ObservableCollection<string> targetItems = [];
+        /// <summary>
+        /// Текст
+        /// </summary>
+        public ObservableCollection<string> TargetItems
+        {
+            get => targetItems;
+            set => SetProperty(ref targetItems, value);
         }
         #endregion
     }

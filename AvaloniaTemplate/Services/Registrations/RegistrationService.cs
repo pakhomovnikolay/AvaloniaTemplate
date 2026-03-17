@@ -8,6 +8,7 @@ namespace AvaloniaTemplate.Services.Registrations
         public static void AddServices(this IServiceCollection services) => services
             .AddSingleton<IUserDialogService, UserDialogService>()
             .AddSingleton<IEncryptorService, EncryptorService>()
+            .AddTransient<IPropertyAccessorFactory, PropertyAccessorFactory>()
             ;
     }
 }

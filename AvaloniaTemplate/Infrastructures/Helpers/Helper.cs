@@ -5,7 +5,7 @@ using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Constants;
 using System;
-using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
@@ -141,17 +141,17 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="index"></param>
         /// <param name="collections"></param>
         /// <returns></returns>
-        public static T GetSelectedElement<T>(int index, ObservableCollection<T> collections)
+        public static T GetSelectedElement<T>(int index, IList collections)
         {
             T selected = default;
             if (collections.Count > 0)
             {
                 if (index > 0 && index >= collections.Count)
-                    selected = collections[^1];
+                    selected = (T)collections[^1];
                 else if (index >= 0)
-                    selected = collections[index];
+                    selected = (T)collections[index];
                 else
-                    selected = collections[0];
+                    selected = (T)collections[0];
             }
             return selected;
         }

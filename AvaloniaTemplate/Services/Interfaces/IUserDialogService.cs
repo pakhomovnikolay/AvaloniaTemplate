@@ -2,7 +2,6 @@
 using Avalonia.Platform.Storage;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
-using AvaloniaTemplate.Views;
 using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces

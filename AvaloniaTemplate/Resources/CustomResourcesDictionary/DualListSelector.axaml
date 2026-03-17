@@ -1,0 +1,175 @@
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+    
+    <Design.PreviewWith>
+        <Border Padding="20" Width="250">
+            <StackPanel Background="{DynamicResource SystemRegionBrush}">
+                <controls:DualListSelector/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    
+    <Thickness x:Key="ListBoxItemPadding">1</Thickness>
+
+    <ControlTheme x:Key="{x:Type controls:DualListSelector}"
+                  TargetType="controls:DualListSelector"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="BorderBrush" Value="Gray"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Border BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        Padding="{TemplateBinding Padding}"
+                        >
+
+					<Grid ColumnDefinitions="* auto *" RowDefinitions="*"
+                          >
+					
+                        <!--Левая панель-->
+                        <Border Grid.Column="0"
+                                BorderThickness="{TemplateBinding BoderThicknessContent}"
+                                BorderBrush="{TemplateBinding BorderBrushContent}"
+                                Background="{TemplateBinding BackgroundContent}"
+                                CornerRadius="{TemplateBinding CornerRadiusContent}"
+                                >
+						
+                            <Grid RowDefinitions="auto *">
+
+                                <TextBox Grid.Row="0"
+                                         Text="{Binding FilterSource, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Background="{TemplateBinding BackgroundPanelFilter}"
+                                         Foreground="{TemplateBinding ForegroundPanelFilter}"
+                                         FontFamily="{TemplateBinding FontFamily}"
+                                         FontSize="{TemplateBinding FontSize}"
+                                         FontWeight="{TemplateBinding FontWeight}"
+                                         CornerRadius="{TemplateBinding CornerRadiusContent}"
+                                         Watermark="{TemplateBinding Watermark}"
+
+                                         MinHeight="25"
+                                         VerticalContentAlignment="Center"
+                                         Classes="clearButton"
+                                         Padding="3 0 0 0"
+                                         Margin="3"
+                                         
+                                         />
+
+                                <ListBox Grid.Row="1"
+                                         x:Name="PART_Source"
+                                         ItemsSource="{Binding SourceItemsView, RelativeSource={RelativeSource TemplatedParent}}"
+                                         SelectedItem="{Binding SourceSelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                                         SelectedItems="{Binding SourceSelectedItems, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                         ItemTemplate="{TemplateBinding ItemTemplate}"
+                                         Background="{TemplateBinding BackgroundContent}"
+                                         Foreground="{TemplateBinding ForegroundContent}"
+                                         DragDrop.AllowDrop="True"
+                                         SelectionMode="Multiple"
+                                         />
+							
+                            </Grid>
+
+                        </Border>
+
+                        <!--Панель управления-->
+                        <Border Grid.Column="1"
+                                BorderThickness="{TemplateBinding BoderThicknessControlPanel}"
+                                BorderBrush="{TemplateBinding BorderBrushControlPanel}"
+                                Background="{TemplateBinding BackgroundControlPanel}"
+                                CornerRadius="{TemplateBinding CornerRadiusControlPanel}"
+                                Margin="5 0"
+                                >
+
+							<StackPanel VerticalAlignment="Center"
+                                        Spacing="8"
+                                        
+                                        >
+						
+                                <Button x:Name="PART_Add"
+                                        Background="Transparent"
+                                        >
+                            
+                                    <Button.Content>
+                                        <Path Data="M8,4 L16,12 L8,20 M14,4 L22,12 L14,20"
+                                                Stroke="#3498db"
+                                                StrokeThickness="2"
+                                                Stretch="Uniform"
+                                                Width="16"
+                                                Height="16"/>
+                                    </Button.Content>
+                                </Button>
+                        
+                                <Button x:Name="PART_Remove"
+                                        Background="Transparent"
+                                        >
+                            
+                                    <Button.Content>
+                                        <Path Data="M16,20 L8,12 L16,4 M22,20 L14,12 L22,4"
+                                                Stroke="#3498db"
+                                                StrokeThickness="2"
+                                                Stretch="Uniform"
+                                                Width="16"
+                                                Height="16"/>
+                                    </Button.Content>
+                                </Button>
+
+                            </StackPanel>
+                        </Border>
+
+                        <!--Правая панель-->
+                        <Border Grid.Column="2"
+                                BorderThickness="{TemplateBinding BoderThicknessContent}"
+                                BorderBrush="{TemplateBinding BorderBrushContent}"
+                                Background="{TemplateBinding BackgroundContent}"
+                                CornerRadius="{Binding CornerRadiusContentRight, RelativeSource={RelativeSource TemplatedParent}}"
+                                >
+						
+                            <Grid RowDefinitions="auto *">
+
+                                <TextBox Grid.Row="0"
+                                         Text="{Binding FilterTarget, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Background="{TemplateBinding BackgroundPanelFilter}"
+                                         Foreground="{TemplateBinding ForegroundPanelFilter}"
+                                         CornerRadius="{Binding CornerRadiusContentRight, RelativeSource={RelativeSource TemplatedParent}}"
+                                         Watermark="{TemplateBinding Watermark}"
+
+                                         MinHeight="25"
+                                         VerticalContentAlignment="Center"
+                                         Classes="clearButton"
+                                         Padding="3 0 0 0"
+                                         Margin="3"
+                                         />
+
+                                <ListBox Grid.Row="1"
+                                         x:Name="PART_Target"
+                                         ItemsSource="{Binding TargetItemsView, RelativeSource={RelativeSource TemplatedParent}}"
+                                         SelectedItem="{Binding TargetSelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                                         SelectedItems="{Binding TargetSelectedItems, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                         ItemTemplate="{TemplateBinding ItemTemplate}"
+                                         Background="{TemplateBinding BackgroundContent}"
+                                         Foreground="{TemplateBinding ForegroundContent}"
+                                         DragDrop.AllowDrop="True"
+                                         SelectionMode="Multiple"
+                                         />
+							
+                            </Grid>
+
+                        </Border>
+
+                    </Grid>
+                </Border>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
+</ResourceDictionary>

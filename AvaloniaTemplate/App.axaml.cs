@@ -143,6 +143,16 @@ namespace AvaloniaTemplate
         }
         #endregion
 
+        #region Получить указанный сервис
+        /// <summary>
+        /// Получить указанный сервис
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetService<T>()
+            => Services.GetRequiredService<T>(); 
+        #endregion
+
         /// <summary>
         /// Инициализация
         /// </summary>

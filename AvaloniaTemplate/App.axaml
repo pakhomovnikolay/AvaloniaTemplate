@@ -31,6 +31,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/TabControlDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/BorderWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/CheckBoxWithTextBox.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DualListSelector.axaml"/>
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

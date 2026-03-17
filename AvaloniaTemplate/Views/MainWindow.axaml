@@ -18,33 +18,51 @@
 		Width="{Binding WindowWidth}"
 		>
 
-	<StackPanel>
+	<Grid RowDefinitions="auto *">
 		
-		<Button Margin="5"
-				Height="25"
-				HorizontalAlignment="Left"
-				Content="Отключить\Включить"
-				Command="{Binding Command_Enabled}"
-				/>
+
+		<StackPanel Margin="5" Spacing="10" Grid.Row="0">
+		
+			<Button 
+					Height="25"
+					HorizontalAlignment="Left"
+					Content="Отключить\Включить"
+					Command="{Binding Command_Enabled}"
+					/>
 
 
-		<customResources:BorderWithTextBox HorizontalAlignment="Left"
-										   Watermark="Ну что-то нужно ввести"
-										   Margin="5"
-										   Header="Строка для ввода:"
-										   Text="{Binding Text}"
-										   IsEnabled="{Binding IsEnabled}"
-										   />
+			<customResources:BorderWithTextBox HorizontalAlignment="Left"
+											   Watermark="Ну что-то нужно ввести"
+											   Header="Строка для ввода:"
+											   Text="{Binding Text}"
+											   IsEnabled="{Binding IsEnabled}"
+											   />
 
-		<customResources:CheckBoxWithTextBox HorizontalAlignment="Left"
-											 Watermark="Ну что-то нужно ввести"
-											 Margin="5"
-											 Header="Строка для ввода:"
-											 Text="{Binding Text}"
-											 IsChecked="{Binding IsEnabled}"
-											 />
+			<customResources:CheckBoxWithTextBox HorizontalAlignment="Left"
+												 Watermark="Ну что-то нужно ввести"
+												 Header="Строка для ввода:"
+												 Text="{Binding Text}"
+												 IsChecked="{Binding IsEnabled}"
+												 />
 
-	</StackPanel>
+		</StackPanel>
+
+		<customResources:DualListSelector Grid.Row="1" Margin="5"
+										  SourceItems="{Binding SourceItems}"
+										  TargetItems="{Binding TargetItems}"
+										  SorterBy=""
+										  >
+			<customResources:DualListSelector.ItemTemplate>
+					<DataTemplate >
+						<TextBlock Text="{Binding }"
+									Margin="5"
+									/>
+					</DataTemplate>
+				</customResources:DualListSelector.ItemTemplate>
+		</customResources:DualListSelector>
+	</Grid>
+
+	
 
 	
 
