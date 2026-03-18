@@ -38,7 +38,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="owner"> Родительское окно </param>
         /// <param name="provider"> Провайдер данных </param>
         /// <returns></returns>
-        Task<string> SelectFile(string title,
+        Task<string> SelectFileAsync(string title,
             FileDialogType dialogType = FileDialogType.Open,
             bool allowMultiple = false,
             string defaultPath = null,
@@ -55,7 +55,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="defaultPath"> Путь по умолчанию </param>
         /// <param name="provider"> Провайдер данных </param>
         /// <returns></returns>
-        Task<string> SelectFolder(string title, string defaultPath = null, IStorageProvider provider = default);
+        Task<string> SelectFolderAsync(string title, string defaultPath = null, IStorageProvider provider = default);
         #endregion
 
         #region Удалить файл
@@ -75,7 +75,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="content"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        Task<bool> Save<T>(T content, string path);
+        Task<bool> SaveAsync<T>(T content, string path);
         #endregion
 
         #region Загрузить данные
@@ -84,7 +84,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <param name="path"> Путь к файлу </param>
         /// <returns></returns>
-        Task<T> Load<T>(string path);
+        Task<T> LoadAsync<T>(string path);
         #endregion
 
         #region Событие закрытия главного окна
@@ -93,7 +93,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        Task CloseMainWindow(WindowClosingEventArgs e);
+        Task CloseMainWindowAsync(WindowClosingEventArgs e);
         #endregion
 
         #region Событие завершения открытия главного окна

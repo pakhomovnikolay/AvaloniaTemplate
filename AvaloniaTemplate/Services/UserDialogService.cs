@@ -6,7 +6,6 @@ using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.Views;
 using AvaloniaTemplate.Views.UserDialogWindows;
-using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -34,7 +33,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Открыть диалоговое окно выбора файла
-        public async Task<string> SelectFile(string title,
+        public async Task<string> SelectFileAsync(string title,
             FileDialogType dialogType = FileDialogType.Open,
             bool allowMultiple = false, string defaultPath = null,
             FilePickerFileType filter = null, Window owner = null,
@@ -68,7 +67,7 @@ namespace AvaloniaTemplate.Services
         /// <param name="defaultPath"> Путь по умолчанию </param>
         /// <param name="provider"> Провайдер данных </param>
         /// <returns></returns>
-        public async Task<string> SelectFolder(string title,
+        public async Task<string> SelectFolderAsync(string title,
             string defaultPath = null,
             IStorageProvider provider = default)
             => await FileDialogWindow.SelectFolder(new OpenFileDialogOptionType
@@ -118,14 +117,14 @@ namespace AvaloniaTemplate.Services
         /// <param name="content"></param>
         /// <param name="path"></param>
         /// <returns></returns>
-        public async Task<bool> Save<T>(T content, string path)
+        public async Task<bool> SaveAsync<T>(T content, string path)
         {
             var result = false;
             var SettingsAppSerializer = new XmlSerializer(typeof(T));
 
             try
             {
-                using FileStream fs = new(path, FileMode.OpenOrCreate);
+                await using FileStream fs = new(path, FileMode.OpenOrCreate);
                 SettingsAppSerializer.Serialize(fs, content);
                 result = true;
             }
@@ -145,14 +144,14 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         /// <param name="path"> Путь к файлу </param>
         /// <returns></returns>
-        public async Task<T> Load<T>(string path)
+        public async Task<T> LoadAsync<T>(string path)
         {
             T result = default;
             var settingsAppSerializer = new XmlSerializer(typeof(T));
 
             try
             {
-                using FileStream fs = new(path, FileMode.OpenOrCreate);
+                await using FileStream fs = new(path, FileMode.OpenOrCreate);
                 result = (T)settingsAppSerializer.Deserialize(fs);
             }
             catch (Exception e)
@@ -170,7 +169,7 @@ namespace AvaloniaTemplate.Services
         /// Событие закрытия главного окна
         /// </summary>
         /// <param name="e"></param>
-        public async Task CloseMainWindow(WindowClosingEventArgs e)
+        public async Task CloseMainWindowAsync(WindowClosingEventArgs e)
         {
             var requestConfirm = App.GetStateRequestConfirmCloseBeforeClosing();
             if (App.Desktop?.MainWindow is not { } window || !requestConfirm)
@@ -248,7 +247,7 @@ namespace AvaloniaTemplate.Services
             if (App.Desktop?.MainWindow is { } window) { window.Show(); return window; }
 
             window = App.GetService<MainWindow>();
-            window.Closing += async (s, e) => await CloseMainWindow(e);
+            window.Closing += async (s, e) => await CloseMainWindowAsync(e);
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.Show();

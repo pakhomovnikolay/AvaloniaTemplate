@@ -22,6 +22,12 @@ namespace AvaloniaTemplate
         private static bool requestConfirmCloseBeforeClosing = Helper.GetResource<bool>("RequestConfirmCloseBeforeClosing");
         private static bool appDataChanged = false;
 
+        private static readonly string emblemCompany = "CTEKSLogo.png";
+        private static readonly string nameCompany = "ООО «КиберТЭКСистем»";
+        private static readonly string webAddressCompany = "cteks.ru";
+        private static readonly string emailSupportCompany = "info@cteks.ru";
+        private static readonly string signatureCompany = "© 2026 ООО «КТС». Все права защищены";
+
         #region Событие изменения статуса приложения
         /// <summary>
         /// Событие изменения статуса приложения
@@ -60,7 +66,21 @@ namespace AvaloniaTemplate
         /// <summary>
         /// Путь к директории хранения настроек
         /// </summary>
-        public static string FolderPath => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName}Settings");
+        public static string FolderPathSettings => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName}Settings");
+        #endregion
+
+        #region Путь к директории хранения логов
+        /// <summary>
+        /// Путь к директории хранения логов
+        /// </summary>
+        public static string FolderPathLogs => Path.Combine(Directory.GetCurrentDirectory(), $"{AppName}Logs");
+        #endregion
+
+        #region Путь к директории приложения
+        /// <summary>
+        /// Путь к директории приложения
+        /// </summary>
+        public static string FolderPath => Path.Combine(Directory.GetCurrentDirectory());
         #endregion
 
         #region Текущий статус приложения
@@ -88,9 +108,9 @@ namespace AvaloniaTemplate
         }
         #endregion
 
-        #region Получить текущий контрол приложения
+        #region Получить данные приложения
         /// <summary>
-        /// Получить текущий контрол приложения
+        /// Получить данные приложения
         /// </summary>
         public static IClassicDesktopStyleApplicationLifetime Desktop => desktop;
         #endregion
@@ -139,7 +159,6 @@ namespace AvaloniaTemplate
         public static void ChangeStatusAppDataChanged(bool change)
         {
             appDataChanged = change;
-            requestConfirmCloseBeforeClosing = requestConfirmCloseBeforeClosing || appDataChanged;
         }
         #endregion
 
@@ -150,16 +169,49 @@ namespace AvaloniaTemplate
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
         public static T GetService<T>()
-            => Services.GetRequiredService<T>(); 
+            => Services.GetRequiredService<T>();
+        #endregion
+
+        #region Эмблема компании
+        /// <summary>
+        /// Эмблема компании
+        /// </summary>
+        public static string EmblemCompany => emblemCompany;
+        #endregion
+
+        #region Наименование компании
+        /// <summary>
+        /// Наименование компании
+        /// </summary>
+        public static string NameCompany => nameCompany;
+        #endregion
+
+        #region Веб адрес компании
+        /// <summary>
+        /// Веб адрес компании
+        /// </summary>
+        public static string WebAddressCompany => webAddressCompany;
+        #endregion
+
+        #region Адрес тех. поддержки компании
+        /// <summary>
+        /// Адрес тех. поддержки компании
+        /// </summary>
+        public static string EmailSupportCompany => emailSupportCompany;
+        #endregion
+
+        #region Подпись компании
+        /// <summary>
+        /// Подпись компании
+        /// </summary>
+        public static string SignatureCompany => signatureCompany;
         #endregion
 
         /// <summary>
         /// Инициализация
         /// </summary>
         public override void Initialize()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
+            => AvaloniaXamlLoader.Load(this);
 
         /// <summary>
         /// Инициализация компонентов при старте приложения 
