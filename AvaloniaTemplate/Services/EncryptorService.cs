@@ -1,7 +1,11 @@
-﻿using AvaloniaTemplate.Services.Interfaces;
+﻿using AvaloniaTemplate.Infrastructures.Constants;
+using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models.Enums;
+using AvaloniaTemplate.Services.Interfaces;
 using System;
-using System.Diagnostics;
+using System.Buffers.Binary;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,227 +14,243 @@ namespace AvaloniaTemplate.Services
 {
     public class EncryptorService : IEncryptorService
     {
-        #region Соль шифрования
-        private static readonly byte[] __Salt =
-        {
-            0x26, 0xdc, 0xff, 0x00,
-            0xad, 0xed, 0x7a, 0xee,
-            0xc5, 0xfe, 0x07, 0xaf,
-            0x4d, 0x08, 0x22, 0x3c
-        };
-        #endregion
-
-        #region Шифрование
-        private static ICryptoTransform GetEncryptor(byte[] salt = null)
-        {
-            using Aes aes = Aes.Create();
-            aes.IV = MD5.HashData(salt ?? __Salt);
-            aes.Key = SHA256.HashData(salt ?? __Salt);
-            return aes.CreateEncryptor(aes.Key, aes.IV);
-        }
-        #endregion
-
-        #region Расшифровка
-        private static ICryptoTransform GetDecryption(byte[] salt = null)
-        {
-            using Aes aes = Aes.Create();
-            aes.IV = MD5.HashData(salt ?? __Salt);
-            aes.Key = SHA256.HashData(salt ?? __Salt);
-            return aes.CreateDecryptor(aes.Key, aes.IV);
-        }
-        #endregion
-
-        #region Синхронное шифрование
-        public void Encryptor(string sourcePath, string destinationPath, string password, int bufferLength = 102400)
-        {
-            var encryptor = GetEncryptor();
-
-            using var destination_encrypted = File.Create(destinationPath, bufferLength);
-            using var destination = new CryptoStream(destination_encrypted, encryptor, CryptoStreamMode.Write);
-            using var source = File.OpenRead(sourcePath);
-
-            int readCount;
-            var buffer = new byte[bufferLength];
-            do
-            {
-                readCount = source.Read(buffer, 0, bufferLength);
-                destination.Write(buffer, 0, readCount);
-            } while (readCount > 0);
-
-            destination.FlushFinalBlock();
-        }
-        #endregion
-
-        #region Синхронная расшифровка
-        public bool Decryption(string sourcePath, string destinationPath, string password, int bufferLength = 102400)
-        {
-            try
-            {
-                var decryption = GetDecryption();
-
-                using var destination_decrypted = File.Create(destinationPath, bufferLength);
-                using var destination = new CryptoStream(destination_decrypted, decryption, CryptoStreamMode.Write);
-                using var source = File.OpenRead(sourcePath);
-
-                int readCount;
-                var buffer = new byte[bufferLength];
-                do
-                {
-                    readCount = source.Read(buffer, 0, bufferLength);
-                    destination.Write(buffer, 0, readCount);
-                } while (readCount > 0);
-
-                try
-                {
-                    destination.FlushFinalBlock();
-                }
-                catch (CryptographicException)
-                {
-
-                    return false;
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
-        #endregion
-
-        #region Асинхронное шифрование
-        public async Task EncryptorAsync(
-            string sourcePath,
-            string destinationPath,
-            string password,
-            int bufferLength = 102400,
-            IProgress<double> progress = null,
+        #region Асинхронное шифрование потока
+        /// <summary>
+        /// Асинхронное шифрование
+        /// </summary>
+        /// <param name="sourcePath">Полный путь к файлу</param>
+        /// <param name="targetPath">Путь к дериктории для сохранения файла</param>
+        /// <param name="password">Пароль? при необходимости</param>
+        /// <param name="progress">Текущий прогресс шифрования</param>
+        /// <param name="cancel">Ключ отмены опереции</param>
+        /// <exception cref="OperationCanceledException">Отмена операции</exception>
+        /// <exception cref="CryptographicException">Ошибка шифрования</exception>
+        /// <exception cref="UnauthorizedAccessException">Не удалось получить доступ к файлу</exception>
+        /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
+        /// <returns>CryptResult</returns>
+        public async Task<CryptResult> EncryptStreamAsync(string sourcePath, string targetPath,
+            string password = "",
+            IProgress<double>? progress = null,
             CancellationToken cancel = default)
         {
-            if (!File.Exists(sourcePath)) throw new FileNotFoundException("Файл-источник для процесса шифрования не найден", sourcePath);
-            if (bufferLength <= 0) throw new ArgumentOutOfRangeException(nameof(bufferLength), bufferLength, "Размер буфера чтения должен быть больше 0");
+            var cryptResult = CryptResult.Ok();
+            if (!File.Exists(sourcePath))
+                throw new FileNotFoundException();
 
-            cancel.ThrowIfCancellationRequested();
-
-            var encryptor = GetEncryptor();
-
+            byte[] key = new byte[EncryptFileFormat.KdfByteLength];
             try
             {
-                await using var destination_encrypted = File.Create(destinationPath, bufferLength);
-                await using var destination = new CryptoStream(destination_encrypted, encryptor, CryptoStreamMode.Write);
-                await using var source = File.OpenRead(sourcePath);
+                byte[] salt = RandomNumberGenerator.GetBytes(EncryptFileFormat.SaltSize);
+                byte[] baseNonce = RandomNumberGenerator.GetBytes(EncryptFileFormat.NonceSize);
 
-                var file_length = source.Length;
+                using var kdf = new Rfc2898DeriveBytes(
+                    password,
+                    salt,
+                    150_000,
+                    HashAlgorithmName.SHA256);
 
-                int readCount;
-                var buffer = new byte[bufferLength];
-                var last_percent = 0.0;
-                do
+                key = kdf.GetBytes(EncryptFileFormat.KdfByteLength);
+
+                await using var input = File.OpenRead(sourcePath);
+                await using var output = File.Create(targetPath);
+                long total = input.Length;
+                long processed = 0;
+
+                // header
+                await output.WriteAsync(EncryptFileFormat.MagicV3, cancel);
+                await output.WriteAsync(salt, cancel);
+                await output.WriteAsync(baseNonce, cancel);
+
+                using var aes = new AesGcm(key, EncryptFileFormat.TagSize);
+                byte[] buffer = new byte[EncryptFileFormat.ChunkSize];
+                int read;
+                uint counter = 0;
+
+                while ((read = await input.ReadAsync(buffer, cancel)) > 0)
                 {
-                    readCount = await source.ReadAsync(buffer.AsMemory(0, bufferLength), cancel).ConfigureAwait(false);
-                    await destination.WriteAsync(buffer.AsMemory(0, readCount), cancel).ConfigureAwait(false);
+                    var nonce = CreateNonce(baseNonce, counter++);
+                    var ciphertext = new byte[read];
+                    var tag = new byte[EncryptFileFormat.TagSize];
 
-                    var position = source.Position;
-                    var percent = (double)position / file_length;
+                    aes.Encrypt(nonce, buffer.AsSpan(0, read), ciphertext, tag);
+                    var lengByte = new byte[EncryptFileFormat.LengthReadWriteByte];
+                    BinaryPrimitives.WriteInt32LittleEndian(lengByte, read);
 
-                    if ((percent - last_percent) >= 0.001)
-                    {
-                        progress?.Report(percent);
-                        last_percent = percent;
-                    }
+                    await output.WriteAsync(lengByte, cancel);
+                    await output.WriteAsync(nonce, cancel);
+                    await output.WriteAsync(tag, cancel);
+                    await output.WriteAsync(ciphertext, cancel);
 
-                    if (cancel.IsCancellationRequested)
-                        cancel.ThrowIfCancellationRequested();
-
-                } while (readCount > 0);
-
-                destination.FlushFinalBlock();
-
+                    processed += read;
+                    progress?.Report((double)processed / total);
+                }
                 progress?.Report(1);
+                return cryptResult;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException e)
             {
-                File.Delete(destinationPath);
-                progress?.Report(0);
+                cryptResult = CryptResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
+                return cryptResult;
             }
-            catch (Exception e)
+            catch (CryptographicException e)
             {
-                Debug.WriteLine("Error in EncryptorAsync:\r\n{0}", e);
-                throw;
+                cryptResult = CryptResult.Fail(EncryptFileFormat.CryptographicWriteMessage, e);
+                return cryptResult;
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
+                return cryptResult;
+            }
+            catch (FileNotFoundException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
+                return cryptResult;
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(key);
+                if (!cryptResult.Success)
+                    File.Delete(targetPath);
             }
         }
         #endregion
 
-        #region Асинхронная расшифровка
-        public async Task<bool> DecryptionAsync(
-            string sourcePath,
-            string destinationPath,
-            string password,
-            int bufferLength = 102400,
-            IProgress<double> progress = null,
+        #region Асинхронное дешифрование потока
+        /// <summary>
+        /// Асинхронное дешифрование потока
+        /// </summary>
+        /// <param name="sourcePath">Полный путь к файлу</param>
+        /// <param name="targetPath">Путь к дериктории для сохранения файла</param>
+        /// <param name="password">Пароль? при необходимости</param>
+        /// <param name="progress">Текущий прогресс шифрования</param>
+        /// <param name="cancel">Ключ отмены опереции</param>
+        /// <exception cref="CryptographicException">Ошибка шифрования</exception>
+        /// <exception cref="OperationCanceledException">Отмена операции</exception>
+        /// <exception cref="UnauthorizedAccessException">Не удалось получить доступ к файлу</exception>
+        /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
+        /// <exception cref="InvalidDataException">Неверный формат данных</exception>
+        /// <exception cref="EndOfStreamException">Неожиданное окончание данных</exception>
+        /// <returns>CryptResult</returns>
+        public async Task<CryptResult> DecryptStreamAsync(string sourcePath, string targetPath,
+            string password = "",
+            IProgress<double>? progress = null,
             CancellationToken cancel = default)
         {
-            if (!File.Exists(sourcePath)) throw new FileNotFoundException("Файл-источник для процесса шифрования не найден", sourcePath);
-            if (bufferLength <= 0) throw new ArgumentOutOfRangeException(nameof(bufferLength), bufferLength, "Размер буфера чтения должен быть больше 0");
+            var cryptResult = CryptResult.Ok();
+            if (!File.Exists(sourcePath))
+                throw new FileNotFoundException();
 
-            cancel.ThrowIfCancellationRequested();
-
-            var decryption = GetDecryption();
+            byte[] key = new byte[EncryptFileFormat.KdfByteLength];
 
             try
             {
-                await using var destination_decrypted = File.Create(destinationPath, bufferLength);
-                await using var destination = new CryptoStream(destination_decrypted, decryption, CryptoStreamMode.Write);
-                await using var source = File.OpenRead(sourcePath);
+                await using var input = File.OpenRead(sourcePath);
+                byte[] header = new byte[EncryptFileFormat.MagicV3.Length];
+                await Helper.ReadExactlyAsync(input, header, cancel);
+                if (!header.AsSpan().SequenceEqual(EncryptFileFormat.MagicV3))
+                    throw new InvalidDataException();
 
-                var file_length = source.Length;
+                await using var output = File.Create(targetPath);
+                byte[] salt = new byte[EncryptFileFormat.SaltSize];
+                byte[] baseNonce = new byte[EncryptFileFormat.NonceSize];
 
-                int readCount;
-                var buffer = new byte[bufferLength];
-                var last_percent = 0.0;
-                do
+                await Helper.ReadExactlyAsync(input, salt, cancel);
+                await Helper.ReadExactlyAsync(input, baseNonce, cancel);
+
+                using var kdf = new Rfc2898DeriveBytes(password, salt, 150_000, HashAlgorithmName.SHA256);
+                key = kdf.GetBytes(EncryptFileFormat.KdfByteLength);
+
+                using var aes = new AesGcm(key, EncryptFileFormat.TagSize);
+                long total = input.Length;
+                long processed = input.Position;
+
+                while (input.Position < input.Length)
                 {
-                    readCount = await source.ReadAsync(buffer.AsMemory(0, bufferLength), cancel).ConfigureAwait(false);
-                    await destination.WriteAsync(buffer.AsMemory(0, readCount), cancel).ConfigureAwait(false);
-
-                    var position = source.Position;
-                    var percent = (double)position / file_length;
-
-                    if ((percent - last_percent) >= 0.001)
-                    {
-                        progress?.Report(percent);
-                        last_percent = percent;
-                    }
-
-
                     cancel.ThrowIfCancellationRequested();
-                } while (readCount > 0);
 
-                try
-                {
-                    destination.FlushFinalBlock();
-                }
-                catch (CryptographicException)
-                {
-                    return false;
+                    var lengByte = new byte[EncryptFileFormat.LengthReadWriteByte];
+                    await Helper.ReadExactlyAsync(input, lengByte, cancel);
+                    int chunkSize = BinaryPrimitives.ReadInt32LittleEndian(lengByte);
+                    if (chunkSize <= 0 || chunkSize > EncryptFileFormat.ChunkSize)
+                        throw new InvalidDataException();
+
+                    var nonce = new byte[EncryptFileFormat.NonceSize];
+                    var tag = new byte[EncryptFileFormat.TagSize];
+                    var ciphertext = new byte[chunkSize];
+                    var plaintext = new byte[chunkSize];
+
+                    await Helper.ReadExactlyAsync(input, nonce, cancel);
+                    await Helper.ReadExactlyAsync(input, tag, cancel);
+                    await Helper.ReadExactlyAsync(input, ciphertext, cancel);
+
+                    aes.Decrypt(nonce, ciphertext, tag, plaintext);
+
+                    await output.WriteAsync(plaintext, cancel);
+
+                    processed = input.Position;
+                    progress?.Report((double)processed / total);
                 }
                 progress?.Report(1);
+                return cryptResult;
             }
-            catch (OperationCanceledException)
+            catch (OperationCanceledException e)
             {
-                File.Delete(destinationPath);
-                progress?.Report(0);
-                throw;
+                cryptResult = CryptResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
+                return cryptResult;
             }
-            catch (Exception e)
+            catch (CryptographicException e)
             {
-
-                Debug.WriteLine("Error in EncryptorAsync:\r\n{0}", e);
-                throw;
+                cryptResult = CryptResult.Fail(EncryptFileFormat.CryptographicReadMessage, e);
+                return cryptResult;
             }
+            catch (UnauthorizedAccessException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
+                return cryptResult;
+            }
+            catch (FileNotFoundException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
+                return cryptResult;
+            }
+            catch (InvalidDataException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.InvalidDataMessage, e);
+                return cryptResult;
+            }
+            catch (EndOfStreamException e)
+            {
+                cryptResult = CryptResult.Fail(EncryptFileFormat.EndOfStreamMessage, e);
+                return cryptResult;
+            }
+            finally
+            {
+                CryptographicOperations.ZeroMemory(key);
+                if (!cryptResult.Success)
+                    File.Delete(targetPath);
+            }
+        }
+        #endregion
 
-            return true;
+        #region Создание кода для фрагмента шифрования
+        /// <summary>
+        /// Создание кода для фрагмента шифрования
+        /// </summary>
+        /// <param name="baseNonce"></param>
+        /// <param name="counter"></param>
+        /// <returns></returns>
+        private static byte[] CreateNonce(byte[] baseNonce, uint counter)
+        {
+            byte[] nonce = new byte[baseNonce.Length];
+            Buffer.BlockCopy(baseNonce, 0, nonce, 0, baseNonce.Length);
+
+            // инкремент последних 4 байт
+            BinaryPrimitives.WriteUInt32BigEndian(
+                nonce.AsSpan(nonce.Length - EncryptFileFormat.LengthReadWriteByte),
+                counter);
+
+            return nonce;
         }
         #endregion
     }

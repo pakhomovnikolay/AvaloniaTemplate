@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input.Platform;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using System;
 using System.Threading.Tasks;
@@ -7,18 +8,20 @@ namespace AvaloniaTemplate.Services
 {
     public class ClipboardService : IClipboardService
     {
+        #region Системный буфер обмена
         /// <summary>
         /// Системный буфер обмена
         /// </summary>
         private static IClipboard Clipboard =>
             App.GetTopLevel()?.Clipboard
             ?? throw new InvalidOperationException("Clipboard недоступен");
+        #endregion
 
-        #region Удалить после вставки
+        #region Текущий тип копирования данных
         /// <summary>
-        /// Удалить после вставки
+        /// Текущий тип обмена
         /// </summary>
-        public bool IsCut { get; set; }
+        private ClipboardType currentClipboardType = ClipboardType.Unknown;
         #endregion
 
         #region Копировать данные в буфер обмена
@@ -26,43 +29,28 @@ namespace AvaloniaTemplate.Services
         /// Копировать данные в буфер обмена
         /// </summary>
         /// <param name="text"></param>
+        /// <param name="clipboardType"></param>
         /// <returns></returns>
-        public async Task CopyTextAsync(string text)
+        public async Task CopyToClipboardAsync(string buffer, ClipboardType clipboardType)
         {
-            if (string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(buffer))
                 return;
 
-            await Clipboard.SetTextAsync(text);
+            currentClipboardType = clipboardType;
+            await CopyToSystemClipboardAsync(buffer);
         }
         #endregion
 
-        #region Копировать данные в буфер обмена, с последующим удалением после вставки
+        #region Получить данные из буфера обмена
         /// <summary>
-        /// Копировать данные в буфер обмена, с последующим удалением после вставки
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public async Task CutTextAsync(string text)
-        {
-
-            if (string.IsNullOrWhiteSpace(text))
-                return;
-
-            IsCut = true;
-            await Clipboard.SetTextAsync(text);
-        }
-        #endregion
-
-        #region Вставить данные из буфера обмена
-        /// <summary>
-        /// Вставить данные из буфера обмена
+        /// Получить данные из буфера обмена
         /// </summary>
         /// <returns></returns>
-        public async Task<string> PasteTextAsync()
+        public async Task<string> GetFromClipboardAsync()
         {
-            var buffer = await Clipboard.TryGetTextAsync() ?? string.Empty;
-            if (IsCut)
-                await ClearAsync();
+            var buffer = await Clipboard.TryGetTextAsync();
+            if (currentClipboardType == ClipboardType.Cut)
+                await ClearClipboardAsync();
 
             return buffer;
         }
@@ -73,8 +61,11 @@ namespace AvaloniaTemplate.Services
         /// Очисть буфер обмена
         /// </summary>
         /// <returns></returns>
-        public async Task ClearAsync()
-            => await Clipboard.ClearAsync();
+        public async Task ClearClipboardAsync()
+        {
+            await Clipboard.ClearAsync();
+            currentClipboardType = ClipboardType.Unknown;
+        }
         #endregion
 
         #region Наличие данных в буфере обмена
@@ -82,11 +73,21 @@ namespace AvaloniaTemplate.Services
         /// Наличие данных в буфере обмена
         /// </summary>
         /// <returns></returns>
-        public async Task<bool> ContainsTextAsync()
+        public async Task<bool> DataOnClipboardAsync()
+            => !string.IsNullOrWhiteSpace(await Clipboard.TryGetTextAsync());
+        #endregion
+
+        #region Копируем данные в системный буфер обмена
+        /// <summary>
+        /// Копируем данные в системный буфер обмена
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        private static async Task CopyToSystemClipboardAsync(string buffer)
         {
-            var text = await Clipboard.TryGetTextAsync();
-            return !string.IsNullOrWhiteSpace(text);
+            await Clipboard.SetTextAsync(buffer);
         }
         #endregion
+
     }
 }

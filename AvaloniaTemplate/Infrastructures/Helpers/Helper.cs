@@ -6,6 +6,9 @@ using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Constants;
 using System;
 using System.Collections;
+using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
@@ -189,6 +192,29 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         {
             return (status & (1 << b_num)) > 0;
         }
+        #endregion
+
+        #region Асинхронное чтение данных
+        /// <summary>
+        /// Асинхронное чтение данных
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="buffer"></param>
+        /// <param name="ct"></param>
+        /// <returns></returns>
+        /// <exception cref="EndOfStreamException"></exception>
+        public static async Task ReadExactlyAsync(Stream stream, byte[] buffer, CancellationToken ct)
+        {
+            int offset = 0;
+            while (offset < buffer.Length)
+            {
+                int read = await stream.ReadAsync(buffer.AsMemory(offset), ct);
+                if (read == 0)
+                    throw new EndOfStreamException();
+
+                offset += read;
+            }
+        } 
         #endregion
     }
 }
