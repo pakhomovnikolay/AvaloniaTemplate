@@ -3,7 +3,6 @@ using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.ViewModels.Base;
 using System;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -163,16 +162,25 @@ namespace AvaloniaTemplate.ViewModels
 
         private async Task ExecuteCommand_Encryption(object p)
         {
-            var fileName = Path.GetFileNameWithoutExtension(FilePath);
-            var targetFilePath = Path.Combine(Path.GetDirectoryName(FilePath), fileName + ".encrypted");
+            var content = File.ReadAllText(FilePath);
+            var file = await App.GetService<IUserDialogService>()?
+                .SaveFileByDeleteTemporaryCopyAfterEncryptAsync<object>(content, FilePath, TargetFilePath,
+                progress: new Progress<double>(p => Proccess = p));
 
-            var result = await App.GetService<IEncryptorService>()?
-                .EncryptStreamAsync(FilePath, targetFilePath, progress: new Progress<double>(p => Proccess = p));
 
-            if (result.Success)
-                Debug.WriteLine(result.Success);
-            else
-                Debug.WriteLine(result.Error);
+            file = file;
+
+
+            //var fileName = Path.GetFileNameWithoutExtension(FilePath);
+            //var targetFilePath = Path.Combine(Path.GetDirectoryName(FilePath), fileName + ".encrypted");
+
+            //var result = await App.GetService<IEncryptorService>()?
+            //    .EncryptStreamAsync(FilePath, targetFilePath, progress: new Progress<double>(p => Proccess = p));
+
+            //if (result.Success)
+            //    Debug.WriteLine(result.Success);
+            //else
+            //    Debug.WriteLine(result.Error);
 
 
 
@@ -189,20 +197,32 @@ namespace AvaloniaTemplate.ViewModels
             => new RelayCommandAsync(ExecuteCommand_Decryption, CanExecuteCommand_Decryption);
 
         private bool CanExecuteCommand_Decryption(object p)
-            => File.Exists(TargetFilePath);
+            => true;
 
         private async Task ExecuteCommand_Decryption(object p)
         {
-            var fileName = Path.GetFileNameWithoutExtension(TargetFilePath);
-            var sourceFilePath = Path.Combine(Path.GetDirectoryName(TargetFilePath), fileName + ".txt");
+            var file = await App.GetService<IUserDialogService>()?
+                .LoadFileByDeleteTemporaryCopyAfterDecryptAsync<object>(TargetFilePath, FilePath,
+                progress: new Progress<double>(p => Proccess = p));
 
-            var result = await App.GetService<IEncryptorService>()?
-                .DecryptStreamAsync(TargetFilePath, sourceFilePath, progress: new Progress<double>(p => Proccess = p));
+            file = file;
 
-            if (result.Success)
-                Debug.WriteLine(result.Success);
-            else
-                Debug.WriteLine(result.Error);
+            //    public const string __ConfigNameOriginal = $"Config{__XmlExportFileSuffix}";
+            //public const string __ConfigNameEncrypted = $"Config{__EncryptedConfigFileSuffix}";
+
+            //var fileName = Path.GetFileNameWithoutExtension(TargetFilePath);
+            //var sourceFilePath = Path.Combine(Path.GetDirectoryName(TargetFilePath), fileName + ".txt");
+
+            //var result = await App.GetService<IEncryptorService>()?
+            //    .DecryptStreamAsync(TargetFilePath, sourceFilePath, progress: new Progress<double>(p => Proccess = p));
+
+            //if (result.Success)
+            //    Debug.WriteLine(result.Success);
+            //else
+            //    Debug.WriteLine(result.Error);
+
+
+            //LoadFileByDeleteTemporaryCopyAfterDecryptAsync
         }
         #endregion
 
@@ -218,9 +238,6 @@ namespace AvaloniaTemplate.ViewModels
             set => SetProperty(ref isEnabled, value);
         }
         #endregion
-
-
-        
 
 
         #region Текст

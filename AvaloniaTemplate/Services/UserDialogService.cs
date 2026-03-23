@@ -7,7 +7,9 @@ using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.Views;
 using AvaloniaTemplate.Views.UserDialogWindows;
+using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
@@ -140,6 +142,34 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Сохранить файл и удалить временную копию, после шифрования
+        public async Task<DialogResult> SaveFileByDeleteTemporaryCopyAfterEncryptAsync<T>(T content, string filePathSource, string filePathTarget,
+            IProgress<double>? progress = null,
+            CancellationToken cancel = default)
+        {
+            try
+            {
+                var dialogResult = await SaveAsync(content, filePathSource);
+                if (dialogResult.Success)
+                {
+                    dialogResult = await App.GetService<IEncryptorService>()?
+                        .EncryptStreamAsync(filePathSource, filePathTarget, progress: progress, cancel: cancel);
+                }
+                return dialogResult;
+            }
+            catch (InvalidOperationException e)
+            {
+                await App.GetService<ILogService>()?.WriteAsync($"Попытка получения файла по пути: {filePathSource}. :{e.Message}");
+                throw new InvalidOperationException(e.Message, e);
+            }
+            finally
+            {
+                if (File.Exists(filePathSource))
+                    await DeleteFileAsync(filePathSource);
+            }
+        }
+        #endregion
+
         #region Загрузить данные
         public async Task<T> LoadAsync<T>(string filePath)
         {
@@ -170,6 +200,31 @@ namespace AvaloniaTemplate.Services
                     App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
 
                 return result;
+            }
+        }
+        #endregion
+
+        #region Загрузить файл и удалить временную копию, после дешифровки
+        public async Task<T> LoadFileByDeleteTemporaryCopyAfterDecryptAsync<T>(string filePathSource, string filePathTarget,
+            IProgress<double>? progress = null,
+            CancellationToken cancel = default)
+        {
+            try
+            {
+                var dialogResult = await App.GetService<IEncryptorService>()?
+                    .DecryptStreamAsync(filePathSource, filePathTarget, progress: progress, cancel: cancel);
+
+                return await LoadAsync<T>(filePathTarget);
+            }
+            catch (Exception e)
+            {
+                await App.GetService<ILogService>()?.WriteAsync($"Попытка получения файла по пути: {filePathSource}. :{e.Message}");
+                throw new InvalidOperationException(e.Message, e);
+            }
+            finally
+            {
+                if (File.Exists(filePathTarget))
+                    await DeleteFileAsync(filePathTarget);
             }
         }
         #endregion

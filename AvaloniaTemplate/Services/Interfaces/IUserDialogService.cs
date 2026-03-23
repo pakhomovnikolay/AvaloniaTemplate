@@ -3,6 +3,8 @@ using Avalonia.Platform.Storage;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
+using System;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces
@@ -117,6 +119,34 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <returns></returns>
         Window GetMainWindow();
+        #endregion
+
+        #region Загрузить файл и удалить временную копию, после дешифровки
+        /// <summary>
+        /// Загрузить файл и удалить временную копию, после дешифровки
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePathSource">Путь к файлу источника данных</param>
+        /// <param name="filePathTarget">Путь к файлу временных данных</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>T</returns>
+        Task<T> LoadFileByDeleteTemporaryCopyAfterDecryptAsync<T>(string filePathSource, string filePathTarget,
+            IProgress<double>? progress = null,
+            CancellationToken cancel = default);
+        #endregion
+
+        #region Сохранить файл и удалить временную копию, после шифрования
+        /// <summary>
+        /// Сохранить файл и удалить временную копию, после шифрования
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePathSource">Путь к файлу источника данных</param>
+        /// <param name="filePathTarget">Путь к файлу временных данных</param>
+        /// <exception cref="InvalidOperationException"></exception>
+        /// <returns>DialogResult</returns>
+        Task<DialogResult> SaveFileByDeleteTemporaryCopyAfterEncryptAsync<T>(T content, string filePathSource, string filePathTarget,
+            IProgress<double>? progress = null,
+            CancellationToken cancel = default);
         #endregion
     }
 }
