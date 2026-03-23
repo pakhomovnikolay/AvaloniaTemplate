@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
+    /// <summary>
+    /// Сервис работы шифрования данных
+    /// </summary>
     public interface IEncryptorService
     {
         #region Асинхронное шифрование потока
@@ -21,8 +24,8 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <exception cref="CryptographicException">Ошибка шифрования</exception>
         /// <exception cref="UnauthorizedAccessException">Не удалось получить доступ к файлу</exception>
         /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
-        /// <returns>CryptResult</returns>
-        Task<CryptResult> EncryptStreamAsync(string sourcePath, string targetPath,
+        /// <returns>DialogResult</returns>
+        Task<DialogResult> EncryptStreamAsync(string sourcePath, string targetPath,
             string password = "",
             IProgress<double>? progress = null,
             CancellationToken cancel = default);
@@ -43,8 +46,8 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
         /// <exception cref="InvalidDataException">Неверный формат данных</exception>
         /// <exception cref="EndOfStreamException">Неожиданное окончание данных</exception>
-        /// <returns>CryptResult</returns>
-        Task<CryptResult> DecryptStreamAsync(string sourcePath, string targetPath,
+        /// <returns>DialogResult</returns>
+        Task<DialogResult> DecryptStreamAsync(string sourcePath, string targetPath,
             string password = "",
             IProgress<double>? progress = null,
             CancellationToken cancel = default);

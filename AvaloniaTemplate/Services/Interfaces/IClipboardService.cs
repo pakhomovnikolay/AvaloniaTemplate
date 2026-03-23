@@ -1,16 +1,21 @@
 ﻿using AvaloniaTemplate.Models.Enums;
+using System;
 using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
+    /// <summary>
+    /// Сервис работы с буфером обмена
+    /// </summary>
     public interface IClipboardService
     {
         #region Копировать данные в буфер обмена
         /// <summary>
         /// Копировать данные в буфер обмена
         /// </summary>
-        /// <param name="text"></param>
+        /// <param name="buffer"></param>
         /// <param name="clipboardType"></param>
+        /// <exception cref="InvalidOperationException">Буфер обмена не доступенг</exception>
         /// <returns></returns>
         Task CopyToClipboardAsync(string buffer, ClipboardType clipboardType);
         #endregion

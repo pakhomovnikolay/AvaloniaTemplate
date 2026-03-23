@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using System.Threading.Tasks;
@@ -63,8 +64,10 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Удалить файл
         /// </summary>
         /// <param name="selectedFile"></param>
-        /// <returns></returns>
-        Task<bool> DeleteFileAsync(string selectedFile);
+        /// <exception cref="FileNotFoundException">Файл по указаннму пути не найден</exception>
+        /// <exception cref="IOException">Нет доступа к файлу или каталогу</exception>
+        /// <returns>DialogResult</returns>
+        Task<DialogResult> DeleteFileAsync(string selectedFile);
         #endregion
 
         #region Сохранить данные
@@ -73,18 +76,23 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="content"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        Task<bool> SaveAsync<T>(T content, string path);
+        /// <param name="filePath"></param>
+        /// <exception cref="FileNotFoundException">Файл по указаннму пути не найден</exception>
+        /// <exception cref="IOException">Нет доступа к файлу или каталогу</exception>
+        /// <returns>DialogResult</returns>
+        Task<DialogResult> SaveAsync<T>(T content, string filePath);
         #endregion
 
         #region Загрузить данные
         /// <summary>
         /// Загрузить данные
         /// </summary>
-        /// <param name="path"> Путь к файлу </param>
-        /// <returns></returns>
-        Task<T> LoadAsync<T>(string path);
+        /// <typeparam name="T"></typeparam>
+        /// <param name="filePath"></param>
+        /// <exception cref="FileNotFoundException">Файл по указаннму пути не найден</exception>
+        /// <exception cref="IOException">Нет доступа к файлу или каталогу</exception>
+        /// <returns>DialogResult</returns>
+        Task<T> LoadAsync<T>(string filePath);
         #endregion
 
         #region Событие закрытия главного окна

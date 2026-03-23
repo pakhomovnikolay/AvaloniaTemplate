@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
+    /// <summary>
+    /// Сервис для реализации обработки данных в асинхронном оежиме
+    /// </summary>
     public interface IOperationService
     {
         #region Выполняется

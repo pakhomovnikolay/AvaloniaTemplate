@@ -2,6 +2,9 @@
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
+    /// <summary>
+    /// Сервис получения данных указанных свойств
+    /// </summary>
     public interface IPropertyAccessorFactory
     {
         #region Создание кеша для фильтрации

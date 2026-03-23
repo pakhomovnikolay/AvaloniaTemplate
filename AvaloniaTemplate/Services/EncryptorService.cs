@@ -15,25 +15,12 @@ namespace AvaloniaTemplate.Services
     public class EncryptorService : IEncryptorService
     {
         #region Асинхронное шифрование потока
-        /// <summary>
-        /// Асинхронное шифрование
-        /// </summary>
-        /// <param name="sourcePath">Полный путь к файлу</param>
-        /// <param name="targetPath">Путь к дериктории для сохранения файла</param>
-        /// <param name="password">Пароль? при необходимости</param>
-        /// <param name="progress">Текущий прогресс шифрования</param>
-        /// <param name="cancel">Ключ отмены опереции</param>
-        /// <exception cref="OperationCanceledException">Отмена операции</exception>
-        /// <exception cref="CryptographicException">Ошибка шифрования</exception>
-        /// <exception cref="UnauthorizedAccessException">Не удалось получить доступ к файлу</exception>
-        /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
-        /// <returns>CryptResult</returns>
-        public async Task<CryptResult> EncryptStreamAsync(string sourcePath, string targetPath,
+        public async Task<DialogResult> EncryptStreamAsync(string sourcePath, string targetPath,
             string password = "",
             IProgress<double>? progress = null,
             CancellationToken cancel = default)
         {
-            var cryptResult = CryptResult.Ok();
+            var cryptResult = DialogResult.Ok();
             if (!File.Exists(sourcePath))
                 throw new FileNotFoundException();
 
@@ -89,22 +76,22 @@ namespace AvaloniaTemplate.Services
             }
             catch (OperationCanceledException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
                 return cryptResult;
             }
             catch (CryptographicException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.CryptographicWriteMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.CryptographicWriteMessage, e);
                 return cryptResult;
             }
             catch (UnauthorizedAccessException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
                 return cryptResult;
             }
             catch (FileNotFoundException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
                 return cryptResult;
             }
             finally
@@ -117,27 +104,12 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Асинхронное дешифрование потока
-        /// <summary>
-        /// Асинхронное дешифрование потока
-        /// </summary>
-        /// <param name="sourcePath">Полный путь к файлу</param>
-        /// <param name="targetPath">Путь к дериктории для сохранения файла</param>
-        /// <param name="password">Пароль? при необходимости</param>
-        /// <param name="progress">Текущий прогресс шифрования</param>
-        /// <param name="cancel">Ключ отмены опереции</param>
-        /// <exception cref="CryptographicException">Ошибка шифрования</exception>
-        /// <exception cref="OperationCanceledException">Отмена операции</exception>
-        /// <exception cref="UnauthorizedAccessException">Не удалось получить доступ к файлу</exception>
-        /// <exception cref="FileNotFoundException">Файл-источник для процесса шифрования не найден</exception>
-        /// <exception cref="InvalidDataException">Неверный формат данных</exception>
-        /// <exception cref="EndOfStreamException">Неожиданное окончание данных</exception>
-        /// <returns>CryptResult</returns>
-        public async Task<CryptResult> DecryptStreamAsync(string sourcePath, string targetPath,
+        public async Task<DialogResult> DecryptStreamAsync(string sourcePath, string targetPath,
             string password = "",
             IProgress<double>? progress = null,
             CancellationToken cancel = default)
         {
-            var cryptResult = CryptResult.Ok();
+            var cryptResult = DialogResult.Ok();
             if (!File.Exists(sourcePath))
                 throw new FileNotFoundException();
 
@@ -196,32 +168,32 @@ namespace AvaloniaTemplate.Services
             }
             catch (OperationCanceledException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.OperationCanceledMessage, e);
                 return cryptResult;
             }
             catch (CryptographicException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.CryptographicReadMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.CryptographicReadMessage, e);
                 return cryptResult;
             }
             catch (UnauthorizedAccessException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.UnauthorizedAccessMessage, e);
                 return cryptResult;
             }
             catch (FileNotFoundException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.FileNotFoundMessage, e);
                 return cryptResult;
             }
             catch (InvalidDataException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.InvalidDataMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.InvalidDataMessage, e);
                 return cryptResult;
             }
             catch (EndOfStreamException e)
             {
-                cryptResult = CryptResult.Fail(EncryptFileFormat.EndOfStreamMessage, e);
+                cryptResult = DialogResult.Fail(EncryptFileFormat.EndOfStreamMessage, e);
                 return cryptResult;
             }
             finally

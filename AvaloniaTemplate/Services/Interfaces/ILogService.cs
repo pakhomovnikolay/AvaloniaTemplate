@@ -2,6 +2,9 @@
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
+    /// <summary>
+    /// Сервис записи лог файлй 
+    /// </summary>
     public interface ILogService
     {
         #region Записать лог

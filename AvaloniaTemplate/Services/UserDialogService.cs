@@ -1,12 +1,12 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
 using AvaloniaTemplate.Models.Enums.MessageTypes;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.Views;
 using AvaloniaTemplate.Views.UserDialogWindows;
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
@@ -60,13 +60,6 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Открыть диалоговое окно выбора пути
-        /// <summary>
-        /// Открыть диалоговое окно выбора пути
-        /// </summary>
-        /// <param name="title"> Заголовок окна </param>
-        /// <param name="defaultPath"> Путь по умолчанию </param>
-        /// <param name="provider"> Провайдер данных </param>
-        /// <returns></returns>
         public async Task<string> SelectFolderAsync(string title,
             string defaultPath = null,
             IStorageProvider provider = default)
@@ -79,88 +72,105 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Удалить файл
-        /// <summary>
-        /// Удалить файл
-        /// </summary>
-        /// <param name="selectedFile"> Путь к файлу по умолчанию </param>
-        /// <returns></returns>
-        public async Task<bool> DeleteFileAsync(string selectedFile)
+        public async Task<DialogResult> DeleteFileAsync(string selectedFile)
         {
-            var result = false;
-            if (!File.Exists(selectedFile))
-                await SendMessageAsync("Удаление файла",
-                    "Не удается найти указанный файл. Проверьте путь",
-                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
-            else
+            var result = DialogResult.Ok();
+            try
             {
-                try
-                {
-                    File.Delete(selectedFile);
-                    result = true;
-                }
-                catch (Exception e)
-                {
-                    await SendMessageAsync("Удаление файла",
-                        $"В процессе удаления файла произошла ошибка: {e}",
-                        App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
-                }
+                if (!File.Exists(selectedFile))
+                    throw new FileNotFoundException("Файл по указаннму пути не найден");
+
+                File.Delete(selectedFile);
+                return result;
             }
-            return result;
+            catch (FileNotFoundException e)
+            {
+                await SendMessageAsync("Удаление файла",
+                    $"Ошибка удаления файла.\n{e.Message}",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                result = DialogResult.Fail(e.Message, e);
+                return result;
+            }
+            catch (IOException e)
+            {
+                await SendMessageAsync("Удаление файла",
+                    $"Ошибка удаления файла.\nНет доступа к файлу или каталогу",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                result = DialogResult.Fail("Нет доступа к файлу или каталогу", e);
+                return result;
+            }
         }
         #endregion
 
         #region Сохранить данные
-        /// <summary>
-        /// Сохранить данные
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <param name="content"></param>
-        /// <param name="path"></param>
-        /// <returns></returns>
-        public async Task<bool> SaveAsync<T>(T content, string path)
+        public async Task<DialogResult> SaveAsync<T>(T content, string filePath)
         {
-            var result = false;
-            var SettingsAppSerializer = new XmlSerializer(typeof(T));
+            var result = DialogResult.Ok();
+            var settingsAppSerializer = new XmlSerializer(typeof(T));
 
             try
             {
-                await using FileStream fs = new(path, FileMode.OpenOrCreate);
-                SettingsAppSerializer.Serialize(fs, content);
-                result = true;
+                if (!File.Exists(filePath))
+                    throw new FileNotFoundException("Файл по указаннму пути не найден");
+
+                await using FileStream fs = new(filePath, FileMode.OpenOrCreate);
+                settingsAppSerializer.Serialize(fs, content);
+                return result;
             }
-            catch (Exception e)
+            catch (FileNotFoundException e)
             {
-                await SendMessageAsync("Сохранение данных",
-                    $"В процессе сохранения данных произошла ошибка: {e}",
+                await SendMessageAsync("Сохранение файла",
+                    $"Ошибка сохранения файла.\n{e.Message}",
                     App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                result = DialogResult.Fail(e.Message, e);
+                return result;
             }
-            return result;
+            catch (IOException e)
+            {
+                await SendMessageAsync("Сохранение файла",
+                    $"Ошибка сохранения файла.\nНет доступа к файлу или каталогу",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                result = DialogResult.Fail("Нет доступа к файлу или каталогу", e);
+                return result;
+            }
         }
         #endregion
 
         #region Загрузить данные
-        /// <summary>
-        /// Загрузить данные
-        /// </summary>
-        /// <param name="path"> Путь к файлу </param>
-        /// <returns></returns>
-        public async Task<T> LoadAsync<T>(string path)
+        public async Task<T> LoadAsync<T>(string filePath)
         {
             T result = default;
             var settingsAppSerializer = new XmlSerializer(typeof(T));
 
             try
             {
-                await using FileStream fs = new(path, FileMode.OpenOrCreate);
+                if (!File.Exists(filePath))
+                    throw new FileNotFoundException("Файл по указаннму пути не найден");
+
+                await using FileStream fs = new(filePath, FileMode.OpenOrCreate);
                 result = (T)settingsAppSerializer.Deserialize(fs);
+                return result;
             }
-            catch (Exception e)
+            catch (FileNotFoundException e)
+            {
+                await SendMessageAsync("Загрузка данных",
+                    $"Ошибка загрузки данных.\n{e.Message}",
+                    App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                return result;
+            }
+            catch (IOException e)
             {
                 await SendMessageAsync("Загрузка данных",
                     $"В процессе загрузки данных произошла ошибка: {e}",
                     App.Desktop.MainWindow, imageType: MessageBoxImageType.Warning);
+
+                return result;
             }
-            return result;
         }
         #endregion
 
