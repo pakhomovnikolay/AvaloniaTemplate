@@ -33,12 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="CommonLib">
-      <HintPath>..\..\..\CommonLib\CommonLib\CommonLib\bin\Release\net8.0\CommonLib.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Resources\CustomResourcesDictionary\BorderWithTextBox.axaml.cs">
       <DependentUpon>BorderWithTextBox.axaml</DependentUpon>
     </Compile>
