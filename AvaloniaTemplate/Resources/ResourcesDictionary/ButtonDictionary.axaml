@@ -8,9 +8,20 @@
     <Design.PreviewWith>
         <Border Padding="20" Width="250">
             <StackPanel Spacing="20">
-                <Button Content="Click Me!" Background="Red" />
+                <Button Content="Click Me!" />
                 <Button Classes="accent" Content="Click Me!" />
-                
+                <Button Classes="highlightedToggleButton" Content="Я как ToggleButton"
+                        BorderThickness="0 0 0 2"
+                        BorderBrush="GreenYellow"
+                        Background="Transparent"
+                        CornerRadius="0"
+                        />
+
+                 <Button Classes="disableBackgroundTransparent"
+                         Content="Im Disable Transparent"
+                         IsEnabled="False"
+                         />
+
                 <ToggleButton Content="Click Me!" />
                 <ToggleButton Content="Disabled" IsEnabled="False" />
                 <ToggleButton Content="Three state" IsThreeState="True" />
@@ -28,6 +39,10 @@
                               Background="Transparent"
                               CornerRadius="0"
                               />
+
+
+
+
                 </helpers:ToggleGroupPanel>
                 
 			</StackPanel>
@@ -135,6 +150,61 @@
 			</Style>
 		</Style>
 	
+        <Style Selector="^.highlightedToggleButton">
+			<Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="RecognizesAccessKey" Value="True" />
+                <Setter Property="BorderThickness" Value="{DynamicResource HighlightedToggleButtonBorderThemeThickness}" />
+                <Setter Property="CornerRadius" Value="{TemplateBinding CornerRadius}" />
+            </Style>
+        
+            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{TemplateBinding Background}" />
+                <Setter Property="BorderThickness" Value="{TemplateBinding BorderThickness}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource HighlightedToggleButtonBackgroundPointerOver}" />
+                <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundPointerOver}" />
+            </Style>
+        
+            <Style Selector="^:pressed">
+                <Setter Property="RenderTransform" Value="scale(0.98)" />
+            </Style>
+        
+            <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{TemplateBinding Background}" />
+                <Setter Property="BorderBrush" Value="{TemplateBinding BorderBrush}" />
+                <Setter Property="Foreground" Value="{TemplateBinding Foreground}" />
+            </Style>
+        
+            <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+                <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundDisabled}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushDisabled}" />
+                <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForegroundDisabled}" />
+            </Style>
+		</Style>
+
+        <Style Selector="^.disableBackgroundTransparent">
+			<Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+			    <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
+			    <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPointerOver}" />
+			    <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPointerOver}" />
+		    </Style>
+
+		    <Style Selector="^:pressed">
+			    <Setter Property="RenderTransform" Value="scale(0.98)" />
+		    </Style>
+
+		    <Style Selector="^:pressed  /template/ ContentPresenter#PART_ContentPresenter">
+			    <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
+			    <Setter Property="BorderBrush" Value="{DynamicResource ButtonBorderBrushPressed}" />
+			    <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundPressed}" />
+		    </Style>
+
+			<Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
+				<Setter Property="Background" Value="Transparent" />
+				<Setter Property="BorderBrush" Value="{DynamicResource AccentButtonBorderBrushDisabled}" />
+				<Setter Property="Foreground" Value="{DynamicResource AccentButtonForegroundDisabled}" />
+			</Style>
+		</Style>
+
     </ControlTheme>
 
 	<!--ToggleButton-->
