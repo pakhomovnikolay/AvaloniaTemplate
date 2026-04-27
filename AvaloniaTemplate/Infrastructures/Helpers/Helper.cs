@@ -147,7 +147,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         public static T GetSelectedElement<T>(int index, IList collections)
         {
             T selected = default;
-            if (collections.Count > 0)
+            if (collections?.Count > 0)
             {
                 if (index > 0 && index >= collections.Count)
                     selected = (T)collections[^1];

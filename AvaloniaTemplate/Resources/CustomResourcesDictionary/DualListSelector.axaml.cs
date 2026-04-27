@@ -26,7 +26,7 @@ public class DualListSelector : TemplatedControl
     private ListBox sourceData;
     private ListBox targetData;
     private Func<object, object?> accessorFactory;
-
+    private PointerPressedEventArgs pointerPressedEventArgs;
     static DualListSelector()
     {
         SourceItemsProperty.Changed.AddClassHandler<DualListSelector>((x, _) => x.RebuildSourceView());
@@ -606,6 +606,7 @@ public class DualListSelector : TemplatedControl
         if (obj is not ContentPresenter)
             return;
 
+        pointerPressedEventArgs = e;
         StartPointerPressed = e.GetPosition(this);
         MousePressed = true;
     }
@@ -622,6 +623,7 @@ public class DualListSelector : TemplatedControl
         currentDropType = DragDropDirectionType.Unknown;
         StartPointerPressed = null;
         MousePressed = false;
+        pointerPressedEventArgs = null;
     }
     #endregion
 
@@ -633,7 +635,7 @@ public class DualListSelector : TemplatedControl
     /// <param name="e"></param>
     private void SourcePointerMovedHandler(object? sender, PointerEventArgs e)
     {
-        if (!MousePressed || sourceData is not { } || sourceData.SelectedItem is null || StartPointerPressed is not { })
+        if (!MousePressed || sourceData is not { } || sourceData.SelectedItem is null || StartPointerPressed is not { } || pointerPressedEventArgs is not { })
             return;
 
         const int dragThreshold = 5;
@@ -646,7 +648,7 @@ public class DualListSelector : TemplatedControl
         StartPointerPressed = null;
         MousePressed = false;
 
-        DragDrop.DoDragDropAsync(e, new DataTransfer(), DragDropEffects.Move);
+        DragDrop.DoDragDropAsync(pointerPressedEventArgs, new DataTransfer(), DragDropEffects.Move);
     }
     #endregion
 
@@ -740,7 +742,7 @@ public class DualListSelector : TemplatedControl
     /// <param name="e"></param>
     private void TargetPointerMovedHandler(object? sender, PointerEventArgs e)
     {
-        if (!MousePressed || targetData is not { } || targetData.SelectedItem is null || StartPointerPressed is not { })
+        if (!MousePressed || targetData is not { } || targetData.SelectedItem is null || StartPointerPressed is not { } || pointerPressedEventArgs is not { })
             return;
 
         const int dragThreshold = 5;
@@ -753,7 +755,7 @@ public class DualListSelector : TemplatedControl
         StartPointerPressed = null;
         MousePressed = false;
 
-        DragDrop.DoDragDropAsync(e, new DataTransfer(), DragDropEffects.Move);
+        DragDrop.DoDragDropAsync(pointerPressedEventArgs, new DataTransfer(), DragDropEffects.Move);
     }
     #endregion
 

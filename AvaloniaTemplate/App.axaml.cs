@@ -231,23 +231,8 @@ namespace AvaloniaTemplate
 
                 desktop = app;
                 desktop.MainWindow = services.GetRequiredService<IUserDialogService>().GetMainWindow();
-                DisableAvaloniaDataAnnotationValidation();
             }
             base.OnFrameworkInitializationCompleted();
-        }
-
-        /// <summary>
-        /// Действия выполняемые после инициализации старта приложения
-        /// </summary>
-        private static void DisableAvaloniaDataAnnotationValidation()
-        {
-            // Get an array of plugins to remove
-            var dataValidationPluginsToRemove =
-                BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-            // remove each entry found
-            foreach (var plugin in dataValidationPluginsToRemove)
-                BindingPlugins.DataValidators.Remove(plugin);
         }
     }
 }

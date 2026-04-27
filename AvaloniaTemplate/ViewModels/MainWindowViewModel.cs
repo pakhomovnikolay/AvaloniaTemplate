@@ -1,4 +1,5 @@
 ﻿using AvaloniaTemplate.ViewModels.Base;
+using System.Collections.Generic;
 
 namespace AvaloniaTemplate.ViewModels
 {
