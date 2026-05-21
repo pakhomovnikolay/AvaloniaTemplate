@@ -57,7 +57,7 @@
                                  x:Name="PART_ContentElement"
                                  Text="{Binding Text, RelativeSource={RelativeSource TemplatedParent}}"
                                  CornerRadius="{TemplateBinding CornerRadius}"
-                                 Watermark="{TemplateBinding Watermark}"
+                                 PlaceholderText="{TemplateBinding Watermark}"
                                  FontFamily="{TemplateBinding FontFamily}"
 								 FontSize="{TemplateBinding FontSize}"
 								 FontWeight="{TemplateBinding FontWeight}"

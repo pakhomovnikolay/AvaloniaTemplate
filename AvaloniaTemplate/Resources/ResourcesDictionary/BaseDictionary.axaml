@@ -21,9 +21,9 @@
                          Classes="revealPasswordButton"
                          RevealPassword="True">Password Revealed</TextBox>
 
-                <TextBox Watermark="Watermark"/>
-                <TextBox Watermark="Floating Watermark" UseFloatingWatermark="True"/>
-                <TextBox Watermark="Floating Watermark" UseFloatingWatermark="True">Content</TextBox>
+                <TextBox PlaceholderText="Watermark"/>
+                <TextBox PlaceholderText="Floating Watermark" UseFloatingPlaceholder="True"/>
+                <TextBox PlaceholderText="Floating Watermark" UseFloatingPlaceholder="True">Content</TextBox>
                 
             </StackPanel>
         </Border>

@@ -55,8 +55,7 @@
                                          FontSize="{TemplateBinding FontSize}"
                                          FontWeight="{TemplateBinding FontWeight}"
                                          CornerRadius="{TemplateBinding CornerRadiusContent}"
-                                         Watermark="{TemplateBinding Watermark}"
-
+                                         PlaceholderText="{TemplateBinding Watermark}"
                                          MinHeight="25"
                                          VerticalContentAlignment="Center"
                                          Classes="clearButton"
@@ -141,8 +140,7 @@
                                          Background="{TemplateBinding BackgroundPanelFilter}"
                                          Foreground="{TemplateBinding ForegroundPanelFilter}"
                                          CornerRadius="{Binding CornerRadiusContentRight, RelativeSource={RelativeSource TemplatedParent}}"
-                                         Watermark="{TemplateBinding Watermark}"
-
+                                         PlaceholderText="{TemplateBinding Watermark}"
                                          MinHeight="25"
                                          VerticalContentAlignment="Center"
                                          Classes="clearButton"
