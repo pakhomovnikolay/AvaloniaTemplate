@@ -18,7 +18,8 @@
 		Width="{Binding WindowWidth}"
 		>
 
-	<customresourcesdictionary:ButtonPaste HorizontalAlignment="Left"
+	<StackPanel>
+		<customresourcesdictionary:ButtonPaste HorizontalAlignment="Left"
 										   VerticalAlignment="Top"
 										   Margin="5"
 										   Command="{StaticResource Command_Paste}"
@@ -26,5 +27,17 @@
 										   >
 		
 	</customresourcesdictionary:ButtonPaste>
+
+	<customresourcesdictionary:ButtonCut HorizontalAlignment="Left"
+										   VerticalAlignment="Top"
+										   Margin="5"
+										   Command="{StaticResource Command_Cut}"
+										   CommandParameter="True"
+										   >
+		
+	</customresourcesdictionary:ButtonCut>
+	</StackPanel>
+
+	
 
 </Window>

@@ -18,8 +18,9 @@ namespace AvaloniaTemplate.Services.Registrations
         {
             // 1. Создаем команды
             RegisterCommand<Command_Paste>("Command_Paste");
+            RegisterCommand<Command_Cut>("Command_Cut");
 
-            //RegisterCommand<Command_Paste>("Command_Paste");
+            //RegisterCommand<Command_Cut>("Command_Cut");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)

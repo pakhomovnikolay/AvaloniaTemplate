@@ -5,11 +5,11 @@ using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ButtonPaste : TemplatedControl
+public class ButtonCut : TemplatedControl
 {
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command),defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда

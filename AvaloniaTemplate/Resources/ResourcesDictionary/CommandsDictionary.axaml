@@ -6,6 +6,7 @@
     
     <!-- Add Resources Here -->
     <cmdUser:Command_Paste x:Key= "Command_Paste"/>
-    
+    <cmdUser:Command_Cut x:Key= "Command_Cut"/>
 
+    
 </ResourceDictionary>

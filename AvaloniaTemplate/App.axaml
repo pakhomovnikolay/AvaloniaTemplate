@@ -33,6 +33,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/CheckBoxWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DualListSelector.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonPaste.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonCut.axaml"/>
 
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

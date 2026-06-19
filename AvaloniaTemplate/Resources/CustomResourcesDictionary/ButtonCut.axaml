@@ -5,28 +5,28 @@
 
     <Design.PreviewWith>
         <Border Padding="20">
-            <controls:ButtonPaste />
+            <controls:ButtonCut />
         </Border>
     </Design.PreviewWith>
     
-    <ControlTheme x:Key="{x:Type controls:ButtonPaste}"
-                  TargetType="controls:ButtonPaste"
-                  >
+    <ControlTheme x:Key="{x:Type controls:ButtonCut}" TargetType="controls:ButtonCut">
         <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="10"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Button Padding="10"
+                <Button Padding="5 2 5 2"
                         Classes="disableBackgroundTransparent"
                         Background="{TemplateBinding Background}"
                         Command="{TemplateBinding Command}"
                         CommandParameter="{TemplateBinding CommandParameter}"
                         >
                     <Button.Content>
-                        <Grid RowDefinitions="* auto">
-                            <Image Source="\Assets\Paste.png" Height="35"/>
-                            <TextBlock Grid.Row="1"
-                                   Text="Вставить"
+                        <Grid ColumnDefinitions="* auto">
+                            <Image Source="\Assets\Cut1.png" Height="20"/>
+                            <TextBlock Grid.Column="1"
+                                   Text="Вырезать"
+                                   Margin="5 0 0 0"
+                                   VerticalAlignment="Center"
                                    FontFamily="{TemplateBinding FontFamily}"
                                    FontSize="{TemplateBinding FontSize}"
                                    />
