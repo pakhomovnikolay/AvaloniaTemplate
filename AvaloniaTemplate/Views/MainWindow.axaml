@@ -46,8 +46,17 @@
 		
 		</customresourcesdictionary:ButtonCopy>
 
+		<customresourcesdictionary:ButtonSimpleAs HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   Margin="5"
+											   Command="{StaticResource Command_SimpleAs}"
+											   CommandParameter="True"
+											   >
+		
+		</customresourcesdictionary:ButtonSimpleAs>
+
 	</StackPanel>
 
 	
-
+	
 </Window>

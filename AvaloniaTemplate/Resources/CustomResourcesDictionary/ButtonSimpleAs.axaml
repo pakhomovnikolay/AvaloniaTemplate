@@ -3,14 +3,14 @@
         xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
         >
 
-    <Design.PreviewWith>
+     <Design.PreviewWith>
         <Border Padding="20">
-            <controls:ButtonCut />
+            <controls:ButtonSimpleAs />
         </Border>
     </Design.PreviewWith>
     
-    <ControlTheme x:Key="{x:Type controls:ButtonCut}"
-                  TargetType="controls:ButtonCut"
+    <ControlTheme x:Key="{x:Type controls:ButtonSimpleAs}"
+                  TargetType="controls:ButtonSimpleAs"
                   >
         <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="10"/>
@@ -24,9 +24,9 @@
                         >
                     <Button.Content>
                         <Grid ColumnDefinitions="* auto">
-                            <Image Source="\Assets\Cut1.png" Height="20"/>
+                            <Image Source="\Assets\AsSimple.png" Height="20"/>
                             <TextBlock Grid.Column="1"
-                                   Text="Вырезать"
+                                   Text="Фомат по образцу"
                                    Margin="5 0 0 0"
                                    VerticalAlignment="Center"
                                    FontFamily="{TemplateBinding FontFamily}"

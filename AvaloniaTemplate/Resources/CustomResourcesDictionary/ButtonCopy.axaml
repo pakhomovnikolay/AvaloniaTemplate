@@ -8,9 +8,11 @@
             <controls:ButtonCopy />
         </Border>
     </Design.PreviewWith>
-
-  <ControlTheme x:Key="{x:Type controls:ButtonCopy}" TargetType="controls:ButtonCopy">
-    <Setter Property="FontFamily" Value="Verdana"/>
+    
+    <ControlTheme x:Key="{x:Type controls:ButtonCopy}"
+                  TargetType="controls:ButtonCopy"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="10"/>
         <Setter Property="Template">
             <ControlTemplate>
@@ -36,5 +38,5 @@
                 </Button>
             </ControlTemplate>
         </Setter>
-  </ControlTheme>
+    </ControlTheme>
 </ResourceDictionary>
