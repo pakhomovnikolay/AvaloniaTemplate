@@ -26,16 +26,26 @@
 										   CommandParameter="True"
 										   >
 		
-	</customresourcesdictionary:ButtonPaste>
+		</customresourcesdictionary:ButtonPaste>
 
-	<customresourcesdictionary:ButtonCut HorizontalAlignment="Left"
-										   VerticalAlignment="Top"
-										   Margin="5"
-										   Command="{StaticResource Command_Cut}"
-										   CommandParameter="True"
-										   >
+		<customresourcesdictionary:ButtonCut HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   Margin="5"
+											   Command="{StaticResource Command_Cut}"
+											   CommandParameter="True"
+											   >
 		
-	</customresourcesdictionary:ButtonCut>
+		</customresourcesdictionary:ButtonCut>
+
+		<customresourcesdictionary:ButtonCopy HorizontalAlignment="Left"
+											   VerticalAlignment="Top"
+											   Margin="5"
+											   Command="{StaticResource Command_Copy}"
+											   CommandParameter="True"
+											   >
+		
+		</customresourcesdictionary:ButtonCopy>
+
 	</StackPanel>
 
 	
