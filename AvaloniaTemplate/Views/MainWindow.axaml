@@ -83,6 +83,13 @@
 			
 		</customresourcesdictionary:ButtonSetFontStyleItalic>
 
+		<customresourcesdictionary:ButtonSetTextStyleUnderLine HorizontalAlignment="Left"
+													 Margin="5"
+													 Command="{StaticResource Command_SetTextStyleUnderline}"
+													 >
+			
+		</customresourcesdictionary:ButtonSetTextStyleUnderLine>
+
 	</StackPanel>
 
 	
