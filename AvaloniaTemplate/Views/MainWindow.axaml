@@ -18,80 +18,59 @@
 		Width="{Binding WindowWidth}"
 		>
 
-	<StackPanel>
-		<customresourcesdictionary:ButtonPaste HorizontalAlignment="Left"
-										   VerticalAlignment="Top"
-										   Margin="5"
-										   Command="{StaticResource Command_Paste}"
-										   CommandParameter="True"
-										   >
-		
-		</customresourcesdictionary:ButtonPaste>
+	<StackPanel Margin="5" Spacing="5">
 
-		<customresourcesdictionary:ButtonCut HorizontalAlignment="Left"
-											   VerticalAlignment="Top"
-											   Margin="5"
-											   Command="{StaticResource Command_Cut}"
-											   CommandParameter="True"
-											   >
-		
-		</customresourcesdictionary:ButtonCut>
+		<Grid ColumnDefinitions="auto auto">
+			<customresourcesdictionary:ButtonPaste Command="{StaticResource Command_Paste}"
+												   CommandParameter="True"
+												   />
 
-		<customresourcesdictionary:ButtonCopy HorizontalAlignment="Left"
-											   VerticalAlignment="Top"
-											   Margin="5"
-											   Command="{StaticResource Command_Copy}"
-											   CommandParameter="True"
-											   >
-		
-		</customresourcesdictionary:ButtonCopy>
+			<Grid Grid.Column="1" RowDefinitions="auto auto auto">
+				<customresourcesdictionary:ButtonCut HorizontalAlignment="Left"
+													 Command="{StaticResource Command_Cut}"
+													 CommandParameter="True"
+													 />
 
-		<customresourcesdictionary:ButtonSimpleAs HorizontalAlignment="Left"
-											   VerticalAlignment="Top"
-											   Margin="5"
-											   Command="{StaticResource Command_SimpleAs}"
-											   CommandParameter="True"
-											   >
-		
-		</customresourcesdictionary:ButtonSimpleAs>
+				<customresourcesdictionary:ButtonCopy Grid.Row="1"
+													  HorizontalAlignment="Left"
+													  Command="{StaticResource Command_Copy}"
+													  CommandParameter="True"
+													  />
 
-		<customresourcesdictionary:ComboBoxWithFonts HorizontalAlignment="Left"
-													 Margin="5"
-													 Width="150"
-													 >
+				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
+														  HorizontalAlignment="Left"
+														  Command="{StaticResource Command_SimpleAs}"
+														  CommandParameter="True"
+														  />
+			</Grid>
+		</Grid>
+
+
+		<Grid ColumnDefinitions="auto auto">
+			<customresourcesdictionary:ComboBoxWithFonts Width="150"
+														 />
+
+			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1"
+															 Width="115"
+															 />
+		</Grid>
+
+		<Grid ColumnDefinitions="35 35 35 50">
+			<customresourcesdictionary:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
+															   />
+
+			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"
+																Command="{StaticResource Command_SetFontStyleItalic}"
+																/>
+
+			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"
+																   Command="{StaticResource Command_SetTextStyleUnderline}"
+																   />
+
+			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"
+														  />
+
 			
-		</customresourcesdictionary:ComboBoxWithFonts>
-
-		<customresourcesdictionary:ComboBoxWithFontsSize HorizontalAlignment="Left"
-													 Margin="5"
-													 Width="110"
-													 >
-			
-		</customresourcesdictionary:ComboBoxWithFontsSize>
-
-		<customresourcesdictionary:ButtonSetFontWeightBold HorizontalAlignment="Left"
-													 Margin="5"
-													 Command="{StaticResource Command_SetFontWeightBold}"
-													 >
-			
-		</customresourcesdictionary:ButtonSetFontWeightBold>
-
-		<customresourcesdictionary:ButtonSetFontStyleItalic HorizontalAlignment="Left"
-													 Margin="5"
-													 Command="{StaticResource Command_SetFontStyleItalic}"
-													 >
-			
-		</customresourcesdictionary:ButtonSetFontStyleItalic>
-
-		<customresourcesdictionary:ButtonSetTextStyleUnderLine HorizontalAlignment="Left"
-													 Margin="5"
-													 Command="{StaticResource Command_SetTextStyleUnderline}"
-													 >
-			
-		</customresourcesdictionary:ButtonSetTextStyleUnderLine>
-
+		</Grid>
 	</StackPanel>
-
-	
-	
 </Window>

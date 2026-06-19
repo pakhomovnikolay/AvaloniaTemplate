@@ -41,6 +41,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetFontWeightBold.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetFontStyleItalic.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetTextStyleUnderLine.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetGridStyle.axaml"/>
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

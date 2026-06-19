@@ -15,9 +15,10 @@
         <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <ToggleButton Padding="10"
+                <ToggleButton Padding="0"
                               Background="{TemplateBinding Background}"
                               Command="{TemplateBinding Command}"
                               CommandParameter="{TemplateBinding CommandParameter}"
@@ -28,6 +29,7 @@
                                    FontFamily="{TemplateBinding FontFamily}"
                                    FontSize="{TemplateBinding FontSize}"
                                    FontWeight="{TemplateBinding FontWeight}"
+                                   IsHitTestVisible="False"
                                    />
                     </ToggleButton.Content>
                 </ToggleButton>
