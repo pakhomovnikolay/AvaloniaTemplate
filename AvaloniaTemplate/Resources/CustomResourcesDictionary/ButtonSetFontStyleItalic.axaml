@@ -5,12 +5,12 @@
 
     <Design.PreviewWith>
         <Border Padding="20">
-            <controls:ButtonSetFontWeightBold />
+            <controls:ButtonSetFontStyleItalic />
         </Border>
     </Design.PreviewWith>
     
-    <ControlTheme x:Key="{x:Type controls:ButtonSetFontWeightBold}"
-                  TargetType="controls:ButtonSetFontWeightBold"
+    <ControlTheme x:Key="{x:Type controls:ButtonSetFontStyleItalic}"
+                  TargetType="controls:ButtonSetFontStyleItalic"
                   >
         <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="12"/>
@@ -24,7 +24,8 @@
                               IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
                               >
                     <ToggleButton.Content>
-                        <TextBlock Text="Ж"
+                        <TextBlock Text="К"
+                                   FontStyle="Italic"
                                    FontFamily="{TemplateBinding FontFamily}"
                                    FontSize="{TemplateBinding FontSize}"
                                    FontWeight="{TemplateBinding FontWeight}"

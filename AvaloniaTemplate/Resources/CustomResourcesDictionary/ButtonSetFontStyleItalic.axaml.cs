@@ -5,7 +5,7 @@ using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ButtonSetFontWeightBold : TemplatedControl
+public class ButtonSetFontStyleItalic : TemplatedControl
 {
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =

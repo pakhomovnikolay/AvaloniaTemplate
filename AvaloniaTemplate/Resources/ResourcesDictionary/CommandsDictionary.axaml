@@ -12,5 +12,6 @@
     <cmdUser:Command_PreViewSelectedFont x:Key= "Command_PreViewSelectedFont"/>
     <cmdUser:Command_PreViewSelectedFontSize x:Key= "Command_PreViewSelectedFontSize"/>
     <cmdUser:Command_SetFontWeightBold x:Key= "Command_SetFontWeightBold"/>
+    <cmdUser:Command_SetFontStyleItalic x:Key= "Command_SetFontStyleItalic"/>
     
 </ResourceDictionary>
