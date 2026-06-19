@@ -12,6 +12,12 @@ namespace AvaloniaTemplate.Services.Registrations
                 var model = s.GetRequiredService<MainWindowViewModel>();
                 var window = new MainWindow { DataContext = model }; return window;
             })
+
+            //.AddSingleton(s =>
+            //{
+            //    var model = s.GetRequiredService<MainWindowViewModel>();
+            //    var window = new MainWindow { DataContext = model }; return window;
+            //})
             ;
     }
 }

@@ -12,6 +12,9 @@ namespace AvaloniaTemplate.Services.Registrations
             .AddSingleton<IOperationService, OperationService>()
             .AddSingleton<IPropertyAccessorFactory, PropertyAccessorFactory>()
             .AddSingleton<IUserDialogService, UserDialogService>()
+            .AddSingleton<IGlobalStateService, GlobalStateService>()
+
+            //.AddSingleton<IGlobalStateService, GlobalStateService>()
             ;
     }
 }

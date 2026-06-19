@@ -10,5 +10,7 @@
     <cmdUser:Command_Copy x:Key= "Command_Copy"/>
     <cmdUser:Command_SimpleAs x:Key= "Command_SimpleAs"/>
     <cmdUser:Command_PreViewSelectedFont x:Key= "Command_PreViewSelectedFont"/>
+    <cmdUser:Command_PreViewSelectedFontSize x:Key= "Command_PreViewSelectedFontSize"/>
+
     
 </ResourceDictionary>

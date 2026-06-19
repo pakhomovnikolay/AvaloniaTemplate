@@ -1,0 +1,92 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:ComboBoxWithFontsSize Width="100"/>
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ComboBoxWithFontsSize}"
+                  TargetType="controls:ComboBoxWithFontsSize"
+                  >
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="* auto auto"
+                      Width="{TemplateBinding Width}"
+                      Height="{TemplateBinding Height}"
+                      >
+                    <ComboBox SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                              SelectedIndex="{Binding SelectedIndex, RelativeSource={RelativeSource TemplatedParent}}"
+                              ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
+                              MinWidth="{TemplateBinding MinWidth}"
+                              MinHeight="{TemplateBinding MinHeight}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              Margin="0 0 1 0"
+                              />
+
+                    <Button x:Name="PART_ButtonFontSizeUp"
+                            Grid.Column="1"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            BorderBrush="Gray"
+                            Height="25"
+                            Padding="5 0 0 0"
+                            >
+                        <Button.Content>
+                            <DockPanel>
+                                <TextBlock Text="A"
+                                           FontSize="15"
+                                           VerticalAlignment="Bottom"/>
+
+                                <PathIcon UseLayoutRounding="False"
+                                          IsHitTestVisible="False"
+                                          Height="8"
+                                          Width="8"
+                                          Margin="0,0,3,10"
+                                         
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                          Data="M1939 1401L2029 1311L1024 306L19 1311L109 1401L1024 486L1939 1401Z"/>
+                            </DockPanel>
+                        </Button.Content>
+                    </Button>
+                    
+                    <Button x:Name="PART_ButtonFontSizeDown"
+                            Grid.Column="2"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            BorderBrush="Gray"
+                            Height="25"
+                            Padding="5 0 0 0"
+                            >
+                        <Button.Content>
+                            <DockPanel>
+                                <TextBlock Text="A"
+                                           FontSize="13"
+                                           VerticalAlignment="Bottom"/>
+
+                                <PathIcon UseLayoutRounding="False"
+                                          IsHitTestVisible="False"
+                                          Height="8"
+                                          Width="8"
+                                          Margin="0,0,3,10"
+                                         
+                                          HorizontalAlignment="Right"
+                                          VerticalAlignment="Center"
+                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
+                            </DockPanel>
+                        </Button.Content>
+                    </Button>
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

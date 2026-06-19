@@ -6,21 +6,34 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ComboBoxWithFonts : TemplatedControl
+public class ComboBoxWithFontsSize : TemplatedControl
 {
     #region Выбранный элемент из спсика
+    public static readonly StyledProperty<int> SelectedIndexProperty =
+        AvaloniaProperty.Register<ComboBoxWithFonts, int>(nameof(SelectedIndex), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Выбранный элемент из спсика
+    /// </summary>
+    public int SelectedIndex
+    {
+        get => GetValue(SelectedIndexProperty);
+        set => SetValue(SelectedIndexProperty, value);
+    }
+    #endregion
+
+    #region Индекс выбранного элемента из спсика
     public static readonly StyledProperty<object?> SelectedItemProperty =
         AvaloniaProperty.Register<ComboBoxWithFonts, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Выбранный элемент из спсика
+    /// Индекс выбранного элемента из спсика
     /// </summary>
     public object? SelectedItem
     {
@@ -75,22 +88,47 @@ public class ComboBoxWithFonts : TemplatedControl
     {
         base.OnApplyTemplate(e);
         var array = new List<Border>();
-        FontManager.Current.SystemFonts?
-            .ToList()?
+        var fontFamily = Helper.GetResource<FontFamily>("FontFamilyDefault");
+        List<double> list = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48, 72];
+
+        list.ToList()?
             .ForEach(x =>
             {
-                var border = new Border { Background = Brushes.Transparent, Child = new TextBlock { Text = x.Name, FontFamily = x, FontSize = 10 } };
+                var border = new Border
+                {
+                    Background = Brushes.Transparent,
+                    Child = new TextBlock
+                    {
+                        Text = x.ToString(),
+                        FontFamily = fontFamily,
+                        FontSize = 10
+                    }
+                };
                 border.PointerMoved += (s, e)
                                 => App.GetService<ICommandProvider>()?
-                                .GetCommand("Command_PreViewSelectedFont")?
-                                .Execute(x.Name);
+                                .GetCommand("Command_PreViewSelectedFontSize")?
+                                .Execute(x);
 
                 array.Add(border);
-
-                if (x.Name.Contains(Helper.GetResource<FontFamily>("FontFamilyDefault").Name, StringComparison.CurrentCultureIgnoreCase))
-                    SelectedItem = border;
             });
 
+        SelectedItem = array[3];
         ItemsSource = array;
+
+
+
+        var ButtonFontSizeUp = e.NameScope.Find<Button>("PART_ButtonFontSizeUp");
+        var ButtonFontSizeDown = e.NameScope.Find<Button>("PART_ButtonFontSizeDown");
+        ButtonFontSizeUp.Click += (s, e) =>
+        {
+            if (SelectedIndex < ItemsSource.Count - 1)
+                SelectedIndex++;
+        };
+
+        ButtonFontSizeDown.Click += (s, e) =>
+        {
+            if (SelectedIndex > 0)
+                SelectedIndex--;
+        };
     }
 }

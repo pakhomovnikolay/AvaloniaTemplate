@@ -5,6 +5,9 @@ namespace AvaloniaTemplate.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
+
+
+
         #region Конструктор
         /// <summary>
         /// Конструктор
@@ -51,6 +54,18 @@ namespace AvaloniaTemplate.ViewModels
         /// </summary>
         /// <param name="settings"></param>
         private void ChangeAppStatus(string status) => AppStatus = status;
+        #endregion
+
+        #region Текущая версия проекта
+        private int selectedIndexFontSize;
+        /// <summary>
+        /// Текущая версия проекта
+        /// </summary>
+        public int SelectedIndexFontSize
+        {
+            get => selectedIndexFontSize;
+            set => SetProperty(ref selectedIndexFontSize, value);
+        }
         #endregion
     }
 }

@@ -37,6 +37,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonCopy.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSimpleAs.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ComboBoxWithFonts.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ComboBoxWithFontsSize.axaml"/>
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

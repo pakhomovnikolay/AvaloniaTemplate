@@ -22,8 +22,9 @@ namespace AvaloniaTemplate.Services.Registrations
             RegisterCommand<Command_Copy>("Command_Copy");
             RegisterCommand<Command_SimpleAs>("Command_SimpleAs");
             RegisterCommand<Command_PreViewSelectedFont>("Command_PreViewSelectedFont");
+            RegisterCommand<Command_PreViewSelectedFontSize>("Command_PreViewSelectedFontSize");
 
-            //RegisterCommand<Command_PreViewSelectedFont>("Command_PreViewSelectedFont");
+            //RegisterCommand<PreViewSelectedFontSize>("PreViewSelectedFontSize");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)

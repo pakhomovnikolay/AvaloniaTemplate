@@ -61,6 +61,13 @@
 													 >
 			
 		</customresourcesdictionary:ComboBoxWithFonts>
+
+		<customresourcesdictionary:ComboBoxWithFontsSize HorizontalAlignment="Left"
+													 Margin="5"
+													 Width="120"
+													 >
+			
+		</customresourcesdictionary:ComboBoxWithFontsSize>
 	</StackPanel>
 
 	
