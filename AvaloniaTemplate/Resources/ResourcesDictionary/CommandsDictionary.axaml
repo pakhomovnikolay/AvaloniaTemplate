@@ -9,5 +9,6 @@
     <cmdUser:Command_Cut x:Key= "Command_Cut"/>
     <cmdUser:Command_Copy x:Key= "Command_Copy"/>
     <cmdUser:Command_SimpleAs x:Key= "Command_SimpleAs"/>
+    <cmdUser:Command_PreViewSelectedFont x:Key= "Command_PreViewSelectedFont"/>
     
 </ResourceDictionary>

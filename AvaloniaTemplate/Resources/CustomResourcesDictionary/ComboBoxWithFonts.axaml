@@ -1,0 +1,31 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+    
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:ComboBoxWithFonts  Width="250"/>
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ComboBoxWithFonts}"
+                  TargetType="controls:ComboBoxWithFonts"
+                  >
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ComboBox SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                          ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
+                          Width="{TemplateBinding Width}"
+                          Height="{TemplateBinding Height}"
+                          MinWidth="{TemplateBinding MinWidth}"
+                          MinHeight="{TemplateBinding MinHeight}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                          />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,4 +1,5 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Media.TextFormatting;
@@ -24,7 +25,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         public static T? GetResource<T>(string name)
         {
             var result = default(T);
-            var resource = App.Desktop?.MainWindow?.FindResource(name);
+            //var resource = App.Desktop?.MainWindow?.FindResource(name);
+            var resource = Application.Current?.FindResource(name);
+
             if (resource is not null && resource is T found)
                 result = found;
 
