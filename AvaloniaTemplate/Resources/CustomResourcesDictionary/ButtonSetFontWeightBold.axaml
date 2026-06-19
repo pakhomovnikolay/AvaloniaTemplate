@@ -1,0 +1,37 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:ButtonSetFontWeightBold />
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ButtonSetFontWeightBold}"
+                  TargetType="controls:ButtonSetFontWeightBold"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ToggleButton Padding="10"
+                              Background="{TemplateBinding Background}"
+                              Command="{TemplateBinding Command}"
+                              CommandParameter="{TemplateBinding CommandParameter}"
+
+                              >
+                    <ToggleButton.Content>
+                        <TextBlock Text="Ж"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   FontWeight="{TemplateBinding FontWeight}"
+                                   />
+                    </ToggleButton.Content>
+                </ToggleButton>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

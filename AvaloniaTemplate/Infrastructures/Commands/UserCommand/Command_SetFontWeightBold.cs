@@ -1,25 +1,18 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
-using System.Diagnostics;
 
 namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 {
     /// <summary>
-    /// Команда - предварительного просмотра выбранного размера шрифта
+    /// Команда - Установить полужирный стиль текста
     /// </summary>
-    public class Command_PreViewSelectedFontSize : Command
+    public class Command_SetFontWeightBold : Command
     {
         protected override bool CanExecute(object p)
-            => p is not null;
+            => true;
 
         protected override void Execute(object p)
         {
-            if (p is null || p is not double fontSize)
-                return;
-
-            Debug.WriteLine($"Текущий размер шрифта: {fontSize}");
-
-
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }

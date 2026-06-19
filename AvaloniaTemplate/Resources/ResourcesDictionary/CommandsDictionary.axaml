@@ -11,6 +11,6 @@
     <cmdUser:Command_SimpleAs x:Key= "Command_SimpleAs"/>
     <cmdUser:Command_PreViewSelectedFont x:Key= "Command_PreViewSelectedFont"/>
     <cmdUser:Command_PreViewSelectedFontSize x:Key= "Command_PreViewSelectedFontSize"/>
-
+    <cmdUser:Command_SetFontWeightBold x:Key= "Command_SetFontWeightBold"/>
     
 </ResourceDictionary>

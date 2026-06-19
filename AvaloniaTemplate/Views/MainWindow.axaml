@@ -68,6 +68,14 @@
 													 >
 			
 		</customresourcesdictionary:ComboBoxWithFontsSize>
+
+		<customresourcesdictionary:ButtonSetFontWeightBold HorizontalAlignment="Left"
+													 Margin="5"
+													 Command="{StaticResource Command_SetFontWeightBold}"
+													 >
+			
+		</customresourcesdictionary:ButtonSetFontWeightBold>
+
 	</StackPanel>
 
 	
