@@ -1,0 +1,53 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <controls:ButtonPaste />
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ButtonPaste}"
+                  TargetType="controls:ButtonPaste"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button Padding="10"
+                        Classes="disableBackgroundTransparent"
+                        Background="{TemplateBinding Background}"
+                        Command="{TemplateBinding Command}"
+                        CommandParameter="{TemplateBinding CommandParameter}"
+                        >
+                    <Button.Content>
+                        <Grid RowDefinitions="* auto">
+                            <Image Source="\Assets\Paste.png" Height="35"/>
+                            <TextBlock Grid.Row="1"
+                                   Text="Вставить"
+                                   FontFamily="{TemplateBinding FontFamily}"
+                                   FontSize="{TemplateBinding FontSize}"
+                                   />
+
+                        </Grid>
+                    </Button.Content>
+                </Button>
+
+
+                <!--<Grid RowDefinitions="* auto">
+                    <Button Padding="0">
+                        
+                    </Button>
+
+                    <TextBlock Grid.Row="1"
+                               Text="Вставить"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}"
+                               />
+                </Grid>-->
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

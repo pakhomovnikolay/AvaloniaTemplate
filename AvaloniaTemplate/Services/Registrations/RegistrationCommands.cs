@@ -1,5 +1,6 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
+using AvaloniaTemplate.Infrastructures.Commands.UserCommand;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,9 @@ namespace AvaloniaTemplate.Services.Registrations
         public static void AddCommands(this IServiceCollection services)
         {
             // 1. Создаем команды
-            //RegisterCommand<CommandTest>("Test");
+            RegisterCommand<Command_Paste>("Command_Paste");
+
+            //RegisterCommand<Command_Paste>("Command_Paste");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)

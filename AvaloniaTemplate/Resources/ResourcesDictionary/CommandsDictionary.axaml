@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     x:ClassModifier="internal"
+                    xmlns:cmdUser="using:AvaloniaTemplate.Infrastructures.Commands.UserCommand"
                     >
-  <!-- Add Resources Here -->
+    
+    <!-- Add Resources Here -->
+    <cmdUser:Command_Paste x:Key= "Command_Paste"/>
+    
+
 </ResourceDictionary>
