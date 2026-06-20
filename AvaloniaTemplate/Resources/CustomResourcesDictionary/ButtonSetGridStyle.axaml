@@ -4,8 +4,8 @@
         >
 
     <Design.PreviewWith>
-        <Border Padding="20">
-            <controls:ButtonSetGridStyle />
+        <Border Padding="20" Width="350">
+            <controls:ButtonSetGridStyle Height="35" Width="35" />
         </Border>
     </Design.PreviewWith>
     
@@ -15,7 +15,123 @@
                   >
         <Setter Property="Template">
             <ControlTemplate>
-                <Button Padding="0"
+                <Grid>
+                    <ToggleButton x:Name="RootElement" Background="Transparent"
+                                  Margin="0 1 0 1"
+                                  Padding="0"
+                                  Classes="highlightedBackground"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  >
+                        <ToggleButton.Content>
+                            <Grid ColumnDefinitions="* auto">
+                                <Button Background="Transparent"
+                                        BorderThickness="0 0 1 0"
+                                        Classes="highlightedBackground"
+                                        Padding="5 0 0 0"
+                                        CornerRadius="1"
+                                        HorizontalContentAlignment="Left"
+                                        Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                        />
+                                
+                                <PathIcon Grid.Column="1"
+                                          Height="12"
+                                          Width="12"
+                                          Margin="3 0 2 0"
+                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                          />
+                            </Grid>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+                    
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           IsOpen="{TemplateBinding IsPopupOpen, Mode=TwoWay}"
+                           IsLightDismissEnabled="True"
+                           InheritsTransform="True"
+                           MinHeight="15"
+                           MinWidth="100"
+                           PlacementTarget="RootElement"
+                           Placement="BottomEdgeAlignedLeft"
+                           >
+                        <Border x:Name="PopupBorder"
+                                Background="LightGray"
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Padding="0"
+                                Margin="0 0 1 0"
+                                HorizontalAlignment="Stretch"
+                                CornerRadius="5"
+                                Child="{Binding PopupContent, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                />
+                    </Popup>
+                </Grid>
+               
+
+
+
+
+                <!--<Grid ColumnDefinitions="* 16">
+                    
+                     --><!-- Текущий стиль --><!--
+                    <Button Grid.Column="0"
+                            Background="Transparent"
+                            >
+                        <PathIcon Data="M1 1H15V15H1Z M5 1V15 M10 1V15 M1 5H15 M1 10H15"/>
+                    </Button>
+
+                    --><!-- Выпадашка --><!--
+                    <ToggleButton Grid.Column="1"
+                                  IsChecked="False"
+                                  Background="Transparent"
+                                  Padding="0"
+                                  >
+                        <PathIcon Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                  Width="12"
+                                  Height="12"
+                                  Margin="5 0"
+                                  />
+                    </ToggleButton>
+
+                    <Popup IsOpen="False"
+                           Placement="Bottom">
+
+                        <Border Padding="4">
+                            <ItemsControl>
+                                <ItemsControl.ItemTemplate>
+
+                                    <DataTemplate>
+
+                                        <Button>
+
+                                            <StackPanel Orientation="Horizontal"
+                                                        Spacing="8">
+
+                                                <Path Width="16"
+                                                      Height="16"
+                                                      Data="{Binding Converter={StaticResource BorderStyleConverter}}"
+                                                      Stretch="Uniform"
+                                                      Stroke="Black"
+                                                      StrokeThickness="1"/>
+
+                                                <TextBlock Text="{Binding}"/>
+
+                                            </StackPanel>
+
+                                        </Button>
+
+                                    </DataTemplate>
+
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </Border>
+
+                    </Popup>
+
+                </Grid>-->
+
+                <!--<Button Padding="0"
                         Background="Transparent"
                         CornerRadius="0"
                         Classes="disableBackgroundTransparent">
@@ -45,7 +161,7 @@
                     </Button.Content>
                     
                     
-                </Button>
+                </Button>-->
             </ControlTemplate>
         </Setter>
     </ControlTheme>
