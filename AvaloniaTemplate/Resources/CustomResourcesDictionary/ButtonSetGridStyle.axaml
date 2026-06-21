@@ -26,7 +26,8 @@
                                   >
                         <ToggleButton.Content>
                             <Grid ColumnDefinitions="* auto">
-                                <Button Background="Transparent"
+                                <Button x:Name="PART_SetGridStyle"
+                                        Background="Transparent"
                                         BorderThickness="0 0 1 0"
                                         Classes="highlightedBackground"
                                         Padding="5 0 0 0"

@@ -6,14 +6,13 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Models.Enums;
-using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonSetGridStyle : TemplatedControl
 {
     private Popup popupFrame;
-    private readonly Dictionary<CurrentBorderStyleType, Control> bufferFrame = [];
+    private Button buttonGridStyle;
 
     #region Источник данных
     public static readonly StyledProperty<object?> ContentProperty =
@@ -60,52 +59,45 @@ public class ButtonSetGridStyle : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        var width = 20;
+        var height = 20;
         popupFrame = e.NameScope.Find<Popup>("PART_Popup");
+        buttonGridStyle = e.NameScope.Find<Button>("PART_SetGridStyle");
+
+        buttonGridStyle.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_ChangeStyleGrid");
+        buttonGridStyle.Bind(Button.CommandParameterProperty, new Binding("Tag") { RelativeSource = new RelativeSource(RelativeSourceMode.Self) });
+
 
         var stackPanel = new StackPanel() { Spacing = 5 };
-        
+
         stackPanel.Children.Add(CreateLabel("Границы"));
-        stackPanel.Children.Add(CreateButtonGrid("Нижняя граница", CurrentBorderStyleType.Bottom));
-        stackPanel.Children.Add(CreateButtonGrid("Верхняя граница", CurrentBorderStyleType.Top));
-        stackPanel.Children.Add(CreateButtonGrid("Левая граница", CurrentBorderStyleType.Left));
-        stackPanel.Children.Add(CreateButtonGrid("Правая граница", CurrentBorderStyleType.Right));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Нижняя граница", CurrentBorderStyleType.Bottom));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Верхняя граница", CurrentBorderStyleType.Top));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Левая граница", CurrentBorderStyleType.Left));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Правая граница", CurrentBorderStyleType.Right));
 
         stackPanel.Children.Add(new Separator() { Height = 2 });
 
-        stackPanel.Children.Add(CreateButtonGrid("Нет границ", CurrentBorderStyleType.None));
-        stackPanel.Children.Add(CreateButtonGrid("Все границы", CurrentBorderStyleType.All));
-        stackPanel.Children.Add(CreateButtonGrid("Внешние границы", CurrentBorderStyleType.Outside));
-        stackPanel.Children.Add(CreateButtonGrid("Толстые внешние границы", CurrentBorderStyleType.ThickOutside));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Нет границ", CurrentBorderStyleType.None));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Все границы", CurrentBorderStyleType.All));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Внешние границы", CurrentBorderStyleType.Outside));
+        stackPanel.Children.Add(CreateButtonGrid(width, height, "Толстые внешние границы", CurrentBorderStyleType.ThickOutside));
         PopupContent = new() { Width = 230 };
         PopupContent.Children.Add(stackPanel);
-
-        if (bufferFrame.TryGetValue(CurrentBorderStyleType.Bottom, out var control))
-        {
-            Content = new Border()
-            {
-                Background = Brushes.White,
-                Height = 25,
-                Width = 25,
-                Child = control
-            };
-        }
-            
+        buttonGridStyle.Tag = CurrentBorderStyleType.Bottom;
+        Content = CreateButtonGrid(width, height, CurrentBorderStyleType.Bottom);
     }
-
     private static TextBlock CreateLabel(string label)
     {
         return new TextBlock()
         {
-            Text = "Границы",
+            Text = label,
             FontWeight = FontWeight.Bold,
             Margin = new(5, 5, 0, 10),
         };
     }
-
-    private Button CreateButtonGrid(string label, CurrentBorderStyleType borderStyle)
+    private Button CreateButtonGrid(double width, double height, string label, CurrentBorderStyleType borderStyle)
     {
-        var width = 20;
-        var height = 20;
         var desc = new TextBlock()
         {
             Text = label,
@@ -117,9 +109,10 @@ public class ButtonSetGridStyle : TemplatedControl
             Background = Brushes.White,
             Height = height,
             Width = width,
-            Child = CreateButtonGrid(width, height, borderStyle)
-
+            Child = CreateButtonGrid(width, height, borderStyle),
+            Tag = borderStyle
         };
+
         var grid = new Grid()
         {
             ColumnDefinitions = [
@@ -144,17 +137,16 @@ public class ButtonSetGridStyle : TemplatedControl
             CommandParameter = borderStyle
         };
 
-        //?.Execute(borderStyle)
         button.Click += (_, _) =>
         {
+            buttonGridStyle.Tag = borderStyle;
             Content = CreateButtonGrid(width, height, borderStyle);
             popupFrame?.Close();
         };
         button.Classes.Add("highlightedBackground");
         return button;
     }
-
-    private Border CreateButtonGrid(double width, double height, CurrentBorderStyleType borderStyle)
+    private static Border CreateButtonGrid(double width, double height, CurrentBorderStyleType borderStyle)
     {
         var border = new Border()
         {
@@ -192,38 +184,6 @@ public class ButtonSetGridStyle : TemplatedControl
                 _ => GridStyleType.CreateGrid(width, height)
             }
         };
-
-        if (!bufferFrame.ContainsKey(borderStyle))
-            bufferFrame[borderStyle] = borderStyle switch
-            {
-                CurrentBorderStyleType.Bottom => GridStyleType.CreateGrid(width, height, Bottom: BorderStyleType.Normal),
-                CurrentBorderStyleType.Top => GridStyleType.CreateGrid(width, height, Top: BorderStyleType.Normal),
-                CurrentBorderStyleType.Left => GridStyleType.CreateGrid(width, height, Left: BorderStyleType.Normal),
-                CurrentBorderStyleType.Right => GridStyleType.CreateGrid(width, height, Right: BorderStyleType.Normal),
-                CurrentBorderStyleType.All => GridStyleType.CreateGrid(width, height,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal),
-
-                CurrentBorderStyleType.Outside => GridStyleType.CreateGrid(width, height,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal,
-                    BorderStyleType.Normal
-                    ),
-
-                CurrentBorderStyleType.ThickOutside => GridStyleType.CreateGrid(width - 1, height - 1,
-                    BorderStyleType.Thick,
-                    BorderStyleType.Thick,
-                    BorderStyleType.Thick,
-                    BorderStyleType.Thick
-                    ),
-
-                _ => GridStyleType.CreateGrid(width, height)
-            };
 
         return border;
     }
