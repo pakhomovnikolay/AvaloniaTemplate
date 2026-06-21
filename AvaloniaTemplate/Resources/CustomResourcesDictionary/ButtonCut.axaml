@@ -17,8 +17,11 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Button Padding="5 2 5 2"
-                        Classes="disableBackgroundTransparent"
+                <Button x:Name="PART_Button"
+                        Padding="5 2 5 2"
+                        Classes="highlightedBackground"
+                        BorderThickness="0"
+                        HorizontalContentAlignment="Left"
                         Background="{TemplateBinding Background}"
                         Command="{TemplateBinding Command}"
                         CommandParameter="{TemplateBinding CommandParameter}"

@@ -1,6 +1,8 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
@@ -34,4 +36,11 @@ public class ButtonCopy : TemplatedControl
         set => SetValue(CommandParameterProperty, value);
     }
     #endregion
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        var button = e.NameScope.Find<Button>("PART_Button");
+        button.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_Copy");
+    }
 }

@@ -88,6 +88,5 @@ namespace AvaloniaTemplate.Services
             await Clipboard.SetTextAsync(buffer);
         }
         #endregion
-
     }
 }

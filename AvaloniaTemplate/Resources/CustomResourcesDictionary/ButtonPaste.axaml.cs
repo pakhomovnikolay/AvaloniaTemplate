@@ -1,12 +1,23 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
+using AvaloniaTemplate.Services;
+using AvaloniaTemplate.Services.Interfaces;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonPaste : TemplatedControl
 {
+    private readonly IGlobalStateService stateService;
+
+    public ButtonPaste()
+    {
+        stateService = App.GetService<IGlobalStateService>();
+    }
+
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
         AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command),defaultBindingMode: BindingMode.TwoWay);
@@ -34,4 +45,13 @@ public class ButtonPaste : TemplatedControl
         set => SetValue(CommandParameterProperty, value);
     }
     #endregion
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        
+        var button = e.NameScope.Find<Button>("PART_Button");
+        button.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_Paste");
+        button.Bind(Button.CommandParameterProperty, new Binding("ClipboardIsNotEmpty") { Source = stateService });
+    }
 }

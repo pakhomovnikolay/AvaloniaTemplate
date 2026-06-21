@@ -18,11 +18,11 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <ToggleButton Padding="10"
+                <ToggleButton x:Name="PART_Button"
+                              Padding="10"
                               Background="{TemplateBinding Background}"
                               Command="{TemplateBinding Command}"
                               CommandParameter="{TemplateBinding CommandParameter}"
-                              IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
                               >
                     <ToggleButton.Content>
                         <TextBlock Text="К"

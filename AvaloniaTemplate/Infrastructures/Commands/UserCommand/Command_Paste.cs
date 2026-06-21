@@ -9,7 +9,7 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
     public class Command_Paste : Command
     {
         protected override bool CanExecute(object p)
-            => true;
+            => p is not null && p is bool state && state;
 
         protected override void Execute(object p)
         {
