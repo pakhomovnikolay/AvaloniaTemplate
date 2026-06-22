@@ -1,4 +1,7 @@
-﻿namespace AvaloniaTemplate.Services.Interfaces
+﻿using System.Collections.ObjectModel;
+using Avalonia.Media;
+
+namespace AvaloniaTemplate.Services.Interfaces
 {
     public interface IGlobalStateService
     {
@@ -35,6 +38,34 @@
         /// Стиль текста подчеркнутый
         /// </summary>
         bool IsTextStyleUnderline { get; set; }
+        #endregion
+
+        #region Коллекция последних выбранных цветов задний заливки
+        /// <summary>
+        /// Коллекция последних выбранных цветов задний заливки
+        /// </summary>
+        ObservableCollection<Color> BackgroundColors { get; set; }
+        #endregion
+
+        #region Коллекция последних выбранных цветов передней заливки
+        /// <summary>
+        /// Коллекция последних выбранных цветов передней заливки
+        /// </summary>
+        ObservableCollection<Color> ForegroundColors { get; set; }
+        #endregion
+
+        #region Текущий цвет заливки
+        /// <summary>
+        /// Текущий цвет заливки
+        /// </summary>
+        IBrush CurrentBackground { get; set; }
+        #endregion
+
+        #region Текущий цвет текста
+        /// <summary>
+        /// Текущий цвет текста
+        /// </summary>
+        IBrush CurrentForeground { get; set; }
         #endregion
     }
 }

@@ -38,7 +38,7 @@
 			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1" Width="115"/>
 		</Grid>
 
-		<Grid ColumnDefinitions="35 35 35 50">
+		<Grid ColumnDefinitions="35 35 35 50 50">
 			<customresourcesdictionary:ButtonSetFontWeightBold />
 
 			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"/>
@@ -46,6 +46,9 @@
 			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"/>
 
 			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"/>
+
+			<customresourcesdictionary:ButtonSetBackgroundStyle Grid.Column="4"/>
+			
 		</Grid>
 	</StackPanel>
 </Window>

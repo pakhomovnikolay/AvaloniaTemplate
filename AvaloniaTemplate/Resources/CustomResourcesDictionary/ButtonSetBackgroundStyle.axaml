@@ -5,13 +5,12 @@
 
     <Design.PreviewWith>
         <Border Padding="20" Width="350">
-            <controls:ButtonSetGridStyle Height="35" Width="35" />
+            <controls:ButtonSetBackgroundStyle Height="35" Width="35" />
         </Border>
     </Design.PreviewWith>
     
-    
-    <ControlTheme x:Key="{x:Type controls:ButtonSetGridStyle}"
-                  TargetType="controls:ButtonSetGridStyle"
+    <ControlTheme x:Key="{x:Type controls:ButtonSetBackgroundStyle}"
+                  TargetType="controls:ButtonSetBackgroundStyle"
                   >
         <Setter Property="Template">
             <ControlTemplate>
@@ -26,15 +25,26 @@
                                   >
                         <ToggleButton.Content>
                             <Grid ColumnDefinitions="* auto">
-                                <Button x:Name="PART_SetGridStyle"
+                                <Button x:Name="PART_SetBackgroundStyle"
                                         Background="Transparent"
                                         BorderThickness="0 0 1 0"
                                         Classes="highlightedBackground"
                                         Padding="5 0 0 0"
                                         CornerRadius="1"
                                         HorizontalContentAlignment="Left"
-                                        Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                        />
+                                        >
+                                    <Button.Content>
+                                        <Grid RowDefinitions="* 9">
+                                            <Image Source="\Assets\FillingColor.png"/>
+                                            <Border x:Name="PART_CurrentBackgroundStyle"
+                                                    Grid.Row="1"
+                                                    Margin="-2 0 1 2"
+                                                    BorderThickness="1"
+                                                    BorderBrush="LightGray"
+                                                    />
+                                        </Grid>
+                                    </Button.Content>
+                                </Button>
                                 
                                 <PathIcon Grid.Column="1"
                                           Height="12"
@@ -60,7 +70,7 @@
                                 Background="LightGray"
                                 BorderBrush="Gray"
                                 BorderThickness="1"
-                                Padding="0"
+                                Padding="5 0 5 0"
                                 Margin="0 0 1 0"
                                 HorizontalAlignment="Stretch"
                                 CornerRadius="5"

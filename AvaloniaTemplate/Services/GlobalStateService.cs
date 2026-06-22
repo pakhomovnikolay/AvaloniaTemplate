@@ -2,6 +2,9 @@
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
+using System.Collections.ObjectModel;
+using Avalonia.Media;
+using AvaloniaTemplate.Infrastructures.Helpers;
 
 namespace AvaloniaTemplate.Services
 {
@@ -62,6 +65,42 @@ namespace AvaloniaTemplate.Services
         {
             get => textStyleUnderline;
             set => SetProperty(ref textStyleUnderline, value);
+        }
+        #endregion
+
+        #region Коллекция последних выбранных цветов задний заливки
+        private ObservableCollection<Color> backgroundColors = [];
+        public ObservableCollection<Color> BackgroundColors
+        {
+            get => backgroundColors;
+            set => SetProperty(ref backgroundColors, value);
+        }
+        #endregion
+
+        #region Коллекция последних выбранных цветов передней заливки
+        private ObservableCollection<Color> foregroundColors = [];
+        public ObservableCollection<Color> ForegroundColors
+        {
+            get => foregroundColors;
+            set => SetProperty(ref foregroundColors, value);
+        }
+        #endregion
+
+        #region Текущий цвет заливки
+        private IBrush currentBackground = Brushes.Transparent;
+        public IBrush CurrentBackground
+        {
+            get => currentBackground;
+            set => SetProperty(ref currentBackground, value);
+        }
+        #endregion
+
+        #region Текущий цвет текста
+        private IBrush currentForeground = Brushes.Transparent;
+        public IBrush CurrentForeground
+        {
+            get => currentForeground;
+            set => SetProperty(ref currentForeground, value);
         }
         #endregion
     }

@@ -42,12 +42,12 @@ public class ButtonSetGridStyle : TemplatedControl
     }
     #endregion
 
-    #region Источник данных
+    #region Окно раскрыто
     public static readonly StyledProperty<bool> IsPopupOpenProperty =
         AvaloniaProperty.Register<DualListSelector, bool>(nameof(IsPopupOpen), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Источник данных
+    /// Окно раскрыто
     /// </summary>
     public bool IsPopupOpen
     {
@@ -63,10 +63,8 @@ public class ButtonSetGridStyle : TemplatedControl
         var height = 20;
         popupFrame = e.NameScope.Find<Popup>("PART_Popup");
         buttonGridStyle = e.NameScope.Find<Button>("PART_SetGridStyle");
-
         buttonGridStyle.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_ChangeStyleGrid");
         buttonGridStyle.Bind(Button.CommandParameterProperty, new Binding("Tag") { RelativeSource = new RelativeSource(RelativeSourceMode.Self) });
-
 
         var stackPanel = new StackPanel() { Spacing = 5 };
 

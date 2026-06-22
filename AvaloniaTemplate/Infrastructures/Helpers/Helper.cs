@@ -1,15 +1,20 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Constants;
+using AvaloniaTemplate.Services.Interfaces;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
@@ -217,7 +222,169 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 
                 offset += read;
             }
-        } 
+        }
+        #endregion
+
+        #region Цвета для формирвоания схеме цветов
+        /// <summary>
+        /// Цвета для формирвоания схеме цветов
+        /// </summary>
+        public static readonly List<Color> ColorsSchema = [Colors.Black, Colors.White, Colors.Red, Colors.Orange, Colors.Yellow,
+                                                            Colors.Green, Colors.Turquoise, Colors.Blue, Colors.Purple, Colors.Gray];
+        #endregion
+
+        #region Стандартные цвета заливки
+        /// <summary>
+        /// Стандартные цвета заливки
+        /// </summary>
+        public static readonly List<Color> ColorsStandard = [Colors.DarkRed, Colors.Red, Colors.Orange, Colors.Yellow, Colors.LightGreen,
+                                                                Colors.Green, Colors.LightBlue, Colors.MediumBlue, Colors.DarkBlue, Colors.DarkViolet];
+        #endregion
+
+        #region Создать цветовую схему
+        /// <summary>
+        /// Создать цветовую палитру
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="frame"></param>
+        /// <param name="panel"></param>
+        /// <param name="panelRecent"></param>
+        public static void CreateColorPalet(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panel, StackPanel panelRecent)
+        {
+            panel.Children.Add(CreateLabel("Схема цветов"));
+            panel.Children.Add(CreateColorsSchema(command, stateService, frame, panelRecent));
+            panel.Children.Add(CreateLabel("Стандартные цвета"));
+            panel.Children.Add(CreateColorsStandard(command, stateService, frame, panelRecent));
+            panel.Children.Add(CreateLabel("Недавние цвета"));
+            panel.Children.Add(panelRecent);
+        }
+        #endregion
+
+        #region Создать подрись
+        /// <summary>
+        /// Создать подрись
+        /// </summary>
+        /// <param name="label"></param>
+        /// <returns></returns>
+        public static TextBlock CreateLabel(string label)
+        {
+            return new TextBlock()
+            {
+                Text = label,
+                FontWeight = FontWeight.Bold,
+                Margin = new(5, 5, 0, 5),
+            };
+        }
+        #endregion
+
+        #region Создать StackPanel
+        /// <summary>
+        /// Создать StackPanel
+        /// </summary>
+        /// <returns></returns>
+        public static StackPanel CreateStackPanel(
+            Orientation orientation = Orientation.Horizontal,
+            double spacing = 3
+            ) => new()
+            {
+                Orientation = orientation,
+                Spacing = spacing
+            };
+        #endregion
+
+        #region Создать панель недавно выбранных цветов
+        /// <summary>
+        /// Создать панель недавно выбранных цветов
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="frame"></param>
+        /// <param name="panelRecent"></param>
+        public static void CreateColorsRecent(ICommand command, IGlobalStateService stateService, StackPanel panel, Popup frame, StackPanel panelRecent)
+        {
+            panelRecent.Children.Clear();
+            foreach (var color in stateService.BackgroundColors)
+                panelRecent.Children.Add(CreateButtonColor(command, stateService, frame, color, panelRecent));
+        }
+        #endregion
+
+        #region Создать схему цветов
+        /// <summary>
+        /// Создать схему цветов
+        /// </summary>
+        /// <returns></returns>
+        private static StackPanel CreateColorsSchema(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panelRecent)
+        {
+            var stackPanel = CreateStackPanel();
+            foreach (var color in ColorsSchema)
+            {
+                var button = CreateButtonColor(command, stateService, frame, color, panelRecent);
+                button.Margin = new(0, 0, 0, 10);
+
+                var childStackPanel = CreateStackPanel(Orientation.Vertical, 3);
+                childStackPanel.Children.Add(button);
+
+                foreach (var shade in ColorHelper.Shades)
+                {
+                    var colorShade = ColorHelper.ChangeLightness(color, shade);
+                    childStackPanel.Children.Add(CreateButtonColor(command, stateService, frame, colorShade, panelRecent));
+                }
+                stackPanel.Children.Add(childStackPanel);
+            }
+            return stackPanel;
+        }
+        #endregion
+
+        #region Создать стандартные цвета
+        /// <summary>
+        /// Создать стандартные цвета
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="frame"></param>
+        /// <param name="panelRecent"></param>
+        /// <returns></returns>
+        private static StackPanel CreateColorsStandard(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panelRecent)
+        {
+            var stackPanel = new StackPanel() { Orientation = Orientation.Horizontal, Spacing = 3 };
+            foreach (var color in ColorsStandard)
+                stackPanel.Children.Add(CreateButtonColor(command, stateService, frame, color, panelRecent));
+
+            return stackPanel;
+        }
+        #endregion
+
+        #region Создать кнопки выбора цветов
+        /// <summary>
+        /// Создать кнопки выбора цветов
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        private static Button CreateButtonColor(ICommand command, IGlobalStateService stateService, Popup frame, Color color, StackPanel panelRecent)
+        {
+            var button = new Button()
+            {
+                Height = 20,
+                Width = 20,
+                Background = new SolidColorBrush(color),
+                BorderThickness = new(1),
+                BorderBrush = Brushes.Gray,
+                CornerRadius = new(1),
+                Command = command,
+                CommandParameter = new SolidColorBrush(color)
+            };
+
+            button.Click += (_, _) =>
+            {
+                stateService.CurrentBackground = button.Background;
+                if (!stateService.BackgroundColors.Contains(color))
+                {
+                    stateService.BackgroundColors.Insert(0, color);
+                    if (stateService.BackgroundColors.Count > 10)
+                        stateService.BackgroundColors.RemoveAt(stateService.BackgroundColors.Count - 1);
+                }
+                frame.Close();
+            };
+            return button;
+        }
         #endregion
     }
 }

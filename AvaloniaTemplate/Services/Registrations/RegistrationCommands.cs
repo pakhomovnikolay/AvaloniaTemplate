@@ -27,8 +27,9 @@ namespace AvaloniaTemplate.Services.Registrations
             RegisterCommand<Command_SetFontStyleItalic>("Command_SetFontStyleItalic");
             RegisterCommand<Command_SetTextStyleUnderline>("Command_SetTextStyleUnderline");
             RegisterCommand<Command_ChangeStyleGrid>("Command_ChangeStyleGrid");
+            RegisterCommand<Command_SetBackgroundStyle>("Command_SetBackgroundStyle");
 
-            //RegisterCommand<Command_ChangeStyleGrid>("Command_ChangeStyleGrid");
+            //RegisterCommand<Command_SetBackgroundStyle>("Command_SetBackgroundStyle");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)
