@@ -7,7 +7,6 @@ using Avalonia.Media.Imaging;
 using Avalonia.Media.TextFormatting;
 using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Constants;
-using AvaloniaTemplate.Services.Interfaces;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -249,14 +248,12 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="frame"></param>
         /// <param name="panel"></param>
         /// <param name="panelRecent"></param>
-        public static void CreateColorPalet(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panel, StackPanel panelRecent)
+        public static void CreateColorPalet(ICommand command, Popup frame, StackPanel panel, StackPanel panelRecent)
         {
             panel.Children.Add(CreateLabel("Схема цветов"));
-            panel.Children.Add(CreateColorsSchema(command, stateService, frame, panelRecent));
+            panel.Children.Add(CreateColorsSchema(command, frame));
             panel.Children.Add(CreateLabel("Стандартные цвета"));
-            panel.Children.Add(CreateColorsStandard(command, stateService, frame, panelRecent));
-            panel.Children.Add(CreateLabel("Недавние цвета"));
-            panel.Children.Add(panelRecent);
+            panel.Children.Add(CreateColorsStandard(command, frame));
         }
         #endregion
 
@@ -284,26 +281,37 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <returns></returns>
         public static StackPanel CreateStackPanel(
             Orientation orientation = Orientation.Horizontal,
-            double spacing = 3
-            ) => new()
+            double spacing = 3) => new()
             {
                 Orientation = orientation,
                 Spacing = spacing
             };
         #endregion
 
-        #region Создать панель недавно выбранных цветов
+        #region Создать кнопки выбора цветов
         /// <summary>
-        /// Создать панель недавно выбранных цветов
+        /// Создать кнопки выбора цветов
         /// </summary>
-        /// <param name="stateService"></param>
-        /// <param name="frame"></param>
-        /// <param name="panelRecent"></param>
-        public static void CreateColorsRecent(ICommand command, IGlobalStateService stateService, StackPanel panel, Popup frame, StackPanel panelRecent)
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static Button CreateButtonColor(ICommand command, Popup frame, Color color)
         {
-            panelRecent.Children.Clear();
-            foreach (var color in stateService.BackgroundColors)
-                panelRecent.Children.Add(CreateButtonColor(command, stateService, frame, color, panelRecent));
+            var button = new Button()
+            {
+                Height = 20,
+                Width = 20,
+                Background = new SolidColorBrush(color),
+                BorderThickness = new(1),
+                BorderBrush = Brushes.Gray,
+                CornerRadius = new(1),
+                Command = command,
+                CommandParameter = new SolidColorBrush(color)
+            };
+
+            button.Click += (_, _)
+                => frame.Close();
+
+            return button;
         }
         #endregion
 
@@ -312,12 +320,12 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// Создать схему цветов
         /// </summary>
         /// <returns></returns>
-        private static StackPanel CreateColorsSchema(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panelRecent)
+        private static StackPanel CreateColorsSchema(ICommand command, Popup frame)
         {
             var stackPanel = CreateStackPanel();
             foreach (var color in ColorsSchema)
             {
-                var button = CreateButtonColor(command, stateService, frame, color, panelRecent);
+                var button = CreateButtonColor(command, frame, color);
                 button.Margin = new(0, 0, 0, 10);
 
                 var childStackPanel = CreateStackPanel(Orientation.Vertical, 3);
@@ -326,7 +334,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 foreach (var shade in ColorHelper.Shades)
                 {
                     var colorShade = ColorHelper.ChangeLightness(color, shade);
-                    childStackPanel.Children.Add(CreateButtonColor(command, stateService, frame, colorShade, panelRecent));
+                    childStackPanel.Children.Add(CreateButtonColor(command, frame, colorShade));
                 }
                 stackPanel.Children.Add(childStackPanel);
             }
@@ -342,48 +350,13 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="frame"></param>
         /// <param name="panelRecent"></param>
         /// <returns></returns>
-        private static StackPanel CreateColorsStandard(ICommand command, IGlobalStateService stateService, Popup frame, StackPanel panelRecent)
+        private static StackPanel CreateColorsStandard(ICommand command, Popup frame)
         {
             var stackPanel = new StackPanel() { Orientation = Orientation.Horizontal, Spacing = 3 };
             foreach (var color in ColorsStandard)
-                stackPanel.Children.Add(CreateButtonColor(command, stateService, frame, color, panelRecent));
+                stackPanel.Children.Add(CreateButtonColor(command, frame, color));
 
             return stackPanel;
-        }
-        #endregion
-
-        #region Создать кнопки выбора цветов
-        /// <summary>
-        /// Создать кнопки выбора цветов
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        private static Button CreateButtonColor(ICommand command, IGlobalStateService stateService, Popup frame, Color color, StackPanel panelRecent)
-        {
-            var button = new Button()
-            {
-                Height = 20,
-                Width = 20,
-                Background = new SolidColorBrush(color),
-                BorderThickness = new(1),
-                BorderBrush = Brushes.Gray,
-                CornerRadius = new(1),
-                Command = command,
-                CommandParameter = new SolidColorBrush(color)
-            };
-
-            button.Click += (_, _) =>
-            {
-                stateService.CurrentBackground = button.Background;
-                if (!stateService.BackgroundColors.Contains(color))
-                {
-                    stateService.BackgroundColors.Insert(0, color);
-                    if (stateService.BackgroundColors.Count > 10)
-                        stateService.BackgroundColors.RemoveAt(stateService.BackgroundColors.Count - 1);
-                }
-                frame.Close();
-            };
-            return button;
         }
         #endregion
     }
