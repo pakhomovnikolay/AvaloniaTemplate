@@ -23,6 +23,7 @@
                               Background="{TemplateBinding Background}"
                               Command="{TemplateBinding Command}"
                               CommandParameter="{TemplateBinding CommandParameter}"
+                              IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
                               >
                     <ToggleButton.Content>
                         <TextBlock Text="К"

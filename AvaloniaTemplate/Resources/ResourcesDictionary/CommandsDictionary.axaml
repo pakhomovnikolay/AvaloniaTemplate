@@ -16,5 +16,6 @@
     <cmdUser:Command_SetTextStyleUnderline x:Key= "Command_SetTextStyleUnderline"/>
     <cmdUser:Command_ChangeStyleGrid x:Key= "Command_ChangeStyleGrid"/>
     <cmdUser:Command_SetBackgroundStyle x:Key= "Command_SetBackgroundStyle"/>
+    <cmdUser:Command_SetForegroundStyle x:Key= "Command_SetForegroundStyle"/>
     
 </ResourceDictionary>

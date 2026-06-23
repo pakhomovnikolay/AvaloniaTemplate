@@ -21,35 +21,63 @@
 	<StackPanel Margin="5" Spacing="5">
 
 		<Grid ColumnDefinitions="auto auto">
-			<customresourcesdictionary:ButtonPaste/>
+			<customresourcesdictionary:ButtonPaste Command="{StaticResource Command_Paste}"
+												   CommandParameter="{Binding GlobalStateService.ClipboardIsNotEmpty}"
+												   />
 
 			<Grid Grid.Column="1" RowDefinitions="auto auto auto">
-				<customresourcesdictionary:ButtonCut/>
+				<customresourcesdictionary:ButtonCut Command="{StaticResource Command_Cut}"
+													 />
 
-				<customresourcesdictionary:ButtonCopy Grid.Row="1"/>
+				<customresourcesdictionary:ButtonCopy Grid.Row="1"
+													  Command="{StaticResource Command_Copy}"
+													  />
 
-				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"/>
+				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
+														  Command="{StaticResource Command_SimpleAs}"
+														  />
 			</Grid>
 		</Grid>
 
 		<Grid ColumnDefinitions="auto auto">
-			<customresourcesdictionary:ComboBoxWithFonts Width="150"/>
+			<customresourcesdictionary:ComboBoxWithFonts Width="150"
+														 />
 
-			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1" Width="115"/>
+			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1"
+															 Width="115"
+															 />
 		</Grid>
 
 		<Grid ColumnDefinitions="35 35 35 50 50 50">
-			<customresourcesdictionary:ButtonSetFontWeightBold />
+			<customresourcesdictionary:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
+															   />
 
-			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"/>
+			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"
+																Command="{StaticResource Command_SetFontStyleItalic}"
+																/>
 
-			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"/>
+			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"
+																   Command="{StaticResource Command_SetTextStyleUnderline}"
+																   />
 
-			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"/>
+			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"
+														  Content="{Binding GlobalStateService.CurrentBorderStyle}"
+														  Command="{StaticResource Command_ChangeStyleGrid}"
+														  CommandParameter="{Binding GlobalStateService.BorderStyleType}"
+														  />
+			
 
-			<customresourcesdictionary:ButtonSetBackgroundStyle Grid.Column="4"/>
+			<customresourcesdictionary:ButtonSetBackgroundStyle Grid.Column="4"
+																Command="{StaticResource Command_SetBackgroundStyle}"
+																CommandParameter="{Binding GlobalStateService.CurrentBackground}"
+																CurrentBackgroundColor="{Binding GlobalStateService.CurrentBackground}"
+																/>
 
-			<customresourcesdictionary:ButtonSetForegroundStyle Grid.Column="5"/>
+			<customresourcesdictionary:ButtonSetForegroundStyle Grid.Column="5"
+																Command="{StaticResource Command_SetForegroundStyle}"
+																CommandParameter="{Binding GlobalStateService.CurrentForeground}"
+																CurrentForegroundColor="{Binding GlobalStateService.CurrentForeground}"
+																/>
 		</Grid>
 	</StackPanel>
 </Window>

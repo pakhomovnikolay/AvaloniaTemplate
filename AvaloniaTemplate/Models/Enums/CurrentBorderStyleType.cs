@@ -1,8 +1,12 @@
-﻿namespace AvaloniaTemplate.Models.Enums
+﻿using System.ComponentModel;
+
+namespace AvaloniaTemplate.Models.Enums
 {
     public enum CurrentBorderStyleType
     {
         None,
+
+        [Description("Нижняя граница")]
         Bottom,
         Top,
         Left,

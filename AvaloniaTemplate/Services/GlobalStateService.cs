@@ -1,10 +1,12 @@
-﻿using Avalonia.Threading;
+﻿using Avalonia.Controls;
+using Avalonia.Media;
+using Avalonia.Threading;
+using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.ObjectModel;
-using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Helpers;
 
 namespace AvaloniaTemplate.Services
 {
@@ -87,7 +89,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Текущий цвет заливки
-        private IBrush currentBackground = Brushes.Transparent;
+        private IBrush currentBackground = Brushes.Yellow;
         public IBrush CurrentBackground
         {
             get => currentBackground;
@@ -96,11 +98,37 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Текущий цвет текста
-        private IBrush currentForeground = Brushes.Transparent;
+        private IBrush currentForeground = Brushes.Red;
         public IBrush CurrentForeground
         {
             get => currentForeground;
             set => SetProperty(ref currentForeground, value);
+        }
+        #endregion
+
+        #region Текущий тип стиля сетки
+        private CurrentBorderStyleType borderStyleType = CurrentBorderStyleType.Bottom;
+        public CurrentBorderStyleType BorderStyleType
+        {
+            get
+            {
+                CurrentBorderStyle ??= GridStyleHelper.CreateGridStyle(borderStyleType, 20, 20);
+                return borderStyleType;
+            }
+            set
+            {
+                if (SetProperty(ref borderStyleType, value))
+                    CurrentBorderStyle = GridStyleHelper.CreateGridStyle(borderStyleType, 20, 20);
+            }
+        }
+        #endregion
+
+        #region Текущий тип стиля сетки
+        private Border currentBorderStyle;
+        public Border CurrentBorderStyle
+        {
+            get => currentBorderStyle;
+            set => SetProperty(ref currentBorderStyle, value);
         }
         #endregion
     }

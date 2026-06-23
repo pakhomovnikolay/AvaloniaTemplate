@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using Avalonia.Controls;
 using Avalonia.Media;
+using AvaloniaTemplate.Models.Enums;
+using System.Collections.ObjectModel;
 
 namespace AvaloniaTemplate.Services.Interfaces
 {
@@ -66,6 +68,20 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Текущий цвет текста
         /// </summary>
         IBrush CurrentForeground { get; set; }
+        #endregion
+
+        #region Текущий тип стиля сетки
+        /// <summary>
+        /// Текущий тип стиля сетки
+        /// </summary>
+        CurrentBorderStyleType BorderStyleType { get; set; }
+        #endregion
+
+        #region Текущий стиль сетки
+        /// <summary>
+        /// Текущий стиль сетки
+        /// </summary>
+        Border CurrentBorderStyle { get; set; }
         #endregion
     }
 }

@@ -1,22 +1,12 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
-using AvaloniaTemplate.Services.Interfaces;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonSetTextStyleUnderLine : TemplatedControl
 {
-    private readonly IGlobalStateService stateService;
-
-    public ButtonSetTextStyleUnderLine()
-    {
-        stateService = App.GetService<IGlobalStateService>();
-    }
-
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
         AvaloniaProperty.Register<ComboBoxWithFonts, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
@@ -62,8 +52,5 @@ public class ButtonSetTextStyleUnderLine : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        var button = e.NameScope.Find<Button>("PART_Button");
-        button.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_SetTextStyleUnderline");
-        button.Bind(ToggleButton.IsCheckedProperty, new Binding("IsTextStyleUnderline") { Source = stateService });
     }
 }

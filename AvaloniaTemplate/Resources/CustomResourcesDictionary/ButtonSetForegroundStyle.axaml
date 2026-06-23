@@ -31,6 +31,8 @@
                                         Classes="highlightedBackground"
                                         Padding="0 0 0 0"
                                         CornerRadius="1"
+                                        Command="{TemplateBinding Command}"
+                                        CommandParameter="{TemplateBinding CommandParameter}"
                                         >
                                     <Button.Content>
                                         <Grid RowDefinitions="* 9" ColumnDefinitions="*" Margin="0 3 0 0">
@@ -40,6 +42,7 @@
                                                     Margin="1 0 0 1"
                                                     BorderThickness="1"
                                                     BorderBrush="LightGray"
+                                                    Background="{TemplateBinding CurrentForegroundColor}"
                                                     />
                                         </Grid>
                                     </Button.Content>

@@ -1,12 +1,52 @@
-﻿using System;
+﻿using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
+using Avalonia.Layout;
 using Avalonia.Media;
+using System;
+using System.Collections.Generic;
+using System.Windows.Input;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
     public class ColorHelper
     {
-        public static double[] Shades =
-        [
+        #region Стандартные цвета заливки
+        /// <summary>
+        /// Стандартные цвета заливки
+        /// </summary>
+        public static readonly List<Color> ColorsStandard = [
+            Colors.DarkRed,
+            Colors.Red,
+            Colors.Orange,
+            Colors.Yellow,
+            Colors.LightGreen,
+            Colors.Green,
+            Colors.LightBlue,
+            Colors.MediumBlue,
+            Colors.DarkBlue,
+            Colors.DarkViolet
+            ];
+        #endregion
+
+        #region Цвета для формирвоания схеме цветов
+        /// <summary>
+        /// Цвета для формирвоания схеме цветов
+        /// </summary>
+        public static readonly List<Color> ColorsSchema = [
+            Colors.Black,
+            Colors.White,
+            Colors.Red,
+            Colors.Orange,
+            Colors.Yellow,
+            Colors.Green,
+            Colors.Turquoise,
+            Colors.Blue,
+            Colors.Purple,
+            Colors.Gray
+            ];
+        #endregion
+
+        public static readonly double[] Shades = [
             0.80,
             0.60,
             0.40,
@@ -17,7 +57,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             -0.45,
             -0.60,
             -0.75
-        ];
+            ];
 
         public readonly struct HslColor(double h, double s, double l)
         {
@@ -144,5 +184,94 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 
             return HslToColor(hsl.H, hsl.S, lightness);
         }
+
+        #region Создать цветовую схему
+        /// <summary>
+        /// Создать цветовую палитру
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="frame"></param>
+        /// <param name="panel"></param>
+        /// <param name="panelRecent"></param>
+        public static void CreateColorPalet(ICommand command, Popup frame, StackPanel panel)
+        {
+            panel.Children.Add(Helper.CreateLabel("Схема цветов"));
+            panel.Children.Add(CreateColorsSchema(command, frame));
+            panel.Children.Add(Helper.CreateLabel("Стандартные цвета"));
+            panel.Children.Add(CreateColorsStandard(command, frame));
+        }
+        #endregion
+
+        #region Создать кнопки выбора цветов
+        /// <summary>
+        /// Создать кнопки выбора цветов
+        /// </summary>
+        /// <param name="color"></param>
+        /// <returns></returns>
+        public static Button CreateButtonColor(ICommand command, Popup frame, Color color)
+        {
+            var button = new Button()
+            {
+                Height = 20,
+                Width = 20,
+                Background = new SolidColorBrush(color),
+                BorderThickness = new(1),
+                BorderBrush = Brushes.Gray,
+                CornerRadius = new(1),
+                Command = command,
+                CommandParameter = new SolidColorBrush(color)
+            };
+
+            button.Click += (_, _)
+                => frame.Close();
+
+            return button;
+        }
+        #endregion
+
+        #region Создать схему цветов
+        /// <summary>
+        /// Создать схему цветов
+        /// </summary>
+        /// <returns></returns>
+        private static StackPanel CreateColorsSchema(ICommand command, Popup frame)
+        {
+            var stackPanel = Helper.CreateStackPanel();
+            foreach (var color in ColorsSchema)
+            {
+                var button = CreateButtonColor(command, frame, color);
+                button.Margin = new(0, 0, 0, 10);
+
+                var childStackPanel = Helper.CreateStackPanel(Orientation.Vertical, 3);
+                childStackPanel.Children.Add(button);
+
+                foreach (var shade in Shades)
+                {
+                    var colorShade = ChangeLightness(color, shade);
+                    childStackPanel.Children.Add(CreateButtonColor(command, frame, colorShade));
+                }
+                stackPanel.Children.Add(childStackPanel);
+            }
+            return stackPanel;
+        }
+        #endregion
+
+        #region Создать стандартные цвета
+        /// <summary>
+        /// Создать стандартные цвета
+        /// </summary>
+        /// <param name="stateService"></param>
+        /// <param name="frame"></param>
+        /// <param name="panelRecent"></param>
+        /// <returns></returns>
+        private static StackPanel CreateColorsStandard(ICommand command, Popup frame)
+        {
+            var stackPanel = Helper.CreateStackPanel();
+            foreach (var color in ColorsStandard)
+                stackPanel.Children.Add(CreateButtonColor(command, frame, color));
+
+            return stackPanel;
+        }
+        #endregion
     }
 }

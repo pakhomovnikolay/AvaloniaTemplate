@@ -34,6 +34,8 @@
                                         CornerRadius="1"
                                         HorizontalContentAlignment="Left"
                                         Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Command="{TemplateBinding Command}"
+                                        CommandParameter="{TemplateBinding CommandParameter}"
                                         />
                                 
                                 <PathIcon Grid.Column="1"

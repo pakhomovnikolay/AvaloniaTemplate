@@ -1,8 +1,6 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
@@ -11,7 +9,7 @@ public class ButtonCut : TemplatedControl
 {
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonCut, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -40,7 +38,5 @@ public class ButtonCut : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        var button = e.NameScope.Find<Button>("PART_Button");
-        button.Command = App.GetService<ICommandProvider>()?.GetCommand("Command_Cut");
     }
 }

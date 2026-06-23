@@ -18,6 +18,9 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
             if (p is null || p is not CurrentBorderStyleType style)
                 return;
 
+            var stateService = App.GetService<IGlobalStateService>();
+            stateService.BorderStyleType = style;
+
             Debug.WriteLine($"Текущий стиль сетки: {style}");
 
 

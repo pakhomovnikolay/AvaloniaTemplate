@@ -126,7 +126,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
                 }
                 else if (Right == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(Width, 0, widthLeftRightThick, Height);
+                    var rect = new Rect(Width, 0, widthLeftRightThick, Height + 1);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }

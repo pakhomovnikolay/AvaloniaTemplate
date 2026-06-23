@@ -224,38 +224,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         }
         #endregion
 
-        #region Цвета для формирвоания схеме цветов
-        /// <summary>
-        /// Цвета для формирвоания схеме цветов
-        /// </summary>
-        public static readonly List<Color> ColorsSchema = [Colors.Black, Colors.White, Colors.Red, Colors.Orange, Colors.Yellow,
-                                                            Colors.Green, Colors.Turquoise, Colors.Blue, Colors.Purple, Colors.Gray];
-        #endregion
+        
 
-        #region Стандартные цвета заливки
-        /// <summary>
-        /// Стандартные цвета заливки
-        /// </summary>
-        public static readonly List<Color> ColorsStandard = [Colors.DarkRed, Colors.Red, Colors.Orange, Colors.Yellow, Colors.LightGreen,
-                                                                Colors.Green, Colors.LightBlue, Colors.MediumBlue, Colors.DarkBlue, Colors.DarkViolet];
-        #endregion
-
-        #region Создать цветовую схему
-        /// <summary>
-        /// Создать цветовую палитру
-        /// </summary>
-        /// <param name="stateService"></param>
-        /// <param name="frame"></param>
-        /// <param name="panel"></param>
-        /// <param name="panelRecent"></param>
-        public static void CreateColorPalet(ICommand command, Popup frame, StackPanel panel, StackPanel panelRecent)
-        {
-            panel.Children.Add(CreateLabel("Схема цветов"));
-            panel.Children.Add(CreateColorsSchema(command, frame));
-            panel.Children.Add(CreateLabel("Стандартные цвета"));
-            panel.Children.Add(CreateColorsStandard(command, frame));
-        }
-        #endregion
+        
 
         #region Создать подрись
         /// <summary>
@@ -286,78 +257,6 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 Orientation = orientation,
                 Spacing = spacing
             };
-        #endregion
-
-        #region Создать кнопки выбора цветов
-        /// <summary>
-        /// Создать кнопки выбора цветов
-        /// </summary>
-        /// <param name="color"></param>
-        /// <returns></returns>
-        public static Button CreateButtonColor(ICommand command, Popup frame, Color color)
-        {
-            var button = new Button()
-            {
-                Height = 20,
-                Width = 20,
-                Background = new SolidColorBrush(color),
-                BorderThickness = new(1),
-                BorderBrush = Brushes.Gray,
-                CornerRadius = new(1),
-                Command = command,
-                CommandParameter = new SolidColorBrush(color)
-            };
-
-            button.Click += (_, _)
-                => frame.Close();
-
-            return button;
-        }
-        #endregion
-
-        #region Создать схему цветов
-        /// <summary>
-        /// Создать схему цветов
-        /// </summary>
-        /// <returns></returns>
-        private static StackPanel CreateColorsSchema(ICommand command, Popup frame)
-        {
-            var stackPanel = CreateStackPanel();
-            foreach (var color in ColorsSchema)
-            {
-                var button = CreateButtonColor(command, frame, color);
-                button.Margin = new(0, 0, 0, 10);
-
-                var childStackPanel = CreateStackPanel(Orientation.Vertical, 3);
-                childStackPanel.Children.Add(button);
-
-                foreach (var shade in ColorHelper.Shades)
-                {
-                    var colorShade = ColorHelper.ChangeLightness(color, shade);
-                    childStackPanel.Children.Add(CreateButtonColor(command, frame, colorShade));
-                }
-                stackPanel.Children.Add(childStackPanel);
-            }
-            return stackPanel;
-        }
-        #endregion
-
-        #region Создать стандартные цвета
-        /// <summary>
-        /// Создать стандартные цвета
-        /// </summary>
-        /// <param name="stateService"></param>
-        /// <param name="frame"></param>
-        /// <param name="panelRecent"></param>
-        /// <returns></returns>
-        private static StackPanel CreateColorsStandard(ICommand command, Popup frame)
-        {
-            var stackPanel = new StackPanel() { Orientation = Orientation.Horizontal, Spacing = 3 };
-            foreach (var color in ColorsStandard)
-                stackPanel.Children.Add(CreateButtonColor(command, frame, color));
-
-            return stackPanel;
-        }
         #endregion
     }
 }

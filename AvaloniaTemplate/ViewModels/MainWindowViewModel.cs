@@ -1,11 +1,11 @@
-﻿using AvaloniaTemplate.ViewModels.Base;
-using System.Collections.Generic;
+﻿using AvaloniaTemplate.Services.Interfaces;
+using AvaloniaTemplate.ViewModels.Base;
 
 namespace AvaloniaTemplate.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-
+        public IGlobalStateService GlobalStateService { get; }
 
 
         #region Конструктор
@@ -21,6 +21,8 @@ namespace AvaloniaTemplate.ViewModels
 
             AppVersion = App.AppVersion;
             AppStatus = App.AppStatus;
+
+            GlobalStateService = App.GetService<IGlobalStateService>();
         }
         #endregion
 
@@ -54,18 +56,6 @@ namespace AvaloniaTemplate.ViewModels
         /// </summary>
         /// <param name="settings"></param>
         private void ChangeAppStatus(string status) => AppStatus = status;
-        #endregion
-
-        #region Текущая версия проекта
-        private int selectedIndexFontSize;
-        /// <summary>
-        /// Текущая версия проекта
-        /// </summary>
-        public int SelectedIndexFontSize
-        {
-            get => selectedIndexFontSize;
-            set => SetProperty(ref selectedIndexFontSize, value);
-        }
         #endregion
     }
 }

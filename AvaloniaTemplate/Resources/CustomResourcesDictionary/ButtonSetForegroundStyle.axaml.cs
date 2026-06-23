@@ -4,7 +4,6 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Services.Interfaces;
 using System.Windows.Input;
@@ -13,6 +12,48 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonSetForegroundStyle : TemplatedControl
 {
+    #region Команда
+    public static readonly StyledProperty<ICommand> CommandProperty =
+        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Команда
+    /// </summary>
+    public ICommand Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+    #endregion
+
+    #region Параметр для команды
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<ButtonCut, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Параметр для команды
+    /// </summary>
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
+    }
+    #endregion
+
+    #region Текущая цвет шрифта
+    public static readonly StyledProperty<IBrush> CurrentForegroundColorProperty =
+        AvaloniaProperty.Register<ButtonPaste, IBrush>(nameof(CurrentForegroundColor), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Текущая цвет шрифта
+    /// </summary>
+    public IBrush CurrentForegroundColor
+    {
+        get => GetValue(CurrentForegroundColorProperty);
+        set => SetValue(CurrentForegroundColorProperty, value);
+    }
+    #endregion
+
     #region Источник данных раскрывающегося окна
     public static readonly StyledProperty<Panel> PopupContentProperty =
         AvaloniaProperty.Register<DualListSelector, Panel>(nameof(PopupContent), defaultBindingMode: BindingMode.TwoWay);
@@ -45,41 +86,61 @@ public class ButtonSetForegroundStyle : TemplatedControl
     {
         base.OnApplyTemplate(e);
 
-        var popupFrame = e.NameScope.Find<Popup>("PART_Popup");
-        var stateService = App.GetService<IGlobalStateService>();
+        var frame = e.NameScope.Find<Popup>("PART_Popup");
         var LayoutColorsRecent = Helper.CreateStackPanel();
-        var command = App.GetService<ICommandProvider>()?.GetCommand("Command_SetForegroundStyle");
-
-        var currentBackgroundStyle = e.NameScope.Find<Border>("PART_CurrentBackgroundStyle");
-        currentBackgroundStyle.Bind(BackgroundProperty, new Binding("CurrentForeground") { Source = stateService });
-        stateService.CurrentForeground = Brushes.Red;
-
-        var button = e.NameScope.Find<Button>("PART_SetBackgroundStyle");
-        button.Command = command;
-        button.Bind(Button.CommandParameterProperty, new Binding("CurrentForeground") { Source = stateService });
-
         var stackPanel = Helper.CreateStackPanel(Orientation.Vertical, 5);
-        stackPanel.Margin = new(0, 0, 0, 5);
 
         stackPanel.Children.Add(Helper.CreateLabel("По умолчанию"));
-        var buttonDefault = Helper.CreateButtonColor(command, popupFrame, Color.Parse(Brushes.Black.ToString()));
+        var buttonDefault = ColorHelper.CreateButtonColor(Command, frame, Color.Parse(Brushes.Black.ToString()));
         buttonDefault.HorizontalAlignment = HorizontalAlignment.Left;
         stackPanel.Children.Add(buttonDefault);
 
-        Helper.CreateColorPalet(command, popupFrame, stackPanel, LayoutColorsRecent);
+        ColorHelper.CreateColorPalet(Command, frame, stackPanel);
 
         stackPanel.Children.Add(Helper.CreateLabel("Недавние цвета"));
         stackPanel.Children.Add(LayoutColorsRecent);
-        popupFrame.Opened += (_, _) => CreateColorsRecent(command, stateService, popupFrame, LayoutColorsRecent);
 
+
+        frame.Opened += (_, _) => CreateColorsRecent(Command, frame, LayoutColorsRecent);
         PopupContent = new() { Width = 230 };
         PopupContent.Children.Add(stackPanel);
+
+        //var popupFrame = e.NameScope.Find<Popup>("PART_Popup");
+        //var stateService = App.GetService<IGlobalStateService>();
+        //var LayoutColorsRecent = Helper.CreateStackPanel();
+        //var command = App.GetService<ICommandProvider>()?.GetCommand("Command_SetForegroundStyle");
+
+        //var currentBackgroundStyle = e.NameScope.Find<Border>("PART_CurrentBackgroundStyle");
+        //currentBackgroundStyle.Bind(BackgroundProperty, new Binding("CurrentForeground") { Source = stateService });
+        //stateService.CurrentForeground = Brushes.Red;
+
+        //var button = e.NameScope.Find<Button>("PART_SetBackgroundStyle");
+        //button.Command = command;
+        //button.Bind(Button.CommandParameterProperty, new Binding("CurrentForeground") { Source = stateService });
+
+        //var stackPanel = Helper.CreateStackPanel(Orientation.Vertical, 5);
+        //stackPanel.Margin = new(0, 0, 0, 5);
+
+        //stackPanel.Children.Add(Helper.CreateLabel("По умолчанию"));
+        //var buttonDefault = Helper.CreateButtonColor(command, popupFrame, Color.Parse(Brushes.Black.ToString()));
+        //buttonDefault.HorizontalAlignment = HorizontalAlignment.Left;
+        //stackPanel.Children.Add(buttonDefault);
+
+        //Helper.CreateColorPalet(command, popupFrame, stackPanel, LayoutColorsRecent);
+
+        //stackPanel.Children.Add(Helper.CreateLabel("Недавние цвета"));
+        //stackPanel.Children.Add(LayoutColorsRecent);
+        //popupFrame.Opened += (_, _) => CreateColorsRecent(command, stateService, popupFrame, LayoutColorsRecent);
+
+        //PopupContent = new() { Width = 230 };
+        //PopupContent.Children.Add(stackPanel);
     }
 
-    private static void CreateColorsRecent(ICommand command, IGlobalStateService stateService, Popup popupFrame, StackPanel LayoutColorsRecent)
+    private static void CreateColorsRecent(ICommand command, Popup popupFrame, StackPanel LayoutColorsRecent)
     {
+        var stateService = App.GetService<IGlobalStateService>();
         LayoutColorsRecent.Children.Clear();
         foreach (var color in stateService.ForegroundColors)
-            LayoutColorsRecent.Children.Add(Helper.CreateButtonColor(command, popupFrame, color));
+            LayoutColorsRecent.Children.Add(ColorHelper.CreateButtonColor(command, popupFrame, color));
     }
 }
