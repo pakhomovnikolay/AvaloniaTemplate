@@ -3,19 +3,13 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
-using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models.Enums;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonSetGridStyle : TemplatedControl
 {
-    //private Popup popupFrame;
-    //private Button buttonGridStyle;
-
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
         AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);

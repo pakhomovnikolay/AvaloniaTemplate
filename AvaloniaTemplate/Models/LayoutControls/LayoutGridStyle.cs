@@ -53,7 +53,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
             var fillThick = Brushes.Black;
 
             var penNone = new Pen(Brushes.Gray, 1, dashStyle: DashStyle.Dash);
-            var pen = new Pen(Brushes.Black);
+            var pen = new Pen(Brushes.Black, 2);
 
             if (Bottom == BorderStyleType.None)
             {

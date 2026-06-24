@@ -1,25 +1,29 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ComboBoxWithFontsSize : TemplatedControl
 {
-    #region Выбранный элемент из спсика
+    static ComboBoxWithFontsSize()
+    {
+        SelectedItemProperty.Changed.AddClassHandler<ComboBoxWithFontsSize>((x, _) => x.OnSelectedItemChanged());
+    }
+
+    #region Индекс выбранного элемента из спсика
     public static readonly StyledProperty<int> SelectedIndexProperty =
         AvaloniaProperty.Register<ComboBoxWithFonts, int>(nameof(SelectedIndex), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Выбранный элемент из спсика
+    /// Индекс выбранного элемента из спсика
     /// </summary>
     public int SelectedIndex
     {
@@ -28,12 +32,12 @@ public class ComboBoxWithFontsSize : TemplatedControl
     }
     #endregion
 
-    #region Индекс выбранного элемента из спсика
+    #region Выбранный элемент из спсика
     public static readonly StyledProperty<object?> SelectedItemProperty =
         AvaloniaProperty.Register<ComboBoxWithFonts, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Индекс выбранного элемента из спсика
+    /// Выбранный элемент из спсика
     /// </summary>
     public object? SelectedItem
     {
@@ -53,6 +57,34 @@ public class ComboBoxWithFontsSize : TemplatedControl
     {
         get => GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
+    }
+    #endregion
+
+    #region Команда смены размера шрифта
+    public static readonly StyledProperty<ICommand> CommandProperty =
+        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Команда смены размера шрифта
+    /// </summary>
+    public ICommand Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+    #endregion
+
+    #region Команда для реализации предварительного просмотра выделенного размера шрифта
+    public static readonly StyledProperty<ICommand> CommandPreviewProperty =
+        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(CommandPreview), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Команда для реализации предварительного просмотра выделенного размера шрифта
+    /// </summary>
+    public ICommand CommandPreview
+    {
+        get => GetValue(CommandPreviewProperty);
+        set => SetValue(CommandPreviewProperty, value);
     }
     #endregion
 
@@ -87,48 +119,46 @@ public class ComboBoxWithFontsSize : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        var array = new List<Border>();
-        var fontFamily = Helper.GetResource<FontFamily>("FontFamilyDefault");
-        List<double> list = [8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 28, 32, 36, 48, 72];
+        ItemsSource = FontFamilyHelper.FontSizes;
+        SelectedItem = FontFamilyHelper.FontSizeDefault;
+        SelectedIndex = FontFamilyHelper.FontSizes.IndexOf(FontFamilyHelper.FontSizeDefault);
 
-        list.ToList()?
-            .ForEach(x =>
+        var CBox = e.NameScope.Find<ComboBox>("PART_RootPanel");
+        CBox.ItemTemplate = new FuncDataTemplate<double>((size, _) =>
+        {
+            var border = new Border
             {
-                var border = new Border
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Padding = new Thickness(0),
+                Child = new TextBlock
                 {
-                    Background = Brushes.Transparent,
-                    Child = new TextBlock
-                    {
-                        Text = x.ToString(),
-                        FontFamily = fontFamily,
-                        FontSize = 10
-                    }
-                };
-                border.PointerMoved += (s, e)
-                                => App.GetService<ICommandProvider>()?
-                                .GetCommand("Command_PreViewSelectedFontSize")?
-                                .Execute(x);
-
-                array.Add(border);
-            });
-
-        SelectedItem = array[3];
-        ItemsSource = array;
-
-
+                    Text = $"{size}"
+                }
+            };
+            border.PointerEntered += (_, _) => CommandPreview?.Execute(size);
+            border.PointerExited += (_, _) => CommandPreview?.Execute(SelectedItem);
+            return border;
+        });
 
         var ButtonFontSizeUp = e.NameScope.Find<Button>("PART_ButtonFontSizeUp");
-        var ButtonFontSizeDown = e.NameScope.Find<Button>("PART_ButtonFontSizeDown");
         ButtonFontSizeUp.Click += (s, e) =>
         {
             if (SelectedIndex < ItemsSource.Count - 1)
                 SelectedIndex++;
         };
 
+        var ButtonFontSizeDown = e.NameScope.Find<Button>("PART_ButtonFontSizeDown");
         ButtonFontSizeDown.Click += (s, e) =>
         {
             if (SelectedIndex > 0)
                 SelectedIndex--;
         };
+    }
+
+    private void OnSelectedItemChanged()
+    {
+        if (IsLoaded)
+            Command?.Execute(SelectedItem);
     }
 }

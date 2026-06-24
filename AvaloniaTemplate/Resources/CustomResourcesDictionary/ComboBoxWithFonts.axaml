@@ -1,6 +1,7 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        xmlns:helper="using:AvaloniaTemplate.Infrastructures.Helpers"
         >
     
     <Design.PreviewWith>
@@ -17,7 +18,8 @@
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <ComboBox SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                <ComboBox x:Name="PART_RootPanel"
+                          SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
                           ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                           Width="{TemplateBinding Width}"
                           Height="{TemplateBinding Height}"
@@ -25,7 +27,24 @@
                           MinHeight="{TemplateBinding MinHeight}"
                           HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                           VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                          />
+                          >
+                    <!--<ComboBox.ItemTemplate>
+                        <DataTemplate x:DataType="FontFamily">
+                            <Border Background="Transparent"
+                                    BorderThickness="0"
+                                    Padding="0"
+                                    >
+                                <TextBlock Text="{Binding Name}" FontFamily="{Binding}"/>
+                            </Border>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>-->
+
+                    <ComboBox.SelectionBoxItemTemplate>
+                        <DataTemplate x:DataType="FontFamily">
+                            <TextBlock Text="{Binding Name}"/>
+                        </DataTemplate>
+                    </ComboBox.SelectionBoxItemTemplate>
+                </ComboBox>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

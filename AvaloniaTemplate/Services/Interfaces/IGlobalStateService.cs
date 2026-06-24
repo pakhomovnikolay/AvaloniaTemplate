@@ -83,5 +83,19 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         Border CurrentBorderStyle { get; set; }
         #endregion
+
+        #region Текущий стиль шрфита
+        /// <summary>
+        /// Текущий стиль шрфита
+        /// </summary>
+        FontFamily CurrentFontFamily { get; set; }
+        #endregion
+
+        #region Текущий размер шрфита
+        /// <summary>
+        /// Текущий размер шрфита
+        /// </summary>
+        double CurrentFontSize { get; set; }
+        #endregion
     }
 }

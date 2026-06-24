@@ -21,7 +21,8 @@
                       Width="{TemplateBinding Width}"
                       Height="{TemplateBinding Height}"
                       >
-                    <ComboBox SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
+                    <ComboBox x:Name="PART_RootPanel"
+                              SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
                               SelectedIndex="{Binding SelectedIndex, RelativeSource={RelativeSource TemplatedParent}}"
                               ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                               MinWidth="{TemplateBinding MinWidth}"
@@ -29,7 +30,15 @@
                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                               Margin="0 0 4 0"
-                              />
+                              >
+                        <ComboBox.SelectionBoxItemTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding}"/>
+                            </DataTemplate>
+                        </ComboBox.SelectionBoxItemTemplate>
+                    
+                    
+                    </ComboBox>
 
                     <Button x:Name="PART_ButtonFontSizeUp"
                             Grid.Column="1"

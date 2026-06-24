@@ -1,20 +1,24 @@
-﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
+﻿using Avalonia.Media;
+using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
+using System.Diagnostics;
 
 namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 {
     /// <summary>
-    /// Команда - Установить курсивный стиль текста
+    /// Команда - выбора размера шрифта
     /// </summary>
-    public class Command_SetFontStyleItalic : Command
+    public class Command_SelectedFontSize : Command
     {
         protected override bool CanExecute(object p)
-            => true;
+            => p is not null;
 
         protected override void Execute(object p)
         {
-            //var stateService = App.GetService<IGlobalStateService>();
-            //stateService.IsFontStyleItalic = false;
+            if (p is null || p is not double size)
+                return;
+
+            Debug.WriteLine($"Текущий размер шрифт: {size}");
 
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);

@@ -17,5 +17,7 @@
     <cmdUser:Command_ChangeStyleGrid x:Key= "Command_ChangeStyleGrid"/>
     <cmdUser:Command_SetBackgroundStyle x:Key= "Command_SetBackgroundStyle"/>
     <cmdUser:Command_SetForegroundStyle x:Key= "Command_SetForegroundStyle"/>
+    <cmdUser:Command_SelectedFont x:Key= "Command_SelectedFont"/>
+    <cmdUser:Command_SelectedFontSize x:Key= "Command_SelectedFontSize"/>
     
 </ResourceDictionary>

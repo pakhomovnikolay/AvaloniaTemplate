@@ -1,20 +1,51 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
+using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ComboBoxWithFonts : TemplatedControl
 {
+    static ComboBoxWithFonts()
+    {
+        SelectedItemProperty.Changed.AddClassHandler<ComboBoxWithFonts>((x, _) => x.OnSelectedItemChanged());
+    }
+
+    #region Команда смены шрифта
+    public static readonly StyledProperty<ICommand> CommandProperty =
+        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Команда смены шрифта
+    /// </summary>
+    public ICommand Command
+    {
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
+    }
+    #endregion
+
+    #region Команда для реализации предварительного просмотра выделенного шрифта
+    public static readonly StyledProperty<ICommand> CommandPreviewProperty =
+        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(CommandPreview), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Команда для реализации предварительного просмотра выделенного шрифта
+    /// </summary>
+    public ICommand CommandPreview
+    {
+        get => GetValue(CommandPreviewProperty);
+        set => SetValue(CommandPreviewProperty, value);
+    }
+    #endregion
+
     #region Выбранный элемент из спсика
     public static readonly StyledProperty<object?> SelectedItemProperty =
         AvaloniaProperty.Register<ComboBoxWithFonts, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
@@ -74,23 +105,33 @@ public class ComboBoxWithFonts : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        var array = new List<Border>();
-        FontManager.Current.SystemFonts?
-            .ToList()?
-            .ForEach(x =>
+        ItemsSource = FontFamilyHelper.FontFamilies;
+        SelectedItem = FontFamilyHelper.AppFontDefault ?? FontFamilyHelper.FontDefault;
+
+        var CBox = e.NameScope.Find<ComboBox>("PART_RootPanel");
+        CBox.ItemTemplate = new FuncDataTemplate<FontFamily>((currentFont, _) =>
+        {
+            var font = currentFont ?? FontFamilyHelper.FontDefault;
+            var border = new Border
             {
-                var border = new Border { Background = Brushes.Transparent, Child = new TextBlock { Text = x.Name, FontFamily = x, FontSize = 10 } };
-                border.PointerMoved += (s, e)
-                                => App.GetService<ICommandProvider>()?
-                                .GetCommand("Command_PreViewSelectedFont")?
-                                .Execute(x.Name);
+                Background = Brushes.Transparent,
+                BorderThickness = new Thickness(0),
+                Padding = new Thickness(0),
+                Child = new TextBlock
+                {
+                    Text = font.Name,
+                    FontFamily = font
+                }
+            };
+            border.PointerEntered += (_, _) => CommandPreview?.Execute(font);
+            border.PointerExited += (_, _) => CommandPreview?.Execute(SelectedItem);
+            return border;
+        });
+    }
 
-                array.Add(border);
-
-                if (x.Name.Contains(Helper.GetResource<FontFamily>("FontFamilyDefault").Name, StringComparison.CurrentCultureIgnoreCase))
-                    SelectedItem = border;
-            });
-
-        ItemsSource = array;
+    private void OnSelectedItemChanged()
+    {
+        if (IsLoaded)
+            Command?.Execute(SelectedItem);
     }
 }

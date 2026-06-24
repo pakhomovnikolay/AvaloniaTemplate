@@ -131,5 +131,29 @@ namespace AvaloniaTemplate.Services
             set => SetProperty(ref currentBorderStyle, value);
         }
         #endregion
+
+        #region Текущий стиль шрфита
+        private FontFamily currentFontFamily;
+        /// <summary>
+        /// Текущий стиль шрфита
+        /// </summary>
+        public FontFamily CurrentFontFamily
+        {
+            get => currentFontFamily;
+            set => SetProperty(ref currentFontFamily, value);
+        }
+        #endregion
+
+        #region Текущий размер шрфита
+        private double currentFontSize;
+        /// <summary>
+        /// Текущий размер шрфита
+        /// </summary>
+        public double CurrentFontSize
+        {
+            get => currentFontSize;
+            set => SetProperty(ref currentFontSize, value);
+        }
+        #endregion
     }
 }

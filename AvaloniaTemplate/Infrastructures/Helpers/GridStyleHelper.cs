@@ -14,12 +14,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         private const double width = 15;
         private const double height = 15;
 
-
-
-
-        #region Список одиночных линий сетки
+        #region Словарь одиночных линий сетки
         /// <summary>
-        /// Список одиночных линий сетки
+        /// Словарь одиночных линий сетки
         /// </summary>
         public static readonly Dictionary<CurrentBorderStyleType, string> SingleBorderStyleTypes = new()
         {
@@ -30,9 +27,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         };
         #endregion
 
-        #region Список линий сетки
+        #region Словарь линий сетки
         /// <summary>
-        /// Список линий сетки
+        /// Словарь линий сетки
         /// </summary>
         public static readonly Dictionary<CurrentBorderStyleType, string> BorderStyleTypes = new()
         {
@@ -40,6 +37,18 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             { CurrentBorderStyleType.All, "Все границы" },
             { CurrentBorderStyleType.Outside, "Внешние границы" },
             { CurrentBorderStyleType.ThickOutside, "Толстые внешние границы" }
+        };
+        #endregion
+
+        #region Дополнительный словарь линий сетки
+        /// <summary>
+        /// Дополнительный словарь линий сетки
+        /// </summary>
+        public static readonly Dictionary<CurrentBorderStyleType, string> AdditionBorderStyleTypes = new()
+        {
+            { CurrentBorderStyleType.DoubleBottom, "Двойнвя нижняя граница" },
+            { CurrentBorderStyleType.ThickBottom, "Толстая нижняя граница" },
+            { CurrentBorderStyleType.TopBottom, "Верхняя и нижняя границы" },
         };
         #endregion
 

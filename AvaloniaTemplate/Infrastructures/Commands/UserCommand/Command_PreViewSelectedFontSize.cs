@@ -20,8 +20,8 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
             Debug.WriteLine($"Текущий размер шрифта: {fontSize}");
 
 
-            App.GetService<IUserDialogService>()?
-                .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
+            //App.GetService<IUserDialogService>()?
+            //    .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }
     }
 }

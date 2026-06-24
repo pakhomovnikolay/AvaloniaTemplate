@@ -41,23 +41,32 @@
 
 		<Grid ColumnDefinitions="auto auto">
 			<customresourcesdictionary:ComboBoxWithFonts Width="150"
+														 SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
+														 Command="{StaticResource Command_SelectedFont}"
+														 CommandPreview="{StaticResource Command_PreViewSelectedFont}"
 														 />
 
 			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1"
-															 Width="115"
+															 Width="120"
+															 SelectedItem="{Binding GlobalStateService.CurrentFontSize}"
+															 Command="{StaticResource Command_SelectedFontSize}"
+															 CommandPreview="{StaticResource Command_PreViewSelectedFontSize}"
 															 />
 		</Grid>
 
 		<Grid ColumnDefinitions="35 35 35 50 50 50">
 			<customresourcesdictionary:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
+															   IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
 															   />
 
 			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"
 																Command="{StaticResource Command_SetFontStyleItalic}"
+																IsChecked="{Binding GlobalStateService.IsFontStyleItalic}"
 																/>
 
 			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"
 																   Command="{StaticResource Command_SetTextStyleUnderline}"
+																   IsChecked="{Binding GlobalStateService.IsTextStyleUnderline}"
 																   />
 
 			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"

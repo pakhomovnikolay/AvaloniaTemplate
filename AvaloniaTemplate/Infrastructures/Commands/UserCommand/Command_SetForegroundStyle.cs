@@ -26,7 +26,6 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 
             Debug.WriteLine($"Текущий цвет заливки: {color}");
 
-
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }

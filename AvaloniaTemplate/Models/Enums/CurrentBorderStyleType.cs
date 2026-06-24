@@ -4,13 +4,11 @@ namespace AvaloniaTemplate.Models.Enums
 {
     public enum CurrentBorderStyleType
     {
-        None,
-
-        [Description("Нижняя граница")]
         Bottom,
         Top,
         Left,
         Right,
+        None,
         All,
         Outside,
         ThickOutside,

@@ -13,6 +13,9 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 
         protected override void Execute(object p)
         {
+            //var stateService = App.GetService<IGlobalStateService>();
+            //stateService.BorderStyleType = style;
+
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }
