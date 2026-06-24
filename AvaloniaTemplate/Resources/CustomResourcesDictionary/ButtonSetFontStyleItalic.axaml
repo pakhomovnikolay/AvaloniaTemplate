@@ -13,13 +13,17 @@
                   TargetType="controls:ButtonSetFontStyleItalic"
                   >
         <Setter Property="FontFamily" Value="Verdana"/>
-        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontSize" Value="14"/>
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <ToggleButton x:Name="PART_Button"
-                              Padding="10"
+                              Classes="highlightedBackground"
+                              Padding="{TemplateBinding Padding}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
                               Background="{TemplateBinding Background}"
                               Command="{TemplateBinding Command}"
                               CommandParameter="{TemplateBinding CommandParameter}"

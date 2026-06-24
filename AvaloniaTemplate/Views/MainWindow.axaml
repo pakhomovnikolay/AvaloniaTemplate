@@ -39,22 +39,44 @@
 			</Grid>
 		</Grid>
 
-		<Grid ColumnDefinitions="auto auto">
-			<customresourcesdictionary:ComboBoxWithFonts Width="150"
-														 SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
+		<Grid ColumnDefinitions="auto 125 30 30 30">
+			<customresourcesdictionary:ComboBoxWithFonts SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
 														 Command="{StaticResource Command_SelectedFont}"
 														 CommandPreview="{StaticResource Command_PreViewSelectedFont}"
+														 Width="150"
 														 />
 
 			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1"
-															 Width="120"
 															 SelectedItem="{Binding GlobalStateService.CurrentFontSize}"
 															 Command="{StaticResource Command_SelectedFontSize}"
 															 CommandPreview="{StaticResource Command_PreViewSelectedFontSize}"
+															 Margin="0 0 0 0"
 															 />
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="2"
+															 Position="Vertical"
+															 VerticalPosition="Top"
+															 Command="{StaticResource Command_SetTextVerticalAlignment}"
+															 />
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="3"
+															 Position="Vertical"
+															 VerticalPosition="Center"
+															 Command="{StaticResource Command_SetTextVerticalAlignment}"
+															 />
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="4"
+															 Position="Vertical"
+															 VerticalPosition="Bottom"
+															 Command="{StaticResource Command_SetTextVerticalAlignment}"
+															 />
+
+
+			
+
 		</Grid>
 
-		<Grid ColumnDefinitions="35 35 35 50 50 50">
+		<Grid ColumnDefinitions="35 35 35 42 45 45 35 auto auto auto">
 			<customresourcesdictionary:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
 															   IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
 															   />
@@ -87,6 +109,27 @@
 																CommandParameter="{Binding GlobalStateService.CurrentForeground}"
 																CurrentForegroundColor="{Binding GlobalStateService.CurrentForeground}"
 																/>
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="7"
+															 Width="30"
+															 Position="Horizontal"
+															 HorizontalPosition="Left"
+															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
+															 />
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="8"
+															 Width="30"
+															 Position="Horizontal"
+															 HorizontalPosition="Center"
+															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
+															 />
+
+			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="9"
+															 Width="30"
+															 Position="Horizontal"
+															 HorizontalPosition="Right"
+															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
+															 />
 		</Grid>
 	</StackPanel>
 </Window>

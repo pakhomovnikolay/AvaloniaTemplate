@@ -38,5 +38,8 @@
     <Compile Update="Resources\CustomResourcesDictionary\BorderWithTextBox.axaml.cs">
       <DependentUpon>BorderWithTextBox.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CustomResourcesDictionary\ButtonSetTextPosition.axaml.cs">
+      <DependentUpon>ButtonSetTextPosition.axaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>

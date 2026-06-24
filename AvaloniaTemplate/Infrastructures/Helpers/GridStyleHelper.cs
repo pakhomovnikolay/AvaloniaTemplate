@@ -80,6 +80,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         {
             var border = new Border()
             {
+                Padding = new(0),
                 Background = Brushes.White,
                 Height = height,
                 Width = width,

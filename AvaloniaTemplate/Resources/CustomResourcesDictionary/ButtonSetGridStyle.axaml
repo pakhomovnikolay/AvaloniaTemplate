@@ -13,10 +13,49 @@
     <ControlTheme x:Key="{x:Type controls:ButtonSetGridStyle}"
                   TargetType="controls:ButtonSetGridStyle"
                   >
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="5"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <ToggleButton x:Name="RootElement" Background="Transparent"
+                    <ToggleButton x:Name="RootElement"
+                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  Background="Transparent"
+                                  HorizontalContentAlignment="Stretch"
+                                  VerticalContentAlignment="Stretch"
+                                  Padding="0"
+                                  Classes="highlightedBackground"
+                                  >
+                        <ToggleButton.Content>
+                            <Grid ColumnDefinitions="* auto">
+                                <Button Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
+                                        Command="{TemplateBinding Command}"
+                                        CommandParameter="{TemplateBinding CommandParameter}"
+                                        Background="Transparent"
+                                        BorderThickness="0 0 1 0"
+                                        CornerRadius="1"
+                                        Margin="0 0 0 0"
+                                        Padding="0"
+                                        Classes="highlightedBackground"
+                                        />
+
+                                <PathIcon Grid.Column="1"
+                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                          HorizontalAlignment="Right"
+                                          Margin="3 0 3 0"
+                                          Height="8"
+                                          Width="8"
+                      
+                                          />
+                            </Grid>
+                        </ToggleButton.Content>
+                    </ToggleButton>
+
+                    <!--<ToggleButton x:Name="RootElement" Background="Transparent"
                                   Margin="0 1 0 1"
                                   Padding="0"
                                   Classes="highlightedBackground"
@@ -46,7 +85,7 @@
                                           />
                             </Grid>
                         </ToggleButton.Content>
-                    </ToggleButton>
+                    </ToggleButton>-->
                     
                     <Popup Name="PART_Popup"
                            WindowManagerAddShadowHint="False"

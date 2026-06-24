@@ -19,5 +19,8 @@
     <cmdUser:Command_SetForegroundStyle x:Key= "Command_SetForegroundStyle"/>
     <cmdUser:Command_SelectedFont x:Key= "Command_SelectedFont"/>
     <cmdUser:Command_SelectedFontSize x:Key= "Command_SelectedFontSize"/>
+    <cmdUser:Command_SetTextHorizontalAlignment x:Key= "Command_SetTextHorizontalAlignment"/>
+    <cmdUser:Command_SetTextVerticalAlignment x:Key= "Command_SetTextVerticalAlignment"/>
+    
     
 </ResourceDictionary>

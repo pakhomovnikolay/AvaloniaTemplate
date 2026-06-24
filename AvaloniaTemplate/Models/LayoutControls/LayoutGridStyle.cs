@@ -41,6 +41,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
         public override void Render(DrawingContext context)
         {
             base.Render(context);
+
             var widthBottomTop = Width;
             var widthLeftRightNormal = 0.5;
             var widthLeftRightThick = 1.3;
@@ -53,7 +54,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
             var fillThick = Brushes.Black;
 
             var penNone = new Pen(Brushes.Gray, 1, dashStyle: DashStyle.Dash);
-            var pen = new Pen(Brushes.Black, 2);
+            var pen = new Pen(Brushes.Black, 1);
 
             if (Bottom == BorderStyleType.None)
             {
@@ -168,30 +169,6 @@ namespace AvaloniaTemplate.Models.LayoutControls
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }
-
-
-
-            
-
-
-
-
-
-
-
-            //if (Bottom is { } && Bottom != BorderStyleType.Normal)
-            //{
-            //    if (Bottom == BorderStyleType.Thick)
-            //    {
-            //        var rect = new Rect();
-            //        var pen = new Pen();
-            //        var fill = Brushes.Black;
-
-
-
-            //    }
-            //}
-
         }
     }
 }

@@ -5,54 +5,60 @@
 
     <Design.PreviewWith>
         <Border Padding="20" Width="350">
-            <controls:ButtonSetForegroundStyle Height="35" Width="35" />
+            <StackPanel Orientation="Horizontal" Spacing="3">
+                <controls:ButtonSetBackgroundStyle Height="35" Width="50" BorderThickness="1" BorderBrush="Black" />
+                <controls:ButtonSetForegroundStyle Height="35" Width="35" />
+            </StackPanel>
         </Border>
     </Design.PreviewWith>
 
     <ControlTheme x:Key="{x:Type controls:ButtonSetForegroundStyle}"
                   TargetType="controls:ButtonSetForegroundStyle"
                   >
+        <Setter Property="CornerRadius" Value="5"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Grid>
-                    <ToggleButton x:Name="RootElement" Background="Transparent"
-                                  Margin="0 1 0 1"
-                                  Padding="0"
-                                  Classes="highlightedBackground"
+                    <ToggleButton x:Name="RootElement"
+                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  Background="Transparent"
                                   HorizontalContentAlignment="Stretch"
                                   VerticalContentAlignment="Stretch"
-                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  Padding="0"
+                                  Classes="highlightedBackground"
                                   >
                         <ToggleButton.Content>
                             <Grid ColumnDefinitions="* auto">
-                                <Button x:Name="PART_SetBackgroundStyle"
+                                <Button Classes="highlightedBackground"
                                         Background="Transparent"
                                         BorderThickness="0 0 1 0"
-                                        Classes="highlightedBackground"
-                                        Padding="0 0 0 0"
-                                        CornerRadius="1"
                                         Command="{TemplateBinding Command}"
                                         CommandParameter="{TemplateBinding CommandParameter}"
+                                        CornerRadius="1"
+                                        Margin="0 0 0 0"
+                                        Padding="0"
                                         >
-                                    <Button.Content>
-                                        <Grid RowDefinitions="* 9" ColumnDefinitions="*" Margin="0 3 0 0">
-                                            <TextBlock Text="A" Width="27" FontSize="16" TextAlignment="Center"/>
-                                            <Border x:Name="PART_CurrentBackgroundStyle"
-                                                    Grid.Row="1"
-                                                    Margin="1 0 0 1"
-                                                    BorderThickness="1"
-                                                    BorderBrush="LightGray"
-                                                    Background="{TemplateBinding CurrentForegroundColor}"
-                                                    />
-                                        </Grid>
-                                    </Button.Content>
+                                    <Grid RowDefinitions="* auto">
+                                        <TextBlock Text="A" Width="25" FontSize="16" TextAlignment="Center"/>
+                                        <Border Grid.Row="1"
+                                                Padding="0"
+                                                Background="{TemplateBinding CurrentForegroundColor}"
+                                                HorizontalAlignment="Stretch"
+                                                Height="7"
+                                                BorderThickness="1"
+                                                BorderBrush="LightGray"
+                                                />
+                                    </Grid>
                                 </Button>
-                                
+
                                 <PathIcon Grid.Column="1"
-                                          Height="12"
-                                          Width="12"
-                                          Margin="3 0 2 0"
                                           Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                          HorizontalAlignment="Right"
+                                          Margin="3 0 3 0"
+                                          Height="8"
+                                          Width="8"
+                                          
                                           />
                             </Grid>
                         </ToggleButton.Content>

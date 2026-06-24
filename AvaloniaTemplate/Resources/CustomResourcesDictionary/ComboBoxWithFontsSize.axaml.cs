@@ -20,7 +20,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Индекс выбранного элемента из спсика
     public static readonly StyledProperty<int> SelectedIndexProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, int>(nameof(SelectedIndex), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, int>(nameof(SelectedIndex), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Индекс выбранного элемента из спсика
@@ -34,7 +34,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Выбранный элемент из спсика
     public static readonly StyledProperty<object?> SelectedItemProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Выбранный элемент из спсика
@@ -48,7 +48,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Источник данных
     public static readonly StyledProperty<IList?> ItemsSourceProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, IList?>(nameof(ItemsSource), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, IList?>(nameof(ItemsSource), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Источник данных
@@ -62,7 +62,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Команда смены размера шрифта
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда смены размера шрифта
@@ -76,7 +76,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Команда для реализации предварительного просмотра выделенного размера шрифта
     public static readonly StyledProperty<ICommand> CommandPreviewProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, ICommand>(nameof(CommandPreview), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, ICommand>(nameof(CommandPreview), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда для реализации предварительного просмотра выделенного размера шрифта
@@ -90,7 +90,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Положение контента по горинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Положение контента по горинтали
@@ -104,7 +104,7 @@ public class ComboBoxWithFontsSize : TemplatedControl
 
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Положение контента по вертикали
@@ -113,6 +113,34 @@ public class ComboBoxWithFontsSize : TemplatedControl
     {
         get => GetValue(VerticalContentAlignmentProperty);
         set => SetValue(VerticalContentAlignmentProperty, value);
+    }
+    #endregion
+
+    #region Минимальная ширина кнопок смены размера шрифта
+    public static readonly StyledProperty<double> MinWidthButtonSizeProperty =
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, double>(nameof(MinWidthButtonSize), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Минимальная ширина кнопок смены размера шрифта
+    /// </summary>
+    public double MinWidthButtonSize
+    {
+        get => GetValue(MinWidthButtonSizeProperty);
+        set => SetValue(MinWidthButtonSizeProperty, value);
+    }
+    #endregion
+
+    #region Минимальная высота кнопок смены размера шрифта
+    public static readonly StyledProperty<double> MinHeightButtonSizeProperty =
+        AvaloniaProperty.Register<ComboBoxWithFontsSize, double>(nameof(MinHeightButtonSize));
+
+    /// <summary>
+    /// Минимальная высота кнопок смены размера шрифта
+    /// </summary>
+    public double MinHeightButtonSize
+    {
+        get => GetValue(MinHeightButtonSizeProperty);
+        set => SetValue(MinHeightButtonSizeProperty, value);
     }
     #endregion
 

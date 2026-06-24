@@ -31,8 +31,10 @@ namespace AvaloniaTemplate.Services.Registrations
             RegisterCommand<Command_SetForegroundStyle>("Command_SetForegroundStyle");
             RegisterCommand<Command_SelectedFont>("Command_SelectedFont");
             RegisterCommand<Command_SelectedFontSize>("Command_SelectedFontSize");
+            RegisterCommand<Command_SetTextHorizontalAlignment>("Command_SetTextHorizontalAlignment");
+            RegisterCommand<Command_SetTextVerticalAlignment>("Command_SetTextVerticalAlignment");
 
-            //RegisterCommand<Command_SelectedFontSize>("Command_SelectedFontSize");
+            //RegisterCommand<Command_SetTextVerticalAlignment>("Command_SetTextVerticalAlignment");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)

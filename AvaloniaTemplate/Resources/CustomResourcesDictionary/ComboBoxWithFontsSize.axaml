@@ -4,22 +4,32 @@
         >
 
     <Design.PreviewWith>
-        <Border Padding="20">
-            <controls:ComboBoxWithFontsSize Width="100"/>
+        <Border Padding="10">
+            <StackPanel Spacing="5" Orientation="Horizontal">
+                <controls:ComboBoxWithFontsSize/>
+            </StackPanel>
         </Border>
     </Design.PreviewWith>
-    
+
     <ControlTheme x:Key="{x:Type controls:ComboBoxWithFontsSize}"
                   TargetType="controls:ComboBoxWithFontsSize"
                   >
+        <Setter Property="MinWidthButtonSize" Value="30"/>
+        <Setter Property="MinHeightButtonSize" Value="20"/>
         <Setter Property="HorizontalContentAlignment" Value="Left"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="MinHeight" Value="0"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="* auto auto"
-                      Width="{TemplateBinding Width}"
-                      Height="{TemplateBinding Height}"
+                <Grid ColumnDefinitions="auto auto auto"
+                      RowDefinitions="auto"
+                      ColumnSpacing="1"
                       >
                     <ComboBox x:Name="PART_RootPanel"
                               SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
@@ -27,77 +37,83 @@
                               ItemsSource="{Binding ItemsSource, RelativeSource={RelativeSource TemplatedParent}}"
                               MinWidth="{TemplateBinding MinWidth}"
                               MinHeight="{TemplateBinding MinHeight}"
+                              Height="{TemplateBinding Height}"
                               HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
                               VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                              Margin="0 0 4 0"
+                              CornerRadius="{TemplateBinding CornerRadius}"
+                              Margin="0 0 0 0"
                               >
                         <ComboBox.SelectionBoxItemTemplate>
                             <DataTemplate>
                                 <TextBlock Text="{Binding}"/>
                             </DataTemplate>
                         </ComboBox.SelectionBoxItemTemplate>
-                    
-                    
                     </ComboBox>
 
                     <Button x:Name="PART_ButtonFontSizeUp"
                             Grid.Column="1"
-                            Classes="disableBackgroundTransparent"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            BorderBrush="Gray"
-                            Height="25"
-                            Padding="5 0 0 0"
-                            Margin="0 0 2 0"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            MinWidth="{TemplateBinding MinWidthButtonSize}"
+                            MinHeight="{TemplateBinding MinHeightButtonSize}"
+                            Padding="{TemplateBinding Padding}"
+                            Classes="highlightedBackground"
                             >
-                        <Button.Content>
-                            <DockPanel>
-                                <TextBlock Text="A"
-                                           FontSize="15"
-                                           VerticalAlignment="Bottom"/>
+                        <Grid RowDefinitions="auto"
+                              ColumnDefinitions="auto"
+                              >
+                            <TextBlock Text="A"
+                                       FontSize="16"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Bottom"
+                                       />
 
-                                <PathIcon UseLayoutRounding="False"
-                                          IsHitTestVisible="False"
-                                          Height="8"
-                                          Width="8"
-                                          Margin="0,0,3,10"
-                                         
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                                          Data="M1939 1401L2029 1311L1024 306L19 1311L109 1401L1024 486L1939 1401Z"/>
-                            </DockPanel>
-                        </Button.Content>
+                            <PathIcon UseLayoutRounding="False"
+                                      IsHitTestVisible="False"
+                                      Height="7"
+                                      Width="7"
+                                      Margin="11 0 0 6"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Center"
+                                      Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                      Data="M1939 1401L2029 1311L1024 306L19 1311L109 1401L1024 486L1939 1401Z"
+                                      />
+                        </Grid>
                     </Button>
-                    
-                    <Button x:Name="PART_ButtonFontSizeDown"
-                            Classes="disableBackgroundTransparent"
-                            Grid.Column="2"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            BorderBrush="Gray"
-                            Height="25"
-                            Padding="5 0 0 0"
-                            Margin="2 0 0 0"
-                            >
-                        <Button.Content>
-                            <DockPanel>
-                                <TextBlock Text="A"
-                                           FontSize="13"
-                                           VerticalAlignment="Bottom"/>
 
-                                <PathIcon UseLayoutRounding="False"
-                                          IsHitTestVisible="False"
-                                          Height="8"
-                                          Width="8"
-                                          Margin="0,0,3,10"
-                                         
-                                          HorizontalAlignment="Right"
-                                          VerticalAlignment="Center"
-                                          Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"/>
-                            </DockPanel>
-                        </Button.Content>
+                    <Button x:Name="PART_ButtonFontSizeDown"
+                            Grid.Column="2"
+                            CornerRadius="{TemplateBinding CornerRadius}"
+                            Background="{TemplateBinding Background}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            MinWidth="{TemplateBinding MinWidthButtonSize}"
+                            MinHeight="{TemplateBinding MinHeightButtonSize}"
+                            Padding="{TemplateBinding Padding}"
+                            Classes="highlightedBackground"
+                            >
+                        <Grid RowDefinitions="auto"
+                              ColumnDefinitions="auto"
+                              >
+                            <TextBlock Text="A"
+                                       FontSize="12"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Bottom"
+                                       />
+
+                            <PathIcon UseLayoutRounding="False"
+                                      IsHitTestVisible="False"
+                                      Height="7"
+                                      Width="7"
+                                      Margin="8 0 0 6"
+                                      HorizontalAlignment="Right"
+                                      VerticalAlignment="Bottom"
+                                      Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                      Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                      />
+                        </Grid>
                     </Button>
                 </Grid>
             </ControlTemplate>

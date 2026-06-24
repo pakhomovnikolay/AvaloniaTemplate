@@ -112,13 +112,13 @@ namespace AvaloniaTemplate.Services
         {
             get
             {
-                CurrentBorderStyle ??= GridStyleHelper.CreateGridStyle(borderStyleType, 20, 20);
+                CurrentBorderStyle ??= GridStyleHelper.CreateGridStyle(borderStyleType, 18, 18);
                 return borderStyleType;
             }
             set
             {
                 if (SetProperty(ref borderStyleType, value))
-                    CurrentBorderStyle = GridStyleHelper.CreateGridStyle(borderStyleType, 20, 20);
+                    CurrentBorderStyle = GridStyleHelper.CreateGridStyle(borderStyleType, 18, 18);
             }
         }
         #endregion
