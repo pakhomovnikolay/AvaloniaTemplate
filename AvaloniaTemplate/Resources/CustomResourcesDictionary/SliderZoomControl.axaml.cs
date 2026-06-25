@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
-using Avalonia.Media.TextFormatting;
 using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using System;
@@ -262,12 +261,12 @@ public class SliderZoomControl : TemplatedControl
             Height = 22,
             VerticalContentAlignment = VerticalAlignment.Center
         };
-        writeValueSlider.Bind(TextBox.TextProperty, new Binding("EditValueSlider") { Source = this } );
+        writeValueSlider.Bind(TextBox.TextProperty, new Binding("EditValueSlider") { Source = this });
         TextBoxHelper.SetEnterKeyCommand(writeValueSlider, EditValueSliderFiniched);
 
         PopupContent = new()
         {
-            Children = 
+            Children =
             {
                 new StackPanel()
                 {
@@ -276,7 +275,6 @@ public class SliderZoomControl : TemplatedControl
                 }
             }
         };
-
     }
 
     private void ValueSliderToString()
