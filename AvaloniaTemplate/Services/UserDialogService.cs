@@ -1,4 +1,6 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using AvaloniaTemplate.Models.Enums;
@@ -311,10 +313,12 @@ namespace AvaloniaTemplate.Services
         {
             if (App.Desktop?.MainWindow is { } window) { window.Show(); return window; }
 
+            var InputManager = App.GetService<IInputManagerService>();
             window = App.GetService<MainWindow>();
             window.Closing += async (s, e) => await CloseMainWindowAsync(e);
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            window.AddHandler(InputElement.KeyDownEvent, InputManager.KeysHandler, RoutingStrategies.Tunnel, true);
             window.Show();
             return window;
         }

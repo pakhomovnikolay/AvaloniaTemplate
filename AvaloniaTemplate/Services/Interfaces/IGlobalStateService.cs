@@ -1,6 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
 using System.Collections.ObjectModel;
 
@@ -125,6 +126,13 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Ячейка объеденённая
         /// </summary>
         bool IsMergeCell { get; set; }
+        #endregion
+
+        #region Текущий режим приложения
+        /// <summary>
+        /// Текущий режим приложения
+        /// </summary>
+        AppActiveModeType AppActiveMode { get; set; }
         #endregion
     }
 }

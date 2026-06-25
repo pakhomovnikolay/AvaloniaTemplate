@@ -3,6 +3,7 @@ using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -202,6 +203,18 @@ namespace AvaloniaTemplate.Services
         {
             get => isMergeCell;
             set => SetProperty(ref isMergeCell, value);
+        }
+        #endregion
+
+        #region Текущий режим приложения
+        private AppActiveModeType appActiveMode = AppActiveModeType.Unknown;
+        /// <summary>
+        /// Текущий режим приложения
+        /// </summary>
+        public AppActiveModeType AppActiveMode
+        {
+            get => appActiveMode;
+            set => SetProperty(ref appActiveMode, value);
         }
         #endregion
     }

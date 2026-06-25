@@ -234,6 +234,7 @@
 				<customresourcesdictionary:ButtonMergeCells IsChecked="{Binding GlobalStateService.IsMergeCell}"
 															/>
 
+				<TextBox Width="150"/>
 			</StackPanel>
 
 		</Grid>
