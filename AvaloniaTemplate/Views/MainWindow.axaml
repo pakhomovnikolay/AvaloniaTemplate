@@ -41,6 +41,10 @@
 			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
 				<customresourcesdictionary:ButtonWrapText Command="{StaticResource Command_WrapText}"
 														  />
+
+				<customresourcesdictionary:ButtonMergeCells Grid.Row="1"
+														  Command="{StaticResource Command_MergeCells}"
+														  />
 			</Grid>
 		</Grid>
 
@@ -135,6 +139,46 @@
 															 HorizontalPosition="Right"
 															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
 															 />
+		</Grid>
+
+
+
+		<Grid ColumnDefinitions="300">
+			<StackPanel Orientation="Horizontal" Spacing="10">
+				<customresourcesdictionary:ButtonSetFontWeightBold IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
+																   />
+				<customresourcesdictionary:ButtonSetFontStyleItalic IsChecked="{Binding GlobalStateService.IsFontStyleItalic}"
+																	/>
+				<customresourcesdictionary:ButtonSetTextStyleUnderLine IsChecked="{Binding GlobalStateService.IsTextStyleUnderline}"
+																	   />
+				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+																 VerticalPosition="Top"
+																 />
+				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+																 VerticalPosition="Center"
+																 />
+				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+																 VerticalPosition="Bottom"
+																 />
+
+				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+																 Position="Horizontal"
+																 HorizontalPosition="Left"
+																 />
+				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+																 Position="Horizontal"
+																 HorizontalPosition="Center"
+																 />
+				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+																 Position="Horizontal"
+																 HorizontalPosition="Right"
+																 />
+				<customresourcesdictionary:ButtonWrapText />
+
+				<customresourcesdictionary:ButtonMergeCells />
+
+			</StackPanel>
+
 		</Grid>
 	</StackPanel>
 </Window>

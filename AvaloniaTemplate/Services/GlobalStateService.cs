@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using Avalonia.Threading;
 using AvaloniaTemplate.Infrastructures.Helpers;
@@ -153,6 +154,30 @@ namespace AvaloniaTemplate.Services
         {
             get => currentFontSize;
             set => SetProperty(ref currentFontSize, value);
+        }
+        #endregion
+
+        #region Положение текста по горизонтали
+        private HorizontalAlignment horizontalTextAlignment;
+        /// <summary>
+        /// Положение текста по горизонтали
+        /// </summary>
+        public HorizontalAlignment HorizontalTextAlignment
+        {
+            get => horizontalTextAlignment;
+            set => SetProperty(ref horizontalTextAlignment, value);
+        }
+        #endregion
+
+        #region Положение текста по вертикали
+        private VerticalAlignment verticalTextAlignment;
+        /// <summary>
+        /// Положение текста по вертикали
+        /// </summary>
+        public VerticalAlignment VerticalTextAlignment
+        {
+            get => verticalTextAlignment;
+            set => SetProperty(ref verticalTextAlignment, value);
         }
         #endregion
     }

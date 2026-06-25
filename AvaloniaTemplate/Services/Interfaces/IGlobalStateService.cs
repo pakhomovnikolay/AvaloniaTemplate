@@ -1,4 +1,5 @@
 ﻿using Avalonia.Controls;
+using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.Enums;
 using System.Collections.ObjectModel;
@@ -96,6 +97,20 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Текущий размер шрфита
         /// </summary>
         double CurrentFontSize { get; set; }
+        #endregion
+
+        #region Положение текста по горизонтали
+        /// <summary>
+        /// Положение текста по горизонтали
+        /// </summary>
+        HorizontalAlignment HorizontalTextAlignment { get; set; }
+        #endregion
+
+        #region Положение текста по вертикали
+        /// <summary>
+        /// Положение текста по вертикали
+        /// </summary>
+        VerticalAlignment VerticalTextAlignment { get; set; } 
         #endregion
     }
 }

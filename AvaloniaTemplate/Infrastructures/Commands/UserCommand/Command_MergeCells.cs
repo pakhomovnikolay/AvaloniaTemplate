@@ -4,9 +4,9 @@ using AvaloniaTemplate.Services.Interfaces;
 namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 {
     /// <summary>
-    /// Команда - переносить текст
+    /// Команда - обяединить ячейки
     /// </summary>
-    public class Command_WrapText : Command
+    public class Command_MergeCells : Command
     {
         protected override bool CanExecute(object p)
             => true;

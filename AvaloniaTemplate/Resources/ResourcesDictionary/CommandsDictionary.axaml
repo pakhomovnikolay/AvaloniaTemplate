@@ -22,6 +22,6 @@
     <cmdUser:Command_SetTextHorizontalAlignment x:Key= "Command_SetTextHorizontalAlignment"/>
     <cmdUser:Command_SetTextVerticalAlignment x:Key= "Command_SetTextVerticalAlignment"/>
     <cmdUser:Command_WrapText x:Key= "Command_WrapText"/>
-
+    <cmdUser:Command_MergeCells x:Key= "Command_MergeCells"/>
     
 </ResourceDictionary>
