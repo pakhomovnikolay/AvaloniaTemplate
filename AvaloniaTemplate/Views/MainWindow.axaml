@@ -20,7 +20,7 @@
 
 	<StackPanel Margin="5" Spacing="5">
 
-		<Grid ColumnDefinitions="auto auto">
+		<Grid ColumnDefinitions="auto auto auto">
 			<customresourcesdictionary:ButtonPaste Command="{StaticResource Command_Paste}"
 												   CommandParameter="{Binding GlobalStateService.ClipboardIsNotEmpty}"
 												   />
@@ -35,6 +35,11 @@
 
 				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
 														  Command="{StaticResource Command_SimpleAs}"
+														  />
+			</Grid>
+
+			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
+				<customresourcesdictionary:ButtonWrapText Command="{StaticResource Command_WrapText}"
 														  />
 			</Grid>
 		</Grid>

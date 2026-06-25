@@ -21,6 +21,7 @@
     <cmdUser:Command_SelectedFontSize x:Key= "Command_SelectedFontSize"/>
     <cmdUser:Command_SetTextHorizontalAlignment x:Key= "Command_SetTextHorizontalAlignment"/>
     <cmdUser:Command_SetTextVerticalAlignment x:Key= "Command_SetTextVerticalAlignment"/>
-    
+    <cmdUser:Command_WrapText x:Key= "Command_WrapText"/>
+
     
 </ResourceDictionary>
