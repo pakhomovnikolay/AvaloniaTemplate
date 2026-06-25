@@ -1,12 +1,12 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
-    /// Команда - Установить подчеркнутый стиль текста
+    /// Команда - Установить полужирный стиль текста
     /// </summary>
-    public class Command_SetTextStyleUnderline : Command
+    public class Command_SetFontWeightBold : Command
     {
         protected override bool CanExecute(object p)
             => true;

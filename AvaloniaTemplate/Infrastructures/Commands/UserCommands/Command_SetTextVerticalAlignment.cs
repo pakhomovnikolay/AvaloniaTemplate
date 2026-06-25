@@ -3,21 +3,21 @@ using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
-    public class Command_SetTextHorizontalAlignment : Command
+    public class Command_SetTextVerticalAlignment : Command
     {
         protected override bool CanExecute(object p)
             => p is not null;
 
         protected override void Execute(object p)
         {
-            if (p is null || p is not HorizontalAlignment alignment)
+            if (p is null || p is not VerticalAlignment alignment)
                 return;
 
-            Debug.WriteLine($"HorizontalAlignment: {alignment}");
+            Debug.WriteLine($"VerticalAlignment: {alignment}");
             if (App.GetService<IGlobalStateService>() is { } service)
-                service.HorizontalTextAlignment = alignment;
+                service.VerticalTextAlignment = alignment;
 
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);

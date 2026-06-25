@@ -5,25 +5,19 @@ namespace AvaloniaTemplate.ViewModels
 {
     public partial class MainWindowViewModel : ViewModelBase
     {
-        public IGlobalStateService GlobalStateService { get; }
-
+        #region Сервис обработки состояний
+        /// <summary>
+        /// Сервис обработки состояний
+        /// </summary>
+        public IGlobalStateService GlobalStateService { get; } = App.GetService<IGlobalStateService>(); 
+        #endregion
 
         #region Конструктор
         /// <summary>
         /// Конструктор
         /// </summary>
         public MainWindowViewModel()
-        {
-            Title = "AvaloniaTemplate";
-            WindowHeight = 750;
-            WindowWidth = 1000;
-            App.ChangeAppStatus += ChangeAppStatus;
-
-            AppVersion = App.AppVersion;
-            AppStatus = App.AppStatus;
-
-            GlobalStateService = App.GetService<IGlobalStateService>();
-        }
+            => InitializeComponent();
         #endregion
 
         #region Текущая версия проекта
@@ -56,6 +50,21 @@ namespace AvaloniaTemplate.ViewModels
         /// </summary>
         /// <param name="settings"></param>
         private void ChangeAppStatus(string status) => AppStatus = status;
+        #endregion
+
+        #region Инициализация компонентов
+        /// <summary>
+        /// Инициализация компонентов
+        /// </summary>
+        private void InitializeComponent()
+        {
+            Title = "Мастер конфигурации проекта";
+            WindowHeight = 750;
+            WindowWidth = 1600;
+            AppVersion = App.AppVersion;
+            AppStatus = App.AppStatus;
+            App.ChangeAppStatus += ChangeAppStatus;
+        }
         #endregion
     }
 }

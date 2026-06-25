@@ -1,6 +1,6 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
-using AvaloniaTemplate.Infrastructures.Commands.UserCommand;
+using AvaloniaTemplate.Infrastructures.Commands.UserCommands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;

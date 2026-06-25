@@ -1,14 +1,13 @@
 ﻿using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Commands.Base;
-using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
-    /// Команда - выбора шрифта
+    /// Команда - предварительного просмотра выбранного шрифта
     /// </summary>
-    public class Command_SelectedFont : Command
+    public class Command_PreViewSelectedFont : Command
     {
         protected override bool CanExecute(object p)
             => p is not null;
@@ -20,8 +19,9 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
 
             Debug.WriteLine($"Текущий шрифт: {font.Name}");
 
-            App.GetService<IUserDialogService>()?
-                .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
+
+            //App.GetService<IUserDialogService>()?
+            //    .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }
     }
 }

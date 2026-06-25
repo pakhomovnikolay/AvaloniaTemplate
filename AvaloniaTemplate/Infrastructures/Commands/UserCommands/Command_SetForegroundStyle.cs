@@ -3,7 +3,7 @@ using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     public class Command_SetForegroundStyle : Command
     {

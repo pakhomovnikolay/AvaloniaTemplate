@@ -1,12 +1,12 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
-    /// Команда - скопировать данные в буфер обмена
+    /// Команда - вырезать выделенные данные
     /// </summary>
-    public class Command_Copy : Command
+    public class Command_Cut : Command
     {
         protected override bool CanExecute(object p)
             => true;

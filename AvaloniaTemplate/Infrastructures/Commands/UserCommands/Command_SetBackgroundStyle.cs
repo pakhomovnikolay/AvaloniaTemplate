@@ -5,7 +5,7 @@ using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 using System.Linq;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     public class Command_SetBackgroundStyle : Command
     {

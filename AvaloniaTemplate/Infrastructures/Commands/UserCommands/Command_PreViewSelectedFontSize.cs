@@ -2,7 +2,7 @@
 using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
     /// Команда - предварительного просмотра выбранного размера шрифта

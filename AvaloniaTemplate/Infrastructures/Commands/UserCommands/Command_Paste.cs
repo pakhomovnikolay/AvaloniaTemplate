@@ -1,15 +1,15 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Services.Interfaces;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
-    /// Команда - вырезать выделенные данные
+    /// Команда - вставить данные из буфера обмена
     /// </summary>
-    public class Command_Cut : Command
+    public class Command_Paste : Command
     {
         protected override bool CanExecute(object p)
-            => true;
+            => p is not null && p is bool state && state;
 
         protected override void Execute(object p)
         {

@@ -3,7 +3,7 @@ using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using System.Diagnostics;
 
-namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
+namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
 {
     /// <summary>
     /// Команда - сменить стиль сетки
