@@ -131,10 +131,7 @@ public class ButtonSetTextPosition : TemplatedControl
         {
             VerticalPosition = VerticalPosition,
             HorizontalPosition = HorizontalPosition,
-            Position = Position,
-            //Width = Width,
-            //Height = Height,
-            //Margin = new(0, 0, 0, 0)
+            Position = Position
         };
         control.InvalidateVisual();
         button.Content = control;

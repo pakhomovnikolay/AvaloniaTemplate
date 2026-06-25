@@ -54,38 +54,6 @@
                             </Grid>
                         </ToggleButton.Content>
                     </ToggleButton>
-
-                    <!--<ToggleButton x:Name="RootElement" Background="Transparent"
-                                  Margin="0 1 0 1"
-                                  Padding="0"
-                                  Classes="highlightedBackground"
-                                  HorizontalContentAlignment="Stretch"
-                                  VerticalContentAlignment="Stretch"
-                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
-                                  >
-                        <ToggleButton.Content>
-                            <Grid ColumnDefinitions="* auto">
-                                <Button x:Name="PART_SetGridStyle"
-                                        Background="Transparent"
-                                        BorderThickness="0 0 1 0"
-                                        Classes="highlightedBackground"
-                                        Padding="5 0 0 0"
-                                        CornerRadius="1"
-                                        HorizontalContentAlignment="Left"
-                                        Content="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"
-                                        Command="{TemplateBinding Command}"
-                                        CommandParameter="{TemplateBinding CommandParameter}"
-                                        />
-                                
-                                <PathIcon Grid.Column="1"
-                                          Height="12"
-                                          Width="12"
-                                          Margin="3 0 2 0"
-                                          Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
-                                          />
-                            </Grid>
-                        </ToggleButton.Content>
-                    </ToggleButton>-->
                     
                     <Popup Name="PART_Popup"
                            WindowManagerAddShadowHint="False"

@@ -32,13 +32,10 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 
         private static void OnEnterKeyCommandChanged(TextBox textBox, AvaloniaPropertyChangedEventArgs e)
         {
-            if (e.OldValue is not ICommand oldCommand || e.NewValue is not ICommand newCommand)
-                return;
-
-            if (oldCommand is { })
+            if (e.OldValue is ICommand)
                 textBox.KeyDown -= OnTextBoxKeyDown;
 
-            if (newCommand is { })
+            if (e.NewValue is ICommand)
                 textBox.KeyDown += OnTextBoxKeyDown;
         }
 

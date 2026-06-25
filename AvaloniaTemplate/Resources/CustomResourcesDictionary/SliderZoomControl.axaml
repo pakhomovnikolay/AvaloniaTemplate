@@ -1,0 +1,122 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+        >
+    
+    <Design.PreviewWith>
+        <Border Padding="20">
+             <controls:SliderZoomControl/>
+        </Border>
+    </Design.PreviewWith>
+
+     <CornerRadius x:Key="SliderThumbCornerRadius">5</CornerRadius>
+    <x:Double x:Key="SliderHorizontalThumbWidth">5</x:Double>
+    <SolidColorBrush x:Key="SliderThumbBackground" Color="Gray"/>
+
+    <ControlTheme x:Key="{x:Type controls:SliderZoomControl}"
+                  TargetType="controls:SliderZoomControl"
+                  >
+        <Setter Property="Height" Value="35"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid ColumnDefinitions="auto * auto auto"
+                      RowDefinitions="auto"
+                      ColumnSpacing="2"
+                      >
+                    <Button x:Name="PART_ButtonZoomDeinc"
+                            Grid.Column="0"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="5 0 5 0"
+                            Height="20"
+                            Classes="highlightedBackground"
+                            CornerRadius="2"
+                            IsVisible="{Binding IsVisibleButoonDeinc, RelativeSource={RelativeSource TemplatedParent}}"
+                            >
+                        <PathIcon UseLayoutRounding="False"
+                                  IsHitTestVisible="False"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Width="12"
+                                  Height="12"
+                                  Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                  Data="M1,7 L15,7 L15,9 L1,9 Z"
+                                  />
+                    </Button>
+
+                    <Slider x:Name="PART_Slider"
+                            IsDirectionReversed="False"
+                            Grid.Column="1"
+                            TickPlacement="TopLeft"
+                            TickFrequency="1"
+                            Minimum="{TemplateBinding MinimumSlider}"
+                            Maximum="{TemplateBinding MaximumSlider}"
+                            SmallChange="{TemplateBinding SmallChangeSlider}"
+                            LargeChange="{TemplateBinding LargeChangeSlider}"
+                            Width="{TemplateBinding WidthSliderPanel}"
+                            Value="{Binding ValueSlider, RelativeSource={RelativeSource TemplatedParent}}"
+                            />
+
+                    <Button x:Name="PART_ButtonZoomInc"
+                            Grid.Column="2"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Padding="5 0 5 0"
+                            Height="20"
+                            Classes="highlightedBackground"
+                            CornerRadius="2"
+                            IsVisible="{Binding IsVisibleButoonInc, RelativeSource={RelativeSource TemplatedParent}}"
+                            >
+                        <PathIcon UseLayoutRounding="False"
+                                  IsHitTestVisible="False"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"
+                                  Width="12"
+                                  Height="12"
+                                  Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                  Data="M7,1 L9,1 L9,7 L15,7 L15,9 L9,9 L9,15 L7,15 L7,9 L1,9 L1,7 L7,7 Z"
+                                  />
+                    </Button>
+
+                    <ToggleButton x:Name="ZoomVisualValue"
+                                  Grid.Column="3"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  Padding="0"
+                                  MinHeight="20"
+                                  MinWidth="50"
+                                  Height="20"
+                                  Content="{Binding VisualValueSlider, RelativeSource={RelativeSource TemplatedParent}}"
+                                  IsChecked="{Binding IsPopupOpenned, RelativeSource={RelativeSource TemplatedParent}}"
+                                  Classes="highlightedBackground"
+                                  />
+
+
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           IsOpen="{TemplateBinding IsPopupOpenned, Mode=TwoWay}"
+                           IsLightDismissEnabled="True"
+                           InheritsTransform="True"
+                           MinHeight="15"
+                           MinWidth="100"
+                           PlacementTarget="ZoomVisualValue"
+                           Placement="TopEdgeAlignedRight"
+                           >
+                        <!--BottomEdgeAlignedLeft-->
+                        <Border x:Name="PopupBorder"
+                                Background="LightGray"
+                                BorderBrush="Gray"
+                                BorderThickness="1"
+                                Padding="0"
+                                Margin="0 0 1 0"
+                                HorizontalAlignment="Stretch"
+                                CornerRadius="5"
+                                Child="{Binding PopupContent, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                />
+                    </Popup>
+                </Grid>
+
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

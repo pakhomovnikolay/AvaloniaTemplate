@@ -29,6 +29,8 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/GroupBoxDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/MenuDictionary.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/TabControlDictionary.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/ResourcesDictionary/SliderDictionary.axaml"/>
+				
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/BorderWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/CheckBoxWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DualListSelector.axaml"/>
@@ -47,8 +49,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetTextPosition.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonWrapText.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonMergeCells.axaml"/>
-
-				
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SliderZoomControl.axaml"/>
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

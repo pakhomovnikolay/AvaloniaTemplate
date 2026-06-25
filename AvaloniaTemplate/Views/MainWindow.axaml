@@ -36,6 +36,10 @@
 				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
 														  Command="{StaticResource Command_SimpleAs}"
 														  />
+
+				
+
+				
 			</Grid>
 
 			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
@@ -46,6 +50,9 @@
 				<customresourcesdictionary:ButtonMergeCells Grid.Row="1"
 														  Command="{StaticResource Command_MergeCells}"
 														  IsChecked="{Binding GlobalStateService.IsMergeCell}"
+														  />
+
+				<customresourcesdictionary:SliderZoomControl Grid.Row="2"
 														  />
 			</Grid>
 		</Grid>
