@@ -110,7 +110,21 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Положение текста по вертикали
         /// </summary>
-        VerticalAlignment VerticalTextAlignment { get; set; } 
+        VerticalAlignment VerticalTextAlignment { get; set; }
+        #endregion
+
+        #region Перенос текста устанволен
+        /// <summary>
+        /// Перенос текста устанволен
+        /// </summary>
+        bool IsWrapText { get; set; }
+        #endregion
+
+        #region Ячейка объеденённая
+        /// <summary>
+        /// Ячейка объеденённая
+        /// </summary>
+        bool IsMergeCell { get; set; }
         #endregion
     }
 }

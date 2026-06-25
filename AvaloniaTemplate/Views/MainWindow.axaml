@@ -1,10 +1,10 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:customresourcesdictionary="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		xmlns:vm="using:AvaloniaTemplate.ViewModels"
+		xmlns:customresourcesdictionary="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
 
         x:Class="AvaloniaTemplate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -40,10 +40,12 @@
 
 			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
 				<customresourcesdictionary:ButtonWrapText Command="{StaticResource Command_WrapText}"
+														  IsChecked="{Binding GlobalStateService.IsWrapText}"
 														  />
 
 				<customresourcesdictionary:ButtonMergeCells Grid.Row="1"
 														  Command="{StaticResource Command_MergeCells}"
+														  IsChecked="{Binding GlobalStateService.IsMergeCell}"
 														  />
 			</Grid>
 		</Grid>
@@ -153,29 +155,84 @@
 																	   />
 				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Top"
-																 />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.VerticalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
+
 				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Center"
-																 />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.VerticalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
+
 				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Bottom"
-																 />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.VerticalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
 
 				<customresourcesdictionary:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Left"
-																 />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
+
 				<customresourcesdictionary:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Center"
-																 />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
+
 				<customresourcesdictionary:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Right"
-																 />
-				<customresourcesdictionary:ButtonWrapText />
+																 >
+					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
+						</MultiBinding>
+					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+				</customresourcesdictionary:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonMergeCells />
+				<customresourcesdictionary:ButtonWrapText IsChecked="{Binding GlobalStateService.IsWrapText}"
+														  />
+
+				<customresourcesdictionary:ButtonMergeCells IsChecked="{Binding GlobalStateService.IsMergeCell}"
+															/>
 
 			</StackPanel>
 

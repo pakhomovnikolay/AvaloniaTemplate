@@ -16,6 +16,9 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommand
                 return;
 
             Debug.WriteLine($"HorizontalAlignment: {alignment}");
+            if (App.GetService<IGlobalStateService>() is { } service)
+                service.HorizontalTextAlignment = alignment;
+
             App.GetService<IUserDialogService>()?
                 .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }

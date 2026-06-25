@@ -1,6 +1,11 @@
 ﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     x:ClassModifier="internal"
+                    xmlns:conv="using:AvaloniaTemplate.Infrastructures.Converters"
                     >
-  <!-- Add Resources Here -->
+    
+    <!-- Add Resources Here -->
+    <conv:Converter_CurrentTextAlignmentToBool x:Key= "Converter_CurrentTextAlignmentToBool"/>
+
+    <!--<conv:Converter_CurrentTextAlignmentToBool x:Key= "Converter_CurrentTextAlignmentToBool"/>-->
 </ResourceDictionary>

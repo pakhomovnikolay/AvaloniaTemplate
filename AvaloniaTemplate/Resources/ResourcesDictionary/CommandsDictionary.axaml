@@ -24,4 +24,5 @@
     <cmdUser:Command_WrapText x:Key= "Command_WrapText"/>
     <cmdUser:Command_MergeCells x:Key= "Command_MergeCells"/>
     
+    <!--<cmdUser:Command_MergeCells x:Key= "Command_MergeCells"/>-->
 </ResourceDictionary>

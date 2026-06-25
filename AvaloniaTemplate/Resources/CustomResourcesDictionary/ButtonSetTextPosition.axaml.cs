@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.LayoutControls;
 using System.Windows.Input;
 
@@ -10,12 +11,12 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonSetTextPosition : TemplatedControl
 {
-    #region Позиция по вертикали
+    #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
         AvaloniaProperty.Register<ButtonSetTextPosition, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Позиция по вертикали
+    /// Положение контента по вертикали
     /// </summary>
     public VerticalAlignment VerticalContentAlignment
     {
@@ -24,12 +25,12 @@ public class ButtonSetTextPosition : TemplatedControl
     }
     #endregion
 
-    #region Позиция по горизинтали
+    #region Положение контента по горизинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
         AvaloniaProperty.Register<ButtonSetTextPosition, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Позиция по горизинтали
+    /// Положение контента по горизинтали
     /// </summary>
     public HorizontalAlignment HorizontalContentAlignment
     {
@@ -124,7 +125,8 @@ public class ButtonSetTextPosition : TemplatedControl
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        var button = e.NameScope.Find<Button>("PART_Button");
+        var button = e.NameScope.Find<ToggleButton>("PART_Button");
+        ToggleGroupControl.SetGroupName(button, $"{Position}Group");
         var control = new LayoutTextPositionType()
         {
             VerticalPosition = VerticalPosition,

@@ -158,7 +158,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Положение текста по горизонтали
-        private HorizontalAlignment horizontalTextAlignment;
+        private HorizontalAlignment horizontalTextAlignment = HorizontalAlignment.Stretch;
         /// <summary>
         /// Положение текста по горизонтали
         /// </summary>
@@ -170,7 +170,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Положение текста по вертикали
-        private VerticalAlignment verticalTextAlignment;
+        private VerticalAlignment verticalTextAlignment = VerticalAlignment.Stretch;
         /// <summary>
         /// Положение текста по вертикали
         /// </summary>
@@ -178,6 +178,30 @@ namespace AvaloniaTemplate.Services
         {
             get => verticalTextAlignment;
             set => SetProperty(ref verticalTextAlignment, value);
+        }
+        #endregion
+
+        #region Перенос текста устанволен
+        private bool isWrapText;
+        /// <summary>
+        /// Перенос текста устанволен
+        /// </summary>
+        public bool IsWrapText
+        {
+            get => isWrapText;
+            set => SetProperty(ref isWrapText, value);
+        }
+        #endregion
+
+        #region Ячейка объеденённая
+        private bool isMergeCell;
+        /// <summary>
+        /// Ячейка объеденённая
+        /// </summary>
+        public bool IsMergeCell
+        {
+            get => isMergeCell;
+            set => SetProperty(ref isMergeCell, value);
         }
         #endregion
     }
