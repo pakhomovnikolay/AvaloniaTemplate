@@ -23,7 +23,7 @@
     <cmdUser:Command_SetTextVerticalAlignment x:Key= "Command_SetTextVerticalAlignment"/>
     <cmdUser:Command_WrapText x:Key= "Command_WrapText"/>
     <cmdUser:Command_MergeCells x:Key= "Command_MergeCells"/>
-    <cmdUser:Command_ItemsControlPanelCreateItem x:Key= "Command_ItemsControlPanelCreateItem"/>
+    <cmdUser:Command_HorizontalTabStripCreateItem x:Key= "Command_HorizontalTabStripCreateItem"/>
 
     <!--<cmdUser:Command_ItemsControlPanelCreateItem x:Key= "Command_ItemsControlPanelCreateItem"/>-->
 </ResourceDictionary>

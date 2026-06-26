@@ -35,7 +35,7 @@ namespace AvaloniaTemplate.Services.Registrations
             RegisterCommand<Command_SetTextVerticalAlignment>("Command_SetTextVerticalAlignment");
             RegisterCommand<Command_WrapText>("Command_WrapText");
             RegisterCommand<Command_MergeCells>("Command_MergeCells");
-            RegisterCommand<Command_ItemsControlPanelCreateItem>("Command_ItemsControlPanelCreateItem");
+            RegisterCommand<Command_HorizontalTabStripCreateItem>("Command_HorizontalTabStripCreateItem");
 
             //RegisterCommand<Command_ItemsControlPanelCreateItem>("Command_ItemsControlPanelCreateItem");
 

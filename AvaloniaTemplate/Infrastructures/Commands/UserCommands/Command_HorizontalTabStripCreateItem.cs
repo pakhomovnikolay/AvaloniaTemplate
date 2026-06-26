@@ -7,7 +7,7 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
     /// <summary>
     /// Команда - создать элемент в коллекции
     /// </summary>
-    public class Command_ItemsControlPanelCreateItem : Command
+    public class Command_HorizontalTabStripCreateItem : Command
     {
         protected override bool CanExecute(object p)
             => true;

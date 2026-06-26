@@ -247,12 +247,11 @@
 		</Grid>
 
 		<crd:HorizontalTabStrip HorizontalAlignment="Left"
-							   SourceItems="{Binding TestItemList}"
-							   SelectedItem="{Binding TestItemSelected}"
-							   Background="LightGray"
-							   Command="{StaticResource Command_ItemsControlPanelCreateItem}"
-							   MaxWidth="700"
-							   MaxWidthSingleItem="100"
+								ItemsSource="{Binding TestItemList}"
+								SelectedItem="{Binding TestItemSelected}"
+								CommandCreateItem="{StaticResource Command_ItemsControlPanelCreateItem}"
+								CommandSelectedItem="{StaticResource Command_ItemsControlPanelCreateItem}"
+								MaxWidthSingleItem="100"
 							   >
 			
 			<crd:HorizontalTabStrip.ItemsPanel>
@@ -262,19 +261,20 @@
 				</ItemsPanelTemplate>
 			</crd:HorizontalTabStrip.ItemsPanel>
 
-			<crd:HorizontalTabStrip.ItemTemplate>
+			<!--<crd:HorizontalTabStrip.ItemTemplate>
 				<DataTemplate>
-					<ToggleButton Content="{Binding }"
-								  Padding="5 0 5 0"
-								  BorderThickness="1 1 1 0"
-								  BorderBrush="Gray"
-								  CornerRadius="3 3 0 0"
-								  Command="{StaticResource Command_ViewSelectedTable}"
-								  CommandParameter="{Binding }"
-								  helpers:ToggleGroupControl.GroupName="TableList"
-								  />
+					<Border Padding="5 0 5 0"
+							Background="Transparent"
+							BorderThickness="1 1 1 0"
+							BorderBrush="WhiteSmoke"
+							CornerRadius="3 3 0 0"
+							MinWidth="70"
+							>
+						<TextBlock Text="{Binding }"/>
+					
+					</Border>
 				</DataTemplate>
-			</crd:HorizontalTabStrip.ItemTemplate>
+			</crd:HorizontalTabStrip.ItemTemplate>-->
 
 		
 		

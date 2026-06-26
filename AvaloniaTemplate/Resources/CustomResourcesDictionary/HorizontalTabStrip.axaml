@@ -12,68 +12,75 @@
     <ControlTheme x:Key="{x:Type controls:HorizontalTabStrip}"
                   TargetType="controls:HorizontalTabStrip"
                   >
-
-
+        <Setter Property="Background" Value="LightGray"/>
+        <Setter Property="MaxWidth" Value="700"/>
         <Setter Property="Template">
             <ControlTemplate>
-               <Grid ColumnDefinitions="auto auto auto * auto"
+               <Grid ColumnDefinitions="auto * auto"
+                     ColumnSpacing="2"
                      Background="{TemplateBinding Background}"
                      >
-                   <RepeatButton x:Name="PART_ButtonNextLeft"
-                                 Grid.Column="0"
-                                 Padding="0"
-                                 Background="Transparent"
-                                 MinWidth="25"
-                                 MinHeight="25"
-                                 >
-                       <PathIcon Data="M12,0 L4,8 L12,16 Z"
-                                 Foreground="Gray"
-                                 Height="12"
-                                 />
-                   
-                   </RepeatButton>
 
-                   <RepeatButton x:Name="PART_ButtonNextRight"
-                                 Grid.Column="1"
-                                 Padding="0"
-                                 Background="Transparent"
-                                 MinWidth="25"
-                                 MinHeight="25"
-                                 >
-                       <PathIcon Data="M4,0 L12,8 L4,16 Z"
-                                 Foreground="Gray"
-                                 Height="12"
-                                 />
+                   <StackPanel Grid.Column="0"
+                               Orientation="Horizontal"
+                               Spacing="2"
+                               >
+                       <RepeatButton x:Name="PART_ButtonNextLeft"
+                                     Padding="0"
+                                     Background="Transparent"
+                                     MinWidth="25"
+                                     MinHeight="25"
+                                     >
+                           <PathIcon Data="M12,0 L4,8 L12,16 Z"
+                                     Foreground="Gray"
+                                     Height="12"
+                                     />
                    
-                   </RepeatButton>
+                       </RepeatButton>
 
-                   <ToggleButton x:Name="ViewItemList"
-                                 Grid.Column="2"
-                                 Padding="0"
-                                 Classes="highlightedBackground"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 Content="..."
-                                 MinWidth="35"
-                                 MinHeight="25"
-                                 IsChecked="{Binding IsPopupOpenned, RelativeSource={RelativeSource TemplatedParent}}"
-                                 />
+                       <RepeatButton x:Name="PART_ButtonNextRight"
+                                     Padding="0"
+                                     Background="Transparent"
+                                     MinWidth="25"
+                                     MinHeight="25"
+                                     >
+                           <PathIcon Data="M4,0 L12,8 L4,16 Z"
+                                     Foreground="Gray"
+                                     Height="12"
+                                     />
+                   
+                       </RepeatButton>
+
+                       <ToggleButton x:Name="ViewItemList"
+                                     Padding="0"
+                                     Classes="highlightedBackground"
+                                     BorderThickness="0"
+                                     Background="Transparent"
+                                     Content="..."
+                                     MinWidth="35"
+                                     MinHeight="25"
+                                     IsChecked="{Binding IsPopupOpenned, RelativeSource={RelativeSource TemplatedParent}}"
+                                     />
+                   
+                   </StackPanel>
 
                    <ScrollViewer x:Name="PART_Scroll"
-                                 Grid.Column="3"
+                                 Grid.Column="1"
                                  HorizontalScrollBarVisibility="Hidden"
                                  VerticalScrollBarVisibility="Disabled"
                                  >
-                       
-                       <ListBox Margin="10 0 0 0"
-                                ItemsSource="{TemplateBinding SourceItems}"
-                                SelectedItem="{TemplateBinding SelectedItem}"
+                       <ListBox Background="{TemplateBinding Background}"
                                 ItemTemplate="{TemplateBinding ItemTemplate}"
                                 ItemsPanel="{TemplateBinding ItemsPanel}"
+                                ItemsSource="{TemplateBinding ItemsSource}"
+                                SelectedIndex="{TemplateBinding SelectedIndex}"
+                                SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                 />
+
+                       
                    </ScrollViewer>
 
-                   <Button Grid.Column="4"
+                   <Button Grid.Column="2"
                            Padding="5 2 5 2"
                            Classes="highlightedBackground"
                            BorderThickness="0"
@@ -81,8 +88,7 @@
                            MinWidth="25"
                            MinHeight="25"
                            HorizontalAlignment="Right"
-                           Command="{TemplateBinding Command}"
-                           CommandParameter="{TemplateBinding CommandParameter}"
+                           Command="{TemplateBinding CommandCreateItem}"
                            >
                        
                        <PathIcon UseLayoutRounding="False"
@@ -115,7 +121,7 @@
                                 Padding="0"
                                 Margin="0 0 1 0"
                                 HorizontalAlignment="Stretch"
-                                CornerRadius="5"
+                                CornerRadius="3"
                                 Child="{Binding PopupContent, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                 />
                     </Popup>
