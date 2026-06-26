@@ -18,15 +18,15 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <ToggleButton x:Name="PART_Button"
-                        Padding="5 2 5 2"
-                        Classes="highlightedBackground"
-                        HorizontalContentAlignment="Left"
-                        BorderThickness="0"
-                        Background="{TemplateBinding Background}"
-                        Command="{TemplateBinding Command}"
-                        CommandParameter="{TemplateBinding CommandParameter}"
-                        IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
-                        >
+                              Padding="5 2 5 2"
+                              Classes="highlightedBackground"
+                              HorizontalContentAlignment="Left"
+                              BorderThickness="0"
+                              Background="{TemplateBinding Background}"
+                              Command="{TemplateBinding Command}"
+                              CommandParameter="{TemplateBinding CommandParameter}"
+                              IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
+                              >
                     <Button.Content>
                         <Grid ColumnDefinitions="* auto">
                             <Image Source="\Assets\MergeCells.png" Height="20"/>

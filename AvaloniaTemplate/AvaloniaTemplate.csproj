@@ -33,4 +33,10 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\CustomResourcesDictionary\HorizontalTabStrip.axaml.cs">
+      <DependentUpon>HorizontalTabStrip.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
 </Project>

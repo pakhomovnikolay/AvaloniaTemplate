@@ -4,7 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
 		xmlns:vm="using:AvaloniaTemplate.ViewModels"
-		xmlns:customresourcesdictionary="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+		xmlns:crd="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+		xmlns:helpers="using:AvaloniaTemplate.Infrastructures.Helpers"
 
         x:Class="AvaloniaTemplate.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -21,34 +22,34 @@
 	<StackPanel Margin="5" Spacing="5">
 
 		<Grid ColumnDefinitions="auto auto auto">
-			<customresourcesdictionary:ButtonPaste Command="{StaticResource Command_Paste}"
+			<crd:ButtonPaste Command="{StaticResource Command_Paste}"
 												   CommandParameter="{Binding GlobalStateService.ClipboardIsNotEmpty}"
 												   />
 
 			<Grid Grid.Column="1" RowDefinitions="auto auto auto">
-				<customresourcesdictionary:ButtonCut Command="{StaticResource Command_Cut}"
+				<crd:ButtonCut Command="{StaticResource Command_Cut}"
 													 />
 
-				<customresourcesdictionary:ButtonCopy Grid.Row="1"
+				<crd:ButtonCopy Grid.Row="1"
 													  Command="{StaticResource Command_Copy}"
 													  />
 
-				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
+				<crd:ButtonSimpleAs Grid.Row="2"
 														  Command="{StaticResource Command_SimpleAs}"
 														  />
 			</Grid>
 
 			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
-				<customresourcesdictionary:ButtonWrapText Command="{StaticResource Command_WrapText}"
+				<crd:ButtonWrapText Command="{StaticResource Command_WrapText}"
 														  IsChecked="{Binding GlobalStateService.IsWrapText}"
 														  />
 
-				<customresourcesdictionary:ButtonMergeCells Grid.Row="1"
+				<crd:ButtonMergeCells Grid.Row="1"
 														  Command="{StaticResource Command_MergeCells}"
 														  IsChecked="{Binding GlobalStateService.IsMergeCell}"
 														  />
 
-				<customresourcesdictionary:SliderZoomControl Grid.Row="2"
+				<crd:SliderZoomControl Grid.Row="2"
 															 ValueSlider="{Binding GlobalStateService.Zoon}"
 															 SmallChangeSlider="{Binding GlobalStateService.SmallChangeSlider}"
 															 LargeChangeSlider="{Binding GlobalStateService.LargeChangeSlider}"
@@ -57,32 +58,32 @@
 		</Grid>
 
 		<Grid ColumnDefinitions="auto 125 30 30 30">
-			<customresourcesdictionary:ComboBoxWithFonts SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
+			<crd:ComboBoxWithFonts SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
 														 Command="{StaticResource Command_SelectedFont}"
 														 CommandPreview="{StaticResource Command_PreViewSelectedFont}"
 														 Width="150"
 														 />
 
-			<customresourcesdictionary:ComboBoxWithFontsSize Grid.Column="1"
+			<crd:ComboBoxWithFontsSize Grid.Column="1"
 															 SelectedItem="{Binding GlobalStateService.CurrentFontSize}"
 															 Command="{StaticResource Command_SelectedFontSize}"
 															 CommandPreview="{StaticResource Command_PreViewSelectedFontSize}"
 															 Margin="0 0 0 0"
 															 />
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="2"
+			<crd:ButtonSetTextPosition Grid.Column="2"
 															 Position="Vertical"
 															 VerticalPosition="Top"
 															 Command="{StaticResource Command_SetTextVerticalAlignment}"
 															 />
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="3"
+			<crd:ButtonSetTextPosition Grid.Column="3"
 															 Position="Vertical"
 															 VerticalPosition="Center"
 															 Command="{StaticResource Command_SetTextVerticalAlignment}"
 															 />
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="4"
+			<crd:ButtonSetTextPosition Grid.Column="4"
 															 Position="Vertical"
 															 VerticalPosition="Bottom"
 															 Command="{StaticResource Command_SetTextVerticalAlignment}"
@@ -94,54 +95,54 @@
 		</Grid>
 
 		<Grid ColumnDefinitions="35 35 35 42 45 45 35 auto auto auto">
-			<customresourcesdictionary:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
+			<crd:ButtonSetFontWeightBold Command="{StaticResource Command_SetFontWeightBold}"
 															   IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
 															   />
 
-			<customresourcesdictionary:ButtonSetFontStyleItalic Grid.Column="1"
+			<crd:ButtonSetFontStyleItalic Grid.Column="1"
 																Command="{StaticResource Command_SetFontStyleItalic}"
 																IsChecked="{Binding GlobalStateService.IsFontStyleItalic}"
 																/>
 
-			<customresourcesdictionary:ButtonSetTextStyleUnderLine Grid.Column="2"
+			<crd:ButtonSetTextStyleUnderLine Grid.Column="2"
 																   Command="{StaticResource Command_SetTextStyleUnderline}"
 																   IsChecked="{Binding GlobalStateService.IsTextStyleUnderline}"
 																   />
 
-			<customresourcesdictionary:ButtonSetGridStyle Grid.Column="3"
+			<crd:ButtonSetGridStyle Grid.Column="3"
 														  Content="{Binding GlobalStateService.CurrentBorderStyle}"
 														  Command="{StaticResource Command_ChangeStyleGrid}"
 														  CommandParameter="{Binding GlobalStateService.BorderStyleType}"
 														  />
 			
 
-			<customresourcesdictionary:ButtonSetBackgroundStyle Grid.Column="4"
+			<crd:ButtonSetBackgroundStyle Grid.Column="4"
 																Command="{StaticResource Command_SetBackgroundStyle}"
 																CommandParameter="{Binding GlobalStateService.CurrentBackground}"
 																CurrentBackgroundColor="{Binding GlobalStateService.CurrentBackground}"
 																/>
 
-			<customresourcesdictionary:ButtonSetForegroundStyle Grid.Column="5"
+			<crd:ButtonSetForegroundStyle Grid.Column="5"
 																Command="{StaticResource Command_SetForegroundStyle}"
 																CommandParameter="{Binding GlobalStateService.CurrentForeground}"
 																CurrentForegroundColor="{Binding GlobalStateService.CurrentForeground}"
 																/>
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="7"
+			<crd:ButtonSetTextPosition Grid.Column="7"
 															 Width="30"
 															 Position="Horizontal"
 															 HorizontalPosition="Left"
 															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
 															 />
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="8"
+			<crd:ButtonSetTextPosition Grid.Column="8"
 															 Width="30"
 															 Position="Horizontal"
 															 HorizontalPosition="Center"
 															 Command="{StaticResource Command_SetTextHorizontalAlignment}"
 															 />
 
-			<customresourcesdictionary:ButtonSetTextPosition Grid.Column="9"
+			<crd:ButtonSetTextPosition Grid.Column="9"
 															 Width="30"
 															 Position="Horizontal"
 															 HorizontalPosition="Right"
@@ -153,96 +154,134 @@
 
 		<Grid ColumnDefinitions="300">
 			<StackPanel Orientation="Horizontal" Spacing="10">
-				<customresourcesdictionary:ButtonSetFontWeightBold IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
+				<crd:ButtonSetFontWeightBold IsChecked="{Binding GlobalStateService.IsFontWeightBold}"
 																   />
-				<customresourcesdictionary:ButtonSetFontStyleItalic IsChecked="{Binding GlobalStateService.IsFontStyleItalic}"
+				<crd:ButtonSetFontStyleItalic IsChecked="{Binding GlobalStateService.IsFontStyleItalic}"
 																	/>
-				<customresourcesdictionary:ButtonSetTextStyleUnderLine IsChecked="{Binding GlobalStateService.IsTextStyleUnderline}"
+				<crd:ButtonSetTextStyleUnderLine IsChecked="{Binding GlobalStateService.IsTextStyleUnderline}"
 																	   />
-				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+				<crd:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Top"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.VerticalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+				<crd:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Center"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.VerticalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonSetTextPosition Position="Vertical"
+				<crd:ButtonSetTextPosition Position="Vertical"
 																 VerticalPosition="Bottom"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.VerticalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+				<crd:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Left"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+				<crd:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Center"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonSetTextPosition Width="30"
+				<crd:ButtonSetTextPosition Width="30"
 																 Position="Horizontal"
 																 HorizontalPosition="Right"
 																 >
-					<customresourcesdictionary:ButtonSetTextPosition.IsChecked>
+					<crd:ButtonSetTextPosition.IsChecked>
 						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
 							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
 							<Binding Path="GlobalStateService.HorizontalTextAlignment" />
 						</MultiBinding>
-					</customresourcesdictionary:ButtonSetTextPosition.IsChecked>
-				</customresourcesdictionary:ButtonSetTextPosition>
+					</crd:ButtonSetTextPosition.IsChecked>
+				</crd:ButtonSetTextPosition>
 
-				<customresourcesdictionary:ButtonWrapText IsChecked="{Binding GlobalStateService.IsWrapText}"
+				<crd:ButtonWrapText IsChecked="{Binding GlobalStateService.IsWrapText}"
 														  />
 
-				<customresourcesdictionary:ButtonMergeCells IsChecked="{Binding GlobalStateService.IsMergeCell}"
+				<crd:ButtonMergeCells IsChecked="{Binding GlobalStateService.IsMergeCell}"
 															/>
 
 				<TextBox Width="150"/>
 			</StackPanel>
 
 		</Grid>
+
+		<crd:HorizontalTabStrip HorizontalAlignment="Left"
+							   SourceItems="{Binding TestItemList}"
+							   SelectedItem="{Binding TestItemSelected}"
+							   Background="LightGray"
+							   Command="{StaticResource Command_ItemsControlPanelCreateItem}"
+							   MaxWidth="700"
+							   MaxWidthSingleItem="100"
+							   >
+			
+			<crd:HorizontalTabStrip.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel Orientation="Horizontal"
+								Spacing="0"/>
+				</ItemsPanelTemplate>
+			</crd:HorizontalTabStrip.ItemsPanel>
+
+			<crd:HorizontalTabStrip.ItemTemplate>
+				<DataTemplate>
+					<ToggleButton Content="{Binding }"
+								  Padding="5 0 5 0"
+								  BorderThickness="1 1 1 0"
+								  BorderBrush="Gray"
+								  CornerRadius="3 3 0 0"
+								  Command="{StaticResource Command_ViewSelectedTable}"
+								  CommandParameter="{Binding }"
+								  helpers:ToggleGroupControl.GroupName="TableList"
+								  />
+				</DataTemplate>
+			</crd:HorizontalTabStrip.ItemTemplate>
+
+		
+		
+		</crd:HorizontalTabStrip>
+
+
+
+		<!--TestItemList-->
 	</StackPanel>
 </Window>

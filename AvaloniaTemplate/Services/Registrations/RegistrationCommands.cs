@@ -35,8 +35,9 @@ namespace AvaloniaTemplate.Services.Registrations
             RegisterCommand<Command_SetTextVerticalAlignment>("Command_SetTextVerticalAlignment");
             RegisterCommand<Command_WrapText>("Command_WrapText");
             RegisterCommand<Command_MergeCells>("Command_MergeCells");
+            RegisterCommand<Command_ItemsControlPanelCreateItem>("Command_ItemsControlPanelCreateItem");
 
-            //RegisterCommand<Command_MergeCells>("Command_MergeCells");
+            //RegisterCommand<Command_ItemsControlPanelCreateItem>("Command_ItemsControlPanelCreateItem");
 
             // 2. Регистрируем все типы команд в DI
             foreach (var kvp in commands)

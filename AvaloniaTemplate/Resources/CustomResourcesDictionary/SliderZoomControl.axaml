@@ -102,7 +102,8 @@
                            PlacementTarget="ZoomVisualValue"
                            Placement="TopEdgeAlignedRight"
                            >
-                        <!--BottomEdgeAlignedLeft-->
+
+                        <!--TopEdgeAlignedRight-->
                         <Border x:Name="PopupBorder"
                                 Background="LightGray"
                                 BorderBrush="Gray"
