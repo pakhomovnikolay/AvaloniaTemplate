@@ -36,10 +36,6 @@
 				<customresourcesdictionary:ButtonSimpleAs Grid.Row="2"
 														  Command="{StaticResource Command_SimpleAs}"
 														  />
-
-				
-
-				
 			</Grid>
 
 			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
@@ -53,7 +49,10 @@
 														  />
 
 				<customresourcesdictionary:SliderZoomControl Grid.Row="2"
-														  />
+															 ValueSlider="{Binding GlobalStateService.Zoon}"
+															 SmallChangeSlider="{Binding GlobalStateService.SmallChangeSlider}"
+															 LargeChangeSlider="{Binding GlobalStateService.LargeChangeSlider}"
+															 />
 			</Grid>
 		</Grid>
 

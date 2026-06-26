@@ -19,7 +19,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Окно раскрыто
     public static readonly StyledProperty<bool> IsPopupOpennedProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, bool>(nameof(IsPopupOpenned));
+        AvaloniaProperty.Register<SliderZoomControl, bool>(nameof(IsPopupOpenned));
 
     /// <summary>
     /// Окно раскрыто
@@ -47,7 +47,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Отображение кнопки увеления масштаба
     public static readonly StyledProperty<bool> IsVisibleButoonIncProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, bool>(
+        AvaloniaProperty.Register<SliderZoomControl, bool>(
             nameof(IsVisibleButoonInc),
             defaultValue: true
             );
@@ -64,7 +64,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Отображение кнопки уменьшения масштаба
     public static readonly StyledProperty<bool> IsVisibleButoonDeincProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, bool>(
+        AvaloniaProperty.Register<SliderZoomControl, bool>(
             nameof(IsVisibleButoonDeinc),
             defaultValue: true
             );
@@ -81,7 +81,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Ширина панели бегунка
     public static readonly StyledProperty<double> WidthSliderPanelProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(WidthSliderPanel),
             defaultValue: 150
             );
@@ -98,7 +98,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Минимальнео значени бегунка
     public static readonly StyledProperty<double> MinimumSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(MinimumSlider),
             defaultValue: 0
             );
@@ -115,7 +115,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Максимальное значени бегунка
     public static readonly StyledProperty<double> MaximumSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(MaximumSlider),
             defaultValue: 3
             );
@@ -132,7 +132,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Минимальное ограниченное значени бегунка
     public static readonly StyledProperty<double> MinStopValueSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(MinStopValueSlider),
             defaultValue: 0.1
             );
@@ -149,7 +149,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Минимальная длина шага
     public static readonly StyledProperty<double> SmallChangeSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(SmallChangeSlider),
             defaultValue: 0.5
             );
@@ -166,7 +166,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Максимальная длина шага
     public static readonly StyledProperty<double> LargeChangeSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(LargeChangeSlider),
             defaultValue: 1.5
             );
@@ -183,9 +183,9 @@ public class SliderZoomControl : TemplatedControl
 
     #region Текущее значение бегунка
     public static readonly StyledProperty<double> ValueSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, double>(
+        AvaloniaProperty.Register<SliderZoomControl, double>(
             nameof(ValueSlider),
-            defaultValue: 1,
+            defaultValue: 0,
             defaultBindingMode: BindingMode.TwoWay
             );
 
@@ -201,7 +201,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Текущее значение бегунка для отображения
     public static readonly StyledProperty<string> VisualValueSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, string>(
+        AvaloniaProperty.Register<SliderZoomControl, string>(
             nameof(VisualValueSlider),
             defaultValue: "100 %",
             defaultBindingMode: BindingMode.TwoWay
@@ -219,7 +219,7 @@ public class SliderZoomControl : TemplatedControl
 
     #region Текущее значение бегунка для редактирования
     public static readonly StyledProperty<int> EditValueSliderProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, int>(
+        AvaloniaProperty.Register<SliderZoomControl, int>(
             nameof(EditValueSlider),
             defaultValue: 1,
             defaultBindingMode: BindingMode.TwoWay
@@ -274,6 +274,12 @@ public class SliderZoomControl : TemplatedControl
                     Children = { new TextBlock() { Text = "Свой масштаб:", Margin = new(5, 5, 0, 0) }, writeValueSlider }
                 }
             }
+        };
+
+        var slider = e.NameScope.Find<Slider>("PART_Slider");
+        slider.PointerWheelChanged += (_, e) =>
+        {
+            ValueSlider += e.Delta.Y * (SmallChangeSlider / 10);
         };
     }
 

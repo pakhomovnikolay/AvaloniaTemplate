@@ -1,7 +1,9 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Input.Raw;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
+using Avalonia.Remote.Protocol.Input;
 using Avalonia.Threading;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Enums.FileDialogOptionTypes;
@@ -319,9 +321,15 @@ namespace AvaloniaTemplate.Services
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.AddHandler(InputElement.KeyDownEvent, InputManager.KeysHandler, RoutingStrategies.Tunnel, true);
+            window.AddHandler(InputElement.PointerWheelChangedEvent, InputManager.PointerWheelHandler, RoutingStrategies.Tunnel, true);
             window.Show();
             return window;
         }
         #endregion
+
+        private void MouseHandler(object? sender, RawMouseWheelEventArgs e)
+        {
+
+        }
     }
 }

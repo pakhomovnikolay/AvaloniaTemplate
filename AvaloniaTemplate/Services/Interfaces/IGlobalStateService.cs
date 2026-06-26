@@ -1,8 +1,10 @@
-﻿using Avalonia.Controls;
+﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary;
 using System.Collections.ObjectModel;
 
 namespace AvaloniaTemplate.Services.Interfaces
@@ -133,6 +135,35 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Текущий режим приложения
         /// </summary>
         AppActiveModeType AppActiveMode { get; set; }
+        #endregion
+
+        #region Текущий масштаб
+        /// <summary>
+        /// Текущий масштаб
+        /// </summary>
+        double Zoon { get; set; }
+        #endregion
+
+        #region Минимальная значение шага изменения мастаба
+        /// <summary>
+        /// Минимальная значение шага изменения мастаба
+        /// </summary>
+        double SmallChangeSlider { get; set; }
+        #endregion
+
+        #region Максимальная значение шага изменения мастаба
+        /// <summary>
+        /// Максимальная значение шага изменения мастаба
+        /// </summary>
+        double LargeChangeSlider { get; set; }
+        #endregion
+
+        #region Запрос на обновление масштаба
+        /// <summary>
+        /// Запрос на обновление масштаба
+        /// </summary>
+        /// <param name="delta"></param>
+        void UpdateZoomRequested(double delta); 
         #endregion
     }
 }

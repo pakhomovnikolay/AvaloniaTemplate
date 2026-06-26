@@ -1,6 +1,7 @@
 ﻿using Avalonia.Input;
 using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Services.Interfaces;
+using System;
 
 namespace AvaloniaTemplate.Services
 {
@@ -26,6 +27,22 @@ namespace AvaloniaTemplate.Services
                     stateService.AppActiveMode = AppActiveModeType.IsEditCell;
                 else if (IsCancel(e))
                     stateService.AppActiveMode = AppActiveModeType.Unknown;
+            }
+        }
+        #endregion
+
+        #region Обработка колеса прокрутки
+        /// <summary>
+        /// Обработка колеса прокрутки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public void PointerWheelHandler(object? sender, PointerWheelEventArgs e)
+        {
+            if (IsZoom(e))
+            {
+                stateService?.UpdateZoomRequested(e.Delta.Y);
+                e.Handled = true;
             }
         }
         #endregion
@@ -107,6 +124,16 @@ namespace AvaloniaTemplate.Services
         /// <returns></returns>
         private bool IsCancel(KeyEventArgs e)
             => e.Key == Key.Escape;
+        #endregion
+
+        #region Проверка на необходимость изменения масштаба
+        /// <summary>
+        /// Проверка на необходимость изменения масштаба
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static bool IsZoom(PointerWheelEventArgs e)
+            => e.KeyModifiers.HasFlag(KeyModifiers.Control); 
         #endregion
     }
 }

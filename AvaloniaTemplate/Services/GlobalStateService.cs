@@ -217,5 +217,53 @@ namespace AvaloniaTemplate.Services
             set => SetProperty(ref appActiveMode, value);
         }
         #endregion
+
+        #region Текущий масштаб
+        private double zoon = 1;
+        /// <summary>
+        /// Текущий масштаб
+        /// </summary>
+        public double Zoon
+        {
+            get => zoon;
+            set => SetProperty(ref zoon, value);
+        }
+        #endregion
+
+        #region Минимальная значение шага изменения мастаба
+        private double smallChangeSlider = 0.5;
+        /// <summary>
+        /// Минимальная значение шага изменения мастаба
+        /// </summary>
+        public  double SmallChangeSlider
+        {
+            get => smallChangeSlider;
+            set => SetProperty(ref smallChangeSlider, value);
+        }
+        #endregion
+
+        #region Максимальная значение шага изменения мастаба
+        private double largeChangeSlider = 1.5;
+        /// <summary>
+        /// Максимальная значение шага изменения мастаба
+        /// </summary>
+        public double LargeChangeSlider
+        {
+            get => largeChangeSlider;
+            set => SetProperty(ref largeChangeSlider, value);
+        }
+        #endregion
+
+        #region Запрос на обновление масштаба
+
+        /// <summary>
+        /// Запрос на обновление масштаба
+        /// </summary>
+        /// <param name="delta"></param>
+        public void UpdateZoomRequested(double delta)
+        {
+            Zoon += delta * (SmallChangeSlider / 10);
+        }
+        #endregion
     }
 }
