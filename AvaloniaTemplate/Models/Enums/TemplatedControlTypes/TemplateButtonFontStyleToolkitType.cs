@@ -3,6 +3,11 @@
     public enum TemplateButtonFontStyleToolkitType
     {
         /// <summary>
+        /// Отсутствует
+        /// </summary>
+        None,
+
+        /// <summary>
         /// Список системных шрифтов
         /// </summary>
         FontList,

@@ -128,6 +128,8 @@ public class ButtonClipboard : BaseTemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
+        if (ClipboardType == TemplatrButtonClipboardType.None)
+            return;
 
         ImagePath ??= InitializeImage();
         Header ??= InitializeHeader();

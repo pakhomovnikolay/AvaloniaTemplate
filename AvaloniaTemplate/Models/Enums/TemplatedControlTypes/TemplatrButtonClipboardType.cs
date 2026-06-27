@@ -3,6 +3,11 @@
     public enum TemplatrButtonClipboardType
     {
         /// <summary>
+        /// Отсутствует
+        /// </summary>
+        None,
+
+        /// <summary>
         /// Копировать
         /// </summary>
         Copy,

@@ -36,6 +36,8 @@
                         </DataTemplate>
                     </ComboBox.SelectionBoxItemTemplate>
                 </ComboBox>
+
+
             </ControlTemplate>
         </Setter>
     </ControlTheme>

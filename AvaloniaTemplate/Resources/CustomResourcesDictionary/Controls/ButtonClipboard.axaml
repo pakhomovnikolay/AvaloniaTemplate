@@ -1,5 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:ClassModifier="internal"
         xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
         >
 
@@ -36,6 +37,8 @@
                         VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                         BorderThickness="{TemplateBinding BorderThickness}"
                         Background="{TemplateBinding Background}"
+                        Command="{TemplateBinding Command}"
+                        CommandParameter="{TemplateBinding CommandParameter}"
                         Classes="highlightedBackground"
                         >
                      <StackPanel Orientation="{TemplateBinding OrientationType}"
@@ -43,7 +46,8 @@
                                 >
                             <Image Source="{TemplateBinding ImagePath}"
                                    MaxHeight="150"
-                                   MaxWidth="50"/>
+                                   MaxWidth="50"
+                                   />
                             <TextBlock Grid.Column="1"
                                        Text="{TemplateBinding Header}"
                                        VerticalAlignment="Center"

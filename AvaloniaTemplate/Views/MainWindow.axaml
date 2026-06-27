@@ -24,6 +24,7 @@
 	<StackPanel Margin="5" Spacing="5">
 
 		<Grid ColumnDefinitions="auto auto auto auto"
+			  ColumnSpacing="5"
 			  >
 			<controls:ButtonClipboard Grid.Column="0"
 									  ClipboardType="Paste"
@@ -43,9 +44,43 @@
 										  />
 			</Grid>
 
-			<Grid Grid.Column="1"
-				  RowDefinitions="auto auto">
-				
+			<Grid Grid.Column="2"
+				  ColumnDefinitions="auto auto"
+				  RowDefinitions="auto auto"
+				  ColumnSpacing="2"
+				  RowSpacing="3"
+				  >
+				<controls:ButtonFontStyleToolkit Grid.Column="0"
+												 ToolkitType="FontList"
+												 />
+				<controls:ButtonFontStyleToolkit Grid.Column="1"
+												 ToolkitType="FontSizeList"
+												 />
+
+				<StackPanel Grid.Column="0"
+							Grid.ColumnSpan="2"
+							Grid.Row="2"
+							Orientation="Horizontal"
+							Spacing="2"
+							>
+
+					<controls:ButtonFontStyleToolkit ToolkitType="FontWeightBold"
+													 Width="30"
+													 Height="30"
+													 />
+
+					<controls:ButtonFontStyleToolkit ToolkitType="FontStyleItalic"
+													 Width="30"
+													 Height="30"
+													 FontSize="14"
+													 />
+
+					<controls:ButtonFontStyleToolkit ToolkitType="TextStyleUnderLine"
+													 Width="30"
+													 Height="30"
+													 />
+					
+				</StackPanel>
 			</Grid>
 
 			

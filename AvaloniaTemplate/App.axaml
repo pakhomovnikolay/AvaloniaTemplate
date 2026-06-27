@@ -54,8 +54,11 @@
 				
 
 
-
+				
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonClipboard.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonFontStyleToolkit.axaml"/>
+
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonFontStyleToolkit.axaml"/>-->
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
