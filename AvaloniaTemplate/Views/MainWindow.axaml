@@ -1,4 +1,6 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
+        xmlns:base="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Base"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,25 +23,70 @@
 
 	<StackPanel Margin="5" Spacing="5">
 
-		<Grid ColumnDefinitions="auto auto auto">
-			<crd:ButtonPaste Command="{StaticResource Command_Paste}"
-												   CommandParameter="{Binding GlobalStateService.ClipboardIsNotEmpty}"
-												   />
-
-			<Grid Grid.Column="1" RowDefinitions="auto auto auto">
-				<crd:ButtonCut Command="{StaticResource Command_Cut}"
-													 />
-
-				<crd:ButtonCopy Grid.Row="1"
-													  Command="{StaticResource Command_Copy}"
-													  />
-
-				<crd:ButtonSimpleAs Grid.Row="2"
-														  Command="{StaticResource Command_SimpleAs}"
-														  />
+		<Grid ColumnDefinitions="auto auto auto auto"
+			  >
+			<controls:ButtonClipboard Grid.Column="0"
+									  ClipboardType="Paste"
+									  Height="75"
+									  />
+			<Grid Grid.Column="1"
+				  RowDefinitions="auto auto auto"
+				  >
+				<controls:ButtonClipboard Grid.Row="0"
+										  ClipboardType="Copy"
+										  />
+				<controls:ButtonClipboard Grid.Row="1"
+										  ClipboardType="Cut"
+										  />
+				<controls:ButtonClipboard Grid.Row="2"
+										  ClipboardType="AsSimple"
+										  />
 			</Grid>
 
-			<Grid Grid.Column="2" RowDefinitions="auto auto auto">
+			<Grid Grid.Column="1"
+				  RowDefinitions="auto auto">
+				
+			</Grid>
+
+			
+
+			<!--<crd:ButtonPaste Command="{StaticResource Command_Paste}"
+												   CommandParameter="{Binding GlobalStateService.ClipboardIsNotEmpty}"
+												   />-->
+
+			<!--<Grid Grid.Column="1"
+				  RowDefinitions="auto auto auto"
+				  ColumnDefinitions="* auto"
+				  >
+
+
+				<controls:ButtonClipboard Grid.Column="0"
+										  Grid.RowSpan="3"
+										  ClipboardType="Paste"
+										  Height="80"
+										  BorderThickness="1"
+										  BorderBrush="Gray"
+										  HorizontalContentAlignment="Center"
+										  />
+
+				<crd:ButtonCut Grid.Column="1"
+							   Command="{StaticResource Command_Cut}"
+							   BorderThickness="1"
+							   BorderBrush="Gray"
+													 />
+
+				<crd:ButtonCopy Grid.Column="1"
+								Grid.Row="1"
+								Command="{StaticResource Command_Copy}"
+								/>
+
+				<crd:ButtonSimpleAs Grid.Column="1"
+									Grid.Row="2"
+									Command="{StaticResource Command_SimpleAs}"
+									/>
+			</Grid>-->
+
+			<!--<Grid Grid.Column="2" RowDefinitions="auto auto auto">
 				<crd:ButtonWrapText Command="{StaticResource Command_WrapText}"
 														  IsChecked="{Binding GlobalStateService.IsWrapText}"
 														  />
@@ -54,10 +101,10 @@
 															 SmallChangeSlider="{Binding GlobalStateService.SmallChangeSlider}"
 															 LargeChangeSlider="{Binding GlobalStateService.LargeChangeSlider}"
 															 />
-			</Grid>
+			</Grid>-->
 		</Grid>
 
-		<Grid ColumnDefinitions="auto 125 30 30 30">
+		<!--<Grid ColumnDefinitions="auto 125 30 30 30">
 			<crd:ComboBoxWithFonts SelectedItem="{Binding GlobalStateService.CurrentFontFamily}"
 														 Command="{StaticResource Command_SelectedFont}"
 														 CommandPreview="{StaticResource Command_PreViewSelectedFont}"
@@ -261,7 +308,7 @@
 				</ItemsPanelTemplate>
 			</crd:HorizontalTabStrip.ItemsPanel>
 
-			<!--<crd:HorizontalTabStrip.ItemTemplate>
+			--><!--<crd:HorizontalTabStrip.ItemTemplate>
 				<DataTemplate>
 					<Border Padding="5 0 5 0"
 							Background="Transparent"
@@ -274,14 +321,16 @@
 					
 					</Border>
 				</DataTemplate>
-			</crd:HorizontalTabStrip.ItemTemplate>-->
+			</crd:HorizontalTabStrip.ItemTemplate>--><!--
 
 		
 		
 		</crd:HorizontalTabStrip>
 
+		
+		--><!--ButtonClipboard--><!--
 
 
-		<!--TestItemList-->
+		--><!--TestItemList-->
 	</StackPanel>
 </Window>

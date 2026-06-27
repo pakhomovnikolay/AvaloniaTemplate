@@ -133,7 +133,7 @@ public class ButtonSetTextPosition : TemplatedControl
             HorizontalPosition = HorizontalPosition,
             Position = Position
         };
-        control.InvalidateVisual();
+        //control.InvalidateVisual();
         button.Content = control;
 
         if (Position == Orientation.Vertical)

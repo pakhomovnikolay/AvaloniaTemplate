@@ -1,0 +1,59 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
+        >
+
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <StackPanel>
+                <controls:ButtonClipboard ClipboardType="Paste"
+                                          HorizontalContentAlignment="Center"
+                                          Height="75"
+                                          />
+                <controls:ButtonClipboard ClipboardType="Copy"/>
+                <controls:ButtonClipboard ClipboardType="Cut"/>
+                <controls:ButtonClipboard ClipboardType="AsSimple"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+
+  <ControlTheme x:Key="{x:Type controls:ButtonClipboard}"
+                TargetType="controls:ButtonClipboard"
+                >
+      <Setter Property="FontFamily" Value="Verdana"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="Background" Value="Transparent"/>
+      <Setter Property="Height" Value="25"/>
+      <Setter Property="Padding" Value="5 2 5 2"/>
+      <Setter Property="HorizontalContentAlignment" Value="Left"/>
+      <Setter Property="VerticalContentAlignment" Value="Center"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Template">
+          <ControlTemplate>
+              <Button x:Name="PART_Button"
+                        Padding="{TemplateBinding Padding}"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Background="{TemplateBinding Background}"
+                        Classes="highlightedBackground"
+                        >
+                     <StackPanel Orientation="{TemplateBinding OrientationType}"
+                                Spacing="5"
+                                >
+                            <Image Source="{TemplateBinding ImagePath}"
+                                   MaxHeight="150"
+                                   MaxWidth="50"/>
+                            <TextBlock Grid.Column="1"
+                                       Text="{TemplateBinding Header}"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{TemplateBinding FontFamily}"
+                                       FontSize="{TemplateBinding FontSize}"
+                                       />
+
+                        </StackPanel>
+                </Button>
+          </ControlTemplate>
+      </Setter>
+  </ControlTheme>
+</ResourceDictionary>

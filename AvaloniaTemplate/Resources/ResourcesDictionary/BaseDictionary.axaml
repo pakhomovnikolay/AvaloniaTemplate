@@ -46,6 +46,12 @@
 	<Image x:Key="MessageBoxImageInformation" Source="/Assets/Information.png"/>
 	<Image x:Key="MessageBoxImageResult"/>
 
+    <Image x:Key="ClipboardCopy" Source="/Assets/Copy.png"/>
+    <Image x:Key="ClipboardCut" Source="/Assets/Cut1.png"/>
+    <Image x:Key="ClipboardPaste" Source="/Assets/Paste.png"/>
+    <Image x:Key="ClipboardAsSimple" Source="/Assets/AsSimple.png"/>
+
+
     <FontFamily x:Key="FontFamilyDefault">Verdana</FontFamily>
 	<FontWeight x:Key="FontWeightDefault">Normal</FontWeight>
 	<sys:Double x:Key="FontSizeDefault">11</sys:Double>
