@@ -44,11 +44,11 @@ namespace AvaloniaTemplate.Models.LayoutControls
 
             var widthBottomTop = Width;
             var widthLeftRightNormal = 0.5;
-            var widthLeftRightThick = 1.3;
+            var widthLeftRightThick = 1;
 
             var heightLeftRight = Height;
             var heightBottomTopNormal = 0.5;
-            var heightBottomTopThick = 1.3;
+            var heightBottomTopThick = 1;
 
             var fillNormal = Brushes.Transparent;
             var fillThick = Brushes.Black;
@@ -58,76 +58,76 @@ namespace AvaloniaTemplate.Models.LayoutControls
 
             if (Bottom == BorderStyleType.None)
             {
-                var rect = new Rect(0, Height, Width, heightBottomTopNormal);
+                var rect = new Rect(0, Height, widthBottomTop, heightBottomTopNormal);
                 context.DrawRectangle(fillNormal, penNone, rect);
             }
             else
             {
                 if (Bottom == BorderStyleType.Normal)
                 {
-                    var rect = new Rect(0, Height, Width, heightBottomTopNormal);
+                    var rect = new Rect(0, Height, widthBottomTop, heightBottomTopNormal);
                     context.DrawRectangle(fillNormal, pen, rect);
                 }
                 else if (Bottom == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(0, Height, Width, heightBottomTopThick);
+                    var rect = new Rect(0, Height, widthBottomTop, heightBottomTopThick);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }
 
             if (Top == BorderStyleType.None)
             {
-                var rect = new Rect(0, 0, Width, heightBottomTopNormal);
+                var rect = new Rect(0, 0, widthBottomTop, heightBottomTopNormal);
                 context.DrawRectangle(fillNormal, penNone, rect);
             }
             else
             {
                 if (Top == BorderStyleType.Normal)
                 {
-                    var rect = new Rect(0, 0, Width, heightBottomTopNormal);
+                    var rect = new Rect(0, 0, widthBottomTop, heightBottomTopNormal);
                     context.DrawRectangle(fillNormal, pen, rect);
                 }
                 else if (Top == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(0, 0, Width, heightBottomTopThick);
+                    var rect = new Rect(0, 0, widthBottomTop, heightBottomTopThick);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }
 
             if (Left == BorderStyleType.None)
             {
-                var rect = new Rect(0, 0, widthLeftRightNormal, Height);
+                var rect = new Rect(0, 0, widthLeftRightNormal, heightLeftRight);
                 context.DrawRectangle(fillNormal, penNone, rect);
             }
             else
             {
                 if (Left == BorderStyleType.Normal)
                 {
-                    var rect = new Rect(0, 0, widthLeftRightNormal, Height);
+                    var rect = new Rect(0, 0, widthLeftRightNormal, heightLeftRight);
                     context.DrawRectangle(fillNormal, pen, rect);
                 }
                 else if (Left == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(0, 0, widthLeftRightThick, Height);
+                    var rect = new Rect(0, 0, widthLeftRightThick, heightLeftRight);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }
 
             if (Right == BorderStyleType.None)
             {
-                var rect = new Rect(Width, 0, widthLeftRightNormal, Height);
+                var rect = new Rect(Width, 0, widthLeftRightNormal, heightLeftRight);
                 context.DrawRectangle(fillNormal, penNone, rect);
             }
             else
             {
                 if (Right == BorderStyleType.Normal)
                 {
-                    var rect = new Rect(Width, 0, widthLeftRightNormal, Height);
+                    var rect = new Rect(Width, 0, widthLeftRightNormal, heightLeftRight);
                     context.DrawRectangle(fillNormal, pen, rect);
                 }
                 else if (Right == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(Width, 0, widthLeftRightThick, Height + 1);
+                    var rect = new Rect(Width, 0, widthLeftRightThick, heightLeftRight + 1);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }
@@ -153,19 +153,19 @@ namespace AvaloniaTemplate.Models.LayoutControls
 
             if (InsideVertical == BorderStyleType.None)
             {
-                var rect = new Rect(Width / 2, 0, widthLeftRightNormal, Height);
+                var rect = new Rect(Width / 2, 0, widthLeftRightNormal, heightLeftRight);
                 context.DrawRectangle(fillNormal, penNone, rect);
             }
             else
             {
                 if (InsideVertical == BorderStyleType.Normal)
                 {
-                    var rect = new Rect(Width / 2, 0, widthLeftRightNormal, Height);
+                    var rect = new Rect(Width / 2, 0, widthLeftRightNormal, heightLeftRight);
                     context.DrawRectangle(fillNormal, pen, rect);
                 }
                 else if (InsideVertical == BorderStyleType.Thick)
                 {
-                    var rect = new Rect(Width / 2, 0, widthLeftRightThick, Height);
+                    var rect = new Rect(Width / 2, 0, widthLeftRightThick, heightLeftRight);
                     context.DrawRectangle(fillThick, pen, rect);
                 }
             }

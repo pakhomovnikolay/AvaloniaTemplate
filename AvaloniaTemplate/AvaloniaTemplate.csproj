@@ -38,6 +38,9 @@
     <Compile Update="Resources\CustomResourcesDictionary\Controls\FontStyleToolkit.axaml.cs">
       <DependentUpon>FontStyleToolkit.axaml</DependentUpon>
     </Compile>
+    <Compile Update="Resources\CustomResourcesDictionary\Controls\GridStylePicker.axaml.cs">
+      <DependentUpon>GridStylePicker.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Resources\CustomResourcesDictionary\HorizontalTabStrip.axaml.cs">
       <DependentUpon>HorizontalTabStrip.axaml</DependentUpon>
     </Compile>

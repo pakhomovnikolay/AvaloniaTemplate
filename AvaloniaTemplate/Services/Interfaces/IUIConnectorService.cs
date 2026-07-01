@@ -63,6 +63,13 @@ namespace AvaloniaTemplate.Services.Interfaces
         ICommand Command_ChangeTextUnderline { get; set; }
         #endregion
 
+        #region Команда - установить выбраннй стиль границ
+        /// <summary>
+        /// Команда - установить выбраннй стиль границ
+        /// </summary>
+        ICommand Command_SetSelectedStyleBorder { get; set; }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         /// <summary>
         /// Установлен полужирный стиль шрифта
@@ -81,9 +88,15 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Установлен подчеркнутый стиль текста
         /// </summary>
-        bool IsTextUnderline { get; set; } 
+        bool IsTextUnderline { get; set; }
         #endregion
 
+        #region Текущий тип стиля сетки
+        /// <summary>
+        /// Текущий тип стиля сетки
+        /// </summary>
+        CurrentBorderStyleType BorderStyleType { get; set; }
+        #endregion
 
 
         //InitializeFontStyle("Ж", FontWeight.Bold) },

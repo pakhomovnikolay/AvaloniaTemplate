@@ -1,4 +1,5 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System.Diagnostics;
@@ -127,6 +128,27 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Команда - установить выбраннй стиль границ
+        private ICommand command_SetSelectedStyleBorder;
+        /// <summary>
+        /// Команда - установить выбраннй стиль границ
+        /// </summary>
+        public ICommand Command_SetSelectedStyleBorder
+        {
+            get => command_SetSelectedStyleBorder ??= new RelayCommand(ExecuteCommand_SetSelectedStyleBorder);
+            set => SetProperty(ref command_SetSelectedStyleBorder, value);
+        }
+
+        private void ExecuteCommand_SetSelectedStyleBorder(object p)
+        {
+            if (p is null || p is not CurrentBorderStyleType styleType)
+                return;
+
+            BorderStyleType = styleType;
+            Debug.WriteLine($"{styleType}");
+        }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         private bool isFontWeightBold;
         /// <summary>
@@ -163,7 +185,17 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-
+        #region Текущий тип стиля сетки
+        private CurrentBorderStyleType borderStyleType = CurrentBorderStyleType.Bottom;
+        /// <summary>
+        /// Текущий тип стиля сетки
+        /// </summary>
+        public CurrentBorderStyleType BorderStyleType
+        {
+            get => borderStyleType;
+            set => SetProperty(ref borderStyleType, value);
+        }
+        #endregion
 
 
 

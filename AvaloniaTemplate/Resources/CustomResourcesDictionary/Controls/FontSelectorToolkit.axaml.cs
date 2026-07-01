@@ -18,6 +18,8 @@ public class FontSelectorToolkit : BaseTemplatedControl
 {
     private Panel? rootPanel;
     private ComboBox? comboBox;
+    private Button? buttonFontSizeUp;
+    private Button? buttonFontSizeDown;
 
     public FontSelectorToolkit()
     {
@@ -145,7 +147,13 @@ public class FontSelectorToolkit : BaseTemplatedControl
             return;
 
         builder.Invoke();
-        comboBox.SelectionChanged += (_, _) => SelectedItemChanged?.Invoke(SelectedItem);
+        comboBox.SelectionChanged -= ComboBox_SelectionChanged;
+        comboBox.SelectionChanged += ComboBox_SelectionChanged;
+    }
+
+    private void ComboBox_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        SelectedItemChanged?.Invoke(SelectedItem);
     }
 
     private void InitializeFontList()
@@ -170,11 +178,11 @@ public class FontSelectorToolkit : BaseTemplatedControl
         });
 
         var margin = new Thickness(0, 0, 30, 0);
-        var buttonFontSizeUp = CreateButtonSetFontSizeUp(margin);
+        buttonFontSizeUp ??= CreateButtonSetFontSizeUp(margin);
         if (!rootPanel.Children.Contains(buttonFontSizeUp))
             rootPanel.Children.Add(buttonFontSizeUp);
 
-        var buttonFontSizeDown = CreateButtonSetFontSizeDown(margin);
+        buttonFontSizeDown ??= CreateButtonSetFontSizeDown(margin);
         if (!rootPanel.Children.Contains(buttonFontSizeDown))
             rootPanel.Children.Add(buttonFontSizeDown);
 

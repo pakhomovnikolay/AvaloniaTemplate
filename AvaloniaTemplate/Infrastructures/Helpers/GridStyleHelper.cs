@@ -59,12 +59,12 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         public static void CreateGridStyle(ICommand command, StackPanel stackPanel, Popup frame)
         {
             foreach (var style in SingleBorderStyleTypes)
-                stackPanel.Children.Add(CreateButtonGrid(style, command, frame));
+                stackPanel.Children.Add(CreateButtonGrid(style.Key, style.Value, frame, command));
 
             stackPanel.Children.Add(new Separator());
 
             foreach (var style in BorderStyleTypes)
-                stackPanel.Children.Add(CreateButtonGrid(style, command, frame));
+                stackPanel.Children.Add(CreateButtonGrid(style.Key, style.Value, frame, command));
         }
         #endregion
 
@@ -120,9 +120,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         } 
         #endregion
 
-        private static Button CreateButtonGrid(KeyValuePair<CurrentBorderStyleType, string> style, ICommand command, Popup frame)
+        private static Button CreateButtonGrid(CurrentBorderStyleType borderStyleType, string borderStyleDesc, Popup frame, ICommand? command = null)
         {
-            var label = Helper.CreateLabel(style.Value);
+            var label = Helper.CreateLabel(borderStyleDesc);
             label.Margin = new(10, 0, 0, 0);
 
             var grid = new Grid()
@@ -132,7 +132,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                     new ColumnDefinition(25, GridUnitType.Star)
                     ]
             };
-            var border = CreateGridStyle(style.Key);
+            var border = CreateGridStyle(borderStyleType);
 
             Grid.SetColumn(label, 1);
             Grid.SetColumn(border, 0);
@@ -146,9 +146,10 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 BorderThickness = new(0),
                 CornerRadius = new(0),
                 HorizontalContentAlignment = HorizontalAlignment.Left,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
                 Background = Brushes.Transparent,
                 Command = command,
-                CommandParameter = style.Key
+                CommandParameter = borderStyleType
             };
             button.Classes.Add("highlightedBackground");
             button.Click += (_, _)

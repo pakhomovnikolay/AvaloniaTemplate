@@ -1,5 +1,4 @@
 ﻿<Window xmlns="https://github.com/avaloniaui"
-        xmlns:base="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Base"
         xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -57,7 +56,7 @@
 									  />
 		</Grid>
 		
-		<Grid RowDefinitions="25 auto"
+		<Grid RowDefinitions="25 25"
 			  RowSpacing="3"
 			  >
 			<Grid Grid.Row="0"
@@ -78,7 +77,7 @@
 			</Grid>
 
 			<Grid Grid.Row="1"
-				  ColumnDefinitions="30 30 30"
+				  ColumnDefinitions="30 30 30 40"
 				  ColumnSpacing="2"
 				  >
 				<controls:FontStyleToolkit Grid.Column="0"
@@ -102,6 +101,13 @@
 										   IsChecked="{Binding ConnectorService.IsTextUnderline}"
 										   Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
 										   />
+
+				<controls:GridStylePicker Grid.Column="3"
+										  BorderStyleType="{Binding ConnectorService.BorderStyleType}"
+										  Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
+										  CommandParameter="{Binding ConnectorService.BorderStyleType}"
+										  />
+				
 			</Grid>
 		</Grid>
 	</StackPanel>
