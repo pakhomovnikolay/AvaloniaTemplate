@@ -1,0 +1,57 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    x:ClassModifier="internal"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
+                    >
+    <Design.PreviewWith>
+        <Border Padding="5"
+                >
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <controls:FontStyleToolkit Width="25" Height="25" ToolkitType="FontWeightBold"/>
+                <controls:FontStyleToolkit Width="25" Height="25" ToolkitType="FontStyleItalic"/>
+                <controls:FontStyleToolkit Width="25" Height="25" ToolkitType="TextStyleUnderLine"/>
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:FontStyleToolkit}"
+                  TargetType="controls:FontStyleToolkit"
+                  >
+        <Setter Property="ToolkitType" Value="None"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="Black"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="MinHeight" Value="0"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <ToggleButton Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                              CornerRadius="{TemplateBinding CornerRadius}"
+                              BorderThickness="{TemplateBinding BorderThickness}"
+                              BorderBrush="{TemplateBinding BorderBrush}"
+                              Background="{TemplateBinding Background}"
+                              Foreground="{TemplateBinding Foreground}"
+                              Margin="{TemplateBinding Margin}"
+                              Padding="{TemplateBinding Padding}"
+                              MinWidth="{TemplateBinding MinWidth}"
+                              MinHeight="{TemplateBinding MinHeight}"
+                              Height="{TemplateBinding Height}"
+                              Width="{TemplateBinding Width}"
+                              IsChecked="{TemplateBinding IsChecked}"
+                              Command="{TemplateBinding Command}"
+                              CommandParameter="{TemplateBinding CommandParameter}"
+                              />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

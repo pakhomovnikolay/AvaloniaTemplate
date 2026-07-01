@@ -17,14 +17,14 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
             if (p is null || p is not IBrush color)
                 return;
 
-            var stateService = App.GetService<IGlobalStateService>();
-            stateService.CurrentBackground = color;
-            if (!stateService.BackgroundColors.Contains(Color.Parse(color.ToString())))
-            {
-                stateService.BackgroundColors.Insert(0, Color.Parse(color.ToString()));
-                if (stateService.BackgroundColors.Count > 10)
-                    stateService.BackgroundColors.RemoveAt(stateService.BackgroundColors.Count - 1);
-            }
+            //var stateService = App.GetService<IUIConnectorService>();
+            //stateService.CurrentBackground = color;
+            //if (!stateService.BackgroundColors.Contains(Color.Parse(color.ToString())))
+            //{
+            //    stateService.BackgroundColors.Insert(0, Color.Parse(color.ToString()));
+            //    if (stateService.BackgroundColors.Count > 10)
+            //        stateService.BackgroundColors.RemoveAt(stateService.BackgroundColors.Count - 1);
+            //}
                 
 
 

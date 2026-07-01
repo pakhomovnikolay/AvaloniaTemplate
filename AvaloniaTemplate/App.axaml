@@ -56,9 +56,10 @@
 
 				
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonClipboard.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonFontStyleToolkit.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/FontStyleToolkit.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/FontSelectorToolkit.axaml"/>
 
-				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonFontStyleToolkit.axaml"/>-->
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/FontSelectorToolkit.axaml"/>-->
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

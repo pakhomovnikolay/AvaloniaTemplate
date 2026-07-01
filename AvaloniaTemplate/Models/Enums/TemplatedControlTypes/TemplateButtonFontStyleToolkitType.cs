@@ -8,16 +8,6 @@
         None,
 
         /// <summary>
-        /// Список системных шрифтов
-        /// </summary>
-        FontList,
-
-        /// <summary>
-        /// Список размеров шрифтов
-        /// </summary>
-        FontSizeList,
-
-        /// <summary>
         /// Стиль шрифта - полужирный
         /// </summary>
         FontWeightBold,

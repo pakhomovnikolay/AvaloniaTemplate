@@ -108,9 +108,9 @@ public class ButtonSetForegroundStyle : TemplatedControl
 
     private static void CreateColorsRecent(ICommand command, Popup popupFrame, StackPanel LayoutColorsRecent)
     {
-        var stateService = App.GetService<IGlobalStateService>();
-        LayoutColorsRecent.Children.Clear();
-        foreach (var color in stateService.ForegroundColors)
-            LayoutColorsRecent.Children.Add(ColorHelper.CreateButtonColor(command, popupFrame, color));
+        //var stateService = App.GetService<IUIConnectorService>();
+        //LayoutColorsRecent.Children.Clear();
+        //foreach (var color in stateService.ForegroundColors)
+        //    LayoutColorsRecent.Children.Add(ColorHelper.CreateButtonColor(command, popupFrame, color));
     }
 }

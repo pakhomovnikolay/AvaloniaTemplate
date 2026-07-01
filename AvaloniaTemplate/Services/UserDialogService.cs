@@ -326,10 +326,5 @@ namespace AvaloniaTemplate.Services
             return window;
         }
         #endregion
-
-        private void MouseHandler(object? sender, RawMouseWheelEventArgs e)
-        {
-
-        }
     }
 }

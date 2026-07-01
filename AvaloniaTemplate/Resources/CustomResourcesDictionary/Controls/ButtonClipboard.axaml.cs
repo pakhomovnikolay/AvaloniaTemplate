@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
@@ -7,12 +6,31 @@ using Avalonia.Platform;
 using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
 
 public class ButtonClipboard : BaseTemplatedControl
 {
+    static ButtonClipboard()
+    {
+        ClipboardTypeProperty.Changed.AddClassHandler<ButtonClipboard>((x, _) => x.OnClipboardTypeChanged());
+    }
+
+    #region Словарь типов взаимодействия с буфером обмена
+    /// <summary>
+    /// Словарь типов взаимодействия с буфером обмена
+    /// </summary>
+    private static readonly Dictionary<TemplatrButtonClipboardType, (Uri imagePath, string header, Orientation orientationType)> dictionaryClipboardType = new()
+    {
+        { TemplatrButtonClipboardType.Paste, (new Uri("avares://AvaloniaTemplate/Assets/Paste.png"), "Вставить", Orientation.Vertical) },
+        { TemplatrButtonClipboardType.Copy, (new Uri("avares://AvaloniaTemplate/Assets/Copy.png"), "Копировать", Orientation.Horizontal) },
+        { TemplatrButtonClipboardType.Cut, (new Uri("avares://AvaloniaTemplate/Assets/Cut1.png"), "Вырезать", Orientation.Horizontal) },
+        { TemplatrButtonClipboardType.AsSimple, (new Uri("avares://AvaloniaTemplate/Assets/AsSimple.png"), "Формат по образцу", Orientation.Horizontal) }
+    };
+    #endregion
+
     #region Тип взаимодействия с буфером обмена
     public static readonly StyledProperty<TemplatrButtonClipboardType> ClipboardTypeProperty =
         AvaloniaProperty.Register<ButtonClipboard, TemplatrButtonClipboardType>(nameof(ClipboardType));
@@ -27,51 +45,9 @@ public class ButtonClipboard : BaseTemplatedControl
     }
     #endregion
 
-    #region Путь к изображению
-    internal static readonly StyledProperty<Bitmap> ImagePathProperty =
-        AvaloniaProperty.Register<ButtonClipboard, Bitmap>(nameof(ImagePath));
-
-    /// <summary>
-    /// Путь к изображению
-    /// </summary>
-    internal Bitmap ImagePath
-    {
-        get => GetValue(ImagePathProperty);
-        set => SetValue(ImagePathProperty, value);
-    }
-    #endregion
-
-    #region Путь к изображению
-    internal static readonly StyledProperty<Orientation?> OrientationTypeProperty =
-        AvaloniaProperty.Register<ButtonClipboard, Orientation?>(nameof(OrientationType));
-
-    /// <summary>
-    /// Путь к изображению
-    /// </summary>
-    internal Orientation? OrientationType
-    {
-        get => GetValue(OrientationTypeProperty);
-        set => SetValue(OrientationTypeProperty, value);
-    }
-    #endregion
-
-    #region Заголовок кнопки
-    internal static readonly StyledProperty<string> HeaderProperty =
-        AvaloniaProperty.Register<ButtonClipboard, string>(nameof(Header));
-
-    /// <summary>
-    /// Заголовок кнопки
-    /// </summary>
-    internal string Header
-    {
-        get => GetValue(HeaderProperty);
-        set => SetValue(HeaderProperty, value);
-    }
-    #endregion
-
     #region Положение контента по горинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonClipboard, HorizontalAlignment>(nameof(HorizontalContentAlignment));
 
     /// <summary>
     /// Положение контента по горинтали
@@ -85,7 +61,7 @@ public class ButtonClipboard : BaseTemplatedControl
 
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonClipboard, VerticalAlignment>(nameof(VerticalContentAlignment));
 
     /// <summary>
     /// Положение контента по вертикали
@@ -97,9 +73,93 @@ public class ButtonClipboard : BaseTemplatedControl
     }
     #endregion
 
+    #region Расположение объектов
+    public static readonly StyledProperty<Orientation?> OrientationTypeProperty =
+        AvaloniaProperty.Register<ButtonClipboard, Orientation?>(nameof(OrientationType));
+
+    /// <summary>
+    /// Расположение объектов
+    /// </summary>
+    public Orientation? OrientationType
+    {
+        get => GetValue(OrientationTypeProperty);
+        set => SetValue(OrientationTypeProperty, value);
+    }
+    #endregion
+
+    #region Расстояние между элементами
+    public static readonly StyledProperty<double> SpacingProperty =
+        AvaloniaProperty.Register<ButtonClipboard, double>(nameof(Spacing));
+
+    /// <summary>
+    /// Расстояние между элементами
+    /// </summary>
+    public double Spacing
+    {
+        get => GetValue(SpacingProperty);
+        set => SetValue(SpacingProperty, value);
+    }
+    #endregion
+
+    #region Источник изображения
+    public static readonly StyledProperty<Bitmap?> ImageSourceProperty =
+        AvaloniaProperty.Register<ButtonClipboard, Bitmap?>(nameof(ImageSource));
+
+    /// <summary>
+    /// Источник изображения
+    /// </summary>
+    public Bitmap? ImageSource
+    {
+        get => GetValue(ImageSourceProperty);
+        set => SetValue(ImageSourceProperty, value);
+    }
+    #endregion
+
+    #region Заголовок кнопки
+    public static readonly StyledProperty<string?> HeaderProperty =
+        AvaloniaProperty.Register<ButtonClipboard, string?>(nameof(Header));
+
+    /// <summary>
+    /// Заголовок кнопки
+    /// </summary>
+    public string? Header
+    {
+        get => GetValue(HeaderProperty);
+        set => SetValue(HeaderProperty, value);
+    }
+    #endregion
+
+    #region Расстояние между элементами
+    public static readonly StyledProperty<double> ImageHeightProperty =
+        AvaloniaProperty.Register<ButtonClipboard, double>(nameof(ImageHeight));
+
+    /// <summary>
+    /// Расстояние между элементами
+    /// </summary>
+    public double ImageHeight
+    {
+        get => GetValue(ImageHeightProperty);
+        set => SetValue(ImageHeightProperty, value);
+    }
+    #endregion
+
+    #region Расстояние между элементами
+    public static readonly StyledProperty<double> ImageWidthProperty =
+        AvaloniaProperty.Register<ButtonClipboard, double>(nameof(ImageWidth));
+
+    /// <summary>
+    /// Расстояние между элементами
+    /// </summary>
+    public double ImageWidth
+    {
+        get => GetValue(ImageWidthProperty);
+        set => SetValue(ImageWidthProperty, value);
+    }
+    #endregion
+
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonClipboard, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonClipboard, ICommand>(nameof(Command));
 
     /// <summary>
     /// Команда
@@ -113,7 +173,7 @@ public class ButtonClipboard : BaseTemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<ButtonClipboard, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonClipboard, object?>(nameof(CommandParameter));
 
     /// <summary>
     /// Параметр для команды
@@ -125,42 +185,13 @@ public class ButtonClipboard : BaseTemplatedControl
     }
     #endregion
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    private void OnClipboardTypeChanged()
     {
-        base.OnApplyTemplate(e);
-        if (ClipboardType == TemplatrButtonClipboardType.None)
+        if (ClipboardType == TemplatrButtonClipboardType.None || !dictionaryClipboardType.TryGetValue(ClipboardType, out var value))
             return;
 
-        ImagePath ??= InitializeImage();
-        Header ??= InitializeHeader();
-        OrientationType ??= InitializeOrientation();
-    }
-    private Bitmap InitializeImage()
-    {
-        return ClipboardType switch
-        {
-            TemplatrButtonClipboardType.AsSimple => new Bitmap(AssetLoader.Open(new Uri($"avares://AvaloniaTemplate/Assets/AsSimple.png"))),
-            TemplatrButtonClipboardType.Cut => new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaTemplate/Assets/Cut1.png"))),
-            TemplatrButtonClipboardType.Paste => new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaTemplate/Assets/Paste.png"))),
-            _ => new Bitmap(AssetLoader.Open(new Uri("avares://AvaloniaTemplate/Assets/Copy.png")))
-        };
-    }
-    private string InitializeHeader()
-    {
-        return ClipboardType switch
-        {
-            TemplatrButtonClipboardType.AsSimple => "Формат по образцу",
-            TemplatrButtonClipboardType.Cut => "Вырезать",
-            TemplatrButtonClipboardType.Paste => "Вставить",
-            _ => "Копировать"
-        };
-    }
-    private Orientation InitializeOrientation()
-    {
-        return ClipboardType switch
-        {
-            TemplatrButtonClipboardType.Paste => Orientation.Vertical,
-            _ => Orientation.Horizontal
-        };
+        ImageSource ??= new Bitmap(AssetLoader.Open(value.imagePath));
+        Header ??= value.header;
+        OrientationType ??= value.orientationType;
     }
 }

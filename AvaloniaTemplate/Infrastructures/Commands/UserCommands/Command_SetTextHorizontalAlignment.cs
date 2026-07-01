@@ -15,12 +15,12 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
             if (p is null || p is not HorizontalAlignment alignment)
                 return;
 
-            Debug.WriteLine($"HorizontalAlignment: {alignment}");
-            if (App.GetService<IGlobalStateService>() is { } service)
-                service.HorizontalTextAlignment = alignment;
+            //Debug.WriteLine($"HorizontalAlignment: {alignment}");
+            //if (App.GetService<IUIConnectorService>() is { } service)
+            //    service.HorizontalTextAlignment = alignment;
 
-            App.GetService<IUserDialogService>()?
-                .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
+            //App.GetService<IUserDialogService>()?
+            //    .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace AvaloniaTemplate.ViewModels
         /// <summary>
         /// Сервис обработки состояний
         /// </summary>
-        public IGlobalStateService GlobalStateService { get; } = App.GetService<IGlobalStateService>(); 
+        public IUIConnectorService ConnectorService { get; } = App.GetService<IUIConnectorService>(); 
         #endregion
 
         #region Конструктор

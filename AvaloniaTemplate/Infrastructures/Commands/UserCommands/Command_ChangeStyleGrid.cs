@@ -18,14 +18,14 @@ namespace AvaloniaTemplate.Infrastructures.Commands.UserCommands
             if (p is null || p is not CurrentBorderStyleType style)
                 return;
 
-            var stateService = App.GetService<IGlobalStateService>();
-            stateService.BorderStyleType = style;
+            //var stateService = App.GetService<IUIConnectorService>();
+            //stateService.BorderStyleType = style;
 
-            Debug.WriteLine($"Текущий стиль сетки: {style}");
+            //Debug.WriteLine($"Текущий стиль сетки: {style}");
 
 
-            App.GetService<IUserDialogService>()?
-                .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
+            //App.GetService<IUserDialogService>()?
+            //    .SendMessageAsync("Команда", "Реализуйте команду: " + GetType().Name, App.Desktop.MainWindow);
         }
     }
 }
