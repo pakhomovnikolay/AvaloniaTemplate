@@ -170,9 +170,14 @@ public class FontSelectorToolkit : BaseTemplatedControl
         });
 
         var margin = new Thickness(0, 0, 30, 0);
-        rootPanel.Children.Clear();
-        rootPanel.Children.Add(CreateButtonSetFontSizeUp(margin));
-        rootPanel.Children.Add(CreateButtonSetFontSizeDown(margin));
+        var buttonFontSizeUp = CreateButtonSetFontSizeUp(margin);
+        if (!rootPanel.Children.Contains(buttonFontSizeUp))
+            rootPanel.Children.Add(buttonFontSizeUp);
+
+        var buttonFontSizeDown = CreateButtonSetFontSizeDown(margin);
+        if (!rootPanel.Children.Contains(buttonFontSizeDown))
+            rootPanel.Children.Add(buttonFontSizeDown);
+
         comboBox.Margin = new(margin.Left, margin.Top, margin.Right * 2 + 3, margin.Bottom);
     }
 
