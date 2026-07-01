@@ -12,7 +12,7 @@ public class ButtonSetGridStyle : TemplatedControl
 {
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonSetGridStyle, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -26,7 +26,7 @@ public class ButtonSetGridStyle : TemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<ButtonCut, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonSetGridStyle, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Параметр для команды

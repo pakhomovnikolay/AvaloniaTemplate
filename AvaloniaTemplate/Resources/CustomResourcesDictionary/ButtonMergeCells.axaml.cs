@@ -9,7 +9,7 @@ public class ButtonMergeCells : TemplatedControl
 {
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonMergeCells, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Установлена
@@ -23,7 +23,7 @@ public class ButtonMergeCells : TemplatedControl
 
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonSetFontWeightBold, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonMergeCells, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -37,7 +37,7 @@ public class ButtonMergeCells : TemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<ButtonSetFontWeightBold, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonMergeCells, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Параметр для команды

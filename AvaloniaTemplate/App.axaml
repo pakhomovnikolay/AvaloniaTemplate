@@ -34,15 +34,8 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/BorderWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/CheckBoxWithTextBox.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DualListSelector.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonPaste.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonCut.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonCopy.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSimpleAs.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ComboBoxWithFonts.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ComboBoxWithFontsSize.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetFontWeightBold.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetFontStyleItalic.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetTextStyleUnderLine.axaml"/>
+
+
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetGridStyle.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetBackgroundStyle.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetForegroundStyle.axaml"/>

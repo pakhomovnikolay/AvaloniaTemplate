@@ -14,7 +14,7 @@ public class ButtonSetForegroundStyle : TemplatedControl
 {
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonPaste, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonSetForegroundStyle, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -28,7 +28,7 @@ public class ButtonSetForegroundStyle : TemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<ButtonCut, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonSetForegroundStyle, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Параметр для команды
@@ -42,7 +42,7 @@ public class ButtonSetForegroundStyle : TemplatedControl
 
     #region Текущая цвет шрифта
     public static readonly StyledProperty<IBrush> CurrentForegroundColorProperty =
-        AvaloniaProperty.Register<ButtonPaste, IBrush>(nameof(CurrentForegroundColor), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonSetForegroundStyle, IBrush>(nameof(CurrentForegroundColor), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Текущая цвет шрифта

@@ -9,7 +9,7 @@ public class ButtonWrapText : TemplatedControl
 {
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
-        AvaloniaProperty.Register<ComboBoxWithFonts, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonWrapText, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Установлена
