@@ -2,173 +2,86 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.Enums;
+using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Models.LayoutControls
 {
     public class LayoutGridStyle : Control
     {
-        /// <summary>
-        /// Стиль верхней границы
-        /// </summary>
-        public BorderStyleType Bottom { get; set; } = BorderStyleType.None;
+        private Dictionary<(string desc, BorderLineStyleType type), (Rect rect, IBrush brush, Pen pen)> dctionaryBorderStyle;
 
+        #region Стиль границ
         /// <summary>
-        /// Стиль нижней границы
+        /// Стиль границ
         /// </summary>
-        public BorderStyleType Top { get; set; } = BorderStyleType.None;
-
-        /// <summary>
-        /// Стиль левой границы
-        /// </summary>
-        public BorderStyleType Left { get; set; } = BorderStyleType.None;
-
-        /// <summary>
-        /// Стиль правой границы
-        /// </summary>
-        public BorderStyleType Right { get; set; } = BorderStyleType.None;
-
-        /// <summary>
-        /// Стиль внутренней границы по горизонтали
-        /// </summary>
-        public BorderStyleType InsideHorizontal { get; set; } = BorderStyleType.None;
-
-        /// <summary>
-        /// Стиль внутренней границы по вертикали
-        /// </summary>
-        public BorderStyleType InsideVertical { get; set; } = BorderStyleType.None;
-
+        public BorderStyleType BorderStyle { get; set; } = new()
+        {
+            Bottom = BorderLineStyleType.None,
+            Top = BorderLineStyleType.None,
+            Left = BorderLineStyleType.None,
+            Right = BorderLineStyleType.None,
+            InsideHorizontal = BorderLineStyleType.None,
+            InsideVertical = BorderLineStyleType.None
+        };
+        #endregion
 
         public override void Render(DrawingContext context)
         {
             base.Render(context);
+            if (double.IsNaN(Width) || double.IsNaN(Height) || Width <= 0 || Height <= 0)
+                return;
 
-            var widthBottomTop = Width;
-            var widthLeftRightNormal = 0.5;
-            var widthLeftRightThick = 1;
+            CreateDictionary();
+            if (dctionaryBorderStyle.TryGetValue(("Bottom", BorderStyle.Bottom), out var style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+            if (dctionaryBorderStyle.TryGetValue(("Top", BorderStyle.Top), out style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+            if (dctionaryBorderStyle.TryGetValue(("Left", BorderStyle.Left), out style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+            if (dctionaryBorderStyle.TryGetValue(("Right", BorderStyle.Right), out style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+            if (dctionaryBorderStyle.TryGetValue(("InsideHorizontal", BorderStyle.InsideHorizontal), out style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+            if (dctionaryBorderStyle.TryGetValue(("InsideVertical", BorderStyle.InsideVertical), out style))
+                RenderGeometry(context, style.rect, style.brush, style.pen);
+        }
 
-            var heightLeftRight = Height;
-            var heightBottomTopNormal = 0.5;
-            var heightBottomTopThick = 1;
+        private static void RenderGeometry(DrawingContext context, Rect rect, IBrush brush, Pen pen)
+            => context.DrawRectangle(brush, pen, rect);
 
-            var fillNormal = Brushes.Transparent;
-            var fillThick = Brushes.Black;
+        private void CreateDictionary()
+        {
+            var sizeNone = 0.5;
+            var sizeNormal = 0.5;
+            var sizeThick = 1;
+            var thickness = 1.0;
 
-            var penNone = new Pen(Brushes.Gray, 1, dashStyle: DashStyle.Dash);
-            var pen = new Pen(Brushes.Black, 1);
+            dctionaryBorderStyle = new()
+            {
+                [("Bottom", BorderLineStyleType.None)] = (new Rect(0, Height, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("Bottom", BorderLineStyleType.Normal)] = (new Rect(0, Height, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Bottom", BorderLineStyleType.Thick)] = (new Rect(0, Height, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
 
-            if (Bottom == BorderStyleType.None)
-            {
-                var rect = new Rect(0, Height, widthBottomTop, heightBottomTopNormal);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (Bottom == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(0, Height, widthBottomTop, heightBottomTopNormal);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (Bottom == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(0, Height, widthBottomTop, heightBottomTopThick);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
+                [("Top", BorderLineStyleType.None)] = (new Rect(0, 0, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("Top", BorderLineStyleType.Normal)] = (new Rect(0, 0, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Top", BorderLineStyleType.Thick)] = (new Rect(0, 0, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
 
-            if (Top == BorderStyleType.None)
-            {
-                var rect = new Rect(0, 0, widthBottomTop, heightBottomTopNormal);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (Top == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(0, 0, widthBottomTop, heightBottomTopNormal);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (Top == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(0, 0, widthBottomTop, heightBottomTopThick);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
+                [("Left", BorderLineStyleType.None)] = (new Rect(0, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("Left", BorderLineStyleType.Normal)] = (new Rect(0, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Left", BorderLineStyleType.Thick)] = (new Rect(0, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
 
-            if (Left == BorderStyleType.None)
-            {
-                var rect = new Rect(0, 0, widthLeftRightNormal, heightLeftRight);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (Left == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(0, 0, widthLeftRightNormal, heightLeftRight);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (Left == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(0, 0, widthLeftRightThick, heightLeftRight);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
+                [("Right", BorderLineStyleType.None)] = (new Rect(Width, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("Right", BorderLineStyleType.Normal)] = (new Rect(Width, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Right", BorderLineStyleType.Thick)] = (new Rect(Width, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
 
-            if (Right == BorderStyleType.None)
-            {
-                var rect = new Rect(Width, 0, widthLeftRightNormal, heightLeftRight);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (Right == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(Width, 0, widthLeftRightNormal, heightLeftRight);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (Right == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(Width, 0, widthLeftRightThick, heightLeftRight + 1);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
+                [("InsideHorizontal", BorderLineStyleType.None)] = (new Rect(0, Height / 2, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("InsideHorizontal", BorderLineStyleType.Normal)] = (new Rect(0, Height / 2, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black)),
+                [("InsideHorizontal", BorderLineStyleType.Thick)] = (new Rect(0, Height / 2, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
 
-            if (InsideHorizontal == BorderStyleType.None)
-            {
-                var rect = new Rect(0, Height / 2, Width, heightBottomTopNormal);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (InsideHorizontal == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(0, Height / 2, Width, heightBottomTopNormal);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (InsideHorizontal == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(0, Height / 2, Width, heightBottomTopThick);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
-
-            if (InsideVertical == BorderStyleType.None)
-            {
-                var rect = new Rect(Width / 2, 0, widthLeftRightNormal, heightLeftRight);
-                context.DrawRectangle(fillNormal, penNone, rect);
-            }
-            else
-            {
-                if (InsideVertical == BorderStyleType.Normal)
-                {
-                    var rect = new Rect(Width / 2, 0, widthLeftRightNormal, heightLeftRight);
-                    context.DrawRectangle(fillNormal, pen, rect);
-                }
-                else if (InsideVertical == BorderStyleType.Thick)
-                {
-                    var rect = new Rect(Width / 2, 0, widthLeftRightThick, heightLeftRight);
-                    context.DrawRectangle(fillThick, pen, rect);
-                }
-            }
+                [("InsideVertical", BorderLineStyleType.None)] = (new Rect(Width / 2, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
+                [("InsideVertical", BorderLineStyleType.Normal)] = (new Rect(Width / 2, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black)),
+                [("InsideVertical", BorderLineStyleType.Thick)] = (new Rect(Width / 2, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness))
+            };
         }
     }
 }

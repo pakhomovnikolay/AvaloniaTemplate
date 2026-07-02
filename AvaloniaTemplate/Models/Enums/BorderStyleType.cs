@@ -1,33 +1,41 @@
-﻿namespace AvaloniaTemplate.Models.Enums
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace AvaloniaTemplate.Models.Enums
 {
-    /// <summary>
-    /// Тип стиля границы
-    /// </summary>
-    public enum BorderStyleType
+    public class BorderStyleType
     {
         /// <summary>
-        /// Отсутствует
+        /// Стиль верхней границы
         /// </summary>
-        None,
+        public BorderLineStyleType Bottom { get; set; } = BorderLineStyleType.None;
 
         /// <summary>
-        /// Обычная
+        /// Стиль нижней границы
         /// </summary>
-        Normal,
+        public BorderLineStyleType Top { get; set; } = BorderLineStyleType.None;
 
         /// <summary>
-        /// Жирная
+        /// Стиль левой границы
         /// </summary>
-        Thick,
+        public BorderLineStyleType Left { get; set; } = BorderLineStyleType.None;
 
         /// <summary>
-        /// Двойная обычная
+        /// Стиль правой границы
         /// </summary>
-        DoubleNormal,
+        public BorderLineStyleType Right { get; set; } = BorderLineStyleType.None;
 
         /// <summary>
-        /// Двойная жирная
+        /// Стиль внутренней границы по горизонтали
         /// </summary>
-        DoubleThick
+        public BorderLineStyleType InsideHorizontal { get; set; } = BorderLineStyleType.None;
+
+        /// <summary>
+        /// Стиль внутренней границы по вертикали
+        /// </summary>
+        public BorderLineStyleType InsideVertical { get; set; } = BorderLineStyleType.None;
     }
 }

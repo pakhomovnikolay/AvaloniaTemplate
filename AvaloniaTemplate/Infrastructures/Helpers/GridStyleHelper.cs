@@ -11,8 +11,8 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 {
     public class GridStyleHelper
     {
-        private const double width = 15;
-        private const double height = 15;
+        private const double width = 16;
+        private const double height = 16;
 
         #region Словарь одиночных линий сетки
         /// <summary>
@@ -86,30 +86,30 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 Width = width,
                 Child = borderStyle switch
                 {
-                    CurrentBorderStyleType.Bottom => CreateGrid(width, height, Bottom: BorderStyleType.Normal),
-                    CurrentBorderStyleType.Top => CreateGrid(width, height, Top: BorderStyleType.Normal),
-                    CurrentBorderStyleType.Left => CreateGrid(width, height, Left: BorderStyleType.Normal),
-                    CurrentBorderStyleType.Right => CreateGrid(width, height, Right: BorderStyleType.Normal),
+                    CurrentBorderStyleType.Bottom => CreateGrid(width, height, Bottom: BorderLineStyleType.Normal),
+                    CurrentBorderStyleType.Top => CreateGrid(width, height, Top: BorderLineStyleType.Normal),
+                    CurrentBorderStyleType.Left => CreateGrid(width, height, Left: BorderLineStyleType.Normal),
+                    CurrentBorderStyleType.Right => CreateGrid(width, height, Right: BorderLineStyleType.Normal),
                     CurrentBorderStyleType.All => CreateGrid(width, height,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal),
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal),
 
                     CurrentBorderStyleType.Outside => CreateGrid(width, height,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal,
-                        BorderStyleType.Normal
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal,
+                        BorderLineStyleType.Normal
                         ),
 
                     CurrentBorderStyleType.ThickOutside => CreateGrid(width - 1, height - 1,
-                        BorderStyleType.Thick,
-                        BorderStyleType.Thick,
-                        BorderStyleType.Thick,
-                        BorderStyleType.Thick
+                        BorderLineStyleType.Thick,
+                        BorderLineStyleType.Thick,
+                        BorderLineStyleType.Thick,
+                        BorderLineStyleType.Thick
                         ),
 
                     _ => CreateGrid(width, height)
@@ -124,6 +124,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         {
             var label = Helper.CreateLabel(borderStyleDesc);
             label.Margin = new(10, 0, 0, 0);
+            label.VerticalAlignment = VerticalAlignment.Center;
 
             var grid = new Grid()
             {
@@ -133,6 +134,8 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                     ]
             };
             var border = CreateGridStyle(borderStyleType);
+            border.MinHeight = 22;
+            border.MinWidth = 22;
 
             Grid.SetColumn(label, 1);
             Grid.SetColumn(border, 0);
@@ -146,6 +149,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 BorderThickness = new(0),
                 CornerRadius = new(0),
                 HorizontalContentAlignment = HorizontalAlignment.Left,
+                VerticalContentAlignment = VerticalAlignment.Center,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
                 Background = Brushes.Transparent,
                 Command = command,
@@ -160,24 +164,27 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         private static LayoutGridStyle CreateGrid(
             double width,
             double height,
-            BorderStyleType Bottom = BorderStyleType.None,
-            BorderStyleType Top = BorderStyleType.None,
-            BorderStyleType Left = BorderStyleType.None,
-            BorderStyleType Right = BorderStyleType.None,
-            BorderStyleType InsideHorizontal = BorderStyleType.None,
-            BorderStyleType InsideVertical = BorderStyleType.None)
+            BorderLineStyleType Bottom = BorderLineStyleType.None,
+            BorderLineStyleType Top = BorderLineStyleType.None,
+            BorderLineStyleType Left = BorderLineStyleType.None,
+            BorderLineStyleType Right = BorderLineStyleType.None,
+            BorderLineStyleType InsideHorizontal = BorderLineStyleType.None,
+            BorderLineStyleType InsideVertical = BorderLineStyleType.None)
         {
 
             var control = new LayoutGridStyle()
             {
-                Bottom = Bottom,
-                Top = Top,
-                Left = Left,
-                Right = Right,
-                InsideHorizontal = InsideHorizontal,
-                InsideVertical = InsideVertical,
                 Width = width,
-                Height = height
+                Height = height,
+                BorderStyle = new()
+                {
+                    Bottom = Bottom,
+                    Top = Top,
+                    Left = Left,
+                    Right = Right,
+                    InsideHorizontal = InsideHorizontal,
+                    InsideVertical = InsideVertical,
+                }
             };
             control.InvalidateVisual();
             return control;
