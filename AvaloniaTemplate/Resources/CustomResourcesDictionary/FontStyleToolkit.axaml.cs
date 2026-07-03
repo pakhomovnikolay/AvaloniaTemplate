@@ -111,7 +111,7 @@ public class FontStyleToolkit : BaseTemplatedControl
 
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
-        AvaloniaProperty.Register<FontStyleToolkit, bool>(nameof(IsChecked));
+        AvaloniaProperty.Register<FontStyleToolkit, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
     /// <summary>
     /// Установлена
     /// </summary>

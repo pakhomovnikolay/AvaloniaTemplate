@@ -319,7 +319,7 @@ public class HorizontalTabStrip : TemplatedControl
                     HorizontalContentAlignment = HorizontalAlignment.Center
                 }
             };
-            ToggleGroupControl.SetGroupName(tabButton, "TableList");
+            ToggleGroupHelper.SetGroupClick(tabButton, "TableList");
             return tabButton;
         });
         return ItemTemplate;

@@ -1,4 +1,5 @@
-﻿using Avalonia.Media;
+﻿using Avalonia.Layout;
+using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
@@ -211,6 +212,46 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Команда - сменить положение текста по горинтали
+        private ICommand command_SetHorizontalContentAlignment;
+        /// <summary>
+        /// Команда - сменить положение текста по горинтали
+        /// </summary>
+        public ICommand Command_SetHorizontalContentAlignment
+        {
+            get => command_SetHorizontalContentAlignment ??= new RelayCommand(ExecuteCommand_SetHorizontalContentAlignment);
+            set => SetProperty(ref command_SetHorizontalContentAlignment, value);
+        }
+
+        private void ExecuteCommand_SetHorizontalContentAlignment(object p)
+        {
+            if (p is null || p is not HorizontalAlignment alignment)
+                return;
+
+            HorizontalContentAlignment = alignment;
+        }
+        #endregion
+
+        #region Команда - сменить положение текста по горинтали
+        private ICommand command_SetVerticalContentAlignment;
+        /// <summary>
+        /// Команда - сменить положение текста по горинтали
+        /// </summary>
+        public ICommand Command_SetVerticalContentAlignment
+        {
+            get => command_SetVerticalContentAlignment ??= new RelayCommand(ExecuteCommand_SetVerticalContentAlignment);
+            set => SetProperty(ref command_SetVerticalContentAlignment, value);
+        }
+
+        private void ExecuteCommand_SetVerticalContentAlignment(object p)
+        {
+            if (p is null || p is not VerticalAlignment alignment)
+                return;
+
+            VerticalContentAlignment = alignment;
+        }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         private bool isFontWeightBold;
         /// <summary>
@@ -307,6 +348,89 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Фиксированное состояние кнопки "Формат по образцу"
+        private bool isAsSimpleFixed = false;
+        /// <summary>
+        /// Фиксированное состояние кнопки "Формат по образцу"
+        /// </summary>
+        public bool IsAsSimpleFixed
+        {
+            get => isAsSimpleFixed;
+            set => SetProperty(ref isAsSimpleFixed, value);
+        }
+        #endregion
+
+        #region Текущий шрифт
+        private FontFamily сurrentFont;
+        /// <summary>
+        /// Текущий шрифт
+        /// </summary>
+        public FontFamily CurrentFont
+        {
+            get => сurrentFont;
+            set => SetProperty(ref сurrentFont, value);
+        }
+        #endregion
+
+        #region Текущий размер шрифт
+        private double currentFontSize;
+        /// <summary>
+        /// Текущий размер шрифт
+        /// </summary>
+        public double CurrentFontSize
+        {
+            get => currentFontSize;
+            set => SetProperty(ref currentFontSize, value);
+        }
+        #endregion
+
+        #region Положение текста по горизонтали
+        private HorizontalAlignment horizontalContentAlignment = HorizontalAlignment.Stretch;
+        /// <summary>
+        /// Положение текста по горизонтали
+        /// </summary>
+        public HorizontalAlignment HorizontalContentAlignment
+        {
+            get => horizontalContentAlignment;
+            set => SetProperty(ref horizontalContentAlignment, value);
+        }
+        #endregion
+
+        #region Положение текста по вертикали
+        private VerticalAlignment verticalContentAlignment = VerticalAlignment.Stretch;
+        /// <summary>
+        /// Положение текста по вертикали
+        /// </summary>
+        public VerticalAlignment VerticalContentAlignment
+        {
+            get => verticalContentAlignment;
+            set => SetProperty(ref verticalContentAlignment, value);
+        }
+        #endregion
+
+        #region Перенос текста устанволен
+        private bool isWrapText;
+        /// <summary>
+        /// Перенос текста устанволен
+        /// </summary>
+        public bool IsWrapText
+        {
+            get => isWrapText;
+            set => SetProperty(ref isWrapText, value);
+        }
+        #endregion
+
+        #region Ячейка объеденённая
+        private bool isMergeCell;
+        /// <summary>
+        /// Ячейка объеденённая
+        /// </summary>
+        public bool IsMergeCell
+        {
+            get => isMergeCell;
+            set => SetProperty(ref isMergeCell, value);
+        }
+        #endregion
 
         //    private readonly IClipboardService сlipboardService;
         //    private readonly DispatcherTimer timerControlClipboard = new() { Interval = TimeSpan.FromMilliseconds(1000) };

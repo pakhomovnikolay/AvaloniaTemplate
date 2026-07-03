@@ -11,6 +11,11 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonTextPosition : TemplatedControl
 {
+    static ButtonTextPosition()
+    {
+        IsCheckedProperty.Changed.AddClassHandler<ButtonTextPosition>((x, _) => x.OnIsCheckedChanged());
+    }
+
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
         AvaloniaProperty.Register<ButtonTextPosition, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
@@ -126,19 +131,26 @@ public class ButtonTextPosition : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         var button = e.NameScope.Find<ToggleButton>("PART_Button");
-        ToggleGroupControl.SetGroupName(button, $"{Position}Group");
+        ToggleGroupHelper.SetGroupIsChecked(button, $"{Position}Group");
         var control = new LayoutTextPositionType()
         {
             VerticalPosition = VerticalPosition,
             HorizontalPosition = HorizontalPosition,
             Position = Position
         };
-        //control.InvalidateVisual();
+        
         button.Content = control;
-
         if (Position == Orientation.Vertical)
             CommandParameter = VerticalPosition;
         else
             CommandParameter = HorizontalPosition;
+    }
+
+    private void OnIsCheckedChanged()
+    {
+        if (Position == Orientation.Vertical)
+            CommandParameter = IsChecked ? VerticalPosition : VerticalAlignment.Stretch;
+        else
+            CommandParameter = IsChecked ? HorizontalPosition : HorizontalAlignment.Stretch;
     }
 }

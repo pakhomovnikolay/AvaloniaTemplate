@@ -71,7 +71,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="color"></param>
         /// <returns></returns>
         public static string GetColor(IBrush color)
-            => color.ToString();
+            => color?.ToString();
         #endregion
 
         #region Наблюдатель

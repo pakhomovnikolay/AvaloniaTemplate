@@ -84,6 +84,20 @@ namespace AvaloniaTemplate.Services.Interfaces
         ICommand Command_SetForeground { get; set; }
         #endregion
 
+        #region Команда - сменить положение текста по горинтали
+        /// <summary>
+        /// Команда - сменить положение текста по горинтали
+        /// </summary>
+        ICommand Command_SetHorizontalContentAlignment { get; set; }
+        #endregion
+
+        #region Команда - сменить положение текста по горинтали
+        /// <summary>
+        /// Команда - сменить положение текста по горинтали
+        /// </summary>
+        ICommand Command_SetVerticalContentAlignment { get; set; }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         /// <summary>
         /// Установлен полужирный стиль шрифта
@@ -139,6 +153,56 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         ObservableCollection<Color> ForegroundColors { get; set; }
         #endregion
+
+        #region Фиксированное состояние кнопки "Формат по образцу"
+        /// <summary>
+        /// Фиксированное состояние кнопки "Формат по образцу"
+        /// </summary>
+        bool IsAsSimpleFixed { get; set; }
+        #endregion
+
+        #region Текущий шрифт
+        /// <summary>
+        /// Текущий шрифт
+        /// </summary>
+        FontFamily CurrentFont { get; set; }
+        #endregion
+
+        #region Текущий размер шрифт
+        /// <summary>
+        /// Текущий размер шрифт
+        /// </summary>
+        double CurrentFontSize { get; set; }
+        #endregion
+
+        #region Положение текста по горизонтали
+        /// <summary>
+        /// Положение текста по горизонтали
+        /// </summary>
+        HorizontalAlignment HorizontalContentAlignment { get; set; }
+        #endregion
+
+        #region Положение текста по вертикали
+        /// <summary>
+        /// Положение текста по вертикали
+        /// </summary>
+        VerticalAlignment VerticalContentAlignment { get; set; }
+        #endregion
+
+        #region Перенос текста устанволен
+        /// <summary>
+        /// Перенос текста устанволен
+        /// </summary>
+        bool IsWrapText { get; set; }
+        #endregion
+
+        #region Ячейка объеденённая
+        /// <summary>
+        /// Ячейка объеденённая
+        /// </summary>
+        bool IsMergeCell { get; set; }
+        #endregion
+
 
         //InitializeFontStyle("Ж", FontWeight.Bold) },
         //    { TemplateButtonFontStyleToolkitType.FontStyleItalic, () => InitializeFontStyle("К", fontStyle: FontStyle.Italic) },

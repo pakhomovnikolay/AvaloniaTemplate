@@ -1,20 +1,28 @@
 using Avalonia;
+using Avalonia.Data;
 using Avalonia.Layout;
+using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonClipboard : BaseTemplatedControl
 {
+    private Color defaultBackground;
+    private Color defaultForeground;
+
     static ButtonClipboard()
     {
         ClipboardTypeProperty.Changed.AddClassHandler<ButtonClipboard>((x, _) => x.OnClipboardTypeChanged());
+        IsCheckedProperty.Changed.AddClassHandler<ButtonClipboard>((x, _) => x.OnIsAsSimpleFixedChanged());
     }
 
     #region Словарь типов взаимодействия с буфером обмена
@@ -156,6 +164,20 @@ public class ButtonClipboard : BaseTemplatedControl
     }
     #endregion
 
+    #region Установлена
+    public static readonly StyledProperty<bool> IsCheckedProperty =
+        AvaloniaProperty.Register<ButtonMergeCells, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Установлена
+    /// </summary>
+    public bool IsChecked
+    {
+        get => GetValue(IsCheckedProperty);
+        set => SetValue(IsCheckedProperty, value);
+    }
+    #endregion
+
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
         AvaloniaProperty.Register<ButtonClipboard, ICommand>(nameof(Command));
@@ -189,8 +211,19 @@ public class ButtonClipboard : BaseTemplatedControl
         if (ClipboardType == TemplatrButtonClipboardType.None || !dictionaryClipboardType.TryGetValue(ClipboardType, out var value))
             return;
 
+        defaultBackground = Color.Parse(Helper.GetColor(Background) ?? Brushes.Transparent.ToString());
+        defaultForeground = Color.Parse(Helper.GetColor(Background) ?? Brushes.Black.ToString());
         ImageSource ??= new Bitmap(AssetLoader.Open(value.imagePath));
         Header ??= value.header;
         OrientationType ??= value.orientationType;
+
+        if (ClipboardType == TemplatrButtonClipboardType.AsSimple)
+            Tapped += (_, _) => IsChecked = !IsChecked;
+    }
+
+    private void OnIsAsSimpleFixedChanged()
+    {
+        Background = IsChecked ? Helper.GetResource<IBrush>("ToggleButtonBackgroundChecked") : new SolidColorBrush(defaultBackground);
+        Foreground = IsChecked ? Helper.GetResource<IBrush>("ToggleButtonForegroundChecked") : new SolidColorBrush(defaultForeground);
     }
 }

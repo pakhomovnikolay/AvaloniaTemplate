@@ -20,158 +20,277 @@
 		Padding="5"
 		>
 
-	<StackPanel Orientation="Horizontal"
-				Spacing="5"
-				>
-		<Grid ColumnDefinitions="auto auto"
-			  RowDefinitions="auto auto auto"
-			  >
-			<crd:ButtonClipboard Grid.Column="0"
-									  Grid.Row="0"
-									  Grid.RowSpan="3"
-									  ClipboardType="Paste"
-									  ImageWidth="45"
-									  ImageHeight="55"
-									  Spacing="-5"
-									  Command="{Binding ConnectorService.Command_Paste}"
-									  />
+	<Grid RowDefinitions="auto auto"
+		  RowSpacing="25"
+		  >
+		<StackPanel Orientation="Horizontal"
+					Spacing="5"
+					>
+			<Grid ColumnDefinitions="auto auto"
+				  RowDefinitions="auto auto auto"
+				  >
+				<crd:ButtonClipboard Grid.Column="0"
+										  Grid.Row="0"
+										  Grid.RowSpan="3"
+										  ClipboardType="Paste"
+										  ImageWidth="45"
+										  ImageHeight="55"
+										  Spacing="-5"
+										  Command="{Binding ConnectorService.Command_Paste}"
+										  />
 
-			<crd:ButtonClipboard Grid.Column="1"
-									  Grid.Row="0"
-									  ClipboardType="Cut"
-									  Command="{Binding ConnectorService.Command_Cut}"
-									  />
+				<crd:ButtonClipboard Grid.Column="1"
+										  Grid.Row="0"
+										  ClipboardType="Cut"
+										  Command="{Binding ConnectorService.Command_Cut}"
+										  />
 
-			<crd:ButtonClipboard Grid.Column="1"
-									  Grid.Row="1"
-									  ClipboardType="Copy"
-									  Command="{Binding ConnectorService.Command_Copy}"
-									  />
+				<crd:ButtonClipboard Grid.Column="1"
+										  Grid.Row="1"
+										  ClipboardType="Copy"
+										  Command="{Binding ConnectorService.Command_Copy}"
+										  />
 
-			<crd:ButtonClipboard Grid.Column="1"
-									  Grid.Row="2"
-									  ClipboardType="AsSimple"
-									  Command="{Binding ConnectorService.Command_AsSimple}"
-									  />
-		</Grid>
+				<crd:ButtonClipboard Grid.Column="1"
+										  Grid.Row="2"
+										  ClipboardType="AsSimple"
+										  Command="{Binding ConnectorService.Command_AsSimple}"
+										  IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"
+										  />
+			</Grid>
 		
-		<Grid RowDefinitions="25 25"
-			  RowSpacing="3"
-			  >
-			<Grid Grid.Row="0"
-				  ColumnDefinitions="160 auto"
+			<Grid RowDefinitions="25 25"
+				  RowSpacing="3"
+				  >
+				<Grid Grid.Row="0"
+					  ColumnDefinitions="160 auto"
+					  ColumnSpacing="1"
+					  >
+					<crd:FontSelectorToolkit Grid.Column="0"
+												  ToolkitType="FontList"
+												  SelectedItem="{Binding ConnectorService.CurrentFont}"
+												  helpers:FontFamilyHelper.ControlPreviewFont="True"
+												  helpers:FontFamilyHelper.ControlFontChanged="True"
+												  />
+
+					<crd:FontSelectorToolkit Grid.Column="1"
+												  ToolkitType="FontSizeList"
+												  SelectedItem="{Binding ConnectorService.CurrentFontSize}"
+												  helpers:FontFamilyHelper.ControlPreviewFontSize="True"
+												  helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
+												  />
+				</Grid>
+
+				<Grid Grid.Row="1"
+					  ColumnDefinitions="30 30 30 40 40 40"
+					  ColumnSpacing="2"
+					  >
+					<crd:FontStyleToolkit Grid.Column="0"
+											   ToolkitType="FontWeightBold"
+											   Height="25"
+											   FontSize="11"
+											   IsChecked="{Binding ConnectorService.IsFontWeightBold}"
+											   Command="{Binding ConnectorService.Command_ChangeFontWeightBold}"
+											   />
+					<crd:FontStyleToolkit Grid.Column="1"
+											   ToolkitType="FontStyleItalic"
+											   Height="25"
+											   FontSize="12"
+											   IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
+											   Command="{Binding ConnectorService.Command_ChangeFontStyleItalic}"
+											   />
+					<crd:FontStyleToolkit Grid.Column="2"
+											   ToolkitType="TextStyleUnderLine"
+											   Height="25"
+											   FontSize="12"
+											   IsChecked="{Binding ConnectorService.IsTextUnderline}"
+											   Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
+											   />
+
+					<crd:SelectorPicker Grid.Column="3"
+											   PickerType="BorderStyle"
+											   BorderStyleType="{Binding ConnectorService.BorderStyleType}"
+											   Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
+											   CommandParameter="{Binding ConnectorService.BorderStyleType}"
+											   />
+
+					<crd:SelectorPicker Grid.Column="4"
+											   PickerType="Background"
+											   BackgroundColors="{Binding ConnectorService.BackgroundColors}"
+											   Command="{Binding ConnectorService.Command_SetBackground}"
+											   CommandParameter="{Binding ConnectorService.CurrentBackground}"
+											   />
+
+					<crd:SelectorPicker Grid.Column="5"
+											   PickerType="Foreground"
+											   BackgroundColors="{Binding ConnectorService.ForegroundColors}"
+											   Command="{Binding ConnectorService.Command_SetForeground}"
+											   CommandParameter="{Binding ConnectorService.CurrentForeground}"
+											   />
+				
+				</Grid>
+			
+			</Grid>
+
+			<Grid ColumnDefinitions="auto auto auto"
+				  RowDefinitions="auto auto"
+				  RowSpacing="3"
 				  ColumnSpacing="1"
 				  >
+				<crd:ButtonTextPosition Grid.Column="0"
+										Grid.Row="0"
+										Position="Vertical"
+										VerticalPosition="Top"
+										Command="{Binding ConnectorService.Command_SetVerticalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.VerticalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+				<crd:ButtonTextPosition Grid.Column="1"
+										Grid.Row="0"
+										Position="Vertical"
+										VerticalPosition="Center"
+										Command="{Binding ConnectorService.Command_SetVerticalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.VerticalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+				<crd:ButtonTextPosition Grid.Column="2"
+										Grid.Row="0"
+										Position="Vertical"
+										VerticalPosition="Bottom"
+										Command="{Binding ConnectorService.Command_SetVerticalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="VerticalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.VerticalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+
+
+				<crd:ButtonTextPosition Grid.Column="0"
+										Grid.Row="1"
+										Position="Horizontal"
+										HorizontalPosition="Left"
+										Command="{Binding ConnectorService.Command_SetHorizontalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.HorizontalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+				<crd:ButtonTextPosition Grid.Column="1"
+										Grid.Row="1"
+										Position="Horizontal"
+										HorizontalPosition="Center"
+										Command="{Binding ConnectorService.Command_SetHorizontalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.HorizontalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+				<crd:ButtonTextPosition Grid.Column="2"
+										Grid.Row="1"
+										Position="Horizontal"
+										HorizontalPosition="Right"
+										Command="{Binding ConnectorService.Command_SetHorizontalContentAlignment}"
+										>
+					<crd:ButtonTextPosition.IsChecked>
+						<MultiBinding Converter="{StaticResource Converter_CurrentTextAlignmentToBool}">
+							<Binding Path="Position" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="HorizontalPosition" RelativeSource="{RelativeSource Self}"/>
+							<Binding Path="ConnectorService.HorizontalContentAlignment" />
+						</MultiBinding>
+					</crd:ButtonTextPosition.IsChecked>
+				</crd:ButtonTextPosition>
+			
+			</Grid>
+
+			<Grid RowDefinitions="auto auto"
+				  RowSpacing="3"
+				  >
+
+				<crd:ButtonWrapText Grid.Row="0"
+									IsChecked="{Binding ConnectorService.IsWrapText}"
+									/>
+				<crd:ButtonMergeCells Grid.Row="1"
+									  IsChecked="{Binding ConnectorService.IsMergeCell}"
+									  />
+			</Grid>
+
+		</StackPanel>
+
+		<Grid Grid.Row="1"
+			  ColumnDefinitions="auto auto"
+			  >
+			<StackPanel Grid.Column="0" Spacing="5"
+						>
+				
+				<!--Формат по образцу-->
+				<CheckBox Content="Формат по образцу"
+						  IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"/>
+
+				<!--Шрифт-->
 				<crd:FontSelectorToolkit Grid.Column="0"
-											  ToolkitType="FontList"
-											  helpers:FontFamilyHelper.ControlPreviewFont="True"
-											  helpers:FontFamilyHelper.ControlFontChanged="True"
-											  />
+										 ToolkitType="FontList"
+										 SelectedItem="{Binding ConnectorService.CurrentFont}"
+										 helpers:FontFamilyHelper.ControlPreviewFont="True"
+										 helpers:FontFamilyHelper.ControlFontChanged="True"
+										 />
 
 				<crd:FontSelectorToolkit Grid.Column="1"
-											  ToolkitType="FontSizeList"
-											  helpers:FontFamilyHelper.ControlPreviewFontSize="True"
-											  helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
-											  />
-			</Grid>
+												  ToolkitType="FontSizeList"
+												  SelectedItem="{Binding ConnectorService.CurrentFontSize}"
+												  helpers:FontFamilyHelper.ControlPreviewFontSize="True"
+												  helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
+												  />
 
-			<Grid Grid.Row="1"
-				  ColumnDefinitions="30 30 30 40 40 40"
-				  ColumnSpacing="2"
-				  >
-				<crd:FontStyleToolkit Grid.Column="0"
-										   ToolkitType="FontWeightBold"
-										   Height="25"
-										   FontSize="11"
-										   IsChecked="{Binding ConnectorService.IsFontWeightBold}"
-										   Command="{Binding ConnectorService.Command_ChangeFontWeightBold}"
-										   />
-                <crd:FontStyleToolkit Grid.Column="1"
-										   ToolkitType="FontStyleItalic"
-										   Height="25"
-										   FontSize="12"
-										   IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
-										   Command="{Binding ConnectorService.Command_ChangeFontStyleItalic}"
-										   />
-                <crd:FontStyleToolkit Grid.Column="2"
-										   ToolkitType="TextStyleUnderLine"
-										   Height="25"
-										   FontSize="12"
-										   IsChecked="{Binding ConnectorService.IsTextUnderline}"
-										   Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
-										   />
+				<!--Полужирный-->
+				<CheckBox Content="Полужирный"
+						  IsChecked="{Binding ConnectorService.IsFontWeightBold}"
+						  />
+				<!--Курсивный-->
+				<CheckBox Content="Курсивный"
+						  IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
+						  />
+				<!--Подчеркнутый-->
+				<CheckBox Content="Подчеркнутый"
+						  IsChecked="{Binding ConnectorService.IsTextUnderline}"
+						  />
 
-				<crd:SelectorPicker Grid.Column="3"
-										   PickerType="BorderStyle"
-										   BorderStyleType="{Binding ConnectorService.BorderStyleType}"
-										   Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
-										   CommandParameter="{Binding ConnectorService.BorderStyleType}"
-										   />
+				<TextBox Text="{Binding ConnectorService.HorizontalContentAlignment}"/>
+				<TextBox Text="{Binding ConnectorService.VerticalContentAlignment}"/>
 
-				<crd:SelectorPicker Grid.Column="4"
-										   PickerType="Background"
-										   BackgroundColors="{Binding ConnectorService.BackgroundColors}"
-										   Command="{Binding ConnectorService.Command_SetBackground}"
-										   CommandParameter="{Binding ConnectorService.CurrentBackground}"
-										   />
-
-				<crd:SelectorPicker Grid.Column="5"
-										   PickerType="Foreground"
-										   BackgroundColors="{Binding ConnectorService.ForegroundColors}"
-										   Command="{Binding ConnectorService.Command_SetForeground}"
-										   CommandParameter="{Binding ConnectorService.CurrentForeground}"
-										   />
-				
-			</Grid>
+				<!--Курсивный-->
+				<CheckBox Content="Переносить текст"
+						  IsChecked="{Binding ConnectorService.IsWrapText}"
+						  />
+				<!--Подчеркнутый-->
+				<CheckBox Content="Объединить ячейки"
+						  IsChecked="{Binding ConnectorService.IsMergeCell}"
+						  />
+			</StackPanel>
 		</Grid>
-
-		<Grid ColumnDefinitions="auto auto auto"
-			  RowDefinitions="auto auto"
-			  RowSpacing="3"
-			  ColumnSpacing="1"
-			  >
-			<crd:ButtonTextPosition Grid.Column="0"
-									Grid.Row="0"
-									Position="Vertical"
-									VerticalPosition="Top"
-									/>
-			<crd:ButtonTextPosition Grid.Column="1"
-									Grid.Row="0"
-									Position="Vertical"
-									VerticalPosition="Center"
-									/>
-			<crd:ButtonTextPosition Grid.Column="2"
-									Grid.Row="0"
-									Position="Vertical"
-									VerticalPosition="Bottom"
-									/>
-
-
-			<crd:ButtonTextPosition Grid.Column="0"
-									Grid.Row="1"
-									Position="Horizontal"
-									HorizontalPosition="Left"
-									/>
-			<crd:ButtonTextPosition Grid.Column="1"
-									Grid.Row="1"
-									Position="Horizontal"
-									HorizontalPosition="Center"
-									/>
-			<crd:ButtonTextPosition Grid.Column="2"
-									Grid.Row="1"
-									Position="Horizontal"
-									HorizontalPosition="Right"
-									/>
-			
-		</Grid>
-
-		<Grid RowDefinitions="auto auto"
-			  RowSpacing="3"
-			  >
-
-			<crd:ButtonWrapText Grid.Row="0"/>
-			<crd:ButtonMergeCells Grid.Row="1"/>
-		</Grid>
-
-	</StackPanel>
+	
+	</Grid>
 </Window>

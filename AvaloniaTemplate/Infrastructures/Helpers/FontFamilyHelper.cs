@@ -1,17 +1,17 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary;
+using AvaloniaTemplate.Services.Interfaces;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Windows.Input;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
     public class FontFamilyHelper
     {
+        //private static readonly IUIConnectorService connectorService = App.GetService<IUIConnectorService>();
+
         static FontFamilyHelper()
         {
             ControlPreviewFontProperty.Changed.AddClassHandler<FontSelectorToolkit>(RegistryPreviewFontChanged);
@@ -111,7 +111,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <summary>
         /// Контроль выбора шрифта
         /// </summary>
-        public static readonly AttachedProperty<bool> ControlFontChangedProperty = 
+        public static readonly AttachedProperty<bool> ControlFontChangedProperty =
             AvaloniaProperty.RegisterAttached<BorderHelper, FontSelectorToolkit, bool>("ControlFontChanged");
 
         /// <summary>
@@ -145,7 +145,10 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             if (item is not { } || item is not FontFamily font)
                 return;
 
-            Debug.WriteLine(font.Name);
+
+            //connectorService.CurrentFont = font;
+
+            //Debug.WriteLine(font.Name);
 
             //if (sender is not Border border)
             //    return;

@@ -67,7 +67,7 @@ public class FontSelectorToolkit : BaseTemplatedControl
 
     #region Выбранный элемент из спсика
     public static readonly StyledProperty<object?> SelectedItemProperty =
-        AvaloniaProperty.Register<FontSelectorToolkit, object?>(nameof(SelectedItem));
+        AvaloniaProperty.Register<FontSelectorToolkit, object?>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Выбранный элемент из спсика
