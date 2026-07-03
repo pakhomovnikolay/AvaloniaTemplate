@@ -12,7 +12,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
+namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class FontSelectorToolkit : BaseTemplatedControl
 {

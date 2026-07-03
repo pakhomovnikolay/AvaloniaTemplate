@@ -8,14 +8,13 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
-namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
+namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class SelectorPicker : BaseTemplatedControl
 {
@@ -28,9 +27,9 @@ public class SelectorPicker : BaseTemplatedControl
     {
         dictionaryColorPickerType = new()
         {
+            { SelectorPickerType.BorderStyle, InitializeBorderStyleElement },
             { SelectorPickerType.Background, InitializeBackgroundElement },
-            { SelectorPickerType.Foreground, InitializeForegroundElement },
-            { SelectorPickerType.BorderStyle, InitializeBorderStyleElement }
+            { SelectorPickerType.Foreground, InitializeForegroundElement }
         };
     }
 
@@ -57,7 +56,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Тип границы
     public static readonly StyledProperty<CurrentBorderStyleType> BorderStyleTypeProperty =
-        AvaloniaProperty.Register<GridStylePicker, CurrentBorderStyleType>(nameof(BorderStyleType));
+        AvaloniaProperty.Register<SelectorPicker, CurrentBorderStyleType>(nameof(BorderStyleType));
 
     /// <summary>
     /// Тип границы
@@ -212,7 +211,6 @@ public class SelectorPicker : BaseTemplatedControl
             Children = { stackPanel }
         };
     }
-
     private void InitializeForegroundElement(Popup frame = null)
     {
         var stackPanel = Helper.CreateStackPanel(Orientation.Vertical, 5);
@@ -249,7 +247,6 @@ public class SelectorPicker : BaseTemplatedControl
             Children = { stackPanel }
         };
     }
-
     private void InitializeBorderStyleElement(Popup frame = null)
     {
         var stackPanel = Helper.CreateStackPanel(Orientation.Vertical, 5);
@@ -262,7 +259,6 @@ public class SelectorPicker : BaseTemplatedControl
             Children = { stackPanel }
         };
     }
-
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -324,7 +320,6 @@ public class SelectorPicker : BaseTemplatedControl
         grid.Children.Add(border);
         return grid;
     }
-
     private void RenderGridStyle(CurrentBorderStyleType borderStyleType)
         => Content = GridStyleHelper.CreateGridStyle(borderStyleType);
 }

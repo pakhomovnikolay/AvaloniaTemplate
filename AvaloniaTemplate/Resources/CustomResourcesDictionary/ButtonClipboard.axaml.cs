@@ -8,7 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
+namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonClipboard : BaseTemplatedControl
 {

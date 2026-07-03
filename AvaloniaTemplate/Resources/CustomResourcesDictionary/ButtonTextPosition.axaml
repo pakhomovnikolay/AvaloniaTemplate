@@ -7,21 +7,21 @@
         <Border Padding="10">
             <Grid RowDefinitions="* *">
                 <StackPanel Orientation="Horizontal" Spacing="5">
-                    <controls:ButtonSetTextPosition Position="Vertical" VerticalPosition="Top"/>
-                    <controls:ButtonSetTextPosition Position="Vertical" VerticalPosition="Center"/>
-                    <controls:ButtonSetTextPosition Position="Vertical" VerticalPosition="Bottom"/>
+                    <controls:ButtonTextPosition Position="Vertical" VerticalPosition="Top"/>
+                    <controls:ButtonTextPosition Position="Vertical" VerticalPosition="Center"/>
+                    <controls:ButtonTextPosition Position="Vertical" VerticalPosition="Bottom"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Spacing="5" Grid.Row="1">
-                    <controls:ButtonSetTextPosition Position="Horizontal" HorizontalPosition="Left"/>
-                    <controls:ButtonSetTextPosition Position="Horizontal" HorizontalPosition="Center"/>
-                    <controls:ButtonSetTextPosition Position="Horizontal" HorizontalPosition="Right"/>
+                    <controls:ButtonTextPosition Position="Horizontal" HorizontalPosition="Left"/>
+                    <controls:ButtonTextPosition Position="Horizontal" HorizontalPosition="Center"/>
+                    <controls:ButtonTextPosition Position="Horizontal" HorizontalPosition="Right"/>
                 </StackPanel>
             </Grid>
         </Border>
     </Design.PreviewWith>
     
-    <ControlTheme x:Key="{x:Type controls:ButtonSetTextPosition}"
-                  TargetType="controls:ButtonSetTextPosition"
+    <ControlTheme x:Key="{x:Type controls:ButtonTextPosition}"
+                  TargetType="controls:ButtonTextPosition"
                   >
         <Setter Property="MinHeight" Value="25"/>
         <Setter Property="MinWidth" Value="25"/>
@@ -35,10 +35,7 @@
         <Setter Property="CornerRadius" Value="3"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnDefinitions="*"
-                      RowDefinitions="*"
-                      >
-                    <ToggleButton x:Name="PART_Button"
+                <ToggleButton x:Name="PART_Button"
                               Command="{TemplateBinding Command}"
                               CommandParameter="{TemplateBinding CommandParameter}"
                               IsChecked="{Binding IsChecked, RelativeSource={RelativeSource TemplatedParent}}"
@@ -52,9 +49,7 @@
                               Background="{TemplateBinding Background}"
                               CornerRadius="{TemplateBinding CornerRadius}"
                               Padding="{TemplateBinding Padding}"
-                              Classes="highlightedBackground"
                               />
-                </Grid>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

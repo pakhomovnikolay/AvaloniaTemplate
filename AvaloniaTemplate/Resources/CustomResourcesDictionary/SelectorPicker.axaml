@@ -1,32 +1,32 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
                     >
     <Design.PreviewWith>
         <Border Padding="5"
                 >
             <StackPanel Orientation="Horizontal" Spacing="5">
-                <controls:ColorStylePicker PickerType="BorderStyle"
-                                           BorderStyleType="Bottom"
-                                           Height="25"
-                                           Width="35"
-                                           />
+                <controls:SelectorPicker BorderStyleType="Bottom"
+                                         PickerType="BorderStyle"
+                                         Height="25"
+                                         Width="35"
+                                         />
 
-                <controls:ColorStylePicker PickerType="Background"
-                                           Height="25"
-                                           Width="35"
-                                           />
+                <controls:SelectorPicker PickerType="Background"
+                                         Height="25"
+                                         Width="35"
+                                         />
 
-                <controls:ColorStylePicker PickerType="Foreground"
-                                           Height="25"
-                                           Width="35"
-                                           />
+                <controls:SelectorPicker PickerType="Foreground"
+                                         Height="25"
+                                         Width="35"
+                                         />
             </StackPanel>
         </Border>
     </Design.PreviewWith>
     
-    <ControlTheme x:Key="{x:Type controls:ColorStylePicker}"
-                  TargetType="controls:ColorStylePicker"
+    <ControlTheme x:Key="{x:Type controls:SelectorPicker}"
+                  TargetType="controls:SelectorPicker"
                   >
         <Setter Property="FontFamily" Value="Verdana"/>
         <Setter Property="FontSize" Value="12"/>

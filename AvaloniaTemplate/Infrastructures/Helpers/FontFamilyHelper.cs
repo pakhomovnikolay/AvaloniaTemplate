@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Media;
-using AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

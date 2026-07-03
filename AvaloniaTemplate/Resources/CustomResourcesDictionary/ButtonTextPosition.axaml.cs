@@ -9,11 +9,11 @@ using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ButtonSetTextPosition : TemplatedControl
+public class ButtonTextPosition : TemplatedControl
 {
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Положение контента по вертикали
@@ -27,7 +27,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Положение контента по горизинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Положение контента по горизинтали
@@ -41,7 +41,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Позиция по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalPositionProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, VerticalAlignment>(nameof(VerticalPosition), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, VerticalAlignment>(nameof(VerticalPosition), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Позиция по вертикали
@@ -55,7 +55,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Позиция по горизинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalPositionProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, HorizontalAlignment>(nameof(HorizontalPosition), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, HorizontalAlignment>(nameof(HorizontalPosition), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Позиция по горизинтали
@@ -69,7 +69,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Ориентация
     public static readonly StyledProperty<Orientation> PositionProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, Orientation>(nameof(Position), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, Orientation>(nameof(Position), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Ориентация
@@ -83,7 +83,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Установлена
@@ -97,7 +97,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -111,7 +111,7 @@ public class ButtonSetTextPosition : TemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<ButtonSetTextPosition, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<ButtonTextPosition, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Параметр для команды

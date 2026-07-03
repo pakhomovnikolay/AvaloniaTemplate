@@ -36,7 +36,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DualListSelector.axaml"/>
 
 
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonSetTextPosition.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonTextPosition.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonWrapText.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonMergeCells.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SliderZoomControl.axaml"/>
@@ -45,10 +45,10 @@
 
 
 				
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ButtonClipboard.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/FontStyleToolkit.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/FontSelectorToolkit.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/SelectorPicker.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonClipboard.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontStyleToolkit.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontSelectorToolkit.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorPicker.axaml"/>
 
 				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ColorStylePicker.axaml"/>-->
 				

@@ -1,12 +1,41 @@
 using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Layout;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class ButtonMergeCells : TemplatedControl
 {
+    #region Положение контента по вертикали
+    public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
+        AvaloniaProperty.Register<ButtonWrapText, VerticalAlignment>(nameof(VerticalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Положение контента по вертикали
+    /// </summary>
+    public VerticalAlignment VerticalContentAlignment
+    {
+        get => GetValue(VerticalContentAlignmentProperty);
+        set => SetValue(VerticalContentAlignmentProperty, value);
+    }
+    #endregion
+
+    #region Положение контента по горизинтали
+    public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
+        AvaloniaProperty.Register<ButtonWrapText, HorizontalAlignment>(nameof(HorizontalContentAlignment), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Положение контента по горизинтали
+    /// </summary>
+    public HorizontalAlignment HorizontalContentAlignment
+    {
+        get => GetValue(HorizontalContentAlignmentProperty);
+        set => SetValue(HorizontalContentAlignmentProperty, value);
+    }
+    #endregion
+
     #region Установлена
     public static readonly StyledProperty<bool> IsCheckedProperty =
         AvaloniaProperty.Register<ButtonMergeCells, bool>(nameof(IsChecked), defaultBindingMode: BindingMode.TwoWay);

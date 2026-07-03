@@ -1,22 +1,25 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
+using Avalonia.Data;
 using Avalonia.Interactivity;
 using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections.Generic;
 using System.Windows.Input;
 
-namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls;
+namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
 public class FontStyleToolkit : BaseTemplatedControl
 {
     static FontStyleToolkit()
     {
         ToolkitTypeProperty.Changed.AddClassHandler<FontStyleToolkit>((x, _) => x.OnToolkitTypeChanged());
+        IsCheckedProperty.Changed.AddClassHandler<FontStyleToolkit>((x, _) => x.OnIsCheckedChanged());
     }
 
     public FontStyleToolkit()
@@ -155,6 +158,15 @@ public class FontStyleToolkit : BaseTemplatedControl
         builder.Invoke();
     }
 
+    private void OnIsCheckedChanged()
+    {
+        if (IsChecked)
+            Foreground = Helper.GetResource<IBrush>("ToggleButtonForegroundChecked");
+        else
+            Foreground = Helper.GetResource<IBrush>("ToggleButtonForeground");
+        
+    }
+
     private void InitializeFontStyle(
         string text,
         FontWeight fontWeight = FontWeight.Normal,
@@ -171,11 +183,11 @@ public class FontStyleToolkit : BaseTemplatedControl
             FontStyle = fontStyle,
             IsHitTestVisible = false
         };
-        textBlock.Bind(ForegroundProperty, this.GetObservable(ForegroundProperty));
-        textBlock.Bind(FontFamilyProperty, this.GetObservable(FontFamilyProperty));
-        textBlock.Bind(FontSizeProperty, this.GetObservable(FontSizeProperty));
-        textBlock.Bind(HorizontalAlignmentProperty, this.GetObservable(HorizontalContentAlignmentProperty));
-        textBlock.Bind(VerticalAlignmentProperty, this.GetObservable(VerticalContentAlignmentProperty));
+        textBlock.Bind(ForegroundProperty, new Binding() { Source = this, Path = "Foreground" });
+        textBlock.Bind(FontFamilyProperty, new Binding() { Source = this, Path = "FontFamily" });
+        textBlock.Bind(FontSizeProperty, new Binding() { Source = this, Path = "FontSize" });
+        textBlock.Bind(HorizontalAlignmentProperty, new Binding() { Source = this, Path = "HorizontalAlignment" });
+        textBlock.Bind(VerticalAlignmentProperty, new Binding() { Source = this, Path = "VerticalAlignment" });
         if (IsUnderline)
             textBlock.TextDecorations = TextDecorations.Underline;
 

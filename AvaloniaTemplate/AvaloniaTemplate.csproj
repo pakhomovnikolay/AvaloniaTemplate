@@ -35,10 +35,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Resources\CustomResourcesDictionary\Controls\SelectorPicker.axaml.cs">
+    <Compile Update="Resources\CustomResourcesDictionary\ButtonTextPosition.axaml.cs">
+      <DependentUpon>ButtonTextPosition.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\CustomResourcesDictionary\SelectorPicker.axaml.cs">
       <DependentUpon>SelectorPicker.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Resources\CustomResourcesDictionary\Controls\FontStyleToolkit.axaml.cs">
+    <Compile Update="Resources\CustomResourcesDictionary\FontStyleToolkit.axaml.cs">
       <DependentUpon>FontStyleToolkit.axaml</DependentUpon>
     </Compile>
     <Compile Update="Resources\CustomResourcesDictionary\HorizontalTabStrip.axaml.cs">
