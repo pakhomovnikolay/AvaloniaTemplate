@@ -6,94 +6,97 @@
     <Design.PreviewWith>
         <Border Padding="20">
             <Grid ColumnDefinitions="auto auto"
-                  RowDefinitions="auto auto auto"
                   >
                 <controls:ButtonClipboard Grid.Column="0"
-                                          Grid.Row="0"
-                                          Grid.RowSpan="3"
                                           ClipboardType="Paste"
                                           ImageWidth="45"
-                                          ImageHeight="55"
-                                          Spacing="-5"
-                                          Padding="5"
+                                          ImageHeight="45"
                                           />
+                <Grid Grid.Column="1"
+                      RowDefinitions="auto auto auto"
+                      >
+                    <controls:ButtonClipboard Grid.Row="0"
+                                              ClipboardType="Cut"
+                                              ImageWidth="16"
+                                              ImageHeight="16"
+                                              Spacing="5"
+                                              />
+                    <controls:ButtonClipboard Grid.Row="1"
+                                              ClipboardType="Copy"
+                                              Spacing="5"
+                                              />
+                    <controls:ButtonClipboard Grid.Row="2"
+                                              ClipboardType="AsSimple"
+                                              Spacing="5"
+                                              />
+                </Grid>
 
-                <controls:ButtonClipboard Grid.Column="1"
-                                          Grid.Row="0"
-                                          ClipboardType="Cut"
-                                          />
-
-                <controls:ButtonClipboard Grid.Column="1"
-                                          Grid.Row="1"
-                                          ClipboardType="Copy"
-                                          />
-
-                <controls:ButtonClipboard Grid.Column="1"
-                                          Grid.Row="2"
-                                          ClipboardType="AsSimple"
-                                          />
             </Grid>
-
-
-
+            <!--<controls:ButtonClipboard ClipboardType="Paste"/>
+            <controls:ButtonClipboard ClipboardType="Cut"/>
+            <controls:ButtonClipboard ClipboardType="Copy"/>
+            <controls:ButtonClipboard ClipboardType="AsSimple"/>-->
             
         </Border>
     </Design.PreviewWith>
 
-  <ControlTheme x:Key="{x:Type controls:ButtonClipboard}"
-                TargetType="controls:ButtonClipboard"
-                >
-      <Setter Property="HorizontalContentAlignment" Value="Center"/>
-      <Setter Property="VerticalContentAlignment" Value="Center"/>
-      <Setter Property="CornerRadius" Value="5"/>
-      <Setter Property="BorderThickness" Value="0"/>
-      <Setter Property="BorderBrush" Value="Gray"/>
-      <Setter Property="Background" Value="Transparent"/>
-      <Setter Property="Foreground" Value="Black"/>
-      <Setter Property="FontFamily" Value="Verdana"/>
-      <Setter Property="FontSize" Value="10"/>
-      <Setter Property="FontWeight" Value="Normal"/>
-      <Setter Property="ImageWidth" Value="20"/>
-      <Setter Property="ImageHeight" Value="22"/>
-      <Setter Property="Padding" Value="5 1"/>
-      <Setter Property="Spacing" Value="5"/>
-      <Setter Property="Template">
-          <ControlTemplate>
-              <Button x:Name="PART_Button"
-                      CornerRadius="{TemplateBinding CornerRadius}"
-                      BorderThickness="{TemplateBinding BorderThickness}"
-                      BorderBrush="{TemplateBinding BorderBrush}"
-                      Background="{TemplateBinding Background}"
-                      Foreground="{TemplateBinding Foreground}"
-                      Margin="{TemplateBinding Margin}"
-                      Padding="{TemplateBinding Padding}"
-                      MinWidth="{TemplateBinding MinWidth}"
-                      MinHeight="{TemplateBinding MinHeight}"
-                      Height="{TemplateBinding Height}"
-                      Width="{TemplateBinding Width}"
-                      Command="{TemplateBinding Command}"
-                      CommandParameter="{TemplateBinding CommandParameter}"
-                      Classes="highlightedBackground"
-                      >
-                  <StackPanel Orientation="{TemplateBinding OrientationType}"
-                              Spacing="{TemplateBinding Spacing}"
-                              Width="{TemplateBinding Width}"
-                              Height="{TemplateBinding Height}"
-                              >
-                      <Image Source="{TemplateBinding ImageSource}"
-                             Height="{TemplateBinding ImageHeight}"
-                             Width="{TemplateBinding ImageWidth}"
-                             />
-                      <TextBlock Text="{TemplateBinding Header}"
-                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                 FontFamily="{TemplateBinding FontFamily}"
-                                 FontSize="{TemplateBinding FontSize}"
-                                 FontWeight="{TemplateBinding FontWeight}"
-                                 />
-                  </StackPanel>
-              </Button>
-          </ControlTemplate>
-      </Setter>
-  </ControlTheme>
+    <ControlTheme x:Key="{x:Type controls:ButtonClipboard}"
+                  TargetType="controls:ButtonClipboard"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="11"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Spacing" Value="5"/>
+        <Setter Property="ImageWidth" Value="18"/>
+        <Setter Property="ImageHeight" Value="18"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="Padding" Value="5 1"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Button x:Name="PART_Button"
+                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                        HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                        VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                        CornerRadius="{TemplateBinding CornerRadius}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}"
+                        Foreground="{TemplateBinding Foreground}"
+                        Margin="{TemplateBinding Margin}"
+                        Padding="{TemplateBinding Padding}"
+                        MinWidth="{TemplateBinding MinWidth}"
+                        MinHeight="{TemplateBinding MinHeight}"
+                        Height="{TemplateBinding Height}"
+                        Width="{TemplateBinding Width}"
+                        Command="{TemplateBinding Command}"
+                        CommandParameter="{TemplateBinding CommandParameter}"
+                        Classes="highlightedBackground"
+                        >
+                <StackPanel Orientation="{TemplateBinding OrientationType}"
+                            Spacing="{TemplateBinding Spacing}"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}"
+                            >
+                    <Image Source="{TemplateBinding ImageSource}"
+                           Height="{TemplateBinding ImageHeight}"
+                           Width="{TemplateBinding ImageWidth}"
+                           />
+                    <TextBlock Text="{TemplateBinding Header}"
+                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                               FontFamily="{TemplateBinding FontFamily}"
+                               FontSize="{TemplateBinding FontSize}"
+                               FontWeight="{TemplateBinding FontWeight}"
+                               />
+                </StackPanel>
+            </Button>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
 </ResourceDictionary>

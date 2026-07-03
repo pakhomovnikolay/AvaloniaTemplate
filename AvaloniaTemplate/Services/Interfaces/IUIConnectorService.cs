@@ -70,6 +70,20 @@ namespace AvaloniaTemplate.Services.Interfaces
         ICommand Command_SetSelectedStyleBorder { get; set; }
         #endregion
 
+        #region Команда - установить цвет заднего фона
+        /// <summary>
+        /// Команда - установить цвет заднего фона
+        /// </summary>
+        ICommand Command_SetBackground { get; set; }
+        #endregion
+
+        #region Команда - установить цвет переднего фона
+        /// <summary>
+        /// Команда - установить цвет переднего фона
+        /// </summary>
+        ICommand Command_SetForeground { get; set; }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         /// <summary>
         /// Установлен полужирный стиль шрифта
@@ -98,6 +112,33 @@ namespace AvaloniaTemplate.Services.Interfaces
         CurrentBorderStyleType BorderStyleType { get; set; }
         #endregion
 
+        #region Текущий цвет заднего фона
+        /// <summary>
+        /// Текущий цвет заднего фона
+        /// </summary>
+        IBrush CurrentBackground { get; set; }
+        #endregion
+
+        #region Коллекция последних выбранных цветов заднего фона
+        /// <summary>
+        /// Коллекция последних выбранных цветов заднего фона
+        /// </summary>
+        ObservableCollection<Color> BackgroundColors { get; set; }
+        #endregion
+
+        #region Текущий цвет переднего фона
+        /// <summary>
+        /// Текущий цвет переднего фона
+        /// </summary>
+        IBrush CurrentForeground { get; set; }
+        #endregion
+
+        #region Коллекция последних выбранных цветов переднего фона
+        /// <summary>
+        /// Коллекция последних выбранных цветов переднего фона
+        /// </summary>
+        ObservableCollection<Color> ForegroundColors { get; set; }
+        #endregion
 
         //InitializeFontStyle("Ж", FontWeight.Bold) },
         //    { TemplateButtonFontStyleToolkitType.FontStyleItalic, () => InitializeFontStyle("К", fontStyle: FontStyle.Italic) },

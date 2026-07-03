@@ -210,17 +210,20 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <returns></returns>
         public static Button CreateButtonColor(ICommand command, Popup frame, Color color)
         {
+            var brush = new SolidColorBrush(color);
             var button = new Button()
             {
                 Height = 20,
                 Width = 20,
-                Background = new SolidColorBrush(color),
-                BorderThickness = new(1),
+                Background = brush,
+                BorderThickness = new(1.1),
                 BorderBrush = Brushes.Gray,
                 CornerRadius = new(1),
                 Command = command,
-                CommandParameter = new SolidColorBrush(color)
+                CommandParameter = brush,
+                
             };
+            button.Classes.Add("highlightedToggleButton");
 
             button.Click += (_, _)
                 => frame.Close();

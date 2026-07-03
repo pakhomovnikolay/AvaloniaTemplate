@@ -52,35 +52,35 @@ namespace AvaloniaTemplate.Models.LayoutControls
         private void CreateDictionary()
         {
             var sizeNone = 0.5;
-            var sizeNormal = 0.5;
-            var sizeThick = 1;
-            var thickness = 1.0;
+            var sizeNormal = 1.5;
+            var sizeThick = 2;
+            var thickness = 1;
 
             dctionaryBorderStyle = new()
             {
                 [("Bottom", BorderLineStyleType.None)] = (new Rect(0, Height, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("Bottom", BorderLineStyleType.Normal)] = (new Rect(0, Height, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness)),
-                [("Bottom", BorderLineStyleType.Thick)] = (new Rect(0, Height, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Bottom", BorderLineStyleType.Normal)] = (new Rect(0, Height, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("Bottom", BorderLineStyleType.Thick)] = (new Rect(0, Height, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
 
                 [("Top", BorderLineStyleType.None)] = (new Rect(0, 0, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("Top", BorderLineStyleType.Normal)] = (new Rect(0, 0, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness)),
-                [("Top", BorderLineStyleType.Thick)] = (new Rect(0, 0, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Top", BorderLineStyleType.Normal)] = (new Rect(0, 0, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("Top", BorderLineStyleType.Thick)] = (new Rect(0, 0, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
 
                 [("Left", BorderLineStyleType.None)] = (new Rect(0, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("Left", BorderLineStyleType.Normal)] = (new Rect(0, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
-                [("Left", BorderLineStyleType.Thick)] = (new Rect(0, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Left", BorderLineStyleType.Normal)] = (new Rect(0, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("Left", BorderLineStyleType.Thick)] = (new Rect(0, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
 
                 [("Right", BorderLineStyleType.None)] = (new Rect(Width, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("Right", BorderLineStyleType.Normal)] = (new Rect(Width, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
-                [("Right", BorderLineStyleType.Thick)] = (new Rect(Width, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("Right", BorderLineStyleType.Normal)] = (new Rect(Width, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("Right", BorderLineStyleType.Thick)] = (new Rect(Width, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
 
                 [("InsideHorizontal", BorderLineStyleType.None)] = (new Rect(0, Height / 2, Width, sizeNone), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("InsideHorizontal", BorderLineStyleType.Normal)] = (new Rect(0, Height / 2, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black)),
-                [("InsideHorizontal", BorderLineStyleType.Thick)] = (new Rect(0, Height / 2, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness)),
+                [("InsideHorizontal", BorderLineStyleType.Normal)] = (new Rect(0, Height / 2, Width, sizeNormal), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("InsideHorizontal", BorderLineStyleType.Thick)] = (new Rect(0, Height / 2, Width, sizeThick), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
 
                 [("InsideVertical", BorderLineStyleType.None)] = (new Rect(Width / 2, 0, sizeNone, Height), Brushes.Gray, new Pen(Brushes.Gray, thickness, dashStyle: DashStyle.Dash)),
-                [("InsideVertical", BorderLineStyleType.Normal)] = (new Rect(Width / 2, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black)),
-                [("InsideVertical", BorderLineStyleType.Thick)] = (new Rect(Width / 2, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness))
+                [("InsideVertical", BorderLineStyleType.Normal)] = (new Rect(Width / 2, 0, sizeNormal, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot)),
+                [("InsideVertical", BorderLineStyleType.Thick)] = (new Rect(Width / 2, 0, sizeThick, Height), Brushes.Black, new Pen(Brushes.Black, thickness, dashStyle: DashStyle.Dot))
             };
         }
     }

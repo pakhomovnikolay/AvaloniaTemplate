@@ -1,5 +1,4 @@
 using Avalonia;
-using Avalonia.Data;
 using Avalonia.Layout;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
@@ -26,7 +25,7 @@ public class ButtonClipboard : BaseTemplatedControl
     {
         { TemplatrButtonClipboardType.Paste, (new Uri("avares://AvaloniaTemplate/Assets/Paste.png"), "Вставить", Orientation.Vertical) },
         { TemplatrButtonClipboardType.Copy, (new Uri("avares://AvaloniaTemplate/Assets/Copy.png"), "Копировать", Orientation.Horizontal) },
-        { TemplatrButtonClipboardType.Cut, (new Uri("avares://AvaloniaTemplate/Assets/Cut1.png"), "Вырезать", Orientation.Horizontal) },
+        { TemplatrButtonClipboardType.Cut, (new Uri("avares://AvaloniaTemplate/Assets/Cut.png"), "Вырезать", Orientation.Horizontal) },
         { TemplatrButtonClipboardType.AsSimple, (new Uri("avares://AvaloniaTemplate/Assets/AsSimple.png"), "Формат по образцу", Orientation.Horizontal) }
     };
     #endregion

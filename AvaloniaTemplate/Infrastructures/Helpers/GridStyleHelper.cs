@@ -134,8 +134,8 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                     ]
             };
             var border = CreateGridStyle(borderStyleType);
-            border.MinHeight = 22;
-            border.MinWidth = 22;
+            //border.MinHeight = 22;
+            //border.MinWidth = 22;
 
             Grid.SetColumn(label, 1);
             Grid.SetColumn(border, 0);

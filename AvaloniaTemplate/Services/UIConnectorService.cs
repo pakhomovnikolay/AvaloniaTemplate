@@ -1,8 +1,12 @@
-﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
+﻿using Avalonia.Media;
+using AvaloniaTemplate.Infrastructures.Commands.Base;
+using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Services
@@ -149,6 +153,64 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Команда - установить цвет заднего фона
+        private ICommand command_SetBackground;
+        /// <summary>
+        /// Команда - установить цвет заднего фона
+        /// </summary>
+        public ICommand Command_SetBackground
+        {
+            get => command_SetBackground ??= new RelayCommand(ExecuteCommand_SetBackground);
+            set => SetProperty(ref command_SetBackground, value);
+        }
+
+        private void ExecuteCommand_SetBackground(object p)
+        {
+            if (p is null || p is not IBrush brush)
+                return;
+
+            var color = Color.Parse(Helper.GetColor(brush));
+            if (!BackgroundColors.Contains(color))
+            {
+                BackgroundColors.Insert(0, color);
+                if (BackgroundColors.Count > 10)
+                    BackgroundColors.RemoveAt(BackgroundColors.Count - 1);
+            }
+
+            CurrentBackground = brush;
+            Debug.WriteLine($"{color}");
+        }
+        #endregion
+
+        #region Команда - установить цвет переднего фона
+        private ICommand сommand_SetForeground;
+        /// <summary>
+        /// Команда - установить цвет переднего фона
+        /// </summary>
+        public ICommand Command_SetForeground
+        {
+            get => сommand_SetForeground ??= new RelayCommand(ExecuteCommand_SetForeground);
+            set => SetProperty(ref сommand_SetForeground, value);
+        }
+
+        private void ExecuteCommand_SetForeground(object p)
+        {
+            if (p is null || p is not IBrush brush)
+                return;
+
+            var color = Color.Parse(Helper.GetColor(brush));
+            if (!ForegroundColors.Contains(color))
+            {
+                ForegroundColors.Insert(0, color);
+                if (ForegroundColors.Count > 10)
+                    ForegroundColors.RemoveAt(ForegroundColors.Count - 1);
+            }
+
+            CurrentForeground = brush;
+            Debug.WriteLine($"{color}");
+        }
+        #endregion
+
         #region Установлен полужирный стиль шрифта
         private bool isFontWeightBold;
         /// <summary>
@@ -197,7 +259,53 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Текущий цвет заднего фона
+        private IBrush currentBackground = Brushes.Yellow;
+        /// <summary>
+        /// Текущий цвет заднего фона
+        /// </summary>
+        public IBrush CurrentBackground
+        {
+            get => currentBackground;
+            set => SetProperty(ref currentBackground, value);
+        }
+        #endregion
 
+        #region Текущий цвет переднего фона
+        private IBrush currentForeground = Brushes.Red;
+        /// <summary>
+        /// Текущий цвет переднего фона
+        /// </summary>
+        public IBrush CurrentForeground
+        {
+            get => currentForeground;
+            set => SetProperty(ref currentForeground, value);
+        }
+        #endregion
+
+        #region Коллекция последних выбранных цветов заднего фона
+        private ObservableCollection<Color> backgroundColors = [];
+        /// <summary>
+        /// Коллекция последних выбранных цветов заднего фона
+        /// </summary>
+        public ObservableCollection<Color> BackgroundColors
+        {
+            get => backgroundColors;
+            set => SetProperty(ref backgroundColors, value);
+        }
+        #endregion
+
+        #region Коллекция последних выбранных цветов переднего фона
+        private ObservableCollection<Color> foregroundColors = [];
+        /// <summary>
+        /// Коллекция последних выбранных цветов переднего фона
+        /// </summary>
+        public ObservableCollection<Color> ForegroundColors
+        {
+            get => foregroundColors;
+            set => SetProperty(ref foregroundColors, value);
+        }
+        #endregion
 
 
         //    private readonly IClipboardService сlipboardService;

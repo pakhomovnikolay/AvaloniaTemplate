@@ -77,7 +77,7 @@
 			</Grid>
 
 			<Grid Grid.Row="1"
-				  ColumnDefinitions="30 30 30 40"
+				  ColumnDefinitions="30 30 30 40 40 40"
 				  ColumnSpacing="2"
 				  >
 				<controls:FontStyleToolkit Grid.Column="0"
@@ -102,11 +102,26 @@
 										   Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
 										   />
 
-				<controls:GridStylePicker Grid.Column="3"
-										  BorderStyleType="{Binding ConnectorService.BorderStyleType}"
-										  Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
-										  CommandParameter="{Binding ConnectorService.BorderStyleType}"
-										  />
+				<controls:ColorStylePicker Grid.Column="3"
+										   PickerType="BorderStyle"
+										   BorderStyleType="{Binding ConnectorService.BorderStyleType}"
+										   Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
+										   CommandParameter="{Binding ConnectorService.BorderStyleType}"
+										   />
+
+				<controls:ColorStylePicker Grid.Column="4"
+										   PickerType="Background"
+										   BackgroundColors="{Binding ConnectorService.BackgroundColors}"
+										   Command="{Binding ConnectorService.Command_SetBackground}"
+										   CommandParameter="{Binding ConnectorService.CurrentBackground}"
+										   />
+
+				<controls:ColorStylePicker Grid.Column="5"
+										   PickerType="Foreground"
+										   BackgroundColors="{Binding ConnectorService.ForegroundColors}"
+										   Command="{Binding ConnectorService.Command_SetForeground}"
+										   CommandParameter="{Binding ConnectorService.CurrentForeground}"
+										   />
 				
 			</Grid>
 		</Grid>

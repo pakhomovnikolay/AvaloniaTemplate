@@ -1,0 +1,239 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Controls"
+                    >
+    <Design.PreviewWith>
+        <Border Padding="5"
+                >
+            <StackPanel Orientation="Horizontal" Spacing="5">
+                <controls:ColorStylePicker PickerType="BorderStyle"
+                                           BorderStyleType="Bottom"
+                                           Height="25"
+                                           Width="35"
+                                           />
+
+                <controls:ColorStylePicker PickerType="Background"
+                                           Height="25"
+                                           Width="35"
+                                           />
+
+                <controls:ColorStylePicker PickerType="Foreground"
+                                           Height="25"
+                                           Width="35"
+                                           />
+            </StackPanel>
+        </Border>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ColorStylePicker}"
+                  TargetType="controls:ColorStylePicker"
+                  >
+        <Setter Property="FontFamily" Value="Verdana"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="Bold"/>
+        <Setter Property="MinWidth" Value="0"/>
+        <Setter Property="MinHeight" Value="0"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <ToggleButton x:Name="PART_ToggleButtonPicker"
+                                  Grid.Column="0"
+                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  FontFamily="{TemplateBinding FontFamily}"
+                                  FontSize="{TemplateBinding FontSize}"
+                                  FontWeight="{TemplateBinding FontWeight}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                  Background="{TemplateBinding Background}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  Classes="highlightedBackground"
+                                  Padding="0"
+                                  Margin="0"
+                                  >
+                        <Grid ColumnDefinitions="* 1 10">
+                            <Button x:Name="PART_ButtonSetColor"
+                                    Grid.Column="0"
+                                    Content="{TemplateBinding Content}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Command="{TemplateBinding Command}"
+                                    CommandParameter="{TemplateBinding CommandParameter}"
+                                    Background="Transparent"
+                                    CornerRadius="2 0 0 2"
+                                    Padding="0 0 0 1"
+                                    Margin="0 0 0 0"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    >
+                               <!-- <Grid RowDefinitions="* 5">
+                                    <ContentPresenter Grid.Row="0"
+                                                      Content="{TemplateBinding Content}"
+                                                      />
+                                    <Border Grid.Row="1"
+                                            BorderThickness="1"
+                                            BorderBrush="Gray"
+                                            Background="{TemplateBinding CommandParameter}"
+                                            />
+                                </Grid>-->
+                            
+                            </Button>
+
+                            <Border x:Name="PART_Separator"
+                                    Grid.Column="1"
+                                    CornerRadius="0"
+                                    BorderThickness="0"
+                                    IsVisible="False"
+                                    Background="{DynamicResource HighlightedToggleButtonBackgroundPointerOver}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    />
+
+                            <PathIcon Grid.Column="2"
+                                      Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                      Height="8"
+                                      Width="8"
+                                      />
+                        </Grid>
+                    </ToggleButton>
+
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           IsOpen="{TemplateBinding IsPopupOpen, Mode=TwoWay}"
+                           IsLightDismissEnabled="True"
+                           InheritsTransform="True"
+                           MinHeight="30"
+                           MinWidth="100"
+                           PlacementTarget="PART_ToggleButtonPicker"
+                           Placement="BottomEdgeAlignedLeft"
+                           >
+                        <Border x:Name="PopupBorder"
+                                Background="LightGray"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                Padding="5 0"
+                                Margin="0 0 0.5 0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                CornerRadius="3"
+                                Child="{Binding ContentPopup, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                />
+                    </Popup>
+                </Grid>
+
+                <!--<Grid>
+                    <ToggleButton x:Name="PART_ToggleButtonPicker"
+                                  Grid.Column="0"
+                                  IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                  FontFamily="{TemplateBinding FontFamily}"
+                                  FontSize="{TemplateBinding FontSize}"
+                                  FontWeight="{TemplateBinding FontWeight}"
+                                  HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                  VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                  HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                                  VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                                  Background="{TemplateBinding Background}"
+                                  CornerRadius="{TemplateBinding CornerRadius}"
+                                  BorderThickness="{TemplateBinding BorderThickness}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  Classes="highlightedBackground"
+                                  Padding="0"
+                                  Margin="0"
+                                  >
+                        <Grid ColumnDefinitions="* 1 10">
+                            <Button x:Name="PART_ButtonSetColor"
+                                    Grid.Column="0"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    Command="{TemplateBinding Command}"
+                                    CommandParameter="{TemplateBinding CommandParameter}"
+                                    Background="Transparent"
+                                    CornerRadius="2 0 0 2"
+                                    Padding="0 0 0 1"
+                                    Margin="0 0 0 0"
+                                    HorizontalContentAlignment="Stretch"
+                                    VerticalContentAlignment="Stretch"
+                                    >
+                            
+                                <Grid RowDefinitions="* 5">
+                                    <ContentPresenter Grid.Row="0"
+                                                      Content="{TemplateBinding Content}"
+                                                      />
+                                    <Border Grid.Row="1"
+                                            BorderThickness="1"
+                                            BorderBrush="Gray"
+                                            Background="{TemplateBinding CommandParameter}"
+                                            />
+                                </Grid>
+                            
+                            </Button>
+
+                            <Border x:Name="PART_Separator"
+                                    Grid.Column="1"
+                                    CornerRadius="0"
+                                    BorderThickness="0"
+                                    IsVisible="False"
+                                    Background="{DynamicResource HighlightedToggleButtonBackgroundPointerOver}"
+                                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                    />
+
+                            <PathIcon Grid.Column="2"
+                                      Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
+                                      HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                      Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z"
+                                      Height="8"
+                                      Width="8"
+                                      />
+                        </Grid>
+                    </ToggleButton>
+
+                    <Popup Name="PART_Popup"
+                           WindowManagerAddShadowHint="False"
+                           IsOpen="{TemplateBinding IsPopupOpen, Mode=TwoWay}"
+                           IsLightDismissEnabled="True"
+                           InheritsTransform="True"
+                           MinHeight="30"
+                           MinWidth="100"
+                           PlacementTarget="PART_ToggleButtonPicker"
+                           Placement="BottomEdgeAlignedLeft"
+                           >
+                        <Border x:Name="PopupBorder"
+                                Background="LightGray"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                Padding="5 0"
+                                Margin="0 0 0.5 0"
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Stretch"
+                                CornerRadius="3"
+                                Child="{Binding ContentPopup, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                />
+                    </Popup>
+                </Grid>-->
+            </ControlTemplate>
+        </Setter>
+
+        <Style Selector="^:pointerover">
+            <Style Selector="^ /template/ Border#PART_Separator">
+                <Setter Property="IsVisible" Value="True" />
+            </Style>
+            <Style Selector="^ /template/ ToggleButton#PART_ToggleButtonPicker">
+                <Setter Property="BorderThickness" Value="1" />
+            </Style>
+        </Style>
+    </ControlTheme>
+</ResourceDictionary>
