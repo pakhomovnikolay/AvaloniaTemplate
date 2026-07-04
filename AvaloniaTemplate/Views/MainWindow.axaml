@@ -242,6 +242,7 @@
 
 		<Grid Grid.Row="1"
 			  ColumnDefinitions="auto auto"
+			  ColumnSpacing="100"
 			  >
 			<StackPanel Grid.Column="0" Spacing="5"
 						>
@@ -289,6 +290,19 @@
 				<CheckBox Content="Объединить ячейки"
 						  IsChecked="{Binding ConnectorService.IsMergeCell}"
 						  />
+			</StackPanel>
+
+			<StackPanel Grid.Column="1"
+						Spacing="5"
+						>
+				
+				<crd:HorizontalTabStrip MaxWidth="500"
+										MinWidth="200"
+										ItemsSource="{Binding ConnectorService.CollectionHorizontalTabStrip}"
+										SelectedItem="{Binding ConnectorService.SelectedItemHorizontalTabStrip}"
+										Command="{Binding ConnectorService.Command_CreateItemHorizontalTabStrip}"
+										helpers:HorizontalTabStripHelper.SelectedChangeControl="True"
+										/>
 			</StackPanel>
 		</Grid>
 	

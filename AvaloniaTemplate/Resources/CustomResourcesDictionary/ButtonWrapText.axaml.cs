@@ -2,11 +2,12 @@ using Avalonia;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ButtonWrapText : TemplatedControl
+public class ButtonWrapText : BaseTemplatedControl
 {
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =

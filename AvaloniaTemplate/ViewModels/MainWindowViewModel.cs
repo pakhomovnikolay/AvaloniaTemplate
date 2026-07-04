@@ -66,7 +66,8 @@ namespace AvaloniaTemplate.ViewModels
             AppStatus = App.AppStatus;
             App.ChangeAppStatus += ChangeAppStatus;
 
-            TestItemList = ["1", "2", "3", "4", "5", "6", "7", "81", "9", "10", "11"];
+            ConnectorService.CollectionHorizontalTabStrip = ["1", "2", "3", "4", "5", "6", "7", "81", "9", "10", "11"];
+            ConnectorService.SelectedItemHorizontalTabStrip = ConnectorService.CollectionHorizontalTabStrip[0];
         }
         #endregion
 

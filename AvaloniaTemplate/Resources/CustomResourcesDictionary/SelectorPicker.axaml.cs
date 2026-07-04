@@ -138,12 +138,12 @@ public class SelectorPicker : BaseTemplatedControl
     }
     #endregion
 
-    #region Источник данных раскрывающегося окна
+    #region Коллекция недавно выбранных цветов
     public static readonly StyledProperty<ObservableCollection<Color>> BackgroundColorsProperty =
         AvaloniaProperty.Register<SelectorPicker, ObservableCollection<Color>>(nameof(BackgroundColors), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
-    /// Источник данных раскрывающегося окна
+    /// Коллекция недавно выбранных цветов
     /// </summary>
     public ObservableCollection<Color> BackgroundColors
     {

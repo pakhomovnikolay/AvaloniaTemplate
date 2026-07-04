@@ -12,8 +12,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         static ToggleGroupHelper()
         {
             GroupControlIsCheckedChangeProperty.Changed.AddClassHandler<ToggleButton>(RegisterIsChecked);
-
-            //GroupNameProperty.Changed.AddClassHandler<ToggleButton>(OnGroupChanged);
+            GroupControlClickChangeProperty.Changed.AddClassHandler<ToggleButton>(RegisterControlClick);
         }
 
         public static readonly AttachedProperty<string?> GroupControlClickChangeProperty

@@ -1,110 +1,132 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
-        >
-
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+                    >
     <Design.PreviewWith>
         <Border Padding="20">
-             <controls:HorizontalTabStrip Width="150" Height="30"/>
+             <controls:HorizontalTabStrip Width="200" Height="30"/>
         </Border>
     </Design.PreviewWith>
 
     <ControlTheme x:Key="{x:Type controls:HorizontalTabStrip}"
                   TargetType="controls:HorizontalTabStrip"
                   >
+        <Setter Property="Padding" Value="0 0 1 0"/>
         <Setter Property="Background" Value="LightGray"/>
-        <Setter Property="MaxWidth" Value="700"/>
+        <Setter Property="CornerRadius" Value="3"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="Template">
             <ControlTemplate>
-               <Grid ColumnDefinitions="auto * auto"
-                     ColumnSpacing="2"
-                     Background="{TemplateBinding Background}"
-                     >
+                <Grid ColumnSpacing="0"
+                      >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*" MaxWidth="700"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                   <StackPanel Grid.Column="0"
-                               Orientation="Horizontal"
-                               Spacing="2"
-                               >
-                       <RepeatButton x:Name="PART_ButtonNextLeft"
-                                     Padding="0"
-                                     Background="Transparent"
-                                     MinWidth="25"
-                                     MinHeight="25"
-                                     >
-                           <PathIcon Data="M12,0 L4,8 L12,16 Z"
-                                     Foreground="Gray"
-                                     Height="12"
-                                     />
-                   
-                       </RepeatButton>
+                    <Border Grid.Column="0"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="3 0 0 3"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Margin="0"
+                            >
+                        <StackPanel Orientation="Horizontal"
+                                    Spacing="2"
+                                    >
+                            <RepeatButton x:Name="PART_ButtonNextLeft"
+                                              Padding="0"
+                                              Background="Transparent"
+                                              MinWidth="30"
+                                              MinHeight="25"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Stretch"
+                                              >
+                                <PathIcon Data="M12,0 L4,8 L12,16 Z"
+                                          Foreground="{DynamicResource ButtonForegroundPressed}"
+                                          Height="12"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Stretch"
+                                          />
+                            </RepeatButton>
 
-                       <RepeatButton x:Name="PART_ButtonNextRight"
-                                     Padding="0"
-                                     Background="Transparent"
-                                     MinWidth="25"
-                                     MinHeight="25"
-                                     >
-                           <PathIcon Data="M4,0 L12,8 L4,16 Z"
-                                     Foreground="Gray"
-                                     Height="12"
-                                     />
-                   
-                       </RepeatButton>
+                            <RepeatButton x:Name="PART_ButtonNextRight"
+                                              Padding="0"
+                                              Background="Transparent"
+                                              MinWidth="30"
+                                              MinHeight="25"
+                                              VerticalAlignment="Stretch"
+                                              HorizontalAlignment="Stretch"
+                                              >
+                                <PathIcon Data="M4,0 L12,8 L4,16 Z"
+                                          Foreground="{DynamicResource ButtonForegroundPressed}"
+                                          Height="12"
+                                          HorizontalAlignment="Center"
+                                          VerticalAlignment="Stretch"
+                                          />
+                            </RepeatButton>
 
-                       <ToggleButton x:Name="ViewItemList"
-                                     Padding="0"
-                                     Classes="highlightedBackground"
-                                     BorderThickness="0"
-                                     Background="Transparent"
-                                     Content="..."
-                                     MinWidth="35"
-                                     MinHeight="25"
-                                     IsChecked="{Binding IsPopupOpenned, RelativeSource={RelativeSource TemplatedParent}}"
-                                     />
-                   
-                   </StackPanel>
+                            <ToggleButton x:Name="ViewItemList"
+                                         Padding="0"
+                                         Classes="highlightedBackground"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Foreground="{DynamicResource ButtonForegroundPressed}"
+                                         Content="..."
+                                         MinWidth="35"
+                                         MinHeight="25"
+                                         VerticalAlignment="Stretch"
+                                         HorizontalAlignment="Stretch"
+                                         IsChecked="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}}"
+                                         />
+                        
+                        </StackPanel>
+                    </Border>
 
-                   <ScrollViewer x:Name="PART_Scroll"
-                                 Grid.Column="1"
-                                 HorizontalScrollBarVisibility="Hidden"
-                                 VerticalScrollBarVisibility="Disabled"
-                                 >
-                       <ListBox Background="{TemplateBinding Background}"
-                                ItemTemplate="{TemplateBinding ItemTemplate}"
-                                ItemsPanel="{TemplateBinding ItemsPanel}"
-                                ItemsSource="{TemplateBinding ItemsSource}"
-                                SelectedIndex="{TemplateBinding SelectedIndex}"
-                                SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
-                                />
-
-                       
-                   </ScrollViewer>
-
-                   <Button Grid.Column="2"
-                           Padding="5 2 5 2"
-                           Classes="highlightedBackground"
-                           BorderThickness="0"
-                           Background="Transparent"
-                           MinWidth="25"
-                           MinHeight="25"
-                           HorizontalAlignment="Right"
-                           Command="{TemplateBinding CommandCreateItem}"
-                           >
-                       
-                       <PathIcon UseLayoutRounding="False"
-                                 IsHitTestVisible="False"
-                                 HorizontalAlignment="Center"
-                                 VerticalAlignment="Center"
-                                 Width="12"
-                                 Height="12"
-                                 Foreground="{DynamicResource ComboBoxDropDownGlyphForeground}"
-                                 Data="M7,1 L9,1 L9,7 L15,7 L15,9 L9,9 L9,15 L7,15 L7,9 L1,9 L1,7 L7,7 Z"
+                    <ScrollViewer x:Name="PART_Scroll"
+                                  Grid.Column="1"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  VerticalScrollBarVisibility="Disabled"
+                                  >
+                        <ListBox Background="{TemplateBinding Background}"
+                                 ItemTemplate="{TemplateBinding ItemTemplate}"
+                                 ItemsPanel="{TemplateBinding ItemsPanel}"
+                                 ItemsSource="{TemplateBinding ItemsSource}"
+                                 SelectedIndex="{Binding SelectedIndex, RelativeSource={RelativeSource TemplatedParent}}"
+                                 SelectedItem="{Binding SelectedItem, RelativeSource={RelativeSource TemplatedParent}}"
                                  />
-                   </Button>
+                    </ScrollViewer>
 
-                   <Popup Name="PART_Popup"
+                    <Border Grid.Column="2"
+                            Background="{TemplateBinding Background}"
+                            CornerRadius="0 3 3 0"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Margin="{TemplateBinding Padding}"
+                            >
+                        <RepeatButton x:Name="PART_ButtonAddItem"
+                                      Padding="0"
+                                      Background="Transparent"
+                                      MinWidth="30"
+                                      MinHeight="25"
+                                      VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch"
+                                      Command="{TemplateBinding Command}"
+                                      >
+                            <PathIcon Data="M7,1 L9,1 L9,7 L15,7 L15,9 L9,9 L9,15 L7,15 L7,9 L1,9 L1,7 L7,7 Z"
+                                      Foreground="{DynamicResource ButtonForegroundPressed}"
+                                      Width="12"
+                                      HorizontalAlignment="Center"
+                                      VerticalAlignment="Stretch"
+                                      />
+                        </RepeatButton>
+                    </Border>
+                    
+                    <Popup Name="PART_Popup"
                            WindowManagerAddShadowHint="False"
-                           IsOpen="{TemplateBinding IsPopupOpenned, Mode=TwoWay}"
+                           IsOpen="{Binding IsPopupOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                            IsLightDismissEnabled="True"
                            InheritsTransform="True"
                            MinHeight="15"
@@ -122,11 +144,11 @@
                                 Margin="0 0 1 0"
                                 HorizontalAlignment="Stretch"
                                 CornerRadius="3"
-                                Child="{Binding PopupContent, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                Child="{Binding ContentPopup , RelativeSource={RelativeSource TemplatedParent}}"
                                 />
                     </Popup>
-               
-               </Grid>
+                
+                </Grid>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

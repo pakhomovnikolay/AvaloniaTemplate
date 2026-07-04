@@ -1,15 +1,15 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Layout;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.LayoutControls;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class ButtonTextPosition : TemplatedControl
+public class ButtonTextPosition : BaseTemplatedControl
 {
     static ButtonTextPosition()
     {
@@ -130,7 +130,8 @@ public class ButtonTextPosition : TemplatedControl
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        var button = e.NameScope.Find<ToggleButton>("PART_Button");
+        base.OnApplyTemplate(e);
+        var button = FindPartById<ToggleButton>(e, "PART_Button");
         ToggleGroupHelper.SetGroupIsChecked(button, $"{Position}Group");
         var control = new LayoutTextPositionType()
         {
@@ -138,7 +139,7 @@ public class ButtonTextPosition : TemplatedControl
             HorizontalPosition = HorizontalPosition,
             Position = Position
         };
-        
+
         button.Content = control;
         if (Position == Orientation.Vertical)
             CommandParameter = VerticalPosition;

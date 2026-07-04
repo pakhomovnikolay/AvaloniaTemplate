@@ -5,12 +5,13 @@ using Avalonia.Data;
 using Avalonia.Layout;
 using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class SliderZoomControl : TemplatedControl
+public class SliderZoomControl : BaseTemplatedControl
 {
     static SliderZoomControl()
     {
@@ -238,8 +239,8 @@ public class SliderZoomControl : TemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        var buttonZoomDeinc = e.NameScope.Find<Button>("PART_ButtonZoomDeinc");
-        var buttonZoomInc = e.NameScope.Find<Button>("PART_ButtonZoomInc");
+        var buttonZoomDeinc = FindPartById<Button>(e, "PART_ButtonZoomDeinc");
+        var buttonZoomInc = FindPartById<Button>(e, "PART_ButtonZoomInc");
 
         buttonZoomDeinc.Click += (_, _) =>
         {
@@ -276,7 +277,7 @@ public class SliderZoomControl : TemplatedControl
             }
         };
 
-        var slider = e.NameScope.Find<Slider>("PART_Slider");
+        var slider = FindPartById<Slider>(e, "PART_Slider");
         slider.PointerWheelChanged += (_, e) =>
         {
             ValueSlider += e.Delta.Y * (SmallChangeSlider / 10);

@@ -7,6 +7,7 @@ using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary;
 using SkiaSharp;
+using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
@@ -96,6 +97,13 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Команда - сменить положение текста по горинтали
         /// </summary>
         ICommand Command_SetVerticalContentAlignment { get; set; }
+        #endregion
+
+        #region Команда - создать элемент для коллекции HorizontalTabStrip
+        /// <summary>
+        /// Команда - создать элемент для коллекции HorizontalTabStrip
+        /// </summary>
+        ICommand Command_CreateItemHorizontalTabStrip { get; set; }
         #endregion
 
         #region Установлен полужирный стиль шрифта
@@ -201,6 +209,20 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Ячейка объеденённая
         /// </summary>
         bool IsMergeCell { get; set; }
+        #endregion
+
+        #region Коллекция элементов HorizontalTabStrip
+        /// <summary>
+        /// Коллекция элементов HorizontalTabStrip
+        /// </summary>
+        ObservableCollection<object> CollectionHorizontalTabStrip { get; set; }
+        #endregion
+
+        #region Выбранный элемент коллекции HorizontalTabStrip
+        /// <summary>
+        /// Выбранный элемент коллекции HorizontalTabStrip
+        /// </summary>
+        object SelectedItemHorizontalTabStrip { get; set; }
         #endregion
 
 

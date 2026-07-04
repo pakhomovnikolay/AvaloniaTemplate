@@ -9,6 +9,7 @@ using Avalonia.Interactivity;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Services.Interfaces;
 using System;
 using System.Collections;
@@ -16,7 +17,7 @@ using System.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class DualListSelector : TemplatedControl
+public class DualListSelector : BaseTemplatedControl
 {
     private bool MousePressed;
     private Point? StartPointerPressed;
@@ -825,14 +826,14 @@ public class DualListSelector : TemplatedControl
         SourceSelectedItems?.Add(Helper.GetSelectedElement<object>(0, SourceItems));
         TargetSelectedItems?.Add(Helper.GetSelectedElement<object>(0, TargetItems));
 
-        buttonAdd = e.NameScope.Find<Button>("PART_Add");
+        buttonAdd = FindPartById<Button>(e, "PART_Add");
         buttonAdd.AddHandler(TappedEvent, HandleAddToTarget, handledEventsToo: true);
 
-        buttonRemove = e.NameScope.Find<Button>("PART_Remove");
+        buttonRemove = FindPartById<Button>(e, "PART_Remove");
         buttonRemove.AddHandler(TappedEvent, HandleAddToSource, handledEventsToo: true);
 
-        sourceData = e.NameScope.Find<ListBox>("PART_Source");
-        targetData = e.NameScope.Find<ListBox>("PART_Target");
+        sourceData = FindPartById<ListBox>(e, "PART_Source");
+        targetData = FindPartById<ListBox>(e, "PART_Target");
 
         sourceData.AddHandler(DoubleTappedEvent, SourceDoubleTappedHandler, handledEventsToo: true);
         sourceData.AddHandler(PointerPressedEvent, SourcePointerPressedHandler, handledEventsToo: true);

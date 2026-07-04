@@ -2,10 +2,11 @@
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Media;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class BorderWithTextBox : TemplatedControl
+public class BorderWithTextBox : BaseTemplatedControl
 {
     #region Шрифт заголовка
     public static readonly StyledProperty<FontFamily> HeaderFontFamilyProperty =

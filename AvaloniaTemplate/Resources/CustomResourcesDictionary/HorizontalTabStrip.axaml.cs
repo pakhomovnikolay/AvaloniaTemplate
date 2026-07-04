@@ -4,53 +4,26 @@ using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Templates;
 using Avalonia.Data;
+using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections;
+using System.Globalization;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class HorizontalTabStrip : TemplatedControl
+public class HorizontalTabStrip : BaseTemplatedControl
 {
     static HorizontalTabStrip()
     {
-        SelectedItemProperty.Changed.AddClassHandler<HorizontalTabStrip>((x, _) => x.SynchronizeIndexItem());
-        SelectedIndexProperty.Changed.AddClassHandler<HorizontalTabStrip>((x, _) => x.SynchronizeItem());
+        ItemsSourceProperty.Changed.AddClassHandler<HorizontalTabStrip>((x, _) => x.OnItemsSourceChanged());
     }
-
-    #region Шаблон представления данных
-    public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, IDataTemplate?>(nameof(ItemTemplate));
-
-    /// <summary>
-    /// Шаблон представления данных
-    /// </summary>
-    public IDataTemplate? ItemTemplate
-    {
-        get => GetValue(ItemTemplateProperty);
-        set => SetValue(ItemTemplateProperty, value);
-    }
-    #endregion
-
-    #region Шаблон панели представления данных
-    public static readonly StyledProperty<ITemplate<Panel?>> ItemsPanelProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, ITemplate<Panel?>>(nameof(ItemsPanel), defaultValue: new ItemsPanelTemplate());
-
-    /// <summary>
-    /// Шаблон панели представления данных
-    /// </summary>
-    public ITemplate<Panel?> ItemsPanel
-    {
-        get => GetValue(ItemsPanelProperty);
-        set => SetValue(ItemsPanelProperty, value);
-    }
-    #endregion
 
     #region Источник данных
     public static readonly StyledProperty<IList?> ItemsSourceProperty =
@@ -94,75 +67,98 @@ public class HorizontalTabStrip : TemplatedControl
     }
     #endregion
 
+    #region Шаблон представления данных
+    public static readonly StyledProperty<IDataTemplate?> ItemTemplateProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, IDataTemplate?>(nameof(ItemTemplate));
+
+    /// <summary>
+    /// Шаблон представления данных
+    /// </summary>
+    public IDataTemplate? ItemTemplate
+    {
+        get => GetValue(ItemTemplateProperty);
+        set => SetValue(ItemTemplateProperty, value);
+    }
+    #endregion
+
+    #region Шаблон панели представления данных
+    public static readonly StyledProperty<ITemplate<Panel?>> ItemsPanelProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, ITemplate<Panel?>>(nameof(ItemsPanel), defaultValue: new ItemsPanelTemplate());
+
+    /// <summary>
+    /// Шаблон панели представления данных
+    /// </summary>
+    public ITemplate<Panel?> ItemsPanel
+    {
+        get => GetValue(ItemsPanelProperty);
+        set => SetValue(ItemsPanelProperty, value);
+    }
+    #endregion
+
     #region Источник данных раскрывающегося окна
-    public static readonly StyledProperty<Panel> PopupContentProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, Panel>(nameof(PopupContent), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<Panel?> ContentPopupProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, Panel?>(nameof(ContentPopup), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Источник данных раскрывающегося окна
     /// </summary>
-    public Panel PopupContent
+    public Panel? ContentPopup
     {
-        get => GetValue(PopupContentProperty);
-        set => SetValue(PopupContentProperty, value);
+        get => GetValue(ContentPopupProperty);
+        set => SetValue(ContentPopupProperty, value);
     }
     #endregion
 
     #region Окно раскрыто
-    public static readonly StyledProperty<bool> IsPopupOpennedProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, bool>(nameof(IsPopupOpenned));
+    public static readonly StyledProperty<bool> IsPopupOpenProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, bool>(nameof(IsPopupOpen), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Окно раскрыто
     /// </summary>
-    public bool IsPopupOpenned
+    public bool IsPopupOpen
     {
-        get => GetValue(IsPopupOpennedProperty);
-        set => SetValue(IsPopupOpennedProperty, value);
+        get => GetValue(IsPopupOpenProperty);
+        set => SetValue(IsPopupOpenProperty, value);
     }
     #endregion
 
-    #region Команда создания нового элемента
-    public static readonly StyledProperty<ICommand> CommandCreateItemProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, ICommand>(nameof(CommandCreateItem), defaultBindingMode: BindingMode.TwoWay);
+    #region Команда
+    public static readonly StyledProperty<ICommand> CommandProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, ICommand>(nameof(Command));
 
     /// <summary>
-    /// Команда создания нового элемента
+    /// Команда
     /// </summary>
-    public ICommand CommandCreateItem
+    public ICommand Command
     {
-        get => GetValue(CommandCreateItemProperty);
-        set => SetValue(CommandCreateItemProperty, value);
+        get => GetValue(CommandProperty);
+        set => SetValue(CommandProperty, value);
     }
     #endregion
 
-    #region Команда выбора элемента
-    public static readonly StyledProperty<ICommand> CommandSelectedItemProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, ICommand>(nameof(CommandSelectedItem), defaultBindingMode: BindingMode.TwoWay);
+    public event Action<object> SelectedItemChange;
 
-    /// <summary>
-    /// Команда выбора элемента
-    /// </summary>
-    public ICommand CommandSelectedItem
+    private void OnItemsSourceChanged()
     {
-        get => GetValue(CommandSelectedItemProperty);
-        set => SetValue(CommandSelectedItemProperty, value);
-    }
-    #endregion
+        if (ItemsSource is not { } || CurrTemplateAppliedEventArgs is null)
+            return;
 
-    #region Максимальная ширина одного элемента
-    public static readonly StyledProperty<double> MaxWidthSingleItemProperty =
-        AvaloniaProperty.Register<HorizontalTabStrip, double>(nameof(MaxWidthSingleItem));
+        var e = CurrTemplateAppliedEventArgs;
+        var scrollViewer = FindPartById<ScrollViewer>(e, "PART_Scroll");
 
-    /// <summary>
-    /// Максимальная ширина одного элемента
-    /// </summary>
-    public double MaxWidthSingleItem
-    {
-        get => GetValue(MaxWidthSingleItemProperty);
-        set => SetValue(MaxWidthSingleItemProperty, value);
+        var buttonNextRight = FindPartById<RepeatButton>(e, "PART_ButtonNextRight");
+        buttonNextRight.Click += (_, _)
+            => ScrollHorizontal(50, scrollViewer);
+
+        var buttonNextLeft = FindPartById<RepeatButton>(e, "PART_ButtonNextLeft");
+        buttonNextLeft.Click += (_, _)
+            => ScrollHorizontal(-50, scrollViewer);
+
+        ContentPopup ??= CratePopupContent();
+        ItemTemplate ??= CrateItemTemplate();
+        ItemsPanel = CrateItemsPanel();
     }
-    #endregion
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
@@ -170,26 +166,9 @@ public class HorizontalTabStrip : TemplatedControl
         if (ItemsSource is not { })
             return;
 
-        var scrollViewer = e.NameScope.Find<ScrollViewer>("PART_Scroll");
-
-        var buttonNextLeft = e.NameScope.Find<RepeatButton>("PART_ButtonNextLeft");
-        buttonNextLeft.Command = Command_SelectNextItemLeft;
-        buttonNextLeft.CommandParameter = scrollViewer;
-
-        var buttonNextRight = e.NameScope.Find<RepeatButton>("PART_ButtonNextRight");
-        buttonNextRight.Command = Command_SelectNextItemRight;
-        buttonNextRight.CommandParameter = scrollViewer;
-
-        PopupContent ??= CratePopupContent();
-        ItemTemplate ??= CrateItemTemplate();
-        ItemsPanel ??= CrateItemsPanel();
+        SetTemplateAppliedEventArgs(e);
+        OnItemsSourceChanged();
     }
-
-    private static void ScrollLeft(double delta, ScrollViewer scrollViewer)
-        => ScrollHorizontal(-delta, scrollViewer);
-
-    private static void ScrollRight(double delta, ScrollViewer scrollViewer)
-        => ScrollHorizontal(delta, scrollViewer);
 
     private static void ScrollHorizontal(double delta, ScrollViewer scrollViewer)
     {
@@ -197,6 +176,43 @@ public class HorizontalTabStrip : TemplatedControl
         var x = Math.Clamp(scrollViewer.Offset.X + delta, 0, max);
 
         scrollViewer.Offset = new Vector(x, scrollViewer.Offset.Y);
+    }
+
+    private IDataTemplate CrateItemTemplate()
+    {
+        ItemTemplate = new FuncDataTemplate<object>((item, _) =>
+        {
+            var tabButton = new ToggleButton()
+            {
+                MinHeight = 20,
+                MinWidth = 70,
+                Padding = new(5, 0, 5, 0),
+                BorderThickness = new(1, 1, 1, 0),
+                Background = Brushes.Transparent,
+                BorderBrush = Brushes.Gray,
+                CornerRadius = new(3, 3, 0, 0),
+                Content = new ContentPresenter()
+                {
+                    Content = item,
+                    HorizontalContentAlignment = HorizontalAlignment.Center
+                }
+            };
+            tabButton.Click += (_, _) => OnSelectedItemChanged(item);
+            tabButton.Bind(ToggleButton.IsCheckedProperty, new Binding(nameof(SelectedItem)) { Source = this, Converter = new SelectedItemConverter(item) });
+            ToggleGroupHelper.SetGroupIsChecked(tabButton, "TableList");
+            return tabButton;
+        });
+        return ItemTemplate;
+    }
+
+    private ITemplate<Panel?> CrateItemsPanel()
+    {
+        ItemsPanel = new FuncTemplate<Panel?>(() => new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 0
+        });
+        return ItemsPanel;
     }
 
     private StackPanel CratePopupContent()
@@ -250,91 +266,26 @@ public class HorizontalTabStrip : TemplatedControl
         return panel;
     }
 
-
-    private static ICommand command_SelectNextItemLeft;
-    private ICommand Command_SelectNextItemLeft
-        => command_SelectNextItemLeft ??= new RelayCommand(ExecuteSelectNextItemLeft);
-
-    private void ExecuteSelectNextItemLeft(object p)
-    {
-        if (p is not { } || p is not ScrollViewer scrollViewer)
-            return;
-
-        ScrollLeft(MaxWidthSingleItem, scrollViewer);
-    }
-
-    private static ICommand command_SelectNextItemRight;
-    private ICommand Command_SelectNextItemRight
-        => command_SelectNextItemRight ??= new RelayCommand(ExecuteSelectNextItemRight);
-
-    private void ExecuteSelectNextItemRight(object p)
-    {
-        if (p is not { } || p is not ScrollViewer scrollViewer)
-            return;
-
-        ScrollRight(MaxWidthSingleItem, scrollViewer);
-    }
-
     private void ConfirmSelectedItem(object item, TappedEventArgs e)
     {
+        OnSelectedItemChanged(item);
+        IsPopupOpen = false;
+    }
+
+    private sealed class SelectedItemConverter(object item) : IValueConverter
+    {
+        private readonly object _item = item;
+
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+            => Equals(value, _item);
+
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            => BindingOperations.DoNothing;
+    }
+
+    private void OnSelectedItemChanged(object item)
+    {
         SelectedItem = item;
-        IsPopupOpenned = false;
-        CommandSelectedItem?.Execute(item);
-    }
-
-    private void SynchronizeIndexItem()
-    {
-        var index = ItemsSource.IndexOf(SelectedItem);
-        if (SelectedIndex == index)
-            return;
-
-        SelectedIndex = index;
-    }
-
-    private void SynchronizeItem()
-    {
-        var item = ItemsSource[SelectedIndex];
-        if (item.Equals(SelectedItem))
-            return;
-
-        SelectedItem = item;
-    }
-
-    private IDataTemplate CrateItemTemplate()
-    {
-        ItemTemplate = new FuncDataTemplate<object>((item, _) =>
-        {
-            var tabButton = new ToggleButton()
-            {
-                Height = 20,
-                MinWidth = 70,
-                Padding = new(5, 0, 5, 0),
-                BorderThickness = new(1, 1, 1, 0),
-                Background = Brushes.Transparent,
-                BorderBrush = Brushes.Gray,
-                CornerRadius = new(3, 3, 0, 0),
-                Content = new ContentPresenter()
-                {
-                    Content = item,
-                    HorizontalContentAlignment = HorizontalAlignment.Center
-                }
-            };
-            ToggleGroupHelper.SetGroupClick(tabButton, "TableList");
-            return tabButton;
-        });
-        return ItemTemplate;
-    }
-
-    private ITemplate<Panel?> CrateItemsPanel()
-    {
-        ItemsPanel = new ItemsPanelTemplate()
-        {
-            Content = new StackPanel()
-            {
-                Orientation = Orientation.Horizontal,
-                Spacing = 1
-            }
-        };
-        return ItemsPanel;
+        SelectedItemChange?.Invoke(item);
     }
 }

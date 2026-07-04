@@ -2,7 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
                     >
-    
     <Design.PreviewWith>
         <Border Padding="10">
             <StackPanel Background="{DynamicResource SystemRegionBrush}"
