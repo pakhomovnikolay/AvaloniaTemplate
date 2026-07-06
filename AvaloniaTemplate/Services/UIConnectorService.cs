@@ -5,10 +5,8 @@ using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
-using System.Collections;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
 using System.Windows.Input;
 
 namespace AvaloniaTemplate.Services

@@ -1,13 +1,6 @@
-﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Layout;
+﻿using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
-using AvaloniaTemplate.Resources.CustomResourcesDictionary;
-using SkiaSharp;
-using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
 
