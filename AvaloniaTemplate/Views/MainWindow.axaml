@@ -298,11 +298,21 @@
 				
 				<crd:HorizontalTabStrip MaxWidth="500"
 										MinWidth="200"
+										
 										ItemsSource="{Binding ConnectorService.CollectionHorizontalTabStrip}"
 										SelectedItem="{Binding ConnectorService.SelectedItemHorizontalTabStrip}"
 										Command="{Binding ConnectorService.Command_CreateItemHorizontalTabStrip}"
 										helpers:HorizontalTabStripHelper.SelectedChangeControl="True"
 										/>
+
+				<crd:SliderZoomControl Height="40"
+									   TickPlacementType="TopLeft"
+									   BorderThickness="0"
+									   Background="Transparent"
+									   ValueSlider="{Binding ConnectorService.Zoon}"
+									   />
+
+
 			</StackPanel>
 		</Grid>
 	

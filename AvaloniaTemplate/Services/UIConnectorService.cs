@@ -475,6 +475,18 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Текущий масштаб
+        private double zoon;
+        /// <summary>
+        /// Текущий масштаб
+        /// </summary>
+        public double Zoon
+        {
+            get => zoon;
+            set => SetProperty(ref zoon, value);
+        }
+        #endregion
+
         //    private readonly IClipboardService сlipboardService;
         //    private readonly DispatcherTimer timerControlClipboard = new() { Interval = TimeSpan.FromMilliseconds(1000) };
 

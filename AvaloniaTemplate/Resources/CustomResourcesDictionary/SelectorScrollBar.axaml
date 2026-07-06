@@ -1,0 +1,23 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+                    >
+    
+    <Design.PreviewWith>
+        <StackPanel Width="400" Spacing="10">
+            <StackPanel Background="{DynamicResource SystemRegionBrush}">
+                <controls:SelectorScrollBar />
+            </StackPanel>
+        </StackPanel>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:SelectorScrollBar}"
+                  TargetType="controls:SelectorScrollBar"
+                  >
+        <Setter Property="Template">
+            <ControlTemplate>
+                <TextBlock Text="Templated Control" />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

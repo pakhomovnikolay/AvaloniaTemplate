@@ -137,6 +137,20 @@ public class HorizontalTabStrip : BaseTemplatedControl
     }
     #endregion
 
+    #region Размер шага скролла
+    public static readonly StyledProperty<double> StepChangeScrollProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, double>(nameof(StepChangeScroll), defaultValue: 50);
+
+    /// <summary>
+    /// Размер шага скролла
+    /// </summary>
+    public double StepChangeScroll
+    {
+        get => GetValue(StepChangeScrollProperty);
+        set => SetValue(StepChangeScrollProperty, value);
+    }
+    #endregion
+
     public event Action<object> SelectedItemChange;
 
     private void OnItemsSourceChanged()
@@ -149,11 +163,11 @@ public class HorizontalTabStrip : BaseTemplatedControl
 
         var buttonNextRight = FindPartById<RepeatButton>(e, "PART_ButtonNextRight");
         buttonNextRight.Click += (_, _)
-            => ScrollHorizontal(50, scrollViewer);
+            => ScrollHorizontal(StepChangeScroll, scrollViewer);
 
         var buttonNextLeft = FindPartById<RepeatButton>(e, "PART_ButtonNextLeft");
         buttonNextLeft.Click += (_, _)
-            => ScrollHorizontal(-50, scrollViewer);
+            => ScrollHorizontal(-StepChangeScroll, scrollViewer);
 
         ContentPopup ??= CratePopupContent();
         ItemTemplate ??= CrateItemTemplate();

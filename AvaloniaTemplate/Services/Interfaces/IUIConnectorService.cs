@@ -225,6 +225,12 @@ namespace AvaloniaTemplate.Services.Interfaces
         object SelectedItemHorizontalTabStrip { get; set; }
         #endregion
 
+        #region Текущий масштаб
+        /// <summary>
+        /// Текущий масштаб
+        /// </summary>
+        double Zoon { get; set; }
+        #endregion
 
         //InitializeFontStyle("Ж", FontWeight.Bold) },
         //    { TemplateButtonFontStyleToolkitType.FontStyleItalic, () => InitializeFontStyle("К", fontStyle: FontStyle.Italic) },
