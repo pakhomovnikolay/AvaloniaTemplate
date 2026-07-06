@@ -305,33 +305,38 @@
 										helpers:HorizontalTabStripHelper.SelectedChangeControl="True"
 										/>
 
-				<crd:SliderZoomControl Height="30"
+				<crd:SliderZoomControl Height="25"
 									   TickPlacementType="TopLeft"
 									   BorderThickness="0"
 									   Background="Transparent"
 									   ValueSlider="{Binding ConnectorService.Zoon}"
 									   />
 
-				<Grid Height="200" Width="225"
-					  ColumnDefinitions="200 auto"
-					  RowDefinitions="* auto"
-					  >
+				<Border BorderThickness="1"
+						BorderBrush="Gray"
+						>
+					<Grid Height="100"
+						  ColumnDefinitions="* auto"
+						  RowDefinitions="* auto"
+						  >
 
-					<crd:SelectorScrollBar Grid.Column="0"
-										   Grid.Row="1"
-										   Position="Horizontal"
-										   Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
-										   helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
-										   />
+						<crd:SelectorScrollBar Grid.Column="0"
+											   Grid.Row="1"
+											   Position="Horizontal"
+											   Height="12"
+											   Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
+											   helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
+											   />
 
-					<crd:SelectorScrollBar Grid.Column="1"
-										   Grid.Row="0"
-										   Grid.RowSpan="2"
-										   Position="Vertical"
-										   Value="{Binding ScrollBarService.VerticalScrollBarValue}"
-										   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
-										   />
-				</Grid>
+						<crd:SelectorScrollBar Grid.Column="1"
+											   Grid.Row="0"
+											   Position="Vertical"
+											   Width="12"
+											   Value="{Binding ScrollBarService.VerticalScrollBarValue}"
+											   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
+											   />
+					</Grid>
+				</Border>
 			</StackPanel>
 		</Grid>
 	

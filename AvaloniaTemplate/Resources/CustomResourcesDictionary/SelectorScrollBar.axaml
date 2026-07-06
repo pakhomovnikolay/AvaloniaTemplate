@@ -6,14 +6,17 @@
     <Design.PreviewWith>
         <StackPanel Width="400" Spacing="10">
             <StackPanel Background="{DynamicResource SystemRegionBrush}">
-                <controls:SelectorScrollBar />
+                <controls:SelectorScrollBar Height="15" />
             </StackPanel>
         </StackPanel>
     </Design.PreviewWith>
-    
+
     <ControlTheme x:Key="{x:Type controls:SelectorScrollBar}"
                   TargetType="controls:SelectorScrollBar"
                   >
+        
+        <Setter Property="CornerRadius" Value="10"/>
+        <Setter Property="AllowAutoHide" Value="False"/>
         <Setter Property="Position" Value="Horizontal"/>
         <Setter Property="Visibility" Value="Auto"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -21,10 +24,13 @@
         <Setter Property="Template">
             <ControlTemplate>
                 <ScrollBar x:Name="PART_ScrollBar"
+                           Theme="{StaticResource CustomScrollBar}"
                            Orientation="{TemplateBinding Position}"
                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                            Visibility="{TemplateBinding Visibility}"
+                           AllowAutoHide="{TemplateBinding AllowAutoHide}"
+                           CornerRadius="{TemplateBinding CornerRadius}"
                            Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}"
                            />
             </ControlTemplate>

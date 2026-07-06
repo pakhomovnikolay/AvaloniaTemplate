@@ -58,6 +58,21 @@ public class SelectorScrollBar : BaseTemplatedControl
     public event Action<double> ValueChanged;
     #endregion
 
+    #region Скрывать автоматически
+    public static readonly StyledProperty<bool> AllowAutoHideProperty =
+        AvaloniaProperty.Register<SelectorScrollBar, bool>(nameof(AllowAutoHide));
+
+    /// <summary>
+    /// Скрывать автоматически
+    /// </summary>
+    public bool AllowAutoHide
+    {
+        get => GetValue(AllowAutoHideProperty);
+        set => SetValue(AllowAutoHideProperty, value);
+    }
+    #endregion
+
+    
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
