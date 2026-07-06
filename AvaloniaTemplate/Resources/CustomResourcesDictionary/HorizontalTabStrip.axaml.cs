@@ -123,17 +123,31 @@ public class HorizontalTabStrip : BaseTemplatedControl
     }
     #endregion
 
-    #region Команда
+    #region Команда кнопки создания нового элемента
     public static readonly StyledProperty<ICommand> CommandProperty =
         AvaloniaProperty.Register<HorizontalTabStrip, ICommand>(nameof(Command));
 
     /// <summary>
-    /// Команда
+    /// Команда кнопки создания нового элемента
     /// </summary>
     public ICommand Command
     {
         get => GetValue(CommandProperty);
         set => SetValue(CommandProperty, value);
+    }
+    #endregion
+
+    #region Параметр для команды
+    public static readonly StyledProperty<object?> CommandParameterProperty =
+        AvaloniaProperty.Register<HorizontalTabStrip, object?>(nameof(CommandParameter));
+
+    /// <summary>
+    /// Параметр для команды
+    /// </summary>
+    public object? CommandParameter
+    {
+        get => GetValue(CommandParameterProperty);
+        set => SetValue(CommandParameterProperty, value);
     }
     #endregion
 

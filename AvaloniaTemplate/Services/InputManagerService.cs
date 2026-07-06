@@ -7,7 +7,9 @@ namespace AvaloniaTemplate.Services
 {
     public class InputManagerService : IInputManagerService
     {
-        private readonly Interfaces.IUIConnectorService stateService = App.GetService<Interfaces.IUIConnectorService>();
+        private readonly IUIConnectorService connectorService = App.GetService<IUIConnectorService>();
+        private readonly IScrollBarService scrollBarService = App.GetService<IScrollBarService>();
+        
 
         #region Обработка клавиш
         /// <summary>
@@ -42,8 +44,28 @@ namespace AvaloniaTemplate.Services
             if (IsZoom(e))
             {
                 //stateService?.UpdateZoomRequested(e.Delta.Y);
-                e.Handled = true;
+                //e.Handled = true;
             }
+            else
+            {
+                if (IsHorizontalScrollBar(e))
+                {
+                    scrollBarService.UpdateHorizontalScrollBarValue(e.Delta.Y);
+
+
+                    //var offset = connectorService.HorizontalScrollBarPosition + e.Delta.Y * 210;
+                    //connectorService.HorizontalScrollBarPosition -= offset;
+                }
+                else
+                {
+                    scrollBarService.UpdateVerticalScrollBarValue(e.Delta.Y);
+                    //var offset = connectorService.VerticalScrollBarPosition + e.Delta.Y * 75;
+                    //connectorService.VerticalScrollBarPosition -= offset;
+                }
+                    
+
+            }
+            e.Handled = true;
         }
         #endregion
 
@@ -133,7 +155,17 @@ namespace AvaloniaTemplate.Services
         /// <param name="e"></param>
         /// <returns></returns>
         private static bool IsZoom(PointerWheelEventArgs e)
-            => e.KeyModifiers.HasFlag(KeyModifiers.Control); 
+            => e.KeyModifiers.HasFlag(KeyModifiers.Control);
+        #endregion
+
+        #region Проверка на необходимость прокрутки положения полосы прокрутки
+        /// <summary>
+        /// Проверка на необходимость прокрутки положения полосы прокрутки
+        /// </summary>
+        /// <param name="e"></param>
+        /// <returns></returns>
+        private static bool IsHorizontalScrollBar(PointerWheelEventArgs e)
+            => e.KeyModifiers.HasFlag(KeyModifiers.Shift);
         #endregion
     }
 }

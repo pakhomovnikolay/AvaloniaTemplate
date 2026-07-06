@@ -48,4 +48,8 @@
       <DependentUpon>HorizontalTabStrip.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Infrastructures\Commands\UserCommands\" />
+  </ItemGroup>
 </Project>

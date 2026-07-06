@@ -1,6 +1,5 @@
 ﻿using AvaloniaTemplate.Infrastructures.Commands.Base;
 using AvaloniaTemplate.Infrastructures.Commands.Base.Interfaces;
-using AvaloniaTemplate.Infrastructures.Commands.UserCommands;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -17,26 +16,6 @@ namespace AvaloniaTemplate.Services.Registrations
         public static void AddCommands(this IServiceCollection services)
         {
             // 1. Создаем команды
-            RegisterCommand<Command_Paste>("Command_Paste");
-            RegisterCommand<Command_Cut>("Command_Cut");
-            RegisterCommand<Command_Copy>("Command_Copy");
-            RegisterCommand<Command_SimpleAs>("Command_SimpleAs");
-            RegisterCommand<Command_PreViewSelectedFont>("Command_PreViewSelectedFont");
-            RegisterCommand<Command_PreViewSelectedFontSize>("Command_PreViewSelectedFontSize");
-            RegisterCommand<Command_SetFontWeightBold>("Command_SetFontWeightBold");
-            RegisterCommand<Command_SetFontStyleItalic>("Command_SetFontStyleItalic");
-            RegisterCommand<Command_SetTextStyleUnderline>("Command_SetTextStyleUnderline");
-            RegisterCommand<Command_ChangeStyleGrid>("Command_ChangeStyleGrid");
-            RegisterCommand<Command_SetBackgroundStyle>("Command_SetBackgroundStyle");
-            RegisterCommand<Command_SetForegroundStyle>("Command_SetForegroundStyle");
-            RegisterCommand<Command_SelectedFont>("Command_SelectedFont");
-            RegisterCommand<Command_SelectedFontSize>("Command_SelectedFontSize");
-            RegisterCommand<Command_SetTextHorizontalAlignment>("Command_SetTextHorizontalAlignment");
-            RegisterCommand<Command_SetTextVerticalAlignment>("Command_SetTextVerticalAlignment");
-            RegisterCommand<Command_WrapText>("Command_WrapText");
-            RegisterCommand<Command_MergeCells>("Command_MergeCells");
-            RegisterCommand<Command_HorizontalTabStripCreateItem>("Command_HorizontalTabStripCreateItem");
-
             //RegisterCommand<Command_ItemsControlPanelCreateItem>("Command_ItemsControlPanelCreateItem");
 
             // 2. Регистрируем все типы команд в DI

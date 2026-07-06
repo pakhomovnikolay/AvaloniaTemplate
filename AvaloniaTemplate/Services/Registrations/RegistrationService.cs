@@ -14,8 +14,10 @@ namespace AvaloniaTemplate.Services.Registrations
             .AddSingleton<IUserDialogService, UserDialogService>()
             .AddSingleton<IUIConnectorService, UIConnectorService>()
             .AddSingleton<IInputManagerService, InputManagerService>()
+            .AddSingleton<IScrollBarService, ScrollBarService>()
+            .AddSingleton<IHorizontalTabStripService<string>, HorizontalTabStripService<string>>()
 
-            //.AddSingleton<IInputManagerService, InputManagerService>()
+            //.AddSingleton<IHorizontalTabStripService, HorizontalTabStripService>()
             ;
     }
 }

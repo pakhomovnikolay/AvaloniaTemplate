@@ -99,13 +99,6 @@ namespace AvaloniaTemplate.Services.Interfaces
         ICommand Command_SetVerticalContentAlignment { get; set; }
         #endregion
 
-        #region Команда - создать элемент для коллекции HorizontalTabStrip
-        /// <summary>
-        /// Команда - создать элемент для коллекции HorizontalTabStrip
-        /// </summary>
-        ICommand Command_CreateItemHorizontalTabStrip { get; set; }
-        #endregion
-
         #region Установлен полужирный стиль шрифта
         /// <summary>
         /// Установлен полужирный стиль шрифта
@@ -211,26 +204,17 @@ namespace AvaloniaTemplate.Services.Interfaces
         bool IsMergeCell { get; set; }
         #endregion
 
-        #region Коллекция элементов HorizontalTabStrip
-        /// <summary>
-        /// Коллекция элементов HorizontalTabStrip
-        /// </summary>
-        ObservableCollection<object> CollectionHorizontalTabStrip { get; set; }
-        #endregion
-
-        #region Выбранный элемент коллекции HorizontalTabStrip
-        /// <summary>
-        /// Выбранный элемент коллекции HorizontalTabStrip
-        /// </summary>
-        object SelectedItemHorizontalTabStrip { get; set; }
-        #endregion
-
         #region Текущий масштаб
         /// <summary>
         /// Текущий масштаб
         /// </summary>
         double Zoon { get; set; }
         #endregion
+
+
+
+
+
 
         //InitializeFontStyle("Ж", FontWeight.Bold) },
         //    { TemplateButtonFontStyleToolkitType.FontStyleItalic, () => InitializeFontStyle("К", fontStyle: FontStyle.Italic) },

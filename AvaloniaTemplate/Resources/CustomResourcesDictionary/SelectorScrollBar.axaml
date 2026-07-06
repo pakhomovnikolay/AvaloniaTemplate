@@ -14,9 +14,19 @@
     <ControlTheme x:Key="{x:Type controls:SelectorScrollBar}"
                   TargetType="controls:SelectorScrollBar"
                   >
+        <Setter Property="Position" Value="Horizontal"/>
+        <Setter Property="Visibility" Value="Auto"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <TextBlock Text="Templated Control" />
+                <ScrollBar x:Name="PART_ScrollBar"
+                           Orientation="{TemplateBinding Position}"
+                           VerticalAlignment="{TemplateBinding VerticalAlignment}"
+                           HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                           Visibility="{TemplateBinding Visibility}"
+                           Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}"
+                           />
             </ControlTemplate>
         </Setter>
     </ControlTheme>

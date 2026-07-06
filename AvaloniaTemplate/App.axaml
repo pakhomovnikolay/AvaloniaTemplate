@@ -49,8 +49,9 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontStyleToolkit.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontSelectorToolkit.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorPicker.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorScrollBar.axaml"/>
 
-				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/ColorStylePicker.axaml"/>-->
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Controls/SelectorScrollBar.axaml"/>-->
 				
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>

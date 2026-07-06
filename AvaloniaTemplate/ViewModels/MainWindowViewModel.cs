@@ -1,4 +1,5 @@
-﻿using AvaloniaTemplate.Services.Interfaces;
+﻿using AvaloniaTemplate.Services;
+using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.ViewModels.Base;
 using System.Collections.ObjectModel;
 
@@ -10,7 +11,21 @@ namespace AvaloniaTemplate.ViewModels
         /// <summary>
         /// Сервис обработки состояний
         /// </summary>
-        public IUIConnectorService ConnectorService { get; } = App.GetService<IUIConnectorService>(); 
+        public IUIConnectorService ConnectorService { get; } = App.GetService<IUIConnectorService>();
+        #endregion
+
+        #region Сервис управления панелью со вкладками
+        /// <summary>
+        /// Сервис управления панелью со вкладками
+        /// </summary>
+        public IHorizontalTabStripService<string> TabStripService { get; } = App.GetService<IHorizontalTabStripService<string>>();
+        #endregion
+
+        #region Сервис управления панелью прокрутки
+        /// <summary>
+        /// Сервис управления панелью прокрутки
+        /// </summary>
+        public IScrollBarService ScrollBarService { get; } = App.GetService<IScrollBarService>();
         #endregion
 
         #region Конструктор
@@ -66,33 +81,9 @@ namespace AvaloniaTemplate.ViewModels
             AppStatus = App.AppStatus;
             App.ChangeAppStatus += ChangeAppStatus;
 
-            ConnectorService.CollectionHorizontalTabStrip = ["1", "2", "3", "4", "5", "6", "7", "81", "9", "10", "11"];
-            ConnectorService.SelectedItemHorizontalTabStrip = ConnectorService.CollectionHorizontalTabStrip[0];
-        }
-        #endregion
-
-        #region Текущая версия проекта
-        private ObservableCollection<string> testItemList;
-        /// <summary>
-        /// Текущая версия проекта
-        /// </summary>
-        public ObservableCollection<string> TestItemList
-        {
-            get => testItemList;
-            set => SetProperty(ref testItemList, value);
-        }
-        #endregion
-
-
-        #region Текущая версия проекта
-        private string testItemSelected;
-        /// <summary>
-        /// Текущая версия проекта
-        /// </summary>
-        public string TestItemSelected
-        {
-            get => testItemSelected;
-            set => SetProperty(ref testItemSelected, value);
+            TabStripService.ItemsSource = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+            TabStripService.SelectedItem = TabStripService.ItemsSource[0];
+            TabStripService.CreateItem += () => { return $"{TabStripService.ItemsSource.Count + 1}"; };
         }
         #endregion
     }

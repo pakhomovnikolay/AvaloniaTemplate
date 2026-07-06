@@ -298,21 +298,40 @@
 				
 				<crd:HorizontalTabStrip MaxWidth="500"
 										MinWidth="200"
-										
-										ItemsSource="{Binding ConnectorService.CollectionHorizontalTabStrip}"
-										SelectedItem="{Binding ConnectorService.SelectedItemHorizontalTabStrip}"
-										Command="{Binding ConnectorService.Command_CreateItemHorizontalTabStrip}"
+										ItemsSource="{Binding TabStripService.ItemsSource}"
+										SelectedItem="{Binding TabStripService.SelectedItem}"
+										Command="{Binding TabStripService.Command_CreateItem}"
+										CommandParameter="{Binding TabStripService.ItemsSource}"
 										helpers:HorizontalTabStripHelper.SelectedChangeControl="True"
 										/>
 
-				<crd:SliderZoomControl Height="40"
+				<crd:SliderZoomControl Height="30"
 									   TickPlacementType="TopLeft"
 									   BorderThickness="0"
 									   Background="Transparent"
 									   ValueSlider="{Binding ConnectorService.Zoon}"
 									   />
 
+				<Grid Height="200" Width="225"
+					  ColumnDefinitions="200 auto"
+					  RowDefinitions="* auto"
+					  >
 
+					<crd:SelectorScrollBar Grid.Column="0"
+										   Grid.Row="1"
+										   Position="Horizontal"
+										   Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
+										   helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
+										   />
+
+					<crd:SelectorScrollBar Grid.Column="1"
+										   Grid.Row="0"
+										   Grid.RowSpan="2"
+										   Position="Vertical"
+										   Value="{Binding ScrollBarService.VerticalScrollBarValue}"
+										   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
+										   />
+				</Grid>
 			</StackPanel>
 		</Grid>
 	

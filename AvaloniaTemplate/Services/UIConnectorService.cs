@@ -253,24 +253,6 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Команда - создать элемент для коллекции HorizontalTabStrip
-        private ICommand command_CreateItemHorizontalTabStrip;
-        /// <summary>
-        /// Команда - создать элемент для коллекции HorizontalTabStrip
-        /// </summary>
-        public ICommand Command_CreateItemHorizontalTabStrip
-        {
-            get => command_CreateItemHorizontalTabStrip ??= new RelayCommand(ExecuteCommand_CreateItemHorizontalTabStrip);
-            set => SetProperty(ref command_CreateItemHorizontalTabStrip, value);
-        }
-
-        private void ExecuteCommand_CreateItemHorizontalTabStrip()
-        {
-            CollectionHorizontalTabStrip.Add($"{CollectionHorizontalTabStrip.Count}");
-            SelectedItemHorizontalTabStrip = CollectionHorizontalTabStrip[^1];
-        }
-        #endregion
-
         #region Установлен полужирный стиль шрифта
         private bool isFontWeightBold;
         /// <summary>
@@ -451,30 +433,6 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Коллекция элементов HorizontalTabStrip
-        private ObservableCollection<object> collectionHorizontalTabStrip;
-        /// <summary>
-        /// Коллекция элементов HorizontalTabStrip
-        /// </summary>
-        public ObservableCollection<object> CollectionHorizontalTabStrip
-        {
-            get => collectionHorizontalTabStrip;
-            set => SetProperty(ref collectionHorizontalTabStrip, value);
-        }
-        #endregion
-
-        #region Выбранный элемент коллекции HorizontalTabStrip
-        private object selectedItemHorizontalTabStrip;
-        /// <summary>
-        /// Выбранный элемент коллекции HorizontalTabStrip
-        /// </summary>
-        public object SelectedItemHorizontalTabStrip
-        {
-            get => selectedItemHorizontalTabStrip;
-            set => SetProperty(ref selectedItemHorizontalTabStrip, value);
-        }
-        #endregion
-
         #region Текущий масштаб
         private double zoon;
         /// <summary>
@@ -486,6 +444,12 @@ namespace AvaloniaTemplate.Services
             set => SetProperty(ref zoon, value);
         }
         #endregion
+
+        
+
+
+
+
 
         //    private readonly IClipboardService сlipboardService;
         //    private readonly DispatcherTimer timerControlClipboard = new() { Interval = TimeSpan.FromMilliseconds(1000) };
