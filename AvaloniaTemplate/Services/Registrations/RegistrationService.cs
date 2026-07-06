@@ -16,8 +16,9 @@ namespace AvaloniaTemplate.Services.Registrations
             .AddSingleton<IInputManagerService, InputManagerService>()
             .AddSingleton<IScrollBarService, ScrollBarService>()
             .AddSingleton<IHorizontalTabStripService<string>, HorizontalTabStripService<string>>()
+            .AddSingleton<IZoomService, ZoomService>()
 
-            //.AddSingleton<IHorizontalTabStripService, HorizontalTabStripService>()
+            //.AddSingleton<IZoomService, ZoomService>()
             ;
     }
 }

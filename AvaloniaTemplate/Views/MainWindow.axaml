@@ -309,7 +309,9 @@
 									   TickPlacementType="TopLeft"
 									   BorderThickness="0"
 									   Background="Transparent"
-									   ValueSlider="{Binding ConnectorService.Zoon}"
+									   ValueSlider="{Binding ZoomService.Scale}"
+									   helpers:SliderZoomHelper.ValueChangeControl="True"
+									   
 									   />
 
 				<Border BorderThickness="1"

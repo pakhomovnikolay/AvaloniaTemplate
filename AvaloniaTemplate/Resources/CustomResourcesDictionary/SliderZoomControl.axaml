@@ -108,7 +108,7 @@
                                 SmallChange="{TemplateBinding SmallChangeSlider}"
                                 LargeChange="{TemplateBinding LargeChangeSlider}"
                                 MinWidth="{TemplateBinding WidthSliderPanel}"
-                                Value="{Binding ValueSlider, RelativeSource={RelativeSource TemplatedParent}}"
+                                Value="{Binding ValueSlider, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                                 />
 
                         <!--PART_ButtonZoomInc-->

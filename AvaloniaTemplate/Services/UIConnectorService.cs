@@ -233,10 +233,10 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Команда - сменить положение текста по горинтали
+        #region Команда - сменить положение текста по вертикали
         private ICommand command_SetVerticalContentAlignment;
         /// <summary>
-        /// Команда - сменить положение текста по горинтали
+        /// Команда - сменить положение текста по вертикали
         /// </summary>
         public ICommand Command_SetVerticalContentAlignment
         {
@@ -433,19 +433,6 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Текущий масштаб
-        private double zoon;
-        /// <summary>
-        /// Текущий масштаб
-        /// </summary>
-        public double Zoon
-        {
-            get => zoon;
-            set => SetProperty(ref zoon, value);
-        }
-        #endregion
-
-        
 
 
 

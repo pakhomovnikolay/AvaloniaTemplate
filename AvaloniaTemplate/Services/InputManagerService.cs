@@ -1,7 +1,5 @@
 ﻿using Avalonia.Input;
-using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Services.Interfaces;
-using System;
 
 namespace AvaloniaTemplate.Services
 {
@@ -9,7 +7,7 @@ namespace AvaloniaTemplate.Services
     {
         private readonly IUIConnectorService connectorService = App.GetService<IUIConnectorService>();
         private readonly IScrollBarService scrollBarService = App.GetService<IScrollBarService>();
-        
+        private readonly IZoomService zoomService = App.GetService<IZoomService>();
 
         #region Обработка клавиш
         /// <summary>
@@ -42,28 +40,13 @@ namespace AvaloniaTemplate.Services
         public void PointerWheelHandler(object? sender, PointerWheelEventArgs e)
         {
             if (IsZoom(e))
-            {
-                //stateService?.UpdateZoomRequested(e.Delta.Y);
-                //e.Handled = true;
-            }
+                zoomService.RecalculateScale(e.Delta.Y);
             else
             {
                 if (IsHorizontalScrollBar(e))
-                {
                     scrollBarService.UpdateHorizontalScrollBarValue(e.Delta.Y);
-
-
-                    //var offset = connectorService.HorizontalScrollBarPosition + e.Delta.Y * 210;
-                    //connectorService.HorizontalScrollBarPosition -= offset;
-                }
                 else
-                {
                     scrollBarService.UpdateVerticalScrollBarValue(e.Delta.Y);
-                    //var offset = connectorService.VerticalScrollBarPosition + e.Delta.Y * 75;
-                    //connectorService.VerticalScrollBarPosition -= offset;
-                }
-                    
-
             }
             e.Handled = true;
         }
@@ -76,27 +59,27 @@ namespace AvaloniaTemplate.Services
         /// <param name="e"></param>
         /// <returns></returns>
         private bool IsInput(KeyEventArgs e) => false;
-            //=> stateService.AppActiveMode != AppActiveModeType.IsInput
-            //    && stateService.AppActiveMode != AppActiveModeType.IsEditCell
-            //    && e.KeyModifiers == KeyModifiers.None
-            //    && (e.Key >= Key.A && e.Key <= Key.Z
-            //    || e.Key == Key.Space
-            //    || e.Key == Key.Back
-            //    || e.Key >= Key.D0 && e.Key <= Key.D9
-            //    || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9
-            //    || e.Key == Key.Oem3 || e.Key == Key.Oem4
-            //    || e.Key == Key.OemMinus || e.Key == Key.Subtract
-            //    || e.Key == Key.OemPlus || e.Key == Key.Add
-            //    || e.Key == Key.Divide
-            //    || e.Key == Key.Multiply
-            //    || e.Key == Key.Decimal
-            //    || e.Key == Key.OemCloseBrackets
-            //    || e.Key == Key.OemPipe
-            //    || e.Key == Key.OemSemicolon
-            //    || e.Key == Key.OemQuotes
-            //    || e.Key == Key.OemComma
-            //    || e.Key == Key.OemPeriod
-            //    || e.Key == Key.OemQuestion);
+        //=> stateService.AppActiveMode != AppActiveModeType.IsInput
+        //    && stateService.AppActiveMode != AppActiveModeType.IsEditCell
+        //    && e.KeyModifiers == KeyModifiers.None
+        //    && (e.Key >= Key.A && e.Key <= Key.Z
+        //    || e.Key == Key.Space
+        //    || e.Key == Key.Back
+        //    || e.Key >= Key.D0 && e.Key <= Key.D9
+        //    || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9
+        //    || e.Key == Key.Oem3 || e.Key == Key.Oem4
+        //    || e.Key == Key.OemMinus || e.Key == Key.Subtract
+        //    || e.Key == Key.OemPlus || e.Key == Key.Add
+        //    || e.Key == Key.Divide
+        //    || e.Key == Key.Multiply
+        //    || e.Key == Key.Decimal
+        //    || e.Key == Key.OemCloseBrackets
+        //    || e.Key == Key.OemPipe
+        //    || e.Key == Key.OemSemicolon
+        //    || e.Key == Key.OemQuotes
+        //    || e.Key == Key.OemComma
+        //    || e.Key == Key.OemPeriod
+        //    || e.Key == Key.OemQuestion);
 
         #endregion
 

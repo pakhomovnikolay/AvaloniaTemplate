@@ -14,9 +14,14 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 public class SliderZoomControl : BaseTemplatedControl
 {
     /// <summary>
-    /// Минимальное ограниченное значени бегунка
+    /// Предыдущее значени бегунка
     /// </summary>
     private readonly double MinStopValueSlider = 0.1;
+
+    /// <summary>
+    /// Предыдущее значени бегунка
+    /// </summary>
+    private double valueSlider;
 
     static SliderZoomControl()
     {
@@ -233,6 +238,13 @@ public class SliderZoomControl : BaseTemplatedControl
     }
     #endregion
 
+    #region Событие изменения положения бегунка
+    /// <summary>
+    /// Событие изменения положения бегунка
+    /// </summary>
+    public event Action<double> ValueChanged;
+    #endregion
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -263,16 +275,21 @@ public class SliderZoomControl : BaseTemplatedControl
 
     private void OnValueSliderChanged()
     {
+        if (valueSlider == ValueSlider)
+            return;
+
         if (ValueSlider < MinStopValueSlider)
         {
             MinimumSlider = MinStopValueSlider;
             ValueSlider = MinStopValueSlider;
         }
-        else if (ValueSlider - MinStopValueSlider > MinStopValueSlider)
+        else if (ValueSlider - MinStopValueSlider > MinStopValueSlider && MinimumSlider > 0)
             MinimumSlider = 0;
 
         EditValueSlider = Convert.ToInt32(ValueSlider * 100);
         VisualValueSlider = $"{EditValueSlider} %";
+        valueSlider = ValueSlider;
+        ValueChanged?.Invoke(valueSlider);
     }
 
     private void CreateContentPopup()

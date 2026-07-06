@@ -92,9 +92,9 @@ namespace AvaloniaTemplate.Services.Interfaces
         ICommand Command_SetHorizontalContentAlignment { get; set; }
         #endregion
 
-        #region Команда - сменить положение текста по горинтали
+        #region Команда - сменить положение текста по вертикали
         /// <summary>
-        /// Команда - сменить положение текста по горинтали
+        /// Команда - сменить положение текста по вертикали
         /// </summary>
         ICommand Command_SetVerticalContentAlignment { get; set; }
         #endregion
@@ -202,13 +202,6 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Ячейка объеденённая
         /// </summary>
         bool IsMergeCell { get; set; }
-        #endregion
-
-        #region Текущий масштаб
-        /// <summary>
-        /// Текущий масштаб
-        /// </summary>
-        double Zoon { get; set; }
         #endregion
 
 

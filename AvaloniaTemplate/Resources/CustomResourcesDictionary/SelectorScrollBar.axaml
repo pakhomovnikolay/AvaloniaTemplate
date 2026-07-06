@@ -4,11 +4,14 @@
                     >
     
     <Design.PreviewWith>
-        <StackPanel Width="400" Spacing="10">
-            <StackPanel Background="{DynamicResource SystemRegionBrush}">
-                <controls:SelectorScrollBar Height="15" />
+        <Border Width="400" Padding="20">
+            <StackPanel Background="{DynamicResource SystemRegionBrush}"
+                        Orientation="Horizontal"
+                        >
+                <controls:SelectorScrollBar Height="20" Width="250" Position="Horizontal" />
+                <controls:SelectorScrollBar Height="250" Position="Vertical"/>
             </StackPanel>
-        </StackPanel>
+        </Border>
     </Design.PreviewWith>
 
     <ControlTheme x:Key="{x:Type controls:SelectorScrollBar}"

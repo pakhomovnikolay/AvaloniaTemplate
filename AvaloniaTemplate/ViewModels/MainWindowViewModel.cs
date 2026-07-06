@@ -28,6 +28,16 @@ namespace AvaloniaTemplate.ViewModels
         public IScrollBarService ScrollBarService { get; } = App.GetService<IScrollBarService>();
         #endregion
 
+        #region Сервис управления масштабом
+        /// <summary>
+        /// Сервис управления масштабом
+        /// </summary>
+        public IZoomService ZoomService { get; } = App.GetService<IZoomService>();
+        #endregion
+        
+
+
+
         #region Конструктор
         /// <summary>
         /// Конструктор
