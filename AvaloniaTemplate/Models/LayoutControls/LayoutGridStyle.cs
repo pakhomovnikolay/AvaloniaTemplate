@@ -1,10 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.Enums.TemplatedControlTypes;
-using System;
 using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Models.LayoutControls
@@ -111,18 +108,18 @@ namespace AvaloniaTemplate.Models.LayoutControls
         }
 
 
-    //    #region Словарь типов взаимодействия с буфером обмена
-    //    /// <summary>
-    //    /// Словарь типов взаимодействия с буфером обмена
-    //    /// </summary>
-    //    private static readonly Dictionary<TemplatrButtonClipboardType, (Uri imagePath, string header, Orientation orientationType)> dictionaryClipboardType = new()
-    //{
-    //    { TemplatrButtonClipboardType.Paste, (new Uri("avares://AvaloniaTemplate/Assets/Paste.png"), "Вставить", Orientation.Vertical) },
-    //    { TemplatrButtonClipboardType.Copy, (new Uri("avares://AvaloniaTemplate/Assets/Copy.png"), "Копировать", Orientation.Horizontal) },
-    //    { TemplatrButtonClipboardType.Cut, (new Uri("avares://AvaloniaTemplate/Assets/Cut.png"), "Вырезать", Orientation.Horizontal) },
-    //    { TemplatrButtonClipboardType.AsSimple, (new Uri("avares://AvaloniaTemplate/Assets/AsSimple.png"), "Формат по образцу", Orientation.Horizontal) }
-    //};
-    //    #endregion
+        //    #region Словарь типов взаимодействия с буфером обмена
+        //    /// <summary>
+        //    /// Словарь типов взаимодействия с буфером обмена
+        //    /// </summary>
+        //    private static readonly Dictionary<TemplatrButtonClipboardType, (Uri imagePath, string header, Orientation orientationType)> dictionaryClipboardType = new()
+        //{
+        //    { TemplatrButtonClipboardType.Paste, (new Uri("avares://AvaloniaTemplate/Assets/Paste.png"), "Вставить", Orientation.Vertical) },
+        //    { TemplatrButtonClipboardType.Copy, (new Uri("avares://AvaloniaTemplate/Assets/Copy.png"), "Копировать", Orientation.Horizontal) },
+        //    { TemplatrButtonClipboardType.Cut, (new Uri("avares://AvaloniaTemplate/Assets/Cut.png"), "Вырезать", Orientation.Horizontal) },
+        //    { TemplatrButtonClipboardType.AsSimple, (new Uri("avares://AvaloniaTemplate/Assets/AsSimple.png"), "Формат по образцу", Orientation.Horizontal) }
+        //};
+        //    #endregion
 
 
 
@@ -154,7 +151,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
                     break;
 
                 case BorderSegmentType.Left:
-                    context.DrawLine(pen,  new Point(0.5, 0), new Point(0.5, h));
+                    context.DrawLine(pen, new Point(0.5, 0), new Point(0.5, h));
                     break;
 
                 case BorderSegmentType.Right:
@@ -166,7 +163,7 @@ namespace AvaloniaTemplate.Models.LayoutControls
                     break;
 
                 case BorderSegmentType.InsideVertical:
-                    context.DrawLine(pen,new Point((w - 0.5) / 2, 0),new Point((w - 0.5) / 2, h));
+                    context.DrawLine(pen, new Point((w - 0.5) / 2, 0), new Point((w - 0.5) / 2, h));
                     break;
             }
         }
