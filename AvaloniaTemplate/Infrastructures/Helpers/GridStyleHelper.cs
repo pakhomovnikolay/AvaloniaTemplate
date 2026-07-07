@@ -11,19 +11,19 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
 {
     public class GridStyleHelper
     {
-        private const double width = 16;
-        private const double height = 16;
+        private const double width = 17;
+        private const double height = 17;
 
         #region Словарь одиночных линий сетки
         /// <summary>
         /// Словарь одиночных линий сетки
         /// </summary>
-        public static readonly Dictionary<CurrentBorderStyleType, string> SingleBorderStyleTypes = new()
+        public static readonly Dictionary<BorderStyleType, string> SingleBorderStyleTypes = new()
         {
-            { CurrentBorderStyleType.Bottom, "Нижняя граница" },
-            { CurrentBorderStyleType.Top, "Верхняя граница" },
-            { CurrentBorderStyleType.Left, "Левая граница" },
-            { CurrentBorderStyleType.Right, "Правая граница" }
+            { BorderStyleType.Bottom, "Нижняя граница" },
+            { BorderStyleType.Top, "Верхняя граница" },
+            { BorderStyleType.Left, "Левая граница" },
+            { BorderStyleType.Right, "Правая граница" }
         };
         #endregion
 
@@ -31,12 +31,12 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <summary>
         /// Словарь линий сетки
         /// </summary>
-        public static readonly Dictionary<CurrentBorderStyleType, string> BorderStyleTypes = new()
+        public static readonly Dictionary<BorderStyleType, string> BorderStyleTypes = new()
         {
-            { CurrentBorderStyleType.None, "Нет границ" },
-            { CurrentBorderStyleType.All, "Все границы" },
-            { CurrentBorderStyleType.Outside, "Внешние границы" },
-            { CurrentBorderStyleType.ThickOutside, "Толстые внешние границы" }
+            { BorderStyleType.None, "Нет границ" },
+            { BorderStyleType.All, "Все границы" },
+            { BorderStyleType.Outside, "Внешние границы" },
+            { BorderStyleType.ThickOutside, "Толстые внешние границы" }
         };
         #endregion
 
@@ -44,11 +44,11 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <summary>
         /// Дополнительный словарь линий сетки
         /// </summary>
-        public static readonly Dictionary<CurrentBorderStyleType, string> AdditionBorderStyleTypes = new()
+        public static readonly Dictionary<BorderStyleType, string> AdditionBorderStyleTypes = new()
         {
-            { CurrentBorderStyleType.DoubleBottom, "Двойнвя нижняя граница" },
-            { CurrentBorderStyleType.ThickBottom, "Толстая нижняя граница" },
-            { CurrentBorderStyleType.TopBottom, "Верхняя и нижняя границы" },
+            { BorderStyleType.DoubleBottom, "Двойнвя нижняя граница" },
+            { BorderStyleType.ThickBottom, "Толстая нижняя граница" },
+            { BorderStyleType.TopBottom, "Верхняя и нижняя границы" },
         };
         #endregion
 
@@ -76,51 +76,52 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="height"></param>
         /// <param name="borderStyle"></param>
         /// <returns></returns>
-        public static Border CreateGridStyle(CurrentBorderStyleType borderStyle, double width = width, double height = height)
+        public static Border CreateGridStyle(BorderStyleType borderStyle, double width = width, double height = height)
         {
             var border = new Border()
             {
                 Padding = new(0),
                 Background = Brushes.White,
-                Height = height,
-                Width = width,
-                Child = borderStyle switch
-                {
-                    CurrentBorderStyleType.Bottom => CreateGrid(width, height, Bottom: BorderLineStyleType.Normal),
-                    CurrentBorderStyleType.Top => CreateGrid(width, height, Top: BorderLineStyleType.Normal),
-                    CurrentBorderStyleType.Left => CreateGrid(width, height, Left: BorderLineStyleType.Normal),
-                    CurrentBorderStyleType.Right => CreateGrid(width, height, Right: BorderLineStyleType.Normal),
-                    CurrentBorderStyleType.All => CreateGrid(width, height,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal),
+                //Height = height,
+                //Width = width,
+                Child = CreateGrid(width, height, borderStyle)
+                //Child = borderStyle switch
+                //{
+                //    BorderStyleType.Bottom => CreateGrid(width, height, Bottom: BorderLineStyleType.Normal),
+                //    BorderStyleType.Top => CreateGrid(width, height, Top: BorderLineStyleType.Normal),
+                //    BorderStyleType.Left => CreateGrid(width, height, Left: BorderLineStyleType.Normal),
+                //    BorderStyleType.Right => CreateGrid(width, height, Right: BorderLineStyleType.Normal),
+                //    BorderStyleType.All => CreateGrid(width, height,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal),
 
-                    CurrentBorderStyleType.Outside => CreateGrid(width, height,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal,
-                        BorderLineStyleType.Normal
-                        ),
+                //    BorderStyleType.Outside => CreateGrid(width, height,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal,
+                //        BorderLineStyleType.Normal
+                //        ),
 
-                    CurrentBorderStyleType.ThickOutside => CreateGrid(width - 1, height - 1,
-                        BorderLineStyleType.Thick,
-                        BorderLineStyleType.Thick,
-                        BorderLineStyleType.Thick,
-                        BorderLineStyleType.Thick
-                        ),
+                //    BorderStyleType.ThickOutside => CreateGrid(width - 1, height - 1,
+                //        BorderLineStyleType.Thick,
+                //        BorderLineStyleType.Thick,
+                //        BorderLineStyleType.Thick,
+                //        BorderLineStyleType.Thick
+                //        ),
 
-                    _ => CreateGrid(width, height)
-                }
+                //    _ => CreateGrid(width, height)
+                //}
             };
 
             return border;
-        } 
+        }
         #endregion
 
-        private static Button CreateButtonGrid(CurrentBorderStyleType borderStyleType, string borderStyleDesc, Popup frame, ICommand? command = null)
+        private static Button CreateButtonGrid(BorderStyleType borderStyleType, string borderStyleDesc, Popup frame, ICommand? command = null)
         {
             var label = Helper.CreateLabel(borderStyleDesc);
             label.Margin = new(10, 0, 0, 0);
@@ -129,7 +130,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             var grid = new Grid()
             {
                 ColumnDefinitions = [
-                    new ColumnDefinition(25, GridUnitType.Pixel),
+                    new ColumnDefinition(25, GridUnitType.Auto),
                     new ColumnDefinition(25, GridUnitType.Star)
                     ]
             };
@@ -164,30 +165,55 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         private static LayoutGridStyle CreateGrid(
             double width,
             double height,
-            BorderLineStyleType Bottom = BorderLineStyleType.None,
-            BorderLineStyleType Top = BorderLineStyleType.None,
-            BorderLineStyleType Left = BorderLineStyleType.None,
-            BorderLineStyleType Right = BorderLineStyleType.None,
-            BorderLineStyleType InsideHorizontal = BorderLineStyleType.None,
-            BorderLineStyleType InsideVertical = BorderLineStyleType.None)
+            BorderStyleType style)
         {
 
             var control = new LayoutGridStyle()
             {
                 Width = width,
                 Height = height,
-                BorderStyle = new()
-                {
-                    Bottom = Bottom,
-                    Top = Top,
-                    Left = Left,
-                    Right = Right,
-                    InsideHorizontal = InsideHorizontal,
-                    InsideVertical = InsideVertical,
-                }
+                CurrentBorderStyleType = style
+                //BorderStyle = new()
+                //{
+                //    Bottom = Bottom,
+                //    Top = Top,
+                //    Left = Left,
+                //    Right = Right,
+                //    InsideHorizontal = InsideHorizontal,
+                //    InsideVertical = InsideVertical,
+                //}
             };
-            control.InvalidateVisual();
+            //control.InvalidateVisual();
             return control;
         }
+
+        //private static LayoutGridStyle CreateGrid(
+        //    double width,
+        //    double height,
+        //    BorderLineStyleType Bottom = BorderLineStyleType.None,
+        //    BorderLineStyleType Top = BorderLineStyleType.None,
+        //    BorderLineStyleType Left = BorderLineStyleType.None,
+        //    BorderLineStyleType Right = BorderLineStyleType.None,
+        //    BorderLineStyleType InsideHorizontal = BorderLineStyleType.None,
+        //    BorderLineStyleType InsideVertical = BorderLineStyleType.None)
+        //{
+
+        //    var control = new LayoutGridStyle()
+        //    {
+        //        Width = width,
+        //        Height = height,
+        //        BorderStyle = new()
+        //        {
+        //            Bottom = Bottom,
+        //            Top = Top,
+        //            Left = Left,
+        //            Right = Right,
+        //            InsideHorizontal = InsideHorizontal,
+        //            InsideVertical = InsideVertical,
+        //        }
+        //    };
+        //    control.InvalidateVisual();
+        //    return control;
+        //}
     }
 }

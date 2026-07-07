@@ -44,7 +44,7 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ButtonClipboard.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontStyleToolkit.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/FontSelectorToolkit.axaml"/>
-				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorPicker.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DropDownPicker.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorScrollBar.axaml"/>
 
 				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ScrollBarDictionary.axaml"/>-->

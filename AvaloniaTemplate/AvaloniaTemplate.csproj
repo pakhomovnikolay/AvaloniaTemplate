@@ -38,8 +38,8 @@
     <Compile Update="Resources\CustomResourcesDictionary\ButtonTextPosition.axaml.cs">
       <DependentUpon>ButtonTextPosition.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Resources\CustomResourcesDictionary\SelectorPicker.axaml.cs">
-      <DependentUpon>SelectorPicker.axaml</DependentUpon>
+    <Compile Update="Resources\CustomResourcesDictionary\DropDownPicker.axaml.cs">
+      <DependentUpon>DropDownPicker.axaml</DependentUpon>
     </Compile>
     <Compile Update="Resources\CustomResourcesDictionary\FontStyleToolkit.axaml.cs">
       <DependentUpon>FontStyleToolkit.axaml</DependentUpon>

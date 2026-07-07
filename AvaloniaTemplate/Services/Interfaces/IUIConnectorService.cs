@@ -117,7 +117,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Текущий тип стиля сетки
         /// </summary>
-        CurrentBorderStyleType BorderStyleType { get; set; }
+        BorderStyleType BorderStyleType { get; set; }
         #endregion
 
         #region Текущий цвет заднего фона

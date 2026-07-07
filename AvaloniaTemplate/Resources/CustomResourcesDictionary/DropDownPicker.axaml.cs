@@ -16,14 +16,14 @@ using System.Windows.Input;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary;
 
-public class SelectorPicker : BaseTemplatedControl
+public class DropDownPicker : BaseTemplatedControl
 {
-    static SelectorPicker()
+    static DropDownPicker()
     {
-        BorderStyleTypeProperty.Changed.AddClassHandler<SelectorPicker>((x, _) => x.RenderGridStyle(x.BorderStyleType));
+        BorderStyleTypeProperty.Changed.AddClassHandler<DropDownPicker>((x, _) => x.RenderGridStyle(x.BorderStyleType));
     }
 
-    public SelectorPicker()
+    public DropDownPicker()
     {
         dictionaryColorPickerType = new()
         {
@@ -42,7 +42,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Тип выбора фона
     public static readonly StyledProperty<SelectorPickerType> PickerTypeProperty =
-        AvaloniaProperty.Register<SelectorPicker, SelectorPickerType>(nameof(PickerType));
+        AvaloniaProperty.Register<DropDownPicker, SelectorPickerType>(nameof(PickerType));
 
     /// <summary>
     /// Тип выбора фона
@@ -55,13 +55,13 @@ public class SelectorPicker : BaseTemplatedControl
     #endregion
 
     #region Тип границы
-    public static readonly StyledProperty<CurrentBorderStyleType> BorderStyleTypeProperty =
-        AvaloniaProperty.Register<SelectorPicker, CurrentBorderStyleType>(nameof(BorderStyleType));
+    public static readonly StyledProperty<BorderStyleType> BorderStyleTypeProperty =
+        AvaloniaProperty.Register<DropDownPicker, BorderStyleType>(nameof(BorderStyleType));
 
     /// <summary>
     /// Тип границы
     /// </summary>
-    public CurrentBorderStyleType BorderStyleType
+    public BorderStyleType BorderStyleType
     {
         get => GetValue(BorderStyleTypeProperty);
         set => SetValue(BorderStyleTypeProperty, value);
@@ -70,7 +70,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Положение контента по горинтали
     public static readonly StyledProperty<HorizontalAlignment> HorizontalContentAlignmentProperty =
-        AvaloniaProperty.Register<SelectorPicker, HorizontalAlignment>(nameof(HorizontalContentAlignment));
+        AvaloniaProperty.Register<DropDownPicker, HorizontalAlignment>(nameof(HorizontalContentAlignment));
 
     /// <summary>
     /// Положение контента по горинтали
@@ -84,7 +84,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Положение контента по вертикали
     public static readonly StyledProperty<VerticalAlignment> VerticalContentAlignmentProperty =
-        AvaloniaProperty.Register<SelectorPicker, VerticalAlignment>(nameof(VerticalContentAlignment));
+        AvaloniaProperty.Register<DropDownPicker, VerticalAlignment>(nameof(VerticalContentAlignment));
 
     /// <summary>
     /// Положение контента по вертикали
@@ -98,7 +98,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Источник данных
     public static readonly StyledProperty<object?> ContentProperty =
-        AvaloniaProperty.Register<SelectorPicker, object?>(nameof(Content), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<DropDownPicker, object?>(nameof(Content), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Источник данных
@@ -112,7 +112,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Окно раскрыто
     public static readonly StyledProperty<bool> IsPopupOpenProperty =
-        AvaloniaProperty.Register<SelectorPicker, bool>(nameof(IsPopupOpen), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<DropDownPicker, bool>(nameof(IsPopupOpen), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Окно раскрыто
@@ -126,7 +126,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Источник данных раскрывающегося окна
     public static readonly StyledProperty<Panel?> ContentPopupProperty =
-        AvaloniaProperty.Register<SelectorPicker, Panel?>(nameof(ContentPopup), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<DropDownPicker, Panel?>(nameof(ContentPopup), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Источник данных раскрывающегося окна
@@ -139,22 +139,22 @@ public class SelectorPicker : BaseTemplatedControl
     #endregion
 
     #region Коллекция недавно выбранных цветов
-    public static readonly StyledProperty<ObservableCollection<Color>> BackgroundColorsProperty =
-        AvaloniaProperty.Register<SelectorPicker, ObservableCollection<Color>>(nameof(BackgroundColors), defaultBindingMode: BindingMode.TwoWay);
+    public static readonly StyledProperty<ObservableCollection<Color>> RecentColorsProperty =
+        AvaloniaProperty.Register<DropDownPicker, ObservableCollection<Color>>(nameof(RecentColors), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Коллекция недавно выбранных цветов
     /// </summary>
-    public ObservableCollection<Color> BackgroundColors
+    public ObservableCollection<Color> RecentColors
     {
-        get => GetValue(BackgroundColorsProperty);
-        set => SetValue(BackgroundColorsProperty, value);
+        get => GetValue(RecentColorsProperty);
+        set => SetValue(RecentColorsProperty, value);
     }
     #endregion
 
     #region Команда
     public static readonly StyledProperty<ICommand> CommandProperty =
-        AvaloniaProperty.Register<SelectorPicker, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<DropDownPicker, ICommand>(nameof(Command), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Команда
@@ -168,7 +168,7 @@ public class SelectorPicker : BaseTemplatedControl
 
     #region Параметр для команды
     public static readonly StyledProperty<object?> CommandParameterProperty =
-        AvaloniaProperty.Register<SelectorPicker, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<DropDownPicker, object?>(nameof(CommandParameter), defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Параметр для команды
@@ -298,7 +298,7 @@ public class SelectorPicker : BaseTemplatedControl
     private void CreateColorsRecent(ICommand command, Popup popupFrame, StackPanel LayoutColorsRecent)
     {
         LayoutColorsRecent.Children.Clear();
-        foreach (var color in BackgroundColors)
+        foreach (var color in RecentColors)
             LayoutColorsRecent.Children.Add(ColorHelper.CreateButtonColor(command, popupFrame, color));
     }
     private Grid CreateGridPanel()
@@ -320,6 +320,12 @@ public class SelectorPicker : BaseTemplatedControl
         grid.Children.Add(border);
         return grid;
     }
-    private void RenderGridStyle(CurrentBorderStyleType borderStyleType)
-        => Content = GridStyleHelper.CreateGridStyle(borderStyleType);
+    private void RenderGridStyle(BorderStyleType borderStyleType)
+    {
+        var border = GridStyleHelper.CreateGridStyle(borderStyleType);
+        border.Width = 16;
+        border.Height = 16;
+        Content = border;
+
+    }
 }

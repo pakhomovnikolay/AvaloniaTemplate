@@ -1,41 +1,68 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AvaloniaTemplate.Models.Enums
+﻿namespace AvaloniaTemplate.Models.Enums
 {
-    public class BorderStyleType
+    /// <summary>
+    /// Стиль границы
+    /// </summary>
+    public enum BorderStyleType
     {
         /// <summary>
-        /// Стиль верхней границы
+        /// Неизвестно
         /// </summary>
-        public BorderLineStyleType Bottom { get; set; } = BorderLineStyleType.None;
+        Unknown,
 
         /// <summary>
-        /// Стиль нижней границы
+        /// Нижняя
         /// </summary>
-        public BorderLineStyleType Top { get; set; } = BorderLineStyleType.None;
+        Bottom,
 
         /// <summary>
-        /// Стиль левой границы
+        /// Верхняя
         /// </summary>
-        public BorderLineStyleType Left { get; set; } = BorderLineStyleType.None;
+        Top,
 
         /// <summary>
-        /// Стиль правой границы
+        /// Слева
         /// </summary>
-        public BorderLineStyleType Right { get; set; } = BorderLineStyleType.None;
+        Left,
 
         /// <summary>
-        /// Стиль внутренней границы по горизонтали
+        /// Справа
         /// </summary>
-        public BorderLineStyleType InsideHorizontal { get; set; } = BorderLineStyleType.None;
+        Right,
 
         /// <summary>
-        /// Стиль внутренней границы по вертикали
+        /// Нет границ
         /// </summary>
-        public BorderLineStyleType InsideVertical { get; set; } = BorderLineStyleType.None;
+        None,
+
+        /// <summary>
+        /// Все границы
+        /// </summary>
+        All,
+
+        /// <summary>
+        /// Внешние
+        /// </summary>
+        Outside,
+
+        /// <summary>
+        /// Внешние толстые
+        /// </summary>
+        ThickOutside,
+
+        /// <summary>
+        /// Двойная снизу
+        /// </summary>
+        DoubleBottom,
+
+        /// <summary>
+        /// Нижняя толстая
+        /// </summary>
+        ThickBottom,
+
+        /// <summary>
+        /// Сверху и снизу
+        /// </summary>
+        TopBottom
     }
 }

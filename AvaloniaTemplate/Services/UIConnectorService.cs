@@ -145,7 +145,7 @@ namespace AvaloniaTemplate.Services
 
         private void ExecuteCommand_SetSelectedStyleBorder(object p)
         {
-            if (p is null || p is not CurrentBorderStyleType styleType)
+            if (p is null || p is not BorderStyleType styleType)
                 return;
 
             BorderStyleType = styleType;
@@ -288,11 +288,11 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Текущий тип стиля сетки
-        private CurrentBorderStyleType borderStyleType = CurrentBorderStyleType.Bottom;
+        private BorderStyleType borderStyleType = BorderStyleType.Bottom;
         /// <summary>
         /// Текущий тип стиля сетки
         /// </summary>
-        public CurrentBorderStyleType BorderStyleType
+        public BorderStyleType BorderStyleType
         {
             get => borderStyleType;
             set => SetProperty(ref borderStyleType, value);

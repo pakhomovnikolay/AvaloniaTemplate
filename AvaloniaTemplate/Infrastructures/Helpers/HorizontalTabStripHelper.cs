@@ -1,14 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
-using Avalonia.Interactivity;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {

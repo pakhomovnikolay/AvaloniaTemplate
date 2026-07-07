@@ -1,7 +1,7 @@
 ﻿namespace AvaloniaTemplate.Models.Enums
 {
     /// <summary>
-    /// Тип стиля границы
+    /// Стиль линии
     /// </summary>
     public enum BorderLineStyleType
     {
@@ -11,12 +11,17 @@
         None,
 
         /// <summary>
+        /// Пунктирная
+        /// </summary>
+        Dash,
+
+        /// <summary>
         /// Обычная
         /// </summary>
         Normal,
 
         /// <summary>
-        /// Жирная
+        /// Толстая
         /// </summary>
         Thick,
 
@@ -26,7 +31,7 @@
         DoubleNormal,
 
         /// <summary>
-        /// Двойная жирная
+        /// Двойная толстая
         /// </summary>
         DoubleThick
     }
