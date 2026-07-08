@@ -47,7 +47,9 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/DropDownPicker.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorScrollBar.axaml"/>
 
-				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ScrollBarDictionary.axaml"/>-->
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterColumns.axaml"/>
+
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/PresenterColumns.axaml"/>-->
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

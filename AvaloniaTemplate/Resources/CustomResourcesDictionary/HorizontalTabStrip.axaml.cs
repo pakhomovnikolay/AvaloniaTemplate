@@ -10,6 +10,7 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections;
@@ -208,7 +209,7 @@ public class HorizontalTabStrip : BaseTemplatedControl
 
     private IDataTemplate CrateItemTemplate()
     {
-        ItemTemplate = new FuncDataTemplate<object>((item, _) =>
+        ItemTemplate = new FuncDataTemplate<ModelTable>((item, _) =>
         {
             var tabButton = new ToggleButton()
             {
@@ -221,7 +222,7 @@ public class HorizontalTabStrip : BaseTemplatedControl
                 CornerRadius = new(3, 3, 0, 0),
                 Content = new ContentPresenter()
                 {
-                    Content = item,
+                    Content = item.Header,
                     HorizontalContentAlignment = HorizontalAlignment.Center
                 }
             };

@@ -10,6 +10,14 @@ namespace AvaloniaTemplate.Services
 {
     public class HorizontalTabStripService<T> : ObservableObject, IHorizontalTabStripService<T>
     {
+        #region Событие смены выбранного элемента
+        /// <summary>
+        /// Событие смены выбранного элемента
+        /// </summary>
+        public event IHorizontalTabStripService<T>.SelectedItemChanged SelectedItemChange;
+        public delegate void SelectedItemChanged(T item);
+        #endregion
+
         #region Функция вызываемая для создания нового элемента коллекции
         /// <summary>
         /// Функция вызываемая для создания нового элемента коллекции
@@ -37,7 +45,11 @@ namespace AvaloniaTemplate.Services
         public T SelectedItem
         {
             get => selectedItem;
-            set => SetProperty(ref selectedItem, value);
+            set
+            {
+                if (SetProperty(ref selectedItem, value))
+                    SelectedItemChange?.Invoke(selectedItem);
+            }
         }
         #endregion
 

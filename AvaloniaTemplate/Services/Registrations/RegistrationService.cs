@@ -1,4 +1,5 @@
-﻿using AvaloniaTemplate.Services.Interfaces;
+﻿using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace AvaloniaTemplate.Services.Registrations
@@ -15,10 +16,11 @@ namespace AvaloniaTemplate.Services.Registrations
             .AddSingleton<IUIConnectorService, UIConnectorService>()
             .AddSingleton<IInputManagerService, InputManagerService>()
             .AddSingleton<IScrollBarService, ScrollBarService>()
-            .AddSingleton<IHorizontalTabStripService<string>, HorizontalTabStripService<string>>()
+            .AddSingleton<IHorizontalTabStripService<ModelTable>, HorizontalTabStripService<ModelTable>>()
             .AddSingleton<IZoomService, ZoomService>()
+            .AddSingleton<ITableGenerateFactory, TableGenerateFactory>()
 
-            //.AddSingleton<IZoomService, ZoomService>()
+            //.AddSingleton<ITableGenerateFactory, TableGenerateFactory>()
             ;
     }
 }

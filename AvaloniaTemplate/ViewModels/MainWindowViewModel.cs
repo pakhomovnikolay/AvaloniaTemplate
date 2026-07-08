@@ -1,4 +1,5 @@
-﻿using AvaloniaTemplate.Services;
+﻿using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Services;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.ViewModels.Base;
 using System.Collections.ObjectModel;
@@ -18,7 +19,7 @@ namespace AvaloniaTemplate.ViewModels
         /// <summary>
         /// Сервис управления панелью со вкладками
         /// </summary>
-        public IHorizontalTabStripService<string> TabStripService { get; } = App.GetService<IHorizontalTabStripService<string>>();
+        public IHorizontalTabStripService<ModelTable> TabStripService { get; } = App.GetService<IHorizontalTabStripService<ModelTable>>();
         #endregion
 
         #region Сервис управления панелью прокрутки
@@ -34,8 +35,15 @@ namespace AvaloniaTemplate.ViewModels
         /// </summary>
         public IZoomService ZoomService { get; } = App.GetService<IZoomService>();
         #endregion
-        
 
+        #region Сервис управления моделями таблиц
+        /// <summary>
+        /// Сервис управления тмоделями таблиц
+        /// </summary>
+        public ITableGenerateFactory TablesFactory { get; } = App.GetService<ITableGenerateFactory>();
+        #endregion
+
+        
 
 
         #region Конструктор
@@ -91,9 +99,9 @@ namespace AvaloniaTemplate.ViewModels
             AppStatus = App.AppStatus;
             App.ChangeAppStatus += ChangeAppStatus;
 
-            TabStripService.ItemsSource = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
-            TabStripService.SelectedItem = TabStripService.ItemsSource[0];
-            TabStripService.CreateItem += () => { return $"{TabStripService.ItemsSource.Count + 1}"; };
+            //TabStripService.ItemsSource = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
+            //TabStripService.SelectedItem = TabStripService.ItemsSource[0];
+            //TabStripService.CreateItem += () => { return $"{TabStripService.ItemsSource.Count + 1}"; };
         }
         #endregion
     }

@@ -21,122 +21,122 @@
 		>
 
 	<Grid RowDefinitions="auto auto"
-		  RowSpacing="25"
-		  >
+			RowSpacing="25"
+			>
 		<StackPanel Orientation="Horizontal"
 					Spacing="5"
 					>
 			<Grid ColumnDefinitions="auto auto"
-				  RowDefinitions="auto auto auto"
-				  >
+					RowDefinitions="auto auto auto"
+					>
 				<crd:ButtonClipboard Grid.Column="0"
-										  Grid.Row="0"
-										  Grid.RowSpan="3"
-										  ClipboardType="Paste"
-										  ImageWidth="45"
-										  ImageHeight="55"
-										  Spacing="-5"
-										  Command="{Binding ConnectorService.Command_Paste}"
-										  />
+											Grid.Row="0"
+											Grid.RowSpan="3"
+											ClipboardType="Paste"
+											ImageWidth="45"
+											ImageHeight="55"
+											Spacing="-5"
+											Command="{Binding ConnectorService.Command_Paste}"
+											/>
 
 				<crd:ButtonClipboard Grid.Column="1"
-										  Grid.Row="0"
-										  ClipboardType="Cut"
-										  Command="{Binding ConnectorService.Command_Cut}"
-										  />
+											Grid.Row="0"
+											ClipboardType="Cut"
+											Command="{Binding ConnectorService.Command_Cut}"
+											/>
 
 				<crd:ButtonClipboard Grid.Column="1"
-										  Grid.Row="1"
-										  ClipboardType="Copy"
-										  Command="{Binding ConnectorService.Command_Copy}"
-										  />
+											Grid.Row="1"
+											ClipboardType="Copy"
+											Command="{Binding ConnectorService.Command_Copy}"
+											/>
 
 				<crd:ButtonClipboard Grid.Column="1"
-										  Grid.Row="2"
-										  ClipboardType="AsSimple"
-										  Command="{Binding ConnectorService.Command_AsSimple}"
-										  IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"
-										  />
+											Grid.Row="2"
+											ClipboardType="AsSimple"
+											Command="{Binding ConnectorService.Command_AsSimple}"
+											IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"
+											/>
 			</Grid>
 		
 			<Grid RowDefinitions="25 25"
-				  RowSpacing="3"
-				  >
+					RowSpacing="3"
+					>
 				<Grid Grid.Row="0"
-					  ColumnDefinitions="160 auto"
-					  ColumnSpacing="1"
-					  >
+						ColumnDefinitions="160 auto"
+						ColumnSpacing="1"
+						>
 					<crd:FontSelectorToolkit Grid.Column="0"
-												  ToolkitType="FontList"
-												  SelectedItem="{Binding ConnectorService.CurrentFont}"
-												  helpers:FontFamilyHelper.ControlPreviewFont="True"
-												  helpers:FontFamilyHelper.ControlFontChanged="True"
-												  />
+													ToolkitType="FontList"
+													SelectedItem="{Binding ConnectorService.CurrentFont}"
+													helpers:FontFamilyHelper.ControlPreviewFont="True"
+													helpers:FontFamilyHelper.ControlFontChanged="True"
+													/>
 
 					<crd:FontSelectorToolkit Grid.Column="1"
-												  ToolkitType="FontSizeList"
-												  SelectedItem="{Binding ConnectorService.CurrentFontSize}"
-												  helpers:FontFamilyHelper.ControlPreviewFontSize="True"
-												  helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
-												  />
+													ToolkitType="FontSizeList"
+													SelectedItem="{Binding ConnectorService.CurrentFontSize}"
+													helpers:FontFamilyHelper.ControlPreviewFontSize="True"
+													helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
+													/>
 				</Grid>
 
 				<Grid Grid.Row="1"
-					  ColumnDefinitions="30 30 30 40 40 40"
-					  ColumnSpacing="2"
-					  >
+						ColumnDefinitions="30 30 30 40 40 40"
+						ColumnSpacing="2"
+						>
 					<crd:FontStyleToolkit Grid.Column="0"
-											   ToolkitType="FontWeightBold"
-											   Height="25"
-											   FontSize="11"
-											   IsChecked="{Binding ConnectorService.IsFontWeightBold}"
-											   Command="{Binding ConnectorService.Command_ChangeFontWeightBold}"
-											   />
+												ToolkitType="FontWeightBold"
+												Height="25"
+												FontSize="11"
+												IsChecked="{Binding ConnectorService.IsFontWeightBold}"
+												Command="{Binding ConnectorService.Command_ChangeFontWeightBold}"
+												/>
 					<crd:FontStyleToolkit Grid.Column="1"
-											   ToolkitType="FontStyleItalic"
-											   Height="25"
-											   FontSize="12"
-											   IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
-											   Command="{Binding ConnectorService.Command_ChangeFontStyleItalic}"
-											   />
+												ToolkitType="FontStyleItalic"
+												Height="25"
+												FontSize="12"
+												IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
+												Command="{Binding ConnectorService.Command_ChangeFontStyleItalic}"
+												/>
 					<crd:FontStyleToolkit Grid.Column="2"
-											   ToolkitType="TextStyleUnderLine"
-											   Height="25"
-											   FontSize="12"
-											   IsChecked="{Binding ConnectorService.IsTextUnderline}"
-											   Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
-											   />
+												ToolkitType="TextStyleUnderLine"
+												Height="25"
+												FontSize="12"
+												IsChecked="{Binding ConnectorService.IsTextUnderline}"
+												Command="{Binding ConnectorService.Command_ChangeTextUnderline}"
+												/>
 
 					<crd:DropDownPicker Grid.Column="3"
-											   PickerType="BorderStyle"
-											   BorderStyleType="{Binding ConnectorService.BorderStyleType}"
-											   Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
-											   CommandParameter="{Binding ConnectorService.BorderStyleType}"
-											   />
+												PickerType="BorderStyle"
+												BorderStyleType="{Binding ConnectorService.BorderStyleType}"
+												Command="{Binding ConnectorService.Command_SetSelectedStyleBorder}"
+												CommandParameter="{Binding ConnectorService.BorderStyleType}"
+												/>
 
 					<crd:DropDownPicker Grid.Column="4"
-											   PickerType="Background"
-											   RecentColors="{Binding ConnectorService.BackgroundColors}"
-											   Command="{Binding ConnectorService.Command_SetBackground}"
-											   CommandParameter="{Binding ConnectorService.CurrentBackground}"
-											   />
+												PickerType="Background"
+												RecentColors="{Binding ConnectorService.BackgroundColors}"
+												Command="{Binding ConnectorService.Command_SetBackground}"
+												CommandParameter="{Binding ConnectorService.CurrentBackground}"
+												/>
 
 					<crd:DropDownPicker Grid.Column="5"
-											   PickerType="Foreground"
-											   RecentColors="{Binding ConnectorService.ForegroundColors}"
-											   Command="{Binding ConnectorService.Command_SetForeground}"
-											   CommandParameter="{Binding ConnectorService.CurrentForeground}"
-											   />
+												PickerType="Foreground"
+												RecentColors="{Binding ConnectorService.ForegroundColors}"
+												Command="{Binding ConnectorService.Command_SetForeground}"
+												CommandParameter="{Binding ConnectorService.CurrentForeground}"
+												/>
 				
 				</Grid>
 			
 			</Grid>
 
 			<Grid ColumnDefinitions="auto auto auto"
-				  RowDefinitions="auto auto"
-				  RowSpacing="3"
-				  ColumnSpacing="1"
-				  >
+					RowDefinitions="auto auto"
+					RowSpacing="3"
+					ColumnSpacing="1"
+					>
 				<crd:ButtonTextPosition Grid.Column="0"
 										Grid.Row="0"
 										Position="Vertical"
@@ -227,69 +227,70 @@
 			</Grid>
 
 			<Grid RowDefinitions="auto auto"
-				  RowSpacing="3"
-				  >
+					RowSpacing="3"
+					>
 
 				<crd:ButtonWrapText Grid.Row="0"
 									IsChecked="{Binding ConnectorService.IsWrapText}"
 									/>
 				<crd:ButtonMergeCells Grid.Row="1"
-									  IsChecked="{Binding ConnectorService.IsMergeCell}"
-									  />
+										IsChecked="{Binding ConnectorService.IsMergeCell}"
+										/>
 			</Grid>
 
 		</StackPanel>
 
 		<Grid Grid.Row="1"
-			  ColumnDefinitions="auto auto"
-			  ColumnSpacing="100"
-			  >
+				ColumnDefinitions="auto auto"
+				ColumnSpacing="100"
+				IsVisible="False"
+				>
 			<StackPanel Grid.Column="0" Spacing="5"
 						>
 				
 				<!--Формат по образцу-->
 				<CheckBox Content="Формат по образцу"
-						  IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"/>
+							IsChecked="{Binding ConnectorService.IsAsSimpleFixed}"/>
 
 				<!--Шрифт-->
 				<crd:FontSelectorToolkit Grid.Column="0"
-										 ToolkitType="FontList"
-										 SelectedItem="{Binding ConnectorService.CurrentFont}"
-										 helpers:FontFamilyHelper.ControlPreviewFont="True"
-										 helpers:FontFamilyHelper.ControlFontChanged="True"
-										 />
+											ToolkitType="FontList"
+											SelectedItem="{Binding ConnectorService.CurrentFont}"
+											helpers:FontFamilyHelper.ControlPreviewFont="True"
+											helpers:FontFamilyHelper.ControlFontChanged="True"
+											/>
 
 				<crd:FontSelectorToolkit Grid.Column="1"
-												  ToolkitType="FontSizeList"
-												  SelectedItem="{Binding ConnectorService.CurrentFontSize}"
-												  helpers:FontFamilyHelper.ControlPreviewFontSize="True"
-												  helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
-												  />
+													ToolkitType="FontSizeList"
+													SelectedItem="{Binding ConnectorService.CurrentFontSize}"
+													helpers:FontFamilyHelper.ControlPreviewFontSize="True"
+													helpers:FontFamilyHelper.ControlFontSizeCHanged="True"
+													/>
 
 				<!--Полужирный-->
 				<CheckBox Content="Полужирный"
-						  IsChecked="{Binding ConnectorService.IsFontWeightBold}"
-						  />
+							IsChecked="{Binding ConnectorService.IsFontWeightBold}"
+							/>
 				<!--Курсивный-->
 				<CheckBox Content="Курсивный"
-						  IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
-						  />
+							IsChecked="{Binding ConnectorService.IsFontStyleItalic}"
+							/>
 				<!--Подчеркнутый-->
 				<CheckBox Content="Подчеркнутый"
-						  IsChecked="{Binding ConnectorService.IsTextUnderline}"
-						  />
+							IsChecked="{Binding ConnectorService.IsTextUnderline}"
+							/>
 
 				<TextBox Text="{Binding ConnectorService.HorizontalContentAlignment}"/>
 				<TextBox Text="{Binding ConnectorService.VerticalContentAlignment}"/>
 
 				<!--Курсивный-->
 				<CheckBox Content="Переносить текст"
-						  IsChecked="{Binding ConnectorService.IsWrapText}"
-						  />
+							IsChecked="{Binding ConnectorService.IsWrapText}"
+							/>
 				<!--Подчеркнутый-->
 				<CheckBox Content="Объединить ячейки"
-						  IsChecked="{Binding ConnectorService.IsMergeCell}"
-						  />
+							IsChecked="{Binding ConnectorService.IsMergeCell}"
+							/>
 			</StackPanel>
 
 			<StackPanel Grid.Column="1"
@@ -306,41 +307,76 @@
 										/>
 
 				<crd:SliderZoomControl Height="25"
-									   TickPlacementType="TopLeft"
-									   BorderThickness="0"
-									   Background="Transparent"
-									   ValueSlider="{Binding ZoomService.Scale}"
-									   helpers:SliderZoomHelper.ValueChangeControl="True"
+										TickPlacementType="TopLeft"
+										BorderThickness="0"
+										Background="Transparent"
+										ValueSlider="{Binding ZoomService.Scale}"
+										helpers:SliderZoomHelper.ValueChangeControl="True"
 									   
-									   />
+										/>
 
 				<Border BorderThickness="1"
 						BorderBrush="Gray"
 						>
 					<Grid Height="100"
-						  ColumnDefinitions="* auto"
-						  RowDefinitions="* auto"
-						  >
+							ColumnDefinitions="* auto"
+							RowDefinitions="* auto"
+							>
 
 						<crd:SelectorScrollBar Grid.Column="0"
-											   Grid.Row="1"
-											   Position="Horizontal"
-											   Height="12"
-											   Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
-											   helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
-											   />
+												Grid.Row="1"
+												Position="Horizontal"
+												Height="12"
+												Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
+												helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
+												/>
 
 						<crd:SelectorScrollBar Grid.Column="1"
-											   Grid.Row="0"
-											   Position="Vertical"
-											   Width="12"
-											   Value="{Binding ScrollBarService.VerticalScrollBarValue}"
-											   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
-											   />
+												Grid.Row="0"
+												Position="Vertical"
+												Width="12"
+												Value="{Binding ScrollBarService.VerticalScrollBarValue}"
+												helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
+												/>
 					</Grid>
 				</Border>
 			</StackPanel>
 		</Grid>
-	
+
+		<Grid Grid.Row="1"
+			  ColumnDefinitions="auto * auto"
+			  RowDefinitions="auto * auto"
+			  >
+
+			<Border x:Name="PART_TopLeftPanel"
+					BorderThickness="1 1 0 0"
+					BorderBrush="Gray"
+					Width="35"
+					Height="25"
+					Background="LightGray"
+					/>
+
+			<Grid Grid.Row="2"
+				  Grid.Column="0"
+				  Grid.ColumnSpan="3"
+				  VerticalAlignment="Bottom"
+				  
+				  >
+				<crd:HorizontalTabStrip x:Name="PART_TabPanel"
+										ItemsSource="{Binding TabStripService.ItemsSource}"
+										SelectedItem="{Binding TabStripService.SelectedItem}"
+										Command="{Binding TabStripService.Command_CreateItem}"
+										CommandParameter="{Binding TabStripService.ItemsSource}"
+										StepChangeScroll="100"
+										/>
+				
+			</Grid>
+
+			
+			
+			<!---->
+		</Grid>
+
 	</Grid>
+
 </Window>

@@ -6,11 +6,19 @@ namespace AvaloniaTemplate.Services.Interfaces
 {
     public interface IHorizontalTabStripService<T>
     {
+        #region Событие смены выбранного элемента
+        /// <summary>
+        /// Событие смены выбранного элемента
+        /// </summary>
+        event SelectedItemChanged SelectedItemChange;
+        delegate void SelectedItemChanged(T item);
+        #endregion
+
         #region Функция вызываемая для создания нового элемента коллекции
         /// <summary>
         /// Функция вызываемая для создания нового элемента коллекции
         /// </summary>
-        Func<T> CreateItem { get; set; } 
+        Func <T> CreateItem { get; set; } 
         #endregion
 
         #region Коллекция элементов
