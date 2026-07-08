@@ -90,6 +90,8 @@ namespace AvaloniaTemplate.Services
         public void UpdateVerticalScrollBarValue(double offset)
         {
             VerticalScrollBarValue = verticalScrollBarOffset - offset * verticalScrollStep;
+            if (VerticalScrollBarValue < 0)
+                VerticalScrollBarValue = 0;
         }
         #endregion
 
@@ -100,6 +102,8 @@ namespace AvaloniaTemplate.Services
         public void UpdateHorizontalScrollBarValue(double offset)
         {
             HorizontalScrollBarValue = horizontalScrollBarOffset - offset * horizontalScrollStep;
+            if (HorizontalScrollBarValue < 0)
+                HorizontalScrollBarValue = 0;
         }
         #endregion
 

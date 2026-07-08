@@ -214,5 +214,12 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="cells"></param>
         void DeleteCells(ModelRow row, ObservableCollection<ModelCell> cells);
         #endregion
+
+        #region Обновить визульное пространство
+        /// <summary>
+        /// Обновить визульное пространство
+        /// </summary>
+        void UpdateViewport(); 
+        #endregion
     }
 }

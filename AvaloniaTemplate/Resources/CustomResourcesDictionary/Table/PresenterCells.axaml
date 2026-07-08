@@ -2,28 +2,29 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table"
                     >
-    
+
     <Design.PreviewWith>
         <Border Padding="5" Width="50" Height="30">
-            <controls:PresenterColumns />
+            <controls:PresenterCells />
         </Border>
     </Design.PreviewWith>
- 
-    <ControlTheme x:Key="{x:Type controls:PresenterColumns}"
-                  TargetType="controls:PresenterColumns"
+    
+    <ControlTheme x:Key="{x:Type controls:PresenterCells}"
+                  TargetType="controls:PresenterCells"
                   >
         <Setter Property="FontFamily" Value="{StaticResource FontFamilyDefault}"/>
         <Setter Property="FontSize" Value="{StaticResource FontSizeDefault}"/>
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="CornerRadius" Value="0"/>
-        <Setter Property="BorderThickness" Value="0 0 0 1"/>
-        <Setter Property="BorderBrush" Value="WhiteSmoke"/>
-        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0 0 0 0"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="Background" Value="White"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Template">
             <ControlTemplate>
                 <Border BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
+                        Background="{TemplateBinding Background}"
                         >
                     <ContentPresenter x:Name="PART_ContentPresenter"
                                       Content="{TemplateBinding Content}"

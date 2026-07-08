@@ -66,7 +66,7 @@ namespace AvaloniaTemplate.Services
         private void OnSelectedItemChange(ModelTable item)
         {
             SelectedModel = item;
-            ScrollBarService.UpdateViewport(ConnectorService.WindowWidth, ConnectorService.WindowHeight, SelectedModel.Width, SelectedModel.Height);
+            UpdateViewport();
         }
 
         #region Коллекция моделей
@@ -264,7 +264,7 @@ namespace AvaloniaTemplate.Services
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
-                    Foreground = Helper.GetColor(Brushes.Black),
+                    Foreground = Helper.GetColor(Brushes.LightGray),
                     BorderBrush = Helper.GetColor(Brushes.LightGray),
                     FontFamily = FontFamilyHelper.AppFontDefault.Name,
                     FontSize = FontFamilyHelper.FontSizeDefault,
@@ -355,7 +355,7 @@ namespace AvaloniaTemplate.Services
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
-                    Foreground = Helper.GetColor(Brushes.Black),
+                    Foreground = Helper.GetColor(Brushes.White),
                     BorderBrush = Helper.GetColor(Brushes.LightGray),
                     FontFamily = FontFamilyHelper.AppFontDefault.Name,
                     FontSize = FontFamilyHelper.FontSizeDefault,
@@ -386,7 +386,7 @@ namespace AvaloniaTemplate.Services
         {
             var array = new List<ModelRow>();
             for (int i = startRow; i < count; i++)
-                array.Add(CreateModelRow(i, GetHeaderRow(i)));
+                array.Add(CreateModelRow(i, GetHeaderRow(i + 1)));
 
             return array;
         }
@@ -568,6 +568,21 @@ namespace AvaloniaTemplate.Services
             bool IsEquals(string id)
                 => Models?
                 .FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase)) is { };
+        }
+        #endregion
+
+        #region Обновить визульное пространство
+        /// <summary>
+        /// Обновить визульное пространство
+        /// </summary>
+        public void UpdateViewport()
+        {
+            ScrollBarService.UpdateViewport(
+                ConnectorService.WindowWidth - ColumnWidthDefault,
+                ConnectorService.WindowHeight - RowHeightDefault * 5,
+                SelectedModel.Width,
+                SelectedModel.Height
+                );
         }
         #endregion
     }

@@ -51,6 +51,5 @@
 
   <ItemGroup>
     <Folder Include="Infrastructures\Commands\UserCommands\" />
-    <Folder Include="Models\Table\Presenter\" />
   </ItemGroup>
 </Project>

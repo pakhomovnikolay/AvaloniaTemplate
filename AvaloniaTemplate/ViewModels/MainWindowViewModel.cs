@@ -88,7 +88,7 @@ namespace AvaloniaTemplate.ViewModels
                 if (SetProperty(ref windowHeight, value))
                 {
                     ConnectorService.WindowHeight = windowHeight;
-                    ScrollBarService.UpdateViewport(WindowWidth, windowHeight, TablesFactory.SelectedModel.Width, TablesFactory.SelectedModel.Height);
+                    TablesFactory.UpdateViewport();
                 }
                     
             }

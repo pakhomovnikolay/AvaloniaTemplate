@@ -5,9 +5,8 @@
              xmlns:local="using:AvaloniaTemplate"
              RequestedThemeVariant="Light"
 			 >
-             
-
-    <Application.DataTemplates>
+	
+	<Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
   
@@ -48,8 +47,10 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/SelectorScrollBar.axaml"/>
 
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterColumns.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterRows.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterCells.axaml"/>
 
-				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/PresenterColumns.axaml"/>-->
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/PresenterCells.axaml"/>-->
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

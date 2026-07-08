@@ -16,28 +16,28 @@ using System.Globalization;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
-public class PresenterColumns : BaseTemplatedControl
+public class PresenterRows : BaseTemplatedControl
 {
     private readonly TranslateTransform transform = new();
     private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
     private static readonly double WidthSeparator = 1;
     private ContentPresenter presenter;
 
-    static PresenterColumns()
+    static PresenterRows()
     {
-        ItemsSourceProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
-        PositionXProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
-        PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
+        ItemsSourceProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.RebuildContent());
+        PositionXProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.UpdateTransform());
+        PositionYProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.UpdateTransform());
     }
 
     #region Источник данных
-    public static readonly StyledProperty<ObservableCollection<ModelColumn>> ItemsSourceProperty =
-        AvaloniaProperty.Register<PresenterColumns, ObservableCollection<ModelColumn>>(nameof(ItemsSource));
+    public static readonly StyledProperty<ObservableCollection<ModelRow>> ItemsSourceProperty =
+        AvaloniaProperty.Register<PresenterRows, ObservableCollection<ModelRow>>(nameof(ItemsSource));
 
     /// <summary>
     /// Источник данных
     /// </summary>
-    public ObservableCollection<ModelColumn> ItemsSource
+    public ObservableCollection<ModelRow> ItemsSource
     {
         get => GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
@@ -46,7 +46,7 @@ public class PresenterColumns : BaseTemplatedControl
 
     #region Content
     public static readonly StyledProperty<object?> ContentProperty =
-        AvaloniaProperty.Register<PresenterColumns, object?>(nameof(Content));
+        AvaloniaProperty.Register<PresenterRows, object?>(nameof(Content));
 
     /// <summary>
     /// Content
@@ -60,7 +60,7 @@ public class PresenterColumns : BaseTemplatedControl
 
     #region Положение по горизонтали
     public static readonly StyledProperty<double> PositionXProperty =
-        AvaloniaProperty.Register<PresenterColumns, double>(nameof(PositionX));
+        AvaloniaProperty.Register<PresenterRows, double>(nameof(PositionX));
 
     /// <summary>
     /// Положение по горизонтали
@@ -74,7 +74,7 @@ public class PresenterColumns : BaseTemplatedControl
 
     #region Положение по вертикали
     public static readonly StyledProperty<double> PositionYProperty =
-        AvaloniaProperty.Register<PresenterColumns, double>(nameof(PositionY));
+        AvaloniaProperty.Register<PresenterRows, double>(nameof(PositionY));
 
     /// <summary>
     /// Положение по вертикали
@@ -97,21 +97,16 @@ public class PresenterColumns : BaseTemplatedControl
         Content ??= InitializeContent();
     }
 
-    private void RebuildContent()
-    {
-        Content = InitializeContent();
-    }
-
     private Grid InitializeContent()
     {
         var grid = new Grid()
         {
-            ColumnDefinitions = [],
+            RowDefinitions = [],
         };
 
         foreach (var item in ItemsSource)
         {
-            var columnDefinition = new ColumnDefinition();
+            var rowDefinition = new RowDefinition();
             var splitter = GetGridSplitter();
             var separator = GetViewwSplitter();
             var border = new Border()
@@ -121,12 +116,12 @@ public class PresenterColumns : BaseTemplatedControl
             };
 
             border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
-            columnDefinition.Bind(ColumnDefinition.WidthProperty,
-                new Binding("Width")
+            rowDefinition.Bind(RowDefinition.HeightProperty,
+                new Binding("Height")
                 {
                     Source = item,
                     Mode = BindingMode.TwoWay,
-                    Converter = new ColumnDefinitionWidthConverter()
+                    Converter = new RowDefinitionWidthConverter()
                 });
 
 
@@ -137,24 +132,18 @@ public class PresenterColumns : BaseTemplatedControl
 
 
 
-            Grid.SetColumn(border, item.Index);
-            Grid.SetColumn(splitter, item.Index);
-            Grid.SetColumn(separator, item.Index);
+            Grid.SetRow(border, item.Index);
+            Grid.SetRow(splitter, item.Index);
+            Grid.SetRow(separator, item.Index);
 
-            grid.ColumnDefinitions.Add(columnDefinition);
+            grid.RowDefinitions.Add(rowDefinition);
             grid.Children.Add(border);
             grid.Children.Add(splitter);
             grid.Children.Add(separator);
         }
 
-        grid.ColumnDefinitions.Add(new ColumnDefinition(5, GridUnitType.Pixel));
+        grid.RowDefinitions.Add(new RowDefinition(5, GridUnitType.Pixel));
         return grid;
-    }
-
-    private void UpdateTransform()
-    {
-        transform.Y = PositionY;
-        transform.X = -PositionX;
     }
 
     #region Получить разделитель
@@ -168,10 +157,10 @@ public class PresenterColumns : BaseTemplatedControl
         {
             Background = Brushes.Transparent,
             BorderThickness = new(0),
-            ResizeDirection = GridResizeDirection.Columns,
-            HorizontalAlignment = HorizontalAlignment.Right,
+            ResizeDirection = GridResizeDirection.Rows,
+            VerticalAlignment = VerticalAlignment.Bottom,
             MinWidth = 0,
-            Width = 10,
+            Height = 5,
             Margin = new(0, 0, 0, 0)
         };
     }
@@ -187,10 +176,10 @@ public class PresenterColumns : BaseTemplatedControl
         return new Rectangle
         {
             Fill = SeparatorBrush,
-            Width = WidthSeparator,
+            Height = WidthSeparator,
             Margin = new(0, 0, 0, 0),
             IsHitTestVisible = false,
-            HorizontalAlignment = HorizontalAlignment.Right
+            VerticalAlignment = VerticalAlignment.Bottom
         };
     }
     #endregion
@@ -201,7 +190,7 @@ public class PresenterColumns : BaseTemplatedControl
     /// </summary>
     /// <param name="Item"></param>
     /// <returns></returns>
-    private static TextBlock GetItemControl(ModelColumn Item)
+    private static TextBlock GetItemControl(ModelRow Item)
     {
         return new TextBlock()
         {
@@ -215,6 +204,17 @@ public class PresenterColumns : BaseTemplatedControl
         };
     }
     #endregion
+
+    private void RebuildContent()
+    {
+        Content = InitializeContent();
+    }
+
+    private void UpdateTransform()
+    {
+        transform.Y = -PositionY;
+        transform.X = PositionX;
+    }
 
     private sealed class BackgroundConverter : IValueConverter
     {
@@ -231,7 +231,7 @@ public class PresenterColumns : BaseTemplatedControl
             => BindingOperations.DoNothing;
     }
 
-    private sealed class ColumnDefinitionWidthConverter : IValueConverter
+    private sealed class RowDefinitionWidthConverter : IValueConverter
     {
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
