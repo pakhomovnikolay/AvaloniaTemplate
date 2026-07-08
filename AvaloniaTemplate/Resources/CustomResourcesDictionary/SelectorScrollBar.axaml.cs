@@ -72,7 +72,35 @@ public class SelectorScrollBar : BaseTemplatedControl
     }
     #endregion
 
-    
+    #region Максимальный размер контента
+    public static readonly StyledProperty<double> MaximumProperty =
+        AvaloniaProperty.Register<SelectorScrollBar, double>(nameof(Maximum), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Максимальный размер контента
+    /// </summary>
+    public double Maximum
+    {
+        get => GetValue(MaximumProperty);
+        set => SetValue(MaximumProperty, value);
+    }
+    #endregion
+
+    #region Текущий размер области видимости
+    public static readonly StyledProperty<double> ViewportSizeProperty =
+        AvaloniaProperty.Register<SelectorScrollBar, double>(nameof(ViewportSize), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Текущий размер области видимости
+    /// </summary>
+    public double ViewportSize
+    {
+        get => GetValue(ViewportSizeProperty);
+        set => SetValue(ViewportSizeProperty, value);
+    }
+    #endregion
+
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);

@@ -197,6 +197,19 @@ namespace AvaloniaTemplate.Services.Interfaces
         bool IsMergeCell { get; set; }
         #endregion
 
+        #region Высота окна
+        /// <summary>
+        /// Высота окна
+        /// </summary>
+        int WindowHeight { get; set; }
+        #endregion
+
+        #region Ширина окна
+        /// <summary>
+        /// Ширина окна
+        /// </summary>
+        int WindowWidth { get; set; }
+        #endregion
 
 
 

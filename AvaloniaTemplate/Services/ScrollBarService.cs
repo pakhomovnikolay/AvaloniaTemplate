@@ -7,7 +7,7 @@ namespace AvaloniaTemplate.Services
     public class ScrollBarService : ObservableObject, IScrollBarService
     {
         private const double verticalScrollStep = 25 * 3;
-        private const double horizontalScrollStep = 70 * 3;
+        private const double horizontalScrollStep = 70 * 4;
         private double verticalScrollBarOffset;
         private double horizontalScrollBarOffset;
 
@@ -23,6 +23,30 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Текущий размер области видимости вертикальной прокрутки
+        private double verticalScrollViewportSize;
+        /// <summary>
+        /// Текущий размер области видимости вертикальной прокрутки
+        /// </summary>
+        public double VerticalScrollViewportSize
+        {
+            get => verticalScrollViewportSize;
+            set => SetProperty(ref verticalScrollViewportSize, value);
+        }
+        #endregion
+
+        #region Максимальный размер контента вертикальной прокрутки
+        private double verticalScrollBarMaximum;
+        /// <summary>
+        /// Максимальный размер контента вертикальной прокрутки
+        /// </summary>
+        public double VerticalScrollBarMaximum
+        {
+            get => verticalScrollBarMaximum;
+            set => SetProperty(ref verticalScrollBarMaximum, value);
+        }
+        #endregion
+
         #region Текущее положение горизонтальной прокрутки
         private double horizontalScrollBarValue;
         /// <summary>
@@ -32,6 +56,30 @@ namespace AvaloniaTemplate.Services
         {
             get => horizontalScrollBarValue;
             set => SetProperty(ref horizontalScrollBarValue, value);
+        }
+        #endregion
+
+        #region Текущий размер области видимости горизонтальной прокрутки
+        private double horizontalScrollViewportSize;
+        /// <summary>
+        /// Текущий размер области видимости горизонтальной прокрутки
+        /// </summary>
+        public double HorizontalScrollViewportSize
+        {
+            get => horizontalScrollViewportSize;
+            set => SetProperty(ref horizontalScrollViewportSize, value);
+        }
+        #endregion
+
+        #region Максимальный размер контента горизонтальной прокрутки
+        private double horizontalScrollBarMaximum;
+        /// <summary>
+        /// Максимальный размер контента горизонтальной прокрутки
+        /// </summary>
+        public double HorizontalScrollBarMaximum
+        {
+            get => horizontalScrollBarMaximum;
+            set => SetProperty(ref horizontalScrollBarMaximum, value);
         }
         #endregion
 
@@ -62,7 +110,7 @@ namespace AvaloniaTemplate.Services
         /// <param name="offset"></param>
         public void UpdateVerticalScrollBarOffset(double offset)
         {
-            verticalScrollBarOffset = Math.Clamp(offset, 0, 1000);
+            verticalScrollBarOffset = Math.Clamp(offset, 0, 100000);
             PositionChange?.Invoke(HorizontalScrollBarValue, VerticalScrollBarValue);
         }
         #endregion
@@ -74,7 +122,7 @@ namespace AvaloniaTemplate.Services
         /// <param name="offset"></param>
         public void UpdateHorizontalScrollBarOffset(double offset)
         {
-            horizontalScrollBarOffset = Math.Clamp(offset, 0, 1000);
+            horizontalScrollBarOffset = Math.Clamp(offset, 0, 100000);
             PositionChange?.Invoke(HorizontalScrollBarValue, VerticalScrollBarValue);
         }
         #endregion
@@ -85,6 +133,23 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public event IScrollBarService.PositionChanged? PositionChange;
         public delegate void PositionChanged(double X, double Y);
+        #endregion
+
+        #region Обновить область просмотра
+        /// <summary>
+        /// Обновить область просмотра
+        /// </summary>
+        /// <param name="viewportWidth"></param>
+        /// <param name="viewportHeight"></param>
+        /// <param name="contentWidth"></param>
+        /// <param name="contentHeight"></param>
+        public void UpdateViewport(double viewportWidth, double viewportHeight, double contentWidth, double contentHeight)
+        {
+            VerticalScrollViewportSize = viewportHeight;
+            VerticalScrollBarMaximum = Math.Max(0, contentHeight - viewportHeight);
+            HorizontalScrollViewportSize = viewportWidth;
+            HorizontalScrollBarMaximum = Math.Max(0, contentWidth - viewportWidth);
+        }
         #endregion
     }
 }

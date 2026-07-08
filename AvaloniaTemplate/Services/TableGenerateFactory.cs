@@ -4,6 +4,7 @@ using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Services.Interfaces;
+using AvaloniaTemplate.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,13 @@ namespace AvaloniaTemplate.Services
         private const int ColumnCountDefault = 50;
         private const int RowCountDefault = 45;
 
+        #region Сервис обработки состояний
+        /// <summary>
+        /// Сервис обработки состояний
+        /// </summary>
+        private IUIConnectorService ConnectorService { get; } = App.GetService<IUIConnectorService>();
+        #endregion
+
         #region Сервис управления панелью со вкладками
         /// <summary>
         /// Сервис управления панелью со вкладками
@@ -28,16 +36,37 @@ namespace AvaloniaTemplate.Services
         private IHorizontalTabStripService<ModelTable> TabStripService { get; } = App.GetService<IHorizontalTabStripService<ModelTable>>();
         #endregion
 
+        #region Сервис управления масштабом
+        /// <summary>
+        /// Сервис управления масштабом
+        /// </summary>
+        private IZoomService ZoomService { get; } = App.GetService<IZoomService>();
+        #endregion
+
+        #region Сервис управления панелью прокрутки
+        /// <summary>
+        /// Сервис управления панелью прокрутки
+        /// </summary>
+        private IScrollBarService ScrollBarService { get; } = App.GetService<IScrollBarService>();
+        #endregion
+
         public TableGenerateFactory()
         {
+            ZoomService.ScaleChange += (v) => SelectedModel.Scale = Convert.ToInt32(v / 100);
             TabStripService.CreateItem += CreateModel;
-            TabStripService.SelectedItemChange += (x) => SelectedModel = x;
+            TabStripService.SelectedItemChange += OnSelectedItemChange;
             if (Models is not { })
             {
                 Models ??= [];
                 TabStripService.ItemsSource = Models;
                 TabStripService.Command_CreateItem.Execute(Models);
-            }   
+            }
+        }
+
+        private void OnSelectedItemChange(ModelTable item)
+        {
+            SelectedModel = item;
+            ScrollBarService.UpdateViewport(ConnectorService.WindowWidth, ConnectorService.WindowHeight, SelectedModel.Width, SelectedModel.Height);
         }
 
         #region Коллекция моделей

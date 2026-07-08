@@ -142,7 +142,7 @@ public class SliderZoomControl : BaseTemplatedControl
 
     #region Текущее значение бегунка для отображения
     public static readonly StyledProperty<string> VisualValueSliderProperty =
-        AvaloniaProperty.Register<SliderZoomControl, string>(nameof(VisualValueSlider), defaultValue: "100 %", defaultBindingMode: BindingMode.TwoWay);
+        AvaloniaProperty.Register<SliderZoomControl, string>(nameof(VisualValueSlider), defaultValue: "0 %", defaultBindingMode: BindingMode.TwoWay);
 
     /// <summary>
     /// Текущее значение бегунка для отображения

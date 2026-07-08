@@ -78,6 +78,39 @@ namespace AvaloniaTemplate.ViewModels
         }
         #endregion
 
+        #region WindowHeight
+        private int windowHeight = 800;
+        public override int WindowHeight
+        {
+            get => windowHeight;
+            set
+            {
+                if (SetProperty(ref windowHeight, value))
+                {
+                    ConnectorService.WindowHeight = windowHeight;
+                    ScrollBarService.UpdateViewport(WindowWidth, windowHeight, TablesFactory.SelectedModel.Width, TablesFactory.SelectedModel.Height);
+                }
+                    
+            }
+        }
+        #endregion
+
+        #region WindowWidth
+        private int windowWidth = 1600;
+        public override int WindowWidth
+        {
+            get => windowWidth;
+            set
+            {
+                if (SetProperty(ref windowWidth, value))
+                {
+                    ConnectorService.WindowWidth = windowWidth;
+                    ScrollBarService.UpdateViewport(windowWidth, WindowHeight, TablesFactory.SelectedModel.Width, TablesFactory.SelectedModel.Height);
+                }
+            }
+        }
+        #endregion
+
         #region Событие изменения состояние приложения
         /// <summary>
         /// Событие изменения состояние приложения
@@ -104,5 +137,8 @@ namespace AvaloniaTemplate.ViewModels
             //TabStripService.CreateItem += () => { return $"{TabStripService.ItemsSource.Count + 1}"; };
         }
         #endregion
+
+
+
     }
 }

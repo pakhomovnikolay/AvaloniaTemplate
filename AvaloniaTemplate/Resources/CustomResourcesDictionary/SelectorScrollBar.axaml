@@ -28,6 +28,8 @@
             <ControlTemplate>
                 <ScrollBar x:Name="PART_ScrollBar"
                            Theme="{StaticResource CustomScrollBar}"
+                           Maximum="{TemplateBinding Maximum}"
+                           ViewportSize="{TemplateBinding ViewportSize}"
                            Orientation="{TemplateBinding Position}"
                            VerticalAlignment="{TemplateBinding VerticalAlignment}"
                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"

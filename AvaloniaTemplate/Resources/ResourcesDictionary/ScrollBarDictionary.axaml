@@ -22,6 +22,7 @@
                            AllowAutoHide="False"
                            HorizontalAlignment="Center"
                            Height="100"
+                           Width="15"
                            Theme="{StaticResource CustomScrollBar}"
                            />
                 <!--<ScrollBar Orientation="Vertical" AllowAutoHide="False" HorizontalAlignment="Center" Height="100" IsEnabled="False"/>

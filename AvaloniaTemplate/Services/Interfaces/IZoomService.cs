@@ -2,6 +2,14 @@
 {
     public interface IZoomService
     {
+        #region Событие изменения масштаба
+        /// <summary>
+        /// Событие изменения масштаба
+        /// </summary>
+        event ScaleChanged ScaleChange;
+        delegate void ScaleChanged(double value);
+        #endregion
+
         #region Масштаб
         /// <summary>
         /// Масштаб

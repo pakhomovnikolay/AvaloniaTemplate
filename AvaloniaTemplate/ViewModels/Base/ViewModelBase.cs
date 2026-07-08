@@ -5,7 +5,7 @@ namespace AvaloniaTemplate.ViewModels.Base
 {
     public class ViewModelBase : ObservableObject, IViewModelBase
     {
-        #region Title
+        #region Заголовок окна
         private string title;
         public string Title
         {
@@ -14,18 +14,18 @@ namespace AvaloniaTemplate.ViewModels.Base
         }
         #endregion
 
-        #region WindowHeight
+        #region Высота окна
         private int windowHeight = 800;
-        public int WindowHeight
+        public virtual int WindowHeight
         {
             get => windowHeight;
             set => SetProperty(ref windowHeight, value);
         }
         #endregion
 
-        #region WindowWidth
+        #region Ширина окна
         private int windowWidth = 1600;
-        public int WindowWidth
+        public virtual int WindowWidth
         {
             get => windowWidth;
             set => SetProperty(ref windowWidth, value);

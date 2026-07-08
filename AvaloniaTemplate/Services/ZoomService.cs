@@ -5,6 +5,14 @@ namespace AvaloniaTemplate.Services
 {
     public class ZoomService : ObservableObject, IZoomService
     {
+        #region Событие изменения масштаба
+        /// <summary>
+        /// Событие изменения масштаба
+        /// </summary>
+        public event IZoomService.ScaleChanged ScaleChange;
+        public delegate void ScaleChanged(double value);
+        #endregion
+
         #region Масштаб
         private double scale = 1;
         /// <summary>
@@ -13,7 +21,11 @@ namespace AvaloniaTemplate.Services
         public double Scale
         {
             get => scale;
-            private set => SetProperty(ref scale, value);
+            private set
+            {
+                if (SetProperty(ref scale, value))
+                    ScaleChange?.Invoke(scale);
+            }
         }
         #endregion
 

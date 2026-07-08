@@ -18,14 +18,9 @@
         <Setter Property="BorderBrush" Value="Gray"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Grid ColumnSpacing="0"
+                <Grid ColumnDefinitions="auto * auto"
+                      ColumnSpacing="0"
                       >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*" MaxWidth="700"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-
                     <Border Grid.Column="0"
                             Background="{TemplateBinding Background}"
                             CornerRadius="3 0 0 3"
