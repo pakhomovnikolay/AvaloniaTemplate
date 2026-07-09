@@ -27,48 +27,6 @@ namespace AvaloniaTemplate.Services.Interfaces
         ObservableCollection<ModelTable> SelectedModels { get; set; }
         #endregion
 
-        #region Выбранная колонка
-        /// <summary>
-        /// Выбранная колонка
-        /// </summary>
-        ModelColumn SelectedModelColumn { get; set; }
-        #endregion
-
-        #region Выбранные колонки
-        /// <summary>
-        /// Выбранные колонки
-        /// </summary>
-        ObservableCollection<ModelColumn> SelectedModelColumns { get; set; }
-        #endregion
-
-        #region Выбранная строка
-        /// <summary>
-        /// Выбранная строка
-        /// </summary>
-        ModelRow SelectedModelRow { get; set; }
-        #endregion
-
-        #region Выбранные строки
-        /// <summary>
-        /// Выбранные строки
-        /// </summary>
-        ObservableCollection<ModelRow> SelectedModelRows { get; set; }
-        #endregion
-
-        #region Выбранная ячейка
-        /// <summary>
-        /// Выбранная ячейка
-        /// </summary>
-        ModelCell SelectedModelCell { get; set; }
-        #endregion
-
-        #region Выбранные ячейки
-        /// <summary>
-        /// Выбранные ячейки
-        /// </summary>
-        ObservableCollection<ModelCell> SelectedModelCells { get; set; }
-        #endregion
-
         #region Создать модель
         /// <summary>
         /// Создать модель
@@ -219,7 +177,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Обновить визульное пространство
         /// </summary>
-        void UpdateViewport(); 
+        void UpdateViewport();
         #endregion
     }
 }

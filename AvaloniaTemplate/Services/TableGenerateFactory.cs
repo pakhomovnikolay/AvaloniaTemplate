@@ -4,7 +4,6 @@ using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Services.Interfaces;
-using AvaloniaTemplate.ViewModels;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
@@ -15,10 +14,10 @@ namespace AvaloniaTemplate.Services
 {
     public class TableGenerateFactory : ObservableObject, ITableGenerateFactory
     {
-        private const double ColumnWidthDefault = 70;
+        private const double ColumnWidthDefault = 60;
         private const double ColumnHeightDefault = 30;
         private const double RowWidthDefault = 30;
-        private const double RowHeightDefault = 25;
+        private const double RowHeightDefault = 20;
         private const int ColumnCountDefault = 50;
         private const int RowCountDefault = 45;
 
@@ -102,78 +101,6 @@ namespace AvaloniaTemplate.Services
         {
             get => selectedModels;
             set => SetProperty(ref selectedModels, value);
-        }
-        #endregion
-
-        #region Выбранная колонка
-        private ModelColumn selectedModelColumn;
-        /// <summary>
-        /// Выбранная колонка
-        /// </summary>
-        public ModelColumn SelectedModelColumn
-        {
-            get => selectedModelColumn;
-            set => SetProperty(ref selectedModelColumn, value);
-        }
-        #endregion
-
-        #region Выбранные колонки
-        private ObservableCollection<ModelColumn> selectedModelColumns;
-        /// <summary>
-        /// Выбранные колонки
-        /// </summary>
-        public ObservableCollection<ModelColumn> SelectedModelColumns
-        {
-            get => selectedModelColumns;
-            set => SetProperty(ref selectedModelColumns, value);
-        }
-        #endregion
-
-        #region Выбранная строка
-        private ModelRow selectedModelRow;
-        /// <summary>
-        /// Выбранная строка
-        /// </summary>
-        public ModelRow SelectedModelRow
-        {
-            get => selectedModelRow;
-            set => SetProperty(ref selectedModelRow, value);
-        }
-        #endregion
-
-        #region Выбранные строки
-        private ObservableCollection<ModelRow> selectedModelRows;
-        /// <summary>
-        /// Выбранные строки
-        /// </summary>
-        public ObservableCollection<ModelRow> SelectedModelRows
-        {
-            get => selectedModelRows;
-            set => SetProperty(ref selectedModelRows, value);
-        }
-        #endregion
-
-        #region Выбранная ячейка
-        private ModelCell selectedModelCell;
-        /// <summary>
-        /// Выбранная ячейка
-        /// </summary>
-        public ModelCell SelectedModelCell
-        {
-            get => selectedModelCell;
-            set => SetProperty(ref selectedModelCell, value);
-        }
-        #endregion
-
-        #region Выбранные ячейки
-        private ObservableCollection<ModelCell> selectedModelCells;
-        /// <summary>
-        /// Выбранные ячейки
-        /// </summary>
-        public ObservableCollection<ModelCell> SelectedModelCells
-        {
-            get => selectedModelCells;
-            set => SetProperty(ref selectedModelCells, value);
         }
         #endregion
 
@@ -304,7 +231,7 @@ namespace AvaloniaTemplate.Services
         /// Удалить модель колонки
         /// </summary>
         public void DeleteModelColumn()
-            => DeleteModelColumn(SelectedModelColumn);
+            => DeleteModelColumn(SelectedModel.SelectedModelColumn);
 
         /// <summary>
         /// Удалить модель колонки
@@ -313,8 +240,8 @@ namespace AvaloniaTemplate.Services
         public void DeleteModelColumn(ModelColumn column)
         {
             SelectedModel.Columns.Remove(column);
-            if (SelectedModelColumn.Equals(column))
-                SelectedModelColumn = Helper.GetSelectedElement<ModelColumn>(column.Index, SelectedModel.Columns);
+            if (SelectedModel.SelectedModelColumn.Equals(column))
+                SelectedModel.SelectedModelColumn = Helper.GetSelectedElement<ModelColumn>(column.Index, SelectedModel.Columns);
         }
 
         /// <summary>
@@ -355,7 +282,7 @@ namespace AvaloniaTemplate.Services
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
-                    Foreground = Helper.GetColor(Brushes.White),
+                    Foreground = Helper.GetColor(Brushes.LightGray),
                     BorderBrush = Helper.GetColor(Brushes.LightGray),
                     FontFamily = FontFamilyHelper.AppFontDefault.Name,
                     FontSize = FontFamilyHelper.FontSizeDefault,
@@ -397,7 +324,7 @@ namespace AvaloniaTemplate.Services
         /// Удалить модель строки
         /// </summary>
         public void DeleteModelRowRow()
-            => DeleteModelRowRow(SelectedModelRow);
+            => DeleteModelRowRow(SelectedModel.SelectedModelRow);
 
         /// <summary>
         /// Удалить модель строки
@@ -406,8 +333,8 @@ namespace AvaloniaTemplate.Services
         public void DeleteModelRowRow(ModelRow row)
         {
             SelectedModel.Rows.Remove(row);
-            if (SelectedModelRow.Equals(row))
-                SelectedModelRow = Helper.GetSelectedElement<ModelRow>(row.Index, SelectedModel.Rows);
+            if (SelectedModel.SelectedModelRow.Equals(row))
+                SelectedModel.SelectedModelRow = Helper.GetSelectedElement<ModelRow>(row.Index, SelectedModel.Rows);
         }
 
         /// <summary>
@@ -490,7 +417,7 @@ namespace AvaloniaTemplate.Services
         /// Удалить модель ячейки
         /// </summary>
         public void DeleteCells()
-            => DeleteCells(SelectedModelRow, SelectedModelCell);
+            => DeleteCells(SelectedModel.SelectedModelRow, SelectedModel.SelectedModelRow.SelectedModelCell);
 
         /// <summary>
         /// Удалить модель ячейки
@@ -501,8 +428,8 @@ namespace AvaloniaTemplate.Services
         {
             var index = row.Cells.IndexOf(cell);
             row.Cells.Remove(cell);
-            if (SelectedModelCell.Equals(cell))
-                SelectedModelCell = Helper.GetSelectedElement<ModelCell>(index, row.Cells);
+            if (SelectedModel.SelectedModelRow.SelectedModelCell.Equals(cell))
+                SelectedModel.SelectedModelRow.SelectedModelCell = Helper.GetSelectedElement<ModelCell>(index, row.Cells);
         }
 
         /// <summary>
@@ -578,8 +505,8 @@ namespace AvaloniaTemplate.Services
         public void UpdateViewport()
         {
             ScrollBarService.UpdateViewport(
-                ConnectorService.WindowWidth - ColumnWidthDefault,
-                ConnectorService.WindowHeight - RowHeightDefault * 5,
+                ConnectorService.WindowWidth,
+                ConnectorService.WindowHeight,
                 SelectedModel.Width,
                 SelectedModel.Height
                 );

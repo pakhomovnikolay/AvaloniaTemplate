@@ -166,7 +166,12 @@ public class HorizontalTabStrip : BaseTemplatedControl
     }
     #endregion
 
-    public event Action<object> SelectedItemChange;
+    #region Событие изменения текущего элемента
+    /// <summary>
+    /// Событие изменения текущего элемента
+    /// </summary>
+    public event Action<object> SelectedItemChange; 
+    #endregion
 
     private void OnItemsSourceChanged()
     {

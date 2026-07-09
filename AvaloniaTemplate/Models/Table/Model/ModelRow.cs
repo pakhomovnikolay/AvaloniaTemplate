@@ -50,5 +50,29 @@ namespace AvaloniaTemplate.Models.Table.Model
             set => SetProperty(ref cells, value);
         }
         #endregion
+
+        #region Выбранная ячейка
+        private ModelCell selectedModelCell;
+        /// <summary>
+        /// Выбранная ячейка
+        /// </summary>
+        public ModelCell SelectedModelCell
+        {
+            get => selectedModelCell;
+            set => SetProperty(ref selectedModelCell, value);
+        }
+        #endregion
+
+        #region Выбранные ячейки
+        private ObservableCollection<ModelCell> selectedModelCells = [];
+        /// <summary>
+        /// Выбранные ячейки
+        /// </summary>
+        public ObservableCollection<ModelCell> SelectedModelCells
+        {
+            get => selectedModelCells;
+            set => SetProperty(ref selectedModelCells, value);
+        }
+        #endregion
     }
 }

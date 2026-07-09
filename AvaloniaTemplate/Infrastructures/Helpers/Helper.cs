@@ -224,9 +224,67 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         }
         #endregion
 
-        
+        #region Получить цвет подсветки
+        /// <summary>
+        /// Получить цвет подсветки
+        /// </summary>
+        /// <param name="baseColor"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        public static Color GetAutoHighlight(Color baseColor, double factor = 0.15)
+        {
+            double luminance = 0.299 * baseColor.R +
+                               0.587 * baseColor.G +
+                               0.114 * baseColor.B;
 
-        
+            // порог можно подстроить
+            bool isLight = luminance > 34;
+
+            return isLight
+                ? Darken(baseColor, factor)   // светлый → затемняем
+                : Lighten(baseColor, factor); // тёмный → осветляем
+        }
+
+        /// <summary>
+        /// Получить цвет подсветки
+        /// </summary>
+        /// <param name="baseColor"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        public static Color GetAutoHighlight(IBrush baseColor, double factor = 0.15)
+        {
+            return GetAutoHighlight(Color.Parse(baseColor.ToString()), factor);
+        }
+
+        /// <summary>
+        /// Получить цвет подсветки
+        /// </summary>
+        /// <param name="baseColor"></param>
+        /// <param name="factor"></param>
+        /// <returns></returns>
+        public static Color GetAutoHighlight(string baseColor, double factor = 0.15)
+        {
+            return GetAutoHighlight(Color.Parse(baseColor), factor);
+        }
+        private static Color Lighten(Color color, double factor)
+        {
+            return Color.FromArgb(
+                color.A,
+                (byte)(color.R + (255 - color.R) * factor),
+                (byte)(color.G + (255 - color.G) * factor),
+                (byte)(color.B + (255 - color.B) * factor));
+        }
+        private static Color Darken(Color color, double factor)
+        {
+            return Color.FromArgb(
+                color.A,
+                (byte)(color.R * (1 - factor)),
+                (byte)(color.G * (1 - factor)),
+                (byte)(color.B * (1 - factor)));
+        }
+        #endregion
+
+
 
         #region Создать подрись
         /// <summary>

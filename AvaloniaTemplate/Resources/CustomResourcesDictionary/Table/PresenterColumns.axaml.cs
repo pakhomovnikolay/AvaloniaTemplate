@@ -5,6 +5,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
@@ -13,11 +14,13 @@ using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterColumns : BaseTemplatedControl
 {
+    private static bool IsMousePressed;
     private readonly TranslateTransform transform = new();
     private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
     private static readonly double WidthSeparator = 1;
@@ -29,6 +32,78 @@ public class PresenterColumns : BaseTemplatedControl
         PositionXProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
         PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
     }
+
+    #region Событие изменения текущего элемента
+    /// <summary>
+    /// Событие изменения текущего элемента
+    /// T: Элемент
+    /// </summary>
+    public event Action<Control, PointerPressedEventArgs, ModelColumn> SelectedItemChanged;
+    #endregion
+
+    #region Событие устанвоки фокуса элемента
+    /// <summary>
+    /// Событие устанвоки фокуса элемента
+    /// T: Элемент
+    /// </summary>
+    public event Action<ModelColumn> SetFocusItem;
+    #endregion
+
+    #region Событие снятия фокуса элемента
+    /// <summary>
+    /// Событие снятия фокуса элемента
+    /// T: Элемент
+    /// </summary>
+    public event Action<ModelColumn> ResetFocusItem;
+    #endregion
+
+    #region Событие перемещения мыши по панели
+    /// <summary>
+    /// Событие перемещения мыши по панели
+    /// T: Элемент
+    /// </summary>
+    public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
+    #endregion
+
+    #region Конвертер заднего фона из строки
+    /// <summary>
+    /// Конвертер заднего фона из строки
+    /// </summary>
+    private sealed class BackgroundConverter : IValueConverter
+    {
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            IBrush color = Brushes.Transparent;
+            if (value is string brush)
+                color = Helper.GetColor(brush);
+
+            return color;
+        }
+
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            => BindingOperations.DoNothing;
+    }
+    #endregion
+
+    #region Конвертер ширины в GridLength
+    /// <summary>
+    /// Конвертер ширины в GridLength
+    /// </summary>
+    private sealed class ColumnDefinitionWidthConverter : IValueConverter
+    {
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            var gridLength = new GridLength();
+            if (value is double width)
+                gridLength = new GridLength(width, GridUnitType.Pixel);
+
+            return gridLength;
+        }
+
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            => BindingOperations.DoNothing;
+    }
+    #endregion
 
     #region Источник данных
     public static readonly StyledProperty<ObservableCollection<ModelColumn>> ItemsSourceProperty =
@@ -44,12 +119,40 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
-    #region Content
+    #region Выбранный элемент
+    public static readonly StyledProperty<ModelColumn> SelectedItemProperty =
+        AvaloniaProperty.Register<PresenterColumns, ModelColumn>(nameof(SelectedItem), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Выбранный элемент
+    /// </summary>
+    public ModelColumn SelectedItem
+    {
+        get => GetValue(SelectedItemProperty);
+        set => SetValue(SelectedItemProperty, value);
+    }
+    #endregion
+
+    #region Выбранные элементы
+    public static readonly StyledProperty<ObservableCollection<ModelColumn>> SelectedItemsProperty =
+        AvaloniaProperty.Register<PresenterColumns, ObservableCollection<ModelColumn>>(nameof(SelectedItems), defaultBindingMode: BindingMode.TwoWay);
+
+    /// <summary>
+    /// Выбранные элементы
+    /// </summary>
+    public ObservableCollection<ModelColumn> SelectedItems
+    {
+        get => GetValue(SelectedItemsProperty);
+        set => SetValue(SelectedItemsProperty, value);
+    }
+    #endregion
+
+    #region Контент
     public static readonly StyledProperty<object?> ContentProperty =
         AvaloniaProperty.Register<PresenterColumns, object?>(nameof(Content));
 
     /// <summary>
-    /// Content
+    /// Контент
     /// </summary>
     public object? Content
     {
@@ -86,32 +189,41 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
-    {
-        base.OnApplyTemplate(e);
-        if (ItemsSource is not { } || ItemsSource.Count <= 0)
-            return;
-
-        presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
-        presenter.RenderTransform = transform;
-        Content ??= InitializeContent();
-    }
-
+    #region Пересобрать контент
+    /// <summary>
+    /// Пересобрать контент
+    /// </summary>
     private void RebuildContent()
     {
         Content = InitializeContent();
     }
+    #endregion
 
+    #region Инициализация контента
+    /// <summary>
+    /// Инициализация контента
+    /// </summary>
+    /// <returns></returns>
     private Grid InitializeContent()
     {
-        var grid = new Grid()
+        var columns = ItemsSource.Select(x =>
         {
-            ColumnDefinitions = [],
-        };
+            var column = new ColumnDefinition();
+            column.Bind(
+                ColumnDefinition.WidthProperty,
+                new Binding(nameof(x.Width))
+                {
+                    Source = x,
+                    Mode = BindingMode.TwoWay,
+                    Converter = new ColumnDefinitionWidthConverter()
+                });
+            return column;
+        })?.ToList();
 
+        columns.Add(new ColumnDefinition(5, GridUnitType.Pixel));
+        var grid = new Grid() { ColumnDefinitions = [.. columns] };
         foreach (var item in ItemsSource)
         {
-            var columnDefinition = new ColumnDefinition();
             var splitter = GetGridSplitter();
             var separator = GetViewwSplitter();
             var border = new Border()
@@ -119,43 +231,32 @@ public class PresenterColumns : BaseTemplatedControl
                 DataContext = item,
                 Child = GetItemControl(item)
             };
-
             border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
-            columnDefinition.Bind(ColumnDefinition.WidthProperty,
-                new Binding("Width")
-                {
-                    Source = item,
-                    Mode = BindingMode.TwoWay,
-                    Converter = new ColumnDefinitionWidthConverter()
-                });
-
-
-            //tabButton.Bind(ToggleButton.IsCheckedProperty, new Binding(nameof(SelectedItem)) { Source = this, Converter = new SelectedItemConverter(item) });
-
-
-
-
-
+            border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
+            border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
+            border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);
 
             Grid.SetColumn(border, item.Index);
             Grid.SetColumn(splitter, item.Index);
             Grid.SetColumn(separator, item.Index);
-
-            grid.ColumnDefinitions.Add(columnDefinition);
             grid.Children.Add(border);
             grid.Children.Add(splitter);
             grid.Children.Add(separator);
         }
-
-        grid.ColumnDefinitions.Add(new ColumnDefinition(5, GridUnitType.Pixel));
         return grid;
     }
+    #endregion
 
+    #region Обновить положение
+    /// <summary>
+    /// Обновить положение
+    /// </summary>
     private void UpdateTransform()
     {
         transform.Y = PositionY;
         transform.X = -PositionX;
     }
+    #endregion
 
     #region Получить разделитель
     /// <summary>
@@ -203,46 +304,69 @@ public class PresenterColumns : BaseTemplatedControl
     /// <returns></returns>
     private static TextBlock GetItemControl(ModelColumn Item)
     {
-        return new TextBlock()
+        var control = new TextBlock()
         {
+            DataContext = Item,
             Text = Item.Header,
             HorizontalAlignment = HorizontalAlignment.Center,
             VerticalAlignment = VerticalAlignment.Center,
             FontFamily = Item.CellStyle.FontFamily,
             FontSize = Item.CellStyle.FontSize,
-            FontWeight = Item.CellStyle.IsBold ? FontWeight.Bold : FontWeight.Normal,
-            Foreground = Helper.GetColor(Item.CellStyle.Foreground)
+            FontWeight = Item.CellStyle.IsBold ? FontWeight.Bold : FontWeight.Normal
         };
+        control.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground"));
+        return control;
     }
     #endregion
 
-    private sealed class BackgroundConverter : IValueConverter
+    #region Обработка смены выбора элемента
+    /// <summary>
+    /// Обработка смены выбора элемента
+    /// </summary>
+    /// <param name="e"></param>
+    /// <param name="item"></param>
+    private void OnSelectedItemChanged(PointerPressedEventArgs e, ModelColumn item)
     {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            IBrush color = Brushes.Transparent;
-            if (value is string brush)
-                color = Helper.GetColor(brush);
+        if (!e.Properties.IsLeftButtonPressed || item is not { })
+            return;
 
-            return color;
-        }
-
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            => BindingOperations.DoNothing;
+        SelectedItemChanged?.Invoke(this, e, item);
     }
+    #endregion
 
-    private sealed class ColumnDefinitionWidthConverter : IValueConverter
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            var gridLength = new GridLength();
-            if (value is double width)
-                gridLength = new GridLength(width, GridUnitType.Pixel);
+        base.OnApplyTemplate(e);
+        if (ItemsSource is not { } || ItemsSource.Count <= 0)
+            return;
 
-            return gridLength;
-        }
+        presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
+        presenter.RenderTransform = transform;
+        Content ??= InitializeContent();
+    }
+    protected override void OnPointerPressed(PointerPressedEventArgs e)
+    {
+        base.OnPointerPressed(e);
 
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            => BindingOperations.DoNothing;
+        if (!e.Properties.IsLeftButtonPressed)
+            return;
+
+        IsMousePressed = true;
+    }
+    protected override void OnPointerReleased(PointerReleasedEventArgs e)
+    {
+        base.OnPointerReleased(e);
+
+        IsMousePressed = false;
+
+    }
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+
+        if (!IsMousePressed)
+            return;
+
+        PointerMovedEventChange?.Invoke(this, e);
     }
 }

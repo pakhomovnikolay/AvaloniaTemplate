@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace AvaloniaTemplate.Models.Table.Model
 {
@@ -209,6 +210,30 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Выбранная колонка
+        private ModelColumn selectedModelColumn;
+        /// <summary>
+        /// Выбранная колонка
+        /// </summary>
+        public ModelColumn SelectedModelColumn
+        {
+            get => selectedModelColumn;
+            set => SetProperty(selectedModelColumn, value, x => { selectedModelColumn = x; UpdateSelectedModelColumns(); });
+        }
+        #endregion
+
+        #region Выбранные колонки
+        private ObservableCollection<ModelColumn> selectedModelColumns = [];
+        /// <summary>
+        /// Выбранные колонки
+        /// </summary>
+        public ObservableCollection<ModelColumn> SelectedModelColumns
+        {
+            get => selectedModelColumns;
+            set => SetProperty(ref selectedModelColumns, value);
+        }
+        #endregion
+
         #region Коллекция строк
         private ObservableCollection<ModelRow> rows = [];
         /// <summary>
@@ -218,6 +243,62 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             get => rows;
             set => SetProperty(ref rows, value);
+        }
+        #endregion
+
+        #region Выбранная строка
+        private ModelRow selectedModelRow;
+        /// <summary>
+        /// Выбранная строка
+        /// </summary>
+        public ModelRow SelectedModelRow
+        {
+            get => selectedModelRow;
+            set => SetProperty(ref selectedModelRow, value);
+        }
+        #endregion
+
+        #region Выбранные строки
+        private ObservableCollection<ModelRow> selectedModelRows = [];
+        /// <summary>
+        /// Выбранные строки
+        /// </summary>
+        public ObservableCollection<ModelRow> SelectedModelRows
+        {
+            get => selectedModelRows;
+            set => SetProperty(ref selectedModelRows, value);
+        }
+        #endregion
+
+        #region Обновить выделенные колонки модели
+        /// <summary>
+        /// Обновить выделенные колонки модели
+        /// </summary>
+        public void UpdateSelectedModelColumns()
+        {
+            SelectedModelColumns?.Where(x => !x.IsSelected)?
+                .ToList()?
+                .ForEach(x => x.IsSelected = true);
+
+            Columns.Where(x => x.IsSelected)?
+                .Except(SelectedModelColumns)?
+                .ToList() ?
+                .ForEach(x => x.IsSelected = false);
+
+            //set
+            //{
+            //    if (SetProperty(ref selectedModelColumn, value))
+            //        UpdateSelectedModelColumns()
+            //    {
+            //        SelectedModel.Columns.Where(x => x.IsSelected)?
+            //            .Except(SelectedModelColumns)?
+            //            .ToList()?
+            //            .ForEach(x => x.IsSelected = false);
+
+            //        SelectedModelColumns?.ToList()?
+            //            .ForEach(x => x.IsSelected = true);
+            //    }
+            //}
         }
         #endregion
     }

@@ -106,7 +106,7 @@ namespace AvaloniaTemplate.Models.Table.Base
         /// <summary>
         /// Выбрана
         /// </summary>
-        public bool IsSelected
+        public virtual bool IsSelected
         {
             get => selected;
             set => SetProperty(ref selected, value);
@@ -118,7 +118,7 @@ namespace AvaloniaTemplate.Models.Table.Base
         /// <summary>
         /// Активная
         /// </summary>
-        public bool IsFocused
+        public virtual bool IsFocused
         {
             get => focused;
             set => SetProperty(ref focused, value);
