@@ -6,28 +6,31 @@ using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 using AvaloniaTemplate.Services;
 using AvaloniaTemplate.Services.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
 {
-    public class PresenterColumnsHelper
+    public class PresenterRowsHelper
     {
         private static readonly StartIndex CurrentIndex = new();
-        private static readonly SelectionService<ModelColumn> SelectorColumns = new(() => TableFactory.SelectedModel.Columns, x => x.Index);
+        private static readonly SelectionService<ModelRow> SelectorRows = new(() => TableFactory.SelectedModel.Rows, x => x.Index);
         private static readonly ITableGenerateFactory TableFactory = App.GetService<ITableGenerateFactory>();
 
-        static PresenterColumnsHelper()
+        static PresenterRowsHelper()
         {
-            SelectedChangeControlProperty.Changed.AddClassHandler<PresenterColumns>(RegisterSelectedChangeControl);
-            SelectorColumns.SelectedChangedItem += OnSelectedChangedColumn;
-            SelectorColumns.SelectedChangedItems += OnSelectedChangedColumns;
-            SelectorColumns.MultiSelectedChangedItem += OnMultiSelectedChangedColumn;
-            SelectorColumns.SelectedAreaChanged += OnColumnSelectedAreaChanged;
+            SelectedChangeControlProperty.Changed.AddClassHandler<PresenterRows>(RegisterSelectedChangeControl);
+            SelectorRows.SelectedChangedItem += OnSelectedChangedColumn;
+            SelectorRows.SelectedChangedItems += OnSelectedChangedColumns;
+            SelectorRows.MultiSelectedChangedItem += OnMultiSelectedChangedRow;
+            SelectorRows.SelectedAreaChanged += OnColumnSelectedAreaChanged;
         }
 
         public static readonly AttachedProperty<bool> SelectedChangeControlProperty
-            = AvaloniaProperty.RegisterAttached<PresenterColumnsHelper, Control, bool>("SelectedChangeControl");
+            = AvaloniaProperty.RegisterAttached<PresenterRowsHelper, Control, bool>("SelectedChangeControl");
 
         public static void SetSelectedChangeControl(Control control, bool value)
             => control.SetValue(SelectedChangeControlProperty, value);
@@ -35,20 +38,20 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         public static bool GetSelectedChangeControl(Control control)
             => control.GetValue(SelectedChangeControlProperty);
 
-        private static void RegisterSelectedChangeControl(PresenterColumns presenter, AvaloniaPropertyChangedEventArgs e)
+        private static void RegisterSelectedChangeControl(PresenterRows presenter, AvaloniaPropertyChangedEventArgs e)
         {
             if (e.NewValue is bool)
             {
                 presenter.SelectedItemChanged += OnSelectedItemChanged;
-                presenter.SetFocusItem += SelectorColumns.SetFocus;
-                presenter.ResetFocusItem += SelectorColumns.ResetFocus;
+                presenter.SetFocusItem += SelectorRows.SetFocus;
+                presenter.ResetFocusItem += SelectorRows.ResetFocus;
                 presenter.PointerMovedEventChange += OnPointerMovedEventChange;
             }
             else
             {
                 presenter.SelectedItemChanged -= OnSelectedItemChanged;
-                presenter.SetFocusItem -= SelectorColumns.SetFocus;
-                presenter.ResetFocusItem -= SelectorColumns.ResetFocus;
+                presenter.SetFocusItem -= SelectorRows.SetFocus;
+                presenter.ResetFocusItem -= SelectorRows.ResetFocus;
                 presenter.PointerMovedEventChange -= OnPointerMovedEventChange;
             }
         }
@@ -60,11 +63,11 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <param name="s"></param>
         /// <param name="r"></param>
         /// <param name="item"></param>
-        private static void OnSelectedItemChanged(PointerPressedEventArgs e, ModelColumn item)
+        private static void OnSelectedItemChanged(PointerPressedEventArgs e, ModelRow item)
         {
-            CurrentIndex.IsEqaulColumn(item.Index);
-            CurrentIndex.Column = item.Index;
-            SelectorColumns.SetSelected(e, item);
+            CurrentIndex.IsEqaulRow(item.Index);
+            CurrentIndex.Row = item.Index;
+            SelectorRows.SetSelected(e, item);
         }
         #endregion
 
@@ -77,64 +80,64 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         private static void OnPointerMovedEventChange(Control? s, PointerEventArgs e)
         {
             var point = e.GetPosition(s);
-            if (CurrentIndex.IsEqaulColumn(GetColumn(point.X))
-                || CurrentIndex.CurrentColumn < 0
-                || CurrentIndex.CurrentColumn >= TableFactory.SelectedModel.Columns.Count
+            if (CurrentIndex.IsEqaulRow(GetRow(point.Y))
+                || CurrentIndex.CurrentRow < 0
+                || CurrentIndex.CurrentRow >= TableFactory.SelectedModel.Rows.Count
                 )
                 return;
 
-            SelectorColumns.SetRangeSelected(CurrentIndex.CurrentColumn);
+            SelectorRows.SetRangeSelected(CurrentIndex.CurrentRow);
         }
         #endregion
 
-        #region Событие изменения текущей колонки
+        #region Событие изменения текущей строки
         /// <summary>
-        /// Событие изменения текущей колонки
+        /// Событие изменения текущей строки
         /// </summary>
         /// <param name="item"></param>
-        private static void OnSelectedChangedColumn(ModelColumn item)
+        private static void OnSelectedChangedColumn(ModelRow item)
         {
-            TableFactory.SelectedModel.SelectedModelColumns.Clear();
-            TableFactory.SelectedModel.SelectedModelColumns.Add(item);
-            TableFactory.SelectedModel.SelectedModelColumn = item;
-
             TableFactory.SelectedModel.SelectedModelRows.Clear();
-            TableFactory.SelectedModel.SelectedModelRow = null;
+            TableFactory.SelectedModel.SelectedModelRows.Add(item);
+            TableFactory.SelectedModel.SelectedModelRow = item;
+
+            TableFactory.SelectedModel.SelectedModelColumns.Clear();
+            TableFactory.SelectedModel.SelectedModelColumn = null;
         }
         #endregion
 
-        #region Событие изменения выбранных колонок
+        #region Событие изменения выбранных строки
         /// <summary>
-        /// Событие изменения выбранных колонок
+        /// Событие изменения выбранных строки
         /// </summary>
         /// <param name="added"></param>
         /// <param name="removed"></param>
-        private static void OnSelectedChangedColumns(IEnumerable<ModelColumn> added, IEnumerable<ModelColumn> removed)
+        private static void OnSelectedChangedColumns(IEnumerable<ModelRow> added, IEnumerable<ModelRow> removed)
         {
             if (removed is { } && removed.Any())
                 foreach (var item in removed)
-                    TableFactory.SelectedModel.SelectedModelColumns.Remove(item);
+                    TableFactory.SelectedModel.SelectedModelRows.Remove(item);
 
             if (added is { } && added.Any())
                 foreach (var item in added)
-                    TableFactory.SelectedModel.SelectedModelColumns.Add(item);
+                    TableFactory.SelectedModel.SelectedModelRows.Add(item);
 
-            TableFactory.SelectedModel.UpdateSelectedModelColumns();
+            TableFactory.SelectedModel.UpdateSelectedModelRows();
         }
         #endregion
 
-        #region Событие изменения выбранной колонки
+        #region Событие изменения выбранной строки
         /// <summary>
-        /// Событие изменения выбранной колонки
+        /// Событие изменения выбранной строки
         /// </summary>
         /// <param name="item"></param>
-        private static void OnMultiSelectedChangedColumn(ModelColumn item, bool remove)
+        private static void OnMultiSelectedChangedRow(ModelRow item, bool remove)
         {
             if (remove)
-                TableFactory.SelectedModel.SelectedModelColumn = TableFactory.SelectedModel.SelectedModelColumns?
+                TableFactory.SelectedModel.SelectedModelRow = TableFactory.SelectedModel.SelectedModelRows?
                     .FirstOrDefault(x => !x.Equals(item));
             else
-                TableFactory.SelectedModel.SelectedModelColumn = item;
+                TableFactory.SelectedModel.SelectedModelRow = item;
 
 
             //var array = Cells.Where(x => x.IndexColumn == item.Index && x.IndexRow < Rows.Count);
@@ -216,25 +219,25 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         }
         #endregion
 
-        #region Получить индекс колонки
+        #region Получить индекс строки
         /// <summary>
-        /// Получить индекс колонки
+        /// Получить индекс строки
         /// </summary>
         /// <returns></returns>
-        private static int GetColumn(double posX)
+        private static int GetRow(double posY)
         {
-            int left = 0;
-            int right = TableFactory.SelectedModel.Columns.Count - 1;
+            int top = 0;
+            int bottom = TableFactory.SelectedModel.Rows.Count - 1;
 
-            while (left <= right)
+            while (top <= bottom)
             {
-                int mid = (left + right) / 2;
-                var col = TableFactory.SelectedModel.Columns[mid];
+                int mid = (top + bottom) / 2;
+                var row = TableFactory.SelectedModel.Rows[mid];
 
-                if (posX < col.PositionX)
-                    right = mid - 1;
-                else if (posX > col.PositionX + col.Width)
-                    left = mid + 1;
+                if (posY < row.PositionY)
+                    bottom = mid - 1;
+                else if (posY > row.PositionY + row.Height)
+                    top = mid + 1;
                 else
                     return mid;
             }

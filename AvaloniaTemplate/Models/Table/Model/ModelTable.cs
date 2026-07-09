@@ -254,7 +254,7 @@ namespace AvaloniaTemplate.Models.Table.Model
         public ModelRow SelectedModelRow
         {
             get => selectedModelRow;
-            set => SetProperty(ref selectedModelRow, value);
+            set => SetProperty(selectedModelRow, value, x => { selectedModelRow = x; UpdateSelectedModelRows(); });
         }
         #endregion
 
@@ -284,21 +284,23 @@ namespace AvaloniaTemplate.Models.Table.Model
                 .Except(SelectedModelColumns)?
                 .ToList() ?
                 .ForEach(x => x.IsSelected = false);
+        }
+        #endregion
 
-            //set
-            //{
-            //    if (SetProperty(ref selectedModelColumn, value))
-            //        UpdateSelectedModelColumns()
-            //    {
-            //        SelectedModel.Columns.Where(x => x.IsSelected)?
-            //            .Except(SelectedModelColumns)?
-            //            .ToList()?
-            //            .ForEach(x => x.IsSelected = false);
+        #region Обновить выделенные строк модели
+        /// <summary>
+        /// Обновить выделенные строк модели
+        /// </summary>
+        public void UpdateSelectedModelRows()
+        {
+            SelectedModelRows?.Where(x => !x.IsSelected)?
+                .ToList()?
+                .ForEach(x => x.IsSelected = true);
 
-            //        SelectedModelColumns?.ToList()?
-            //            .ForEach(x => x.IsSelected = true);
-            //    }
-            //}
+            Rows.Where(x => x.IsSelected)?
+                .Except(SelectedModelRows)?
+                .ToList()?
+                .ForEach(x => x.IsSelected = false);
         }
         #endregion
     }

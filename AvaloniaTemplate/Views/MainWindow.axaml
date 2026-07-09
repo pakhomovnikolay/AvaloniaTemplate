@@ -373,9 +373,7 @@
 									Grid.ColumnSpan="2"
 									Grid.Row="0"
 									ItemsSource="{Binding TablesFactory.SelectedModel.Columns}"
-									SelectedItems="{Binding TablesFactory.SelectedModel.SelectedModelColumns}"
 									SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelColumn}"
-									
 									PositionY="0"
 									PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
 									helpers:PresenterColumnsHelper.SelectedChangeControl="True"
@@ -385,8 +383,10 @@
 			<table:PresenterRows Grid.Column="0"
 								 Grid.Row="1"
 								 ItemsSource="{Binding TablesFactory.SelectedModel.Rows}"
+								 SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelRow}"
 								 PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
 								 PositionX="0"
+								 helpers:PresenterRowsHelper.SelectedChangeControl="True"
 								 />
 
 			

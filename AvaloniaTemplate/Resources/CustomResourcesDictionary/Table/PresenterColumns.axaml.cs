@@ -38,7 +38,7 @@ public class PresenterColumns : BaseTemplatedControl
     /// Событие изменения текущего элемента
     /// T: Элемент
     /// </summary>
-    public event Action<Control, PointerPressedEventArgs, ModelColumn> SelectedItemChanged;
+    public event Action<PointerPressedEventArgs, ModelColumn> SelectedItemChanged;
     #endregion
 
     #region Событие устанвоки фокуса элемента
@@ -130,20 +130,6 @@ public class PresenterColumns : BaseTemplatedControl
     {
         get => GetValue(SelectedItemProperty);
         set => SetValue(SelectedItemProperty, value);
-    }
-    #endregion
-
-    #region Выбранные элементы
-    public static readonly StyledProperty<ObservableCollection<ModelColumn>> SelectedItemsProperty =
-        AvaloniaProperty.Register<PresenterColumns, ObservableCollection<ModelColumn>>(nameof(SelectedItems), defaultBindingMode: BindingMode.TwoWay);
-
-    /// <summary>
-    /// Выбранные элементы
-    /// </summary>
-    public ObservableCollection<ModelColumn> SelectedItems
-    {
-        get => GetValue(SelectedItemsProperty);
-        set => SetValue(SelectedItemsProperty, value);
     }
     #endregion
 
@@ -330,7 +316,7 @@ public class PresenterColumns : BaseTemplatedControl
         if (!e.Properties.IsLeftButtonPressed || item is not { })
             return;
 
-        SelectedItemChanged?.Invoke(this, e, item);
+        SelectedItemChanged?.Invoke(e, item);
     }
     #endregion
 
@@ -358,7 +344,6 @@ public class PresenterColumns : BaseTemplatedControl
         base.OnPointerReleased(e);
 
         IsMousePressed = false;
-
     }
     protected override void OnPointerMoved(PointerEventArgs e)
     {
@@ -367,6 +352,6 @@ public class PresenterColumns : BaseTemplatedControl
         if (!IsMousePressed)
             return;
 
-        PointerMovedEventChange?.Invoke(this, e);
+        PointerMovedEventChange?.Invoke(presenter, e);
     }
 }
