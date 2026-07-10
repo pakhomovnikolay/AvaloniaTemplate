@@ -1,12 +1,15 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
+using Avalonia.Layout;
 using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 using AvaloniaTemplate.Services;
 using AvaloniaTemplate.Services.Interfaces;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AvaloniaTemplate.Infrastructures.Helpers
@@ -29,6 +32,10 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             presenter.SetFocusItem += SelectorColumns.SetFocus;
             presenter.ResetFocusItem += SelectorColumns.ResetFocus;
             presenter.PointerMovedEventChange += PointerMovedEventChange;
+            presenter.DragStartedEvent += OnDragStartedEvent;
+            presenter.WidthChangeEvent += OnWidthChangeEvent;
+            presenter.DragCompletedEvent += OnDragCompletedEvent;
+            presenter.SizeToContentEvent += OnSizeToContentEvent;
         }
         static PresenterColumnsHelper()
         {
@@ -214,6 +221,44 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             //    }
             //}
         }
+        #endregion
+
+        #region Событие начала изменения ширины
+        /// <summary>
+        /// Событие начала изменения ширины
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnDragStartedEvent(ModelColumn item) => TableFactory?
+            .UpdateLayoutDrag(Orientation.Vertical, item.PositionX, item.Right);
+        #endregion
+
+        #region Событие изменения ширины
+        /// <summary>
+        /// Событие изменения ширины
+        /// </summary>
+        /// <param name="delta"></param>
+        private void OnWidthChangeEvent(ModelColumn item, double delta) => TableFactory?
+            .UpdateLayoutDrag(Orientation.Vertical, item.PositionX, item.Right += delta);
+        #endregion
+
+        #region Событие завершения изменения ширины
+        /// <summary>
+        /// Событие завершения изменения ширины
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnDragCompletedEvent(ModelColumn item) => TableFactory?
+            .UpdateLayoutDragComplete(Orientation.Vertical, item);
+        #endregion
+
+        #region Событие необходимости установки ширины по содержимому
+        /// <summary>
+        /// Событие необходимости установки ширины по содержимому
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnSizeToContentEvent(ModelColumn item)
+        {
+            //Debug.WriteLine(item.Header);
+        } 
         #endregion
 
         #region Получить индекс колонки

@@ -36,7 +36,6 @@ public class PresenterRows : BaseTemplatedControl
     #region Событие изменения текущего элемента
     /// <summary>
     /// Событие изменения текущего элемента
-    /// T: Элемент
     /// </summary>
     public event Action<PointerPressedEventArgs, ModelRow> SelectedItemChanged;
     #endregion
@@ -44,7 +43,6 @@ public class PresenterRows : BaseTemplatedControl
     #region Событие устанвоки фокуса элемента
     /// <summary>
     /// Событие устанвоки фокуса элемента
-    /// T: Элемент
     /// </summary>
     public event Action<ModelRow> SetFocusItem;
     #endregion
@@ -52,7 +50,6 @@ public class PresenterRows : BaseTemplatedControl
     #region Событие снятия фокуса элемента
     /// <summary>
     /// Событие снятия фокуса элемента
-    /// T: Элемент
     /// </summary>
     public event Action<ModelRow> ResetFocusItem;
     #endregion
@@ -60,7 +57,6 @@ public class PresenterRows : BaseTemplatedControl
     #region Событие перемещения мыши по панели
     /// <summary>
     /// Событие перемещения мыши по панели
-    /// T: Элемент
     /// </summary>
     public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
     #endregion
@@ -101,7 +97,12 @@ public class PresenterRows : BaseTemplatedControl
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            => BindingOperations.DoNothing;
+        {
+            if (value is GridLength length)
+                return length.Value;
+
+            return BindingOperations.DoNothing;
+        }
     }
     #endregion
 

@@ -36,7 +36,6 @@ public class PresenterColumns : BaseTemplatedControl
     #region Событие изменения текущего элемента
     /// <summary>
     /// Событие изменения текущего элемента
-    /// T: Элемент
     /// </summary>
     public event Action<PointerPressedEventArgs, ModelColumn> SelectedItemChanged;
     #endregion
@@ -44,7 +43,6 @@ public class PresenterColumns : BaseTemplatedControl
     #region Событие устанвоки фокуса элемента
     /// <summary>
     /// Событие устанвоки фокуса элемента
-    /// T: Элемент
     /// </summary>
     public event Action<ModelColumn> SetFocusItem;
     #endregion
@@ -52,7 +50,6 @@ public class PresenterColumns : BaseTemplatedControl
     #region Событие снятия фокуса элемента
     /// <summary>
     /// Событие снятия фокуса элемента
-    /// T: Элемент
     /// </summary>
     public event Action<ModelColumn> ResetFocusItem;
     #endregion
@@ -60,9 +57,36 @@ public class PresenterColumns : BaseTemplatedControl
     #region Событие перемещения мыши по панели
     /// <summary>
     /// Событие перемещения мыши по панели
-    /// T: Элемент
     /// </summary>
     public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
+    #endregion
+
+    #region Событие начала изменения ширины
+    /// <summary>
+    /// Событие начала изменения ширины
+    /// </summary>
+    public event Action<ModelColumn> DragStartedEvent;
+    #endregion
+
+    #region Событие изменения ширины
+    /// <summary>
+    /// Событие изменения ширины
+    /// </summary>
+    public event Action<ModelColumn, double> WidthChangeEvent;
+    #endregion
+
+    #region Событие завершения изменения ширины
+    /// <summary>
+    /// Событие завершения изменения ширины
+    /// </summary>
+    public event Action<ModelColumn> DragCompletedEvent;
+    #endregion
+
+    #region Событие необходимости установки ширины по содержимому
+    /// <summary>
+    /// Событие необходимости установки ширины по содержимому
+    /// </summary>
+    public event Action<ModelColumn> SizeToContentEvent;
     #endregion
 
     #region Конвертер заднего фона из строки
@@ -101,7 +125,12 @@ public class PresenterColumns : BaseTemplatedControl
         }
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            => BindingOperations.DoNothing;
+        {
+            if (value is GridLength length)
+                return length.Value;
+
+            return BindingOperations.DoNothing;
+        }
     }
     #endregion
 
@@ -229,6 +258,11 @@ public class PresenterColumns : BaseTemplatedControl
             grid.Children.Add(border);
             grid.Children.Add(splitter);
             grid.Children.Add(separator);
+
+            splitter.DragStarted += (_, _) => DragStartedEvent?.Invoke(item);
+            splitter.DragDelta += (_, e) => WidthChangeEvent?.Invoke(item, e.Vector.X);
+            splitter.DragCompleted += (_, e) => DragCompletedEvent?.Invoke(item);
+            splitter.DoubleTapped += (_, e) => SizeToContentEvent?.Invoke(item);
         }
         return grid;
     }

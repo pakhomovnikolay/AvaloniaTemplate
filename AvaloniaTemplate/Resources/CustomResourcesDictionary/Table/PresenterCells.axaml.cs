@@ -7,6 +7,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
@@ -31,7 +32,6 @@ public class PresenterCells : BaseTemplatedControl
     #region Событие изменения текущего элемента
     /// <summary>
     /// Событие изменения текущего элемента
-    /// T: Элемент
     /// </summary>
     public event Action<PointerPressedEventArgs, ModelCell> SelectedItemChanged;
     #endregion
@@ -41,7 +41,6 @@ public class PresenterCells : BaseTemplatedControl
     #region Событие перемещения мыши по панели
     /// <summary>
     /// Событие перемещения мыши по панели
-    /// T: Элемент
     /// </summary>
     public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
     #endregion
@@ -103,6 +102,20 @@ public class PresenterCells : BaseTemplatedControl
 
         public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
             => BindingOperations.DoNothing;
+    }
+    #endregion
+
+    #region Источник данных
+    public static readonly StyledProperty<LayoutDragArea> DragAreaProperty =
+        AvaloniaProperty.Register<PresenterCells, LayoutDragArea>(nameof(DragArea));
+
+    /// <summary>
+    /// Источник данных
+    /// </summary>
+    public LayoutDragArea DragArea
+    {
+        get => GetValue(DragAreaProperty);
+        set => SetValue(DragAreaProperty, value);
     }
     #endregion
 
@@ -198,7 +211,7 @@ public class PresenterCells : BaseTemplatedControl
             var column = new ColumnDefinition();
             column.Bind(
                 ColumnDefinition.WidthProperty,
-                new Binding(nameof(x.Width))
+                new Binding(nameof(x.WidthResult))
                 {
                     Source = x,
                     Mode = BindingMode.TwoWay,
@@ -287,6 +300,9 @@ public class PresenterCells : BaseTemplatedControl
         base.OnApplyTemplate(e);
         if (ItemsSource is not { } || ItemsSource.Rows.Count <= 0 || ItemsSource.Rows.FirstOrDefault(r => r.Cells.Count > 0) is not { })
             return;
+
+        var panel = FindPartById<Panel>(e, "PART_RootPanel");
+        panel.Children.Add(DragArea);
 
         presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
         presenter.RenderTransform = transform;

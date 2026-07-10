@@ -398,8 +398,11 @@
 
 				<!--DataCells-->
 				<table:PresenterCells ItemsSource="{Binding TablesFactory.SelectedModel}"
+									  SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelRow.SelectedModelCell}"
 									  PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
 									  PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
+									  DragArea="{Binding TablesFactory.DragArea}"
+									  helpers:PresenterCellsHelper.SelectedChangeControl="True"
 									  />
 			
 				<crd:SelectorScrollBar Grid.Column="1"

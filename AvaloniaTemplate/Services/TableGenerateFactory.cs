@@ -1,7 +1,12 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia;
+using Avalonia.Controls;
+using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
+using AvaloniaTemplate.Models.LayoutControls;
+using AvaloniaTemplate.Models.LayoutControls.Models;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -49,6 +54,10 @@ namespace AvaloniaTemplate.Services
         private IScrollBarService ScrollBarService { get; } = App.GetService<IScrollBarService>();
         #endregion
 
+        #region Конструктор класса
+        /// <summary>
+        /// Конструктор класса
+        /// </summary>
         public TableGenerateFactory()
         {
             ZoomService.ScaleChange += (v) => SelectedModel.Scale = Convert.ToInt32(v / 100);
@@ -66,13 +75,32 @@ namespace AvaloniaTemplate.Services
                 SelectedModel.PositionX = x;
                 SelectedModel.PositionY = y;
             };
-        }
+        } 
+        #endregion
 
+        #region Обработка изменения выбранного элемента
+        /// <summary>
+        /// Обработка изменения выбранного элемента
+        /// </summary>
+        /// <param name="item"></param>
         private void OnSelectedItemChange(ModelTable item)
         {
             SelectedModel = item;
             UpdateViewport();
         }
+        #endregion
+
+        #region Область изменения размера
+        private LayoutDragArea dragArea = new();
+        /// <summary>
+        /// Область изменения размера
+        /// </summary>
+        public LayoutDragArea DragArea
+        {
+            get => dragArea;
+            set => SetProperty(ref dragArea, value);
+        }
+        #endregion
 
         #region Коллекция моделей
         private ObservableCollection<ModelTable> models;
@@ -186,6 +214,7 @@ namespace AvaloniaTemplate.Services
                 Index = index,
                 Header = header,
                 Width = ColumnWidthDefault,
+                WidthResult = ColumnWidthDefault,
                 Height = ColumnHeightDefault,
                 PositionX = index * ColumnWidthDefault,
                 PositionY = 0,
@@ -510,8 +539,8 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public void UpdateViewport()
         {
-            ScrollBarService.UpdateHorizontalScrollBarValue(SelectedModel.PositionX);
-            ScrollBarService.UpdateVerticalScrollBarValue(SelectedModel.PositionY);
+            //ScrollBarService.UpdateHorizontalScrollBarValue(SelectedModel.PositionX);
+            //ScrollBarService.UpdateVerticalScrollBarValue(SelectedModel.PositionY);
             ScrollBarService.UpdateViewport(
                  ConnectorService.WindowWidth,
                  ConnectorService.WindowHeight,
@@ -520,5 +549,84 @@ namespace AvaloniaTemplate.Services
                  );
         }
         #endregion
+
+        #region Обновить область отображения изменения размера
+        /// <summary>
+        /// Обновить область отображения изменения размера
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <param name="PositionX"></param>
+        /// <param name="Right"></param>
+        public void UpdateLayoutDrag(Orientation orientation, double positionStart, double positionEnd)
+        {
+            DragArea.Area ??= new();
+            DragArea.Area.BorderBrush = Brushes.Black;
+            DragArea.Area.Flow = orientation;
+            DragArea.Area.Start = GetRect(orientation, positionStart - ScrollBarService.HorizontalScrollBarValue);
+            DragArea.Area.End = GetRect(orientation, positionEnd - ScrollBarService.HorizontalScrollBarValue);
+            DragArea.InvalidateVisual();
+        }
+        #endregion
+
+        #region Изменение размера завершено
+        /// <summary>
+        /// Изменение размера завершено
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <param name="ittem"></param>
+        public void UpdateLayoutDragComplete(Orientation orientation, ModelColumn item)
+        {
+            item.WidthResult = item.Width;
+            SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Width);
+            if (orientation == Orientation.Vertical)
+                UpdateHorizontalPosition(item.Index);
+
+            DragArea.Area = null;
+            DragArea.InvalidateVisual();
+        }
+        #endregion
+
+
+
+        #region Получить Rect
+        /// <summary>
+        /// Получить Rect
+        /// </summary>
+        /// <param name="Flow"></param>
+        /// <param name="position"></param>
+        /// <returns></returns>
+        private Rect GetRect(Orientation Flow, double position)
+        {
+            var rect = new Rect();
+            switch (Flow)
+            {
+                case Orientation.Vertical:
+                    var width = 1d;
+                    double height = ConnectorService.WindowHeight;
+                    rect = new(position, 0, width, height);
+                    break;
+
+                case Orientation.Horizontal:
+                    width = ConnectorService.WindowWidth;
+                    height = 1d;
+                    rect = new(0, position, width, height);
+                    break;
+            }
+            return rect;
+        } 
+        #endregion
+
+        private void UpdateHorizontalPosition(int index)
+        {
+            SelectedModel.Columns[index].Right = SelectedModel.Columns[index].PositionX + SelectedModel.Columns[index].Width;
+            var posX = SelectedModel.Columns[index].Right;
+            index++;
+            for (int i = index; i < SelectedModel.Columns.Count; i++)
+            {
+                SelectedModel.Columns[i].PositionX = posX;
+                SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
+                posX = SelectedModel.Columns[i].Right;
+            }
+        }
     }
 }

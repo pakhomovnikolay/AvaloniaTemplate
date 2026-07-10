@@ -70,10 +70,10 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
-        #region Ширина
+        #region Результирующее занчение ширины
         private double widthResult;
         /// <summary>
-        /// Ширина
+        /// Результирующее занчение ширины
         /// </summary>
         public double WidthResult
         {

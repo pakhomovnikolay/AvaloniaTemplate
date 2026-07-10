@@ -1,4 +1,8 @@
-﻿using AvaloniaTemplate.Models.Table.Model;
+﻿using Avalonia.Layout;
+using AvaloniaTemplate.Models.LayoutControls;
+using AvaloniaTemplate.Models.LayoutControls.Models;
+using AvaloniaTemplate.Models.Table.Model;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -6,6 +10,13 @@ namespace AvaloniaTemplate.Services.Interfaces
 {
     public interface ITableGenerateFactory
     {
+        #region Область изменения размера
+        /// <summary>
+        /// Область изменения размера
+        /// </summary>
+        LayoutDragArea DragArea { get; set; }
+        #endregion
+
         #region Коллекция моделей
         /// <summary>
         /// Коллекция моделей
@@ -178,6 +189,25 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Обновить визульное пространство
         /// </summary>
         void UpdateViewport();
+        #endregion
+
+        #region Обновить область отображения изменения размера
+        /// <summary>
+        /// Обновить область отображения изменения размера
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <param name="PositionX"></param>
+        /// <param name="Right"></param>
+        void UpdateLayoutDrag(Orientation orientation, double PositionX, double Right);
+        #endregion
+
+        #region Изменение размера завершено
+        /// <summary>
+        /// Изменение размера завершено
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <param name="ittem"></param>
+        void UpdateLayoutDragComplete(Orientation orientation, ModelColumn ittem);
         #endregion
     }
 }
