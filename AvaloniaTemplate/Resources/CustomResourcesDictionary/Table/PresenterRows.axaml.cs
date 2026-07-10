@@ -20,10 +20,10 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterRows : BaseTemplatedControl
 {
-    private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
-    private readonly TranslateTransform transform = new();
-    private static readonly double WidthSeparator = 1;
     private static bool IsMousePressed;
+    private readonly TranslateTransform transform = new();
+    private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
+    private static readonly double WidthSeparator = 1;
     private ContentPresenter presenter;
 
     static PresenterRows()
@@ -85,9 +85,9 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
-    #region Конвертер ширины в GridLength
+    #region Конвертер высоты в GridLength
     /// <summary>
-    /// Конвертер ширины в GridLength
+    /// Конвертер высоты в GridLength
     /// </summary>
     private sealed class RowDefinitionHeightConverter : IValueConverter
     {
@@ -205,8 +205,8 @@ public class PresenterRows : BaseTemplatedControl
                 });
             return row;
         })?.ToList();
-
         rows.Add(new RowDefinition(5, GridUnitType.Pixel));
+
         var grid = new Grid() { RowDefinitions = [.. rows] };
         foreach (var item in ItemsSource)
         {
@@ -218,6 +218,7 @@ public class PresenterRows : BaseTemplatedControl
                 Child = GetItemControl(item)
             };
             border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
+            border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
             border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
             border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
             border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);

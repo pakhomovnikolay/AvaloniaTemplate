@@ -205,8 +205,8 @@ public class PresenterColumns : BaseTemplatedControl
                 });
             return column;
         })?.ToList();
-
         columns.Add(new ColumnDefinition(5, GridUnitType.Pixel));
+
         var grid = new Grid() { ColumnDefinitions = [.. columns] };
         foreach (var item in ItemsSource)
         {
@@ -218,6 +218,7 @@ public class PresenterColumns : BaseTemplatedControl
                 Child = GetItemControl(item)
             };
             border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
+            border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
             border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
             border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
             border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);

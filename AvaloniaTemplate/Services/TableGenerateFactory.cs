@@ -60,6 +60,12 @@ namespace AvaloniaTemplate.Services
                 TabStripService.ItemsSource = Models;
                 TabStripService.Command_CreateItem.Execute(Models);
             }
+
+            ScrollBarService.PositionChange += (x, y) =>
+            {
+                SelectedModel.PositionX = x;
+                SelectedModel.PositionY = y;
+            };
         }
 
         private void OnSelectedItemChange(ModelTable item)
@@ -504,12 +510,14 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public void UpdateViewport()
         {
+            ScrollBarService.UpdateHorizontalScrollBarValue(SelectedModel.PositionX);
+            ScrollBarService.UpdateVerticalScrollBarValue(SelectedModel.PositionY);
             ScrollBarService.UpdateViewport(
-                ConnectorService.WindowWidth,
-                ConnectorService.WindowHeight,
-                SelectedModel.Width,
-                SelectedModel.Height
-                );
+                 ConnectorService.WindowWidth,
+                 ConnectorService.WindowHeight,
+                 SelectedModel.Width,
+                 SelectedModel.Height
+                 );
         }
         #endregion
     }

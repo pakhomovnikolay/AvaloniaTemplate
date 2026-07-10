@@ -70,6 +70,18 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Ширина
+        private double widthResult;
+        /// <summary>
+        /// Ширина
+        /// </summary>
+        public double WidthResult
+        {
+            get => widthResult;
+            set => SetProperty(ref widthResult, value);
+        }
+        #endregion
+
         #region Контроль текущего заднего фона
         /// <summary>
         /// Контроль текузего заднего фона

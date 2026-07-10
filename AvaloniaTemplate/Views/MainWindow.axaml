@@ -389,8 +389,6 @@
 								 helpers:PresenterRowsHelper.SelectedChangeControl="True"
 								 />
 
-			
-
 			<!--CenterPanel-->
 			<Grid Grid.Column="1"
 				  Grid.ColumnSpan="2"
@@ -413,7 +411,6 @@
 									   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
 									   />
 			</Grid>
-
 
 			<!--BottomPanel-->
 			<Grid Grid.Row="2"
