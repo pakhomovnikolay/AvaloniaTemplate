@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
@@ -28,9 +29,10 @@ public class PresenterRows : BaseTemplatedControl
 
     static PresenterRows()
     {
-        ItemsSourceProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.RebuildContent());
+        ModelProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.RebuildContent());
         PositionXProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.UpdateTransform());
         PositionYProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.UpdateTransform());
+        ScaleProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.RebuildContent());
     }
 
     #region Событие изменения текущего элемента
@@ -106,17 +108,17 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
-    #region Источник данных
-    public static readonly StyledProperty<ObservableCollection<ModelRow>> ItemsSourceProperty =
-        AvaloniaProperty.Register<PresenterRows, ObservableCollection<ModelRow>>(nameof(ItemsSource));
+    #region Модель данных
+    public static readonly StyledProperty<ModelTable> ModelProperty =
+        AvaloniaProperty.Register<PresenterRows, ModelTable>(nameof(Model));
 
     /// <summary>
-    /// Источник данных
+    /// Модель данных
     /// </summary>
-    public ObservableCollection<ModelRow> ItemsSource
+    public ModelTable Model
     {
-        get => GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
+        get => GetValue(ModelProperty);
+        set => SetValue(ModelProperty, value);
     }
     #endregion
 
@@ -186,52 +188,82 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
+    #region Масштаб
+    public static readonly StyledProperty<double> ScaleProperty =
+        AvaloniaProperty.Register<PresenterRows, double>(nameof(Scale), defaultValue: 1);
+
+    /// <summary>
+    /// Масштаб
+    /// </summary>
+    public double Scale
+    {
+        get => GetValue(ScaleProperty);
+        set => SetValue(ScaleProperty, value);
+    }
+    #endregion
+
     #region Инициализация контента
     /// <summary>
     /// Инициализация контента
     /// </summary>
     /// <returns></returns>
-    private Grid InitializeContent()
+    private SpreadsheetPanel InitializeContent()
     {
-        var rows = ItemsSource.Select(x =>
-        {
-            var row = new RowDefinition();
-            row.Bind(
-                RowDefinition.HeightProperty,
-                new Binding(nameof(x.Height))
-                {
-                    Source = x,
-                    Mode = BindingMode.TwoWay,
-                    Converter = new RowDefinitionHeightConverter()
-                });
-            return row;
-        })?.ToList();
-        rows.Add(new RowDefinition(5, GridUnitType.Pixel));
+        var panel = new SpreadsheetPanel();
+        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
 
-        var grid = new Grid() { RowDefinitions = [.. rows] };
-        foreach (var item in ItemsSource)
+        foreach (var column in Model?.Rows)
         {
-            var splitter = GetGridSplitter();
-            var separator = GetViewwSplitter();
-            var border = new Border()
+            panel.Children.Add(new ContentPresenter()
             {
-                DataContext = item,
-                Child = GetItemControl(item)
-            };
-            border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
-            border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
-            border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
-            border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
-            border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);
-
-            Grid.SetRow(border, item.Index);
-            Grid.SetRow(splitter, item.Index);
-            Grid.SetRow(separator, item.Index);
-            grid.Children.Add(border);
-            grid.Children.Add(splitter);
-            grid.Children.Add(separator);
+                Content = column,
+                ContentTemplate = new FuncDataTemplate<ModelRow>((item, _) =>
+                {
+                    return new Panel() { Children = { GetItemControl(item), GetViewwSplitter() } };
+                })
+            });
         }
-        return grid;
+        return panel;
+
+        //var rows = ItemsSource.Select(x =>
+        //{
+        //    var row = new RowDefinition();
+        //    row.Bind(
+        //        RowDefinition.HeightProperty,
+        //        new Binding(nameof(x.Height))
+        //        {
+        //            Source = x,
+        //            Mode = BindingMode.TwoWay,
+        //            Converter = new RowDefinitionHeightConverter()
+        //        });
+        //    return row;
+        //})?.ToList();
+        //rows.Add(new RowDefinition(5, GridUnitType.Pixel));
+
+        //var grid = new Grid() { RowDefinitions = [.. rows] };
+        //foreach (var item in ItemsSource)
+        //{
+        //    var splitter = GetGridSplitter();
+        //    var separator = GetViewwSplitter();
+        //    var border = new Border()
+        //    {
+        //        DataContext = item,
+        //        Child = GetItemControl(item)
+        //    };
+        //    border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
+        //    border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
+        //    border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
+        //    border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
+        //    border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);
+
+        //    Grid.SetRow(border, item.Index);
+        //    Grid.SetRow(splitter, item.Index);
+        //    Grid.SetRow(separator, item.Index);
+        //    grid.Children.Add(border);
+        //    grid.Children.Add(splitter);
+        //    grid.Children.Add(separator);
+        //}
+        //return grid;
     }
     #endregion
 
@@ -325,12 +357,21 @@ public class PresenterRows : BaseTemplatedControl
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        if (ItemsSource is not { } || ItemsSource.Count <= 0)
+        if (Model is not { } || Model.Rows.Count <= 0)
             return;
 
         presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
         presenter.RenderTransform = transform;
+
         Content ??= InitializeContent();
+
+        //base.OnApplyTemplate(e);
+        //if (ItemsSource is not { } || ItemsSource.Count <= 0)
+        //    return;
+
+        //presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
+        //presenter.RenderTransform = transform;
+        //Content ??= InitializeContent();
     }
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {

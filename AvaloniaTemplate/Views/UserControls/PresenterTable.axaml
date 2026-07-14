@@ -1,0 +1,165 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:AvaloniaTemplate.ViewModels"
+			 xmlns:table="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table"
+			 xmlns:helpers="using:AvaloniaTemplate.Infrastructures.Helpers"
+			 xmlns:crd="using:AvaloniaTemplate.Resources.CustomResourcesDictionary"
+
+             x:Class="AvaloniaTemplate.Views.UserControls.PresenterTable"
+             x:DataType="vm:PresenterTableViewModel"
+
+			 Background="Gray"
+             >
+
+    <!--DataGrid-->
+		<Grid ColumnDefinitions="auto * auto"
+			  RowDefinitions="auto * auto"
+			  >
+
+			<Border x:Name="PART_TopLeftPanel"
+					BorderThickness="0 0 1 1"
+					BorderBrush="White"
+					Width="{Binding TablesFactory.SelectedModel.HeaderRowsWidth}"
+					Height="{Binding TablesFactory.SelectedModel.HeaderColumnsHeight}"
+					/>
+
+			<!--ColumnsHeader-->
+			<table:PresenterColumns Grid.Column="1"
+									Grid.ColumnSpan="2"
+									Grid.Row="0"
+									Model="{Binding TablesFactory.SelectedModel}"
+									SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelColumn}"
+									Frame="{Binding TablesFactory.FrameColumns}"
+									PositionY="0"
+									PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
+									Scale="{Binding ZoomService.Scale}"
+									/>
+
+			<!--<table:PresenterColumns Grid.Column="1"
+									Grid.ColumnSpan="2"
+									Grid.Row="0"
+									ItemsSource="{Binding TablesFactory.SelectedModel.Columns}"
+									SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelColumn}"
+									
+									
+									helpers:PresenterColumnsHelper.SelectedChangeControl="True"
+									/>-->
+
+			<!--RowsHeader-->
+			<table:PresenterRows Grid.Column="0"
+								 Grid.Row="1"
+								 Model="{Binding TablesFactory.SelectedModel}"
+								 SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelRow}"
+								 PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
+								 PositionX="0"
+								 Scale="{Binding ZoomService.Scale}"
+								 helpers:PresenterRowsHelper.SelectedChangeControl="True"
+								 />
+
+			<!--CenterPanel-->
+			<Grid Grid.Column="1"
+				  Grid.ColumnSpan="2"
+				  Grid.Row="1"
+				  ColumnDefinitions="* auto"
+				  >
+
+				<!--DataCells-->
+				<table:PresenterCells ItemsSource="{Binding TablesFactory.SelectedModel}"
+									  SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelCell}"
+									  PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
+									  PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
+									  DragArea="{Binding TablesFactory.DragArea}"
+									  ActiveArea="{Binding TablesFactory.ActiveArea}"
+									  AnchorArea="{Binding TablesFactory.AnchorArea}"
+
+									  helpers:PresenterCellsHelper.SelectedChangeControl="True"
+									  />
+			
+				<crd:SelectorScrollBar Grid.Column="1"
+									   Position="Vertical"
+									   Width="17"
+									   Value="{Binding ScrollBarService.VerticalScrollBarValue}"
+									   Maximum="{Binding ScrollBarService.VerticalScrollBarMaximum}"
+									   ViewportSize="{Binding ScrollBarService.VerticalScrollViewportSize}"
+									   helpers:ScrollBarHelper.VerticalScrollBarValueChangeControl="True"
+									   />
+			</Grid>
+
+			<!--BottomPanel-->
+			<Grid Grid.Row="2"
+				  Grid.Column="0"
+				  Grid.ColumnSpan="3"
+				  RowDefinitions="* auto"
+				  >
+				<Grid Grid.Row="0"
+					  ColumnSpacing="2"
+					  >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" MinWidth="215"/>
+						<ColumnDefinition Width="450" MinWidth="100"/>
+					</Grid.ColumnDefinitions>
+
+					<crd:HorizontalTabStrip x:Name="PART_TabPanel"
+											Grid.Column="0"
+											ItemsSource="{Binding TabStripService.ItemsSource}"
+											SelectedItem="{Binding TabStripService.SelectedItem}"
+											Command="{Binding TabStripService.Command_CreateItem}"
+											CommandParameter="{Binding TabStripService.ItemsSource}"
+											StepChangeScroll="100"
+											Background="DarkGray"
+											Margin="0 0 5 0"
+											Height="25"
+											BorderThickness="1 0 1 0"
+											/>
+					<GridSplitter Grid.Column="0"
+								  MinWidth="0"
+								  Margin="0 3"
+								  Width="2"
+								  HorizontalAlignment="Right"
+								  />
+
+					<crd:SelectorScrollBar Grid.Column="1"
+										   Height="15"
+										   Margin="5 0"
+										   Value="{Binding ScrollBarService.HorizontalScrollBarValue}"
+										   Maximum="{Binding ScrollBarService.HorizontalScrollBarMaximum}"
+										   ViewportSize="{Binding ScrollBarService.HorizontalScrollViewportSize}"
+										   helpers:ScrollBarHelper.HorizontalScrollBarValueChangeControl="True"
+										   />
+				</Grid>
+			
+				<Border Grid.Row="1"
+						BorderThickness="0 1 0 0"
+						BorderBrush="DarkGray"
+						Margin="3 0 0 0"
+						>
+
+					<Grid ColumnDefinitions="auto * auto">
+						<TextBlock Text="{Binding AppStatus}"
+								   VerticalAlignment="Bottom"
+								   Foreground="LightGray"
+								   FontFamily="{StaticResource FontFamilyDefault}"
+								   FontWeight="Bold"
+								   FontSize="11"
+								   />
+
+						<crd:SliderZoomControl Grid.Column="2"
+											   Height="20"
+											   TickPlacementType="TopLeft"
+											   BorderThickness="0"
+											   Background="Transparent"
+											   ValueSlider="{Binding ZoomService.Scale}"
+											   helpers:SliderZoomHelper.ValueChangeControl="True"
+											   />
+					</Grid>
+
+				</Border>
+
+			</Grid>
+		
+		</Grid>
+	
+</UserControl>

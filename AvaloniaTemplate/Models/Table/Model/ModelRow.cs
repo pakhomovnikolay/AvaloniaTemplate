@@ -59,30 +59,6 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
-        #region Выбранная ячейка
-        private ModelCell selectedModelCell;
-        /// <summary>
-        /// Выбранная ячейка
-        /// </summary>
-        public ModelCell SelectedModelCell
-        {
-            get => selectedModelCell;
-            set => SetProperty(ref selectedModelCell, value);
-        }
-        #endregion
-
-        #region Выбранные ячейки
-        private ObservableCollection<ModelCell> selectedModelCells = [];
-        /// <summary>
-        /// Выбранные ячейки
-        /// </summary>
-        public ObservableCollection<ModelCell> SelectedModelCells
-        {
-            get => selectedModelCells;
-            set => SetProperty(ref selectedModelCells, value);
-        }
-        #endregion
-
         #region Выбрана
         private bool selected;
         /// <summary>
@@ -107,6 +83,30 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Выбрана как заголовок
+        private bool isHeader;
+        /// <summary>
+        /// Выбрана как заголовок
+        /// </summary>
+        public bool IsHeader
+        {
+            get => isHeader;
+            set => SetProperty(ref isHeader, value);
+        }
+        #endregion
+
+        #region Результирующее занчение ширины
+        private double heightResult;
+        /// <summary>
+        /// Результирующее занчение ширины
+        /// </summary>
+        public double HeightResult
+        {
+            get => heightResult;
+            set => SetProperty(ref heightResult, value);
+        }
+        #endregion
+
         #region Контроль текущего заднего фона
         /// <summary>
         /// Контроль текузего заднего фона
@@ -115,28 +115,95 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             if (IsFocused)
             {
-                if (IsSelected)
-                    CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString();
-                else
-                    CellStyle.Background = OnHoverBackground.ToString();
-
                 CellStyle.Foreground = Brushes.White.ToString();
+                if (!IsSelected)
+                {
+                    CellStyle.Background = OnHoverBackground.ToString();
+                }
+                else
+                {
+                    CellStyle.Background = IsHeader
+                        ? Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString()
+                        : Helper.GetAutoHighlight(Color.Parse(DefaultForeground.ToString()), 0.05).ToString();
+                }
             }
             else
             {
-                if (IsSelected)
-                {
-                    CellStyle.Foreground = Brushes.White.ToString();
-                    CellStyle.Background = OnHoverBackground.ToString();
-                }
+                CellStyle.Foreground = IsSelected
+                    ? Brushes.White.ToString()
+                    : DefaultForeground.ToString();
 
-                else
+                if (!IsSelected)
                 {
-                    CellStyle.Foreground = DefaultForeground.ToString();
                     CellStyle.Background = DefaultBackground.ToString();
                 }
-
+                else
+                {
+                    CellStyle.Background = IsHeader
+                        ? OnHoverBackground.ToString()
+                        : Helper.GetAutoHighlight(Color.Parse(DefaultBackground.ToString()), 0.05).ToString();
+                }
             }
+
+
+
+            //if (IsFocused)
+            //{
+            //    if (IsSelected)
+            //    {
+            //        if (IsHeader)
+            //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString();
+            //        else
+            //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(DefaultForeground.ToString()), 0.05).ToString();
+            //    }
+
+                //    else
+                //        CellStyle.Background = OnHoverBackground.ToString();
+
+                //    CellStyle.Foreground = Brushes.White.ToString();
+                //}
+                //else
+                //{
+                //    if (IsSelected)
+                //    {
+                //        if (IsHeader)
+                //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(DefaultBackground.ToString()), 0.05).ToString();
+                //        else
+                //            CellStyle.Background = OnHoverBackground.ToString();
+
+                //        CellStyle.Foreground = Brushes.White.ToString();
+                //    }
+
+                //    else
+                //    {
+                //        CellStyle.Foreground = DefaultForeground.ToString();
+                //        CellStyle.Background = DefaultBackground.ToString();
+                //    }
+                //}
+
+                //if (IsFocused)
+                //{
+                //    if (IsSelected)
+                //        CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString();
+                //    else
+                //        CellStyle.Background = OnHoverBackground.ToString();
+
+                //    CellStyle.Foreground = Brushes.White.ToString();
+                //}
+                //else
+                //{
+                //    if (IsSelected)
+                //    {
+                //        CellStyle.Foreground = Brushes.White.ToString();
+                //        CellStyle.Background = OnHoverBackground.ToString();
+                //    }
+
+                //    else
+                //    {
+                //        CellStyle.Foreground = DefaultForeground.ToString();
+                //        CellStyle.Background = DefaultBackground.ToString();
+                //    }
+                //}
         }
         #endregion
     }

@@ -119,7 +119,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 foreach (var item in added)
                     TableFactory.SelectedModel.SelectedModelRows.Add(item);
 
-            TableFactory.SelectedModel.UpdateSelectedModelRows();
+            TableFactory.SelectedModel.UpdateSelectedModelRows(true);
         }
         #endregion
 

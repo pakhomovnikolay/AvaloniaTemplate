@@ -30,7 +30,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Минимальная значение шага изменения мастаба
-        private double smallChangeScale = 0.5;
+        private double smallChangeScale = 1.5;
         /// <summary>
         /// Минимальная значение шага изменения мастаба
         /// </summary>

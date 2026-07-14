@@ -283,6 +283,10 @@ public class SliderZoomControl : BaseTemplatedControl
             MinimumSlider = MinStopValueSlider;
             ValueSlider = MinStopValueSlider;
         }
+        else if (ValueSlider >= MaximumSlider)
+        {
+            ValueSlider = MaximumSlider;
+        }
         else if (ValueSlider - MinStopValueSlider > MinStopValueSlider && MinimumSlider > 0)
             MinimumSlider = 0;
 

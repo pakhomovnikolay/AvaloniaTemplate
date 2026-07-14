@@ -1,8 +1,7 @@
-﻿using AvaloniaTemplate.Models.Table.Model;
-using AvaloniaTemplate.Services;
+﻿using Avalonia.Controls;
 using AvaloniaTemplate.Services.Interfaces;
 using AvaloniaTemplate.ViewModels.Base;
-using System.Collections.ObjectModel;
+using AvaloniaTemplate.Views.UserControls;
 
 namespace AvaloniaTemplate.ViewModels
 {
@@ -15,36 +14,12 @@ namespace AvaloniaTemplate.ViewModels
         public IUIConnectorService ConnectorService { get; } = App.GetService<IUIConnectorService>();
         #endregion
 
-        #region Сервис управления панелью со вкладками
+        #region Данные таблицы
         /// <summary>
-        /// Сервис управления панелью со вкладками
+        /// Данные таблицы
         /// </summary>
-        public IHorizontalTabStripService<ModelTable> TabStripService { get; } = App.GetService<IHorizontalTabStripService<ModelTable>>();
+        public UserControl Content { get; } = App.GetService<PresenterTable>();
         #endregion
-
-        #region Сервис управления панелью прокрутки
-        /// <summary>
-        /// Сервис управления панелью прокрутки
-        /// </summary>
-        public IScrollBarService ScrollBarService { get; } = App.GetService<IScrollBarService>();
-        #endregion
-
-        #region Сервис управления масштабом
-        /// <summary>
-        /// Сервис управления масштабом
-        /// </summary>
-        public IZoomService ZoomService { get; } = App.GetService<IZoomService>();
-        #endregion
-
-        #region Сервис управления моделями таблиц
-        /// <summary>
-        /// Сервис управления тмоделями таблиц
-        /// </summary>
-        public ITableGenerateFactory TablesFactory { get; } = App.GetService<ITableGenerateFactory>();
-        #endregion
-
-        
-
 
         #region Конструктор
         /// <summary>
@@ -83,15 +58,7 @@ namespace AvaloniaTemplate.ViewModels
         public override int WindowHeight
         {
             get => windowHeight;
-            set
-            {
-                if (SetProperty(ref windowHeight, value))
-                {
-                    ConnectorService.WindowHeight = windowHeight;
-                    TablesFactory.UpdateViewport();
-                }
-                    
-            }
+            set => SetProperty(ref windowHeight, value);
         }
         #endregion
 
@@ -100,14 +67,7 @@ namespace AvaloniaTemplate.ViewModels
         public override int WindowWidth
         {
             get => windowWidth;
-            set
-            {
-                if (SetProperty(ref windowWidth, value))
-                {
-                    ConnectorService.WindowWidth = windowWidth;
-                    ScrollBarService.UpdateViewport(windowWidth, WindowHeight, TablesFactory.SelectedModel.Width, TablesFactory.SelectedModel.Height);
-                }
-            }
+            set => SetProperty(ref windowWidth, value);
         }
         #endregion
 
@@ -131,14 +91,8 @@ namespace AvaloniaTemplate.ViewModels
             AppVersion = App.AppVersion;
             AppStatus = App.AppStatus;
             App.ChangeAppStatus += ChangeAppStatus;
-
-            //TabStripService.ItemsSource = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11"];
-            //TabStripService.SelectedItem = TabStripService.ItemsSource[0];
-            //TabStripService.CreateItem += () => { return $"{TabStripService.ItemsSource.Count + 1}"; };
         }
         #endregion
-
-
-
     }
+
 }

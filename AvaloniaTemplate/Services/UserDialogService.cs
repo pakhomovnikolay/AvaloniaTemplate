@@ -319,7 +319,6 @@ namespace AvaloniaTemplate.Services
             window.Opened += (s, e) => OpennedMainWindow();
             window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             window.AddHandler(InputElement.KeyDownEvent, InputManager.KeysHandler, RoutingStrategies.Tunnel, true);
-            window.AddHandler(InputElement.PointerWheelChangedEvent, InputManager.PointerWheelHandler, RoutingStrategies.Tunnel, true);
             window.Show();
             return window;
         }

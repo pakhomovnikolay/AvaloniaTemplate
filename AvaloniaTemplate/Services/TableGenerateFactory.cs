@@ -1,12 +1,9 @@
 ﻿using Avalonia;
-using Avalonia.Controls;
-using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.LayoutControls;
-using AvaloniaTemplate.Models.LayoutControls.Models;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -60,7 +57,7 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public TableGenerateFactory()
         {
-            ZoomService.ScaleChange += (v) => SelectedModel.Scale = Convert.ToInt32(v / 100);
+            ZoomService.ScaleChange += OnScaleChange;
             TabStripService.CreateItem += CreateModel;
             TabStripService.SelectedItemChange += OnSelectedItemChange;
             if (Models is not { })
@@ -75,7 +72,49 @@ namespace AvaloniaTemplate.Services
                 SelectedModel.PositionX = x;
                 SelectedModel.PositionY = y;
             };
-        } 
+        }
+        #endregion
+
+        #region Обработка изменения масштаба
+        /// <summary>
+        /// Обработка изменения масштаба
+        /// </summary>
+        /// <param name="scale"></param>
+        private void OnScaleChange(double scale)
+        {
+            SelectedModel.Scale = Convert.ToInt32(scale / 100);
+            //SelectedModel.HeaderColumnsHeight = ColumnHeightDefault * scale;
+            //SelectedModel.HeaderRowsWidth = RowWidthDefault * scale;
+
+            //var posX = 0d;
+            //for (int i = 0; i < SelectedModel.Columns.Count; i++)
+            //{
+            //    SelectedModel.Columns[i].PositionX = posX;
+            //    SelectedModel.Columns[i].Width = SelectedModel.Columns[i].WidthResult * scale;
+            //    SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
+            //    posX = SelectedModel.Columns[i].Right;
+            //}
+
+            //UpdateHorizontalPosition(0);
+
+
+
+            //FrameColumns.ColsX.Clear();
+            //foreach (var column in model.Columns.Where(x => x.IsVisible))
+            //{
+            //    FrameColumns.ColsX.Add(new()
+            //    {
+            //        PositionX = column.PositionX,
+            //        PositionY = column.PositionY,
+            //        Right = column.Right,
+            //        Bottom = column.Bottom,
+            //        Size = column.Height,
+            //        LinePen = new(Brushes.WhiteSmoke)
+            //    });
+            //}
+            //FrameColumns.InvalidateVisual();
+
+        }
         #endregion
 
         #region Обработка изменения выбранного элемента
@@ -91,7 +130,11 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Область изменения размера
-        private LayoutDragArea dragArea = new();
+        private LayoutDragArea dragArea = new()
+        {
+            IsHitTestVisible = false,
+            ZIndex = 3,
+        };
         /// <summary>
         /// Область изменения размера
         /// </summary>
@@ -99,6 +142,54 @@ namespace AvaloniaTemplate.Services
         {
             get => dragArea;
             set => SetProperty(ref dragArea, value);
+        }
+        #endregion
+
+        #region Активная область
+        private LayoutActiveArea activeArea = new()
+        {
+            IsHitTestVisible = false,
+            ZIndex = 1,
+            Opacity = 0.5
+        };
+        /// <summary>
+        /// Активная область
+        /// </summary>
+        public LayoutActiveArea ActiveArea
+        {
+            get => activeArea;
+            set => SetProperty(ref activeArea, value);
+        }
+        #endregion
+
+        #region Стартовая область
+        private LayoutAnchorArea anchorArea = new()
+        {
+            IsHitTestVisible = false,
+            ZIndex = 2,
+        };
+        /// <summary>
+        /// Стартовая область
+        /// </summary>
+        public LayoutAnchorArea AnchorArea
+        {
+            get => anchorArea;
+            set => SetProperty(ref anchorArea, value);
+        }
+        #endregion
+
+        #region Сетка области колонок
+        private LayoutFrame frameColumns = new()
+        {
+            IsHitTestVisible = false
+        };
+        /// <summary>
+        /// Сетка области колонок
+        /// </summary>
+        public LayoutFrame FrameColumns
+        {
+            get => frameColumns;
+            set => SetProperty(ref frameColumns, value);
         }
         #endregion
 
@@ -145,7 +236,7 @@ namespace AvaloniaTemplate.Services
         public ModelTable CreateModel()
         {
             var header = CreateHeader();
-            return new()
+            var model = new ModelTable()
             {
                 Id = header,
                 Index = Models.Count,
@@ -166,6 +257,12 @@ namespace AvaloniaTemplate.Services
                 Columns = [.. CreateModelColumns(0, ColumnCountDefault)],
                 Rows = [.. CreateModelRows(0, RowCountDefault)]
             };
+
+            model.ColumnDragStartedChange += UpdateLayoutDrag;
+            model.ColumnDragCompletedChange += UpdateLayoutDragComplete;
+            model.ColumnSplitterDoubleTappedChange += SetSizeColumnToContent;
+            //UpdateLayoutFrameColumns(model);
+            return model;
         }
         #endregion
 
@@ -396,11 +493,11 @@ namespace AvaloniaTemplate.Services
             {
                 Id = $"{GetHeaderColumn(indexCol + 1)}{indexRow}",
                 Width = ColumnWidthDefault,
-                Height = ColumnHeightDefault,
+                Height = RowHeightDefault,
                 PositionX = indexCol * ColumnWidthDefault,
-                PositionY = indexRow * ColumnHeightDefault,
+                PositionY = indexRow * RowHeightDefault,
                 Right = indexCol * ColumnWidthDefault + ColumnWidthDefault,
-                Bottom = indexRow * ColumnHeightDefault + ColumnHeightDefault,
+                Bottom = indexRow * RowHeightDefault + RowHeightDefault,
                 IsVisible = true,
                 IsSelected = false,
                 IsFocused = false,
@@ -452,7 +549,7 @@ namespace AvaloniaTemplate.Services
         /// Удалить модель ячейки
         /// </summary>
         public void DeleteCells()
-            => DeleteCells(SelectedModel.SelectedModelRow, SelectedModel.SelectedModelRow.SelectedModelCell);
+            => DeleteCells(SelectedModel.SelectedModelRow, SelectedModel.SelectedModelCell);
 
         /// <summary>
         /// Удалить модель ячейки
@@ -463,8 +560,8 @@ namespace AvaloniaTemplate.Services
         {
             var index = row.Cells.IndexOf(cell);
             row.Cells.Remove(cell);
-            if (SelectedModel.SelectedModelRow.SelectedModelCell.Equals(cell))
-                SelectedModel.SelectedModelRow.SelectedModelCell = Helper.GetSelectedElement<ModelCell>(index, row.Cells);
+            if (SelectedModel.SelectedModelCell.Equals(cell))
+                SelectedModel.SelectedModelCell = Helper.GetSelectedElement<ModelCell>(index, row.Cells);
         }
 
         /// <summary>
@@ -565,6 +662,30 @@ namespace AvaloniaTemplate.Services
             DragArea.Area.Start = GetRect(orientation, positionStart - ScrollBarService.HorizontalScrollBarValue);
             DragArea.Area.End = GetRect(orientation, positionEnd - ScrollBarService.HorizontalScrollBarValue);
             DragArea.InvalidateVisual();
+
+
+
+            //var colX = FrameColumns.ColsX.FirstOrDefault(x => x.PositionX == positionStart);
+            //colX.Right = DragArea.Area.End.Value.Right;
+            //FrameColumns.InvalidateVisual();
+
+            //UpdateLayoutFrameColumns(SelectedModel);
+
+
+            //FrameColumns.ColsX.Clear();
+            //foreach (var column in model.Columns.Where(x => x.IsVisible))
+            //{
+            //    FrameColumns.ColsX.Add(new()
+            //    {
+            //        PositionX = column.PositionX,
+            //        PositionY = column.PositionY,
+            //        Right = column.PositionX + column.Width,
+            //        Bottom = column.Bottom,
+            //        Size = column.Height,
+            //        LinePen = new(Brushes.WhiteSmoke)
+            //    });
+            //}
+            //FrameColumns.InvalidateVisual();
         }
         #endregion
 
@@ -584,6 +705,55 @@ namespace AvaloniaTemplate.Services
             DragArea.Area = null;
             DragArea.InvalidateVisual();
         }
+        #endregion
+
+        #region Обновить выделенную область
+        /// <summary>
+        /// Обновить выделенную область
+        /// </summary>
+        /// <param name="rect"></param>
+        public void UpdateSelectedArea(Rect? rect)
+        {
+            ActiveArea.SelectedArea ??= new()
+            {
+                RectPen = new Pen(new SolidColorBrush(Color.FromRgb(170, 110, 110)), 2),
+                RectFill = Brushes.LightGray
+            };
+            ActiveArea.SelectedArea.Area = rect;
+            ActiveArea.InvalidateVisual();
+        }
+        #endregion
+
+        #region Обновить стартовую область
+        /// <summary>
+        /// Обновить стартовую область
+        /// </summary>
+        /// <param name="rect"></param>
+        public void UpdateAnchorArea(Rect? rect)
+        {
+            AnchorArea.SelectedArea ??= new()
+            {
+                RectPen = new Pen(new SolidColorBrush(Color.FromRgb(170, 110, 110)), 0),
+                RectFill = /*Helper.GetColor(SelectedModel.SelectedModelCell.CellStyle.Background)*/Brushes.White
+            };
+            AnchorArea.SelectedArea.Area = rect;
+            AnchorArea.InvalidateVisual();
+        }
+        #endregion
+
+        #region Устаноаить размер колонок по содержимому
+        /// <summary>
+        /// Устаноаить размер колонок по содержимому
+        /// </summary>
+        /// <param name="item"></param>
+        public void SetSizeColumnToContent(ModelColumn item)
+        {
+            var width = Helper.MeasureTextWidth(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
+            item.Width = width;
+            item.WidthResult = width;
+
+            UpdateHorizontalPosition(item.Index);
+        } 
         #endregion
 
 
@@ -613,20 +783,173 @@ namespace AvaloniaTemplate.Services
                     break;
             }
             return rect;
-        } 
+        }
         #endregion
 
+        #region Обновить горизонтальные позиции после изменения размеров колонок
+        /// <summary>
+        /// Обновить горизонтальные позиции после изменения размеров колонок
+        /// </summary>
+        /// <param name="index"></param>
         private void UpdateHorizontalPosition(int index)
         {
-            SelectedModel.Columns[index].Right = SelectedModel.Columns[index].PositionX + SelectedModel.Columns[index].Width;
-            var posX = SelectedModel.Columns[index].Right;
-            index++;
+            if (SelectedModel.Columns[index].IsHeader)
+            {
+                foreach (var column in SelectedModel.SelectedModelColumns)
+                {
+                    column.Width = SelectedModel.Columns[index].Width;
+                    column.WidthResult = SelectedModel.Columns[index].Width;
+                }
+                index = SelectedModel.SelectedModelColumns[0].Index;
+            }
+            var posX = SelectedModel.Columns[index].PositionX;
             for (int i = index; i < SelectedModel.Columns.Count; i++)
             {
                 SelectedModel.Columns[i].PositionX = posX;
                 SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
+                for (int j = 0; j < SelectedModel.Rows.Count; j++)
+                {
+                    SelectedModel.Rows[j].Cells[i].PositionX = posX;
+                    SelectedModel.Rows[j].Cells[i].Right = SelectedModel.Rows[j].Cells[i].PositionX + SelectedModel.Rows[j].Cells[i].Width;
+                    posX = SelectedModel.Rows[j].Cells[i].Right;
+                }
                 posX = SelectedModel.Columns[i].Right;
             }
+
+            //UpdateLayoutFrameColumns(SelectedModel);
         }
+        #endregion
+
+        #region Обновить сетку
+        /// <summary>
+        /// Обновить сетку
+        /// </summary>
+        //private void UpdateLayoutFrameColumns(ModelTable model)
+        //{
+        //    FrameColumns.ColsX.Clear();
+        //    foreach (var column in model.Columns.Where(x => x.IsVisible))
+        //    {
+        //        FrameColumns.ColsX.Add(new()
+        //        {
+        //            PositionX = column.PositionX,
+        //            PositionY = column.PositionY,
+        //            Right = column.Right,
+        //            Bottom = column.Bottom,
+        //            Size = column.Height,
+        //            LinePen = new(Brushes.WhiteSmoke)
+        //        });
+        //    }
+        //    FrameColumns.InvalidateVisual();
+
+        //    //if (Rows is { } && Rows.Count > 0)
+        //    //{
+        //    //    foreach (var row in Rows)
+        //    //    {
+        //    //        foreach (var cell in row.Cells.Where(x => x.IsVisible))
+        //    //        {
+        //    //            MainFrame.ColsX.Add(new()
+        //    //            {
+        //    //                PositionX = cell.PositionX,
+        //    //                PositionY = cell.PositionY,
+        //    //                Right = cell.Right,
+        //    //                Bottom = cell.Bottom,
+        //    //                Size = cell.Height.Value,
+        //    //                LinePen = new(FrameBrush)
+        //    //            });
+        //    //            MainFrame.RowsY.Add(new()
+        //    //            {
+        //    //                PositionX = cell.PositionX,
+        //    //                PositionY = cell.PositionY,
+        //    //                Right = cell.Right,
+        //    //                Bottom = cell.Bottom,
+        //    //                Size = cell.Width.Value,
+        //    //                LinePen = new(FrameBrush)
+        //    //            });
+        //    //        }
+        //    //    }
+        //    //}
+        //    //MainFrame.InvalidateVisual();
+
+        //    //var startIndexCol = 0;
+        //    //var indexCol = 0;
+        //    //var startIndexRow = 0;
+        //    //var indexRow = 0;
+        //    //if (SelectedCells is { } && SelectedCells.Count > 0)
+        //    //{
+        //    //    startIndexCol = SelectedCells.FirstOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
+        //    //    indexCol = SelectedCells.LastOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
+        //    //    startIndexRow = SelectedCells.FirstOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
+        //    //    indexRow = SelectedCells.LastOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
+        //    //    DragAreaFrame.InvalidateVisual();
+        //    //}
+        //}
+        #endregion
+
+
+        #region Обновить сетку
+        /// <summary>
+        /// Обновить сетку
+        /// </summary>
+        private void UpdateScaleColumns(double scale)
+        {
+
+            //FrameColumns.ColsX.Clear();
+            //foreach (var column in model.Columns.Where(x => x.IsVisible))
+            //{
+            //    FrameColumns.ColsX.Add(new()
+            //    {
+            //        PositionX = column.PositionX,
+            //        PositionY = column.PositionY,
+            //        Right = column.Right,
+            //        Bottom = column.Bottom,
+            //        Size = column.Height,
+            //        LinePen = new(Brushes.WhiteSmoke)
+            //    });
+            //}
+            //FrameColumns.InvalidateVisual();
+
+            //if (Rows is { } && Rows.Count > 0)
+            //{
+            //    foreach (var row in Rows)
+            //    {
+            //        foreach (var cell in row.Cells.Where(x => x.IsVisible))
+            //        {
+            //            MainFrame.ColsX.Add(new()
+            //            {
+            //                PositionX = cell.PositionX,
+            //                PositionY = cell.PositionY,
+            //                Right = cell.Right,
+            //                Bottom = cell.Bottom,
+            //                Size = cell.Height.Value,
+            //                LinePen = new(FrameBrush)
+            //            });
+            //            MainFrame.RowsY.Add(new()
+            //            {
+            //                PositionX = cell.PositionX,
+            //                PositionY = cell.PositionY,
+            //                Right = cell.Right,
+            //                Bottom = cell.Bottom,
+            //                Size = cell.Width.Value,
+            //                LinePen = new(FrameBrush)
+            //            });
+            //        }
+            //    }
+            //}
+            //MainFrame.InvalidateVisual();
+
+            //var startIndexCol = 0;
+            //var indexCol = 0;
+            //var startIndexRow = 0;
+            //var indexRow = 0;
+            //if (SelectedCells is { } && SelectedCells.Count > 0)
+            //{
+            //    startIndexCol = SelectedCells.FirstOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
+            //    indexCol = SelectedCells.LastOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
+            //    startIndexRow = SelectedCells.FirstOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
+            //    indexRow = SelectedCells.LastOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
+            //    DragAreaFrame.InvalidateVisual();
+            //}
+        }
+        #endregion
     }
 }

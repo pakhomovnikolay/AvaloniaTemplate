@@ -1,8 +1,7 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia;
+using Avalonia.Layout;
 using AvaloniaTemplate.Models.LayoutControls;
-using AvaloniaTemplate.Models.LayoutControls.Models;
 using AvaloniaTemplate.Models.Table.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -16,6 +15,28 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         LayoutDragArea DragArea { get; set; }
         #endregion
+
+        #region Активная область
+        /// <summary>
+        /// Активная область
+        /// </summary>
+        LayoutActiveArea ActiveArea { get; set; }
+        #endregion
+
+        #region Стартовая область
+        /// <summary>
+        /// Стартовая область
+        /// </summary>
+        LayoutAnchorArea AnchorArea { get; set; }
+        #endregion
+
+        #region Сетка области колонок
+        /// <summary>
+        /// Сетка области колонок
+        /// </summary>
+        LayoutFrame FrameColumns { get; set; }
+        #endregion
+
 
         #region Коллекция моделей
         /// <summary>
@@ -208,6 +229,30 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="orientation"></param>
         /// <param name="ittem"></param>
         void UpdateLayoutDragComplete(Orientation orientation, ModelColumn ittem);
+        #endregion
+
+        #region Обновить выделенную область
+        /// <summary>
+        /// Обновить выделенную область
+        /// </summary>
+        /// <param name="rect"></param>
+        void UpdateSelectedArea(Rect? rect);
+        #endregion
+
+        #region Обновить стартовую область
+        /// <summary>
+        /// Обновить стартовую область
+        /// </summary>
+        /// <param name="rect"></param>
+        void UpdateAnchorArea(Rect? rect);
+        #endregion
+
+        #region Устаноаить размер колонок по содержимому
+        /// <summary>
+        /// Устаноаить размер колонок по содержимому
+        /// </summary>
+        /// <param name="item"></param>
+        void SetSizeColumnToContent(ModelColumn item);
         #endregion
     }
 }

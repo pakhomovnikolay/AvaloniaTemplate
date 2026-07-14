@@ -3,97 +3,56 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
 using Avalonia.Controls.Shapes;
+using Avalonia.Controls.Templates;
 using Avalonia.Data;
 using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.Table.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterColumns : BaseTemplatedControl
 {
-    private static bool IsMousePressed;
+    private bool IsMousePressed;
     private readonly TranslateTransform transform = new();
-    private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
-    private static readonly double WidthSeparator = 1;
-    private ContentPresenter presenter;
+    private readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
+    private readonly double WidthSeparator = 1;
+    private SpreadsheetPanel presenter;
 
     static PresenterColumns()
     {
-        ItemsSourceProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
+        ModelProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
         PositionXProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
         PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
+        ScaleProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
     }
 
-    #region Событие изменения текущего элемента
-    /// <summary>
-    /// Событие изменения текущего элемента
-    /// </summary>
-    public event Action<PointerPressedEventArgs, ModelColumn> SelectedItemChanged;
-    #endregion
+    #region Активная область
+    public static readonly StyledProperty<LayoutFrame> FrameProperty =
+        AvaloniaProperty.Register<PresenterColumns, LayoutFrame>(nameof(Frame));
 
-    #region Событие устанвоки фокуса элемента
     /// <summary>
-    /// Событие устанвоки фокуса элемента
+    /// Активная область
     /// </summary>
-    public event Action<ModelColumn> SetFocusItem;
-    #endregion
-
-    #region Событие снятия фокуса элемента
-    /// <summary>
-    /// Событие снятия фокуса элемента
-    /// </summary>
-    public event Action<ModelColumn> ResetFocusItem;
-    #endregion
-
-    #region Событие перемещения мыши по панели
-    /// <summary>
-    /// Событие перемещения мыши по панели
-    /// </summary>
-    public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
-    #endregion
-
-    #region Событие начала изменения ширины
-    /// <summary>
-    /// Событие начала изменения ширины
-    /// </summary>
-    public event Action<ModelColumn> DragStartedEvent;
-    #endregion
-
-    #region Событие изменения ширины
-    /// <summary>
-    /// Событие изменения ширины
-    /// </summary>
-    public event Action<ModelColumn, double> WidthChangeEvent;
-    #endregion
-
-    #region Событие завершения изменения ширины
-    /// <summary>
-    /// Событие завершения изменения ширины
-    /// </summary>
-    public event Action<ModelColumn> DragCompletedEvent;
-    #endregion
-
-    #region Событие необходимости установки ширины по содержимому
-    /// <summary>
-    /// Событие необходимости установки ширины по содержимому
-    /// </summary>
-    public event Action<ModelColumn> SizeToContentEvent;
+    public LayoutFrame Frame
+    {
+        get => GetValue(FrameProperty);
+        set => SetValue(FrameProperty, value);
+    }
     #endregion
 
     #region Конвертер заднего фона из строки
     /// <summary>
     /// Конвертер заднего фона из строки
     /// </summary>
-    private sealed class BackgroundConverter : IValueConverter
+    private sealed class SolidColorBrushConverter : IValueConverter
     {
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
@@ -109,17 +68,43 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
+    #region Конвертер толщины шрифта
+    /// <summary>
+    /// Конвертер толщины шрифта
+    /// </summary>
+    private sealed class FontWeightConverter : IValueConverter
+    {
+        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
+        {
+            var fontWeight = FontWeight.Normal;
+            if (value is bool isBold && isBold)
+                fontWeight = FontWeight.Bold;
+
+            return fontWeight;
+        }
+
+        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
+            => BindingOperations.DoNothing;
+    }
+    #endregion
+
     #region Конвертер ширины в GridLength
     /// <summary>
     /// Конвертер ширины в GridLength
     /// </summary>
     private sealed class ColumnDefinitionWidthConverter : IValueConverter
     {
+        public double scale = 1;
+
         public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         {
+            if (scale < 0.1)
+                scale = 0.1;
+
+
             var gridLength = new GridLength();
             if (value is double width)
-                gridLength = new GridLength(width, GridUnitType.Pixel);
+                gridLength = new GridLength(width * scale, GridUnitType.Pixel);
 
             return gridLength;
         }
@@ -134,17 +119,34 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
-    #region Источник данных
-    public static readonly StyledProperty<ObservableCollection<ModelColumn>> ItemsSourceProperty =
-        AvaloniaProperty.Register<PresenterColumns, ObservableCollection<ModelColumn>>(nameof(ItemsSource));
+
+
+
+    #region Контент
+    public static readonly StyledProperty<object?> ContentProperty =
+        AvaloniaProperty.Register<PresenterColumns, object?>(nameof(Content));
 
     /// <summary>
-    /// Источник данных
+    /// Контент
     /// </summary>
-    public ObservableCollection<ModelColumn> ItemsSource
+    public object? Content
     {
-        get => GetValue(ItemsSourceProperty);
-        set => SetValue(ItemsSourceProperty, value);
+        get => GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
+    }
+    #endregion
+
+    #region Модель данных
+    public static readonly StyledProperty<ModelTable> ModelProperty =
+        AvaloniaProperty.Register<PresenterColumns, ModelTable>(nameof(Model));
+
+    /// <summary>
+    /// Модель данных
+    /// </summary>
+    public ModelTable Model
+    {
+        get => GetValue(ModelProperty);
+        set => SetValue(ModelProperty, value);
     }
     #endregion
 
@@ -159,20 +161,6 @@ public class PresenterColumns : BaseTemplatedControl
     {
         get => GetValue(SelectedItemProperty);
         set => SetValue(SelectedItemProperty, value);
-    }
-    #endregion
-
-    #region Контент
-    public static readonly StyledProperty<object?> ContentProperty =
-        AvaloniaProperty.Register<PresenterColumns, object?>(nameof(Content));
-
-    /// <summary>
-    /// Контент
-    /// </summary>
-    public object? Content
-    {
-        get => GetValue(ContentProperty);
-        set => SetValue(ContentProperty, value);
     }
     #endregion
 
@@ -204,67 +192,17 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
-    #region Пересобрать контент
+    #region Масштаб
+    public static readonly StyledProperty<double> ScaleProperty =
+        AvaloniaProperty.Register<PresenterColumns, double>(nameof(Scale), defaultValue: 1);
+
     /// <summary>
-    /// Пересобрать контент
+    /// Масштаб
     /// </summary>
-    private void RebuildContent()
+    public double Scale
     {
-        Content = InitializeContent();
-    }
-    #endregion
-
-    #region Инициализация контента
-    /// <summary>
-    /// Инициализация контента
-    /// </summary>
-    /// <returns></returns>
-    private Grid InitializeContent()
-    {
-        var columns = ItemsSource.Select(x =>
-        {
-            var column = new ColumnDefinition();
-            column.Bind(
-                ColumnDefinition.WidthProperty,
-                new Binding(nameof(x.Width))
-                {
-                    Source = x,
-                    Mode = BindingMode.TwoWay,
-                    Converter = new ColumnDefinitionWidthConverter()
-                });
-            return column;
-        })?.ToList();
-        columns.Add(new ColumnDefinition(5, GridUnitType.Pixel));
-
-        var grid = new Grid() { ColumnDefinitions = [.. columns] };
-        foreach (var item in ItemsSource)
-        {
-            var splitter = GetGridSplitter();
-            var separator = GetViewwSplitter();
-            var border = new Border()
-            {
-                DataContext = item,
-                Child = GetItemControl(item)
-            };
-            border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
-            border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
-            border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
-            border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
-            border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);
-
-            Grid.SetColumn(border, item.Index);
-            Grid.SetColumn(splitter, item.Index);
-            Grid.SetColumn(separator, item.Index);
-            grid.Children.Add(border);
-            grid.Children.Add(splitter);
-            grid.Children.Add(separator);
-
-            splitter.DragStarted += (_, _) => DragStartedEvent?.Invoke(item);
-            splitter.DragDelta += (_, e) => WidthChangeEvent?.Invoke(item, e.Vector.X);
-            splitter.DragCompleted += (_, e) => DragCompletedEvent?.Invoke(item);
-            splitter.DoubleTapped += (_, e) => SizeToContentEvent?.Invoke(item);
-        }
-        return grid;
+        get => GetValue(ScaleProperty);
+        set => SetValue(ScaleProperty, value);
     }
     #endregion
 
@@ -276,6 +214,177 @@ public class PresenterColumns : BaseTemplatedControl
     {
         transform.Y = PositionY;
         transform.X = -PositionX;
+    }
+    #endregion
+
+    #region Пересобрать контент
+    /// <summary>
+    /// Пересобрать контент
+    /// </summary>
+    private void RebuildContent()
+    {
+        presenter = InitializeContent();
+        presenter.RenderTransform = transform;
+        Content = presenter;
+
+        //presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
+        //presenter.RenderTransform = transform;
+
+        //Content ??= InitializeContent();
+        //Content = Model.Columns;
+    }
+    #endregion
+
+    #region Инициализация контента
+    /// <summary>
+    /// Инициализация контента
+    /// </summary>
+    /// <returns></returns>
+    private SpreadsheetPanel InitializeContent()
+    {
+        var panel = new SpreadsheetPanel();
+        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+        foreach (var column in Model?.Columns)
+        {
+            panel.Children.Add(new ContentPresenter()
+            {
+                Content = column,
+                ContentTemplate = new FuncDataTemplate<ModelColumn>((item, _) => GetItemControl(item))
+                //{
+                //    return new Panel() { Children = { GetItemControl(item)/*, GetViewwSplitter() */} };
+                //})
+            });
+        }
+
+        return panel;
+
+
+
+        //return new()
+        //{
+        //    Content = Model.Columns
+        //};
+
+
+
+
+        //var panel = new SpreadsheetPanel();
+        //panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+
+        //foreach (var column in Model?.Columns)
+        //{
+        //    panel.Children.Add(new ContentPresenter()
+        //    {
+        //        Content = column,
+        //        ContentTemplate = new FuncDataTemplate<ModelColumn>((item, _) =>
+        //        {
+        //            return new Panel() { Children = { GetItemControl(item), GetViewwSplitter() } };
+        //        })
+        //    });
+        //}
+        //return panel;
+    }
+    #endregion
+
+
+
+
+
+    //comboBox.ItemTemplate = new FuncDataTemplate<FontFamily>((item, _) =>
+    //{
+    //    var fontFamily = item ?? FontFamilyHelper.FontDefault;
+    //    return CreateBorderItemTemplate(fontFamily.Name, fontFamily, fontFamily);
+    //});
+
+
+    //var panel = new SpreadsheetPanel();
+    //panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+    //foreach (var column in Model?.Columns)
+    //{
+    //    panel.Children.Add(new ContentPresenter()
+    //    {
+    //        DataContext = column,
+    //        Content = GetItemControl(column)
+    //    });
+    //}
+    //return panel;
+
+    //var columns = Model?.Columns.Select(x =>
+    //{
+    //    var column = new ColumnDefinition();
+    //    column.Bind(
+    //        ColumnDefinition.WidthProperty,
+    //        new Binding(nameof(x.Width))
+    //        {
+    //            Source = x,
+    //            Mode = BindingMode.TwoWay,
+    //            Converter = new ColumnDefinitionWidthConverter() { scale = Scale }
+    //        });
+    //    return column;
+    //})?.ToList();
+    //columns.Add(new ColumnDefinition(5, GridUnitType.Pixel));
+
+    ////var scaleTransform = new ScaleTransform();
+    ////scaleTransform.Bind(ScaleTransform.ScaleXProperty, new Binding("Scale") { Source = this });
+    //var grid = new Grid()
+    //{
+    //    ColumnDefinitions = [.. columns],
+    //    //RenderTransformOrigin = new(1, 1, RelativeUnit.Absolute),
+    //    //RenderTransform = scaleTransform
+    //};
+
+    //foreach (var item in Model?.Columns)
+    //{
+
+    //    var splitter = GetGridSplitter();
+    //    var separator = GetViewwSplitter();
+    //    var border = new Border()
+    //    {
+    //        DataContext = item,
+    //        Child = GetItemControl(item),
+    //        VerticalAlignment = VerticalAlignment.Stretch
+    //    };
+    //    border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
+    //    border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
+    //    border.PointerPressed += (_, e) => Model?.SetSelectedColumn(e, item);
+    //    border.PointerEntered += (_, _) => Model?.SetFocusColumn(item);
+    //    border.PointerExited += (_, _) => Model?.ResetFocusColumn(item);
+
+    //    Grid.SetColumn(border, item.Index);
+    //    Grid.SetColumn(splitter, item.Index);
+    //    Grid.SetColumn(separator, item.Index);
+    //    grid.Children.Add(border);
+    //    grid.Children.Add(splitter);
+    //    grid.Children.Add(separator);
+
+    //    splitter.DragStarted += (_, _) => Model?.ColumnDragStartedChange?.Invoke(Orientation.Vertical, item.PositionX, item.Right);
+    //    splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.X, splitter.Width, item);
+    //    splitter.DragCompleted += (_, e) => Model?.ColumnDragCompletedChange?.Invoke(Orientation.Vertical, item);
+    //    splitter.DoubleTapped += (_, e) => Model?.ColumnSplitterDoubleTappedChange?.Invoke(item);
+    //}
+    //return grid;
+
+
+
+
+    #region Изменение размера колонки
+    /// <summary>
+    /// Изменение размера колонки
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <param name="item"></param>
+    private void OnDragDelta(double delta, double maxWidth, ModelColumn item)
+    {
+        var minDelta = 0.5;
+        if (Math.Abs(delta) < minDelta)
+            return;
+
+        if (item.Width <= maxWidth)
+            item.Right = item.PositionX + item.Width;
+        else
+            item.Right += delta;
+
+        Model?.ColumnDragStartedChange?.Invoke(Orientation.Vertical, item.PositionX, item.Right);
     }
     #endregion
 
@@ -304,7 +413,7 @@ public class PresenterColumns : BaseTemplatedControl
     /// Получить визуальный разделитель
     /// </summary>
     /// <returns></returns>
-    private static Rectangle GetViewwSplitter()
+    private Rectangle GetViewwSplitter()
     {
         return new Rectangle
         {
@@ -323,52 +432,102 @@ public class PresenterColumns : BaseTemplatedControl
     /// </summary>
     /// <param name="Item"></param>
     /// <returns></returns>
-    private static TextBlock GetItemControl(ModelColumn Item)
+    private Panel GetItemControl(ModelColumn item)
     {
-        var control = new TextBlock()
+        var viewPanel = new TextBlock()
         {
-            DataContext = Item,
-            Text = Item.Header,
             HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            FontFamily = Item.CellStyle.FontFamily,
-            FontSize = Item.CellStyle.FontSize,
-            FontWeight = Item.CellStyle.IsBold ? FontWeight.Bold : FontWeight.Normal
+            VerticalAlignment = VerticalAlignment.Center
         };
-        control.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground"));
-        return control;
+        viewPanel.Bind(TextBlock.TextProperty, new Binding("Header"));
+        viewPanel.Bind(TextBlock.FontFamilyProperty, new Binding("CellStyle.FontFamily"));
+        viewPanel.Bind(TextBlock.FontSizeProperty, new Binding("CellStyle.FontSize"));
+        viewPanel.Bind(TextBlock.FontWeightProperty, new Binding("CellStyle.IsBold") { Converter = new FontWeightConverter() });
+        viewPanel.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground") { Converter = new SolidColorBrushConverter() });
+
+        var border = new Border()
+        {
+            DataContext = item,
+            VerticalAlignment = VerticalAlignment.Stretch,
+            Child = viewPanel
+        };
+        border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new SolidColorBrushConverter() });
+        border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
+        border.PointerEntered += (_, _) => Model?.SetFocusColumn(item);
+        border.PointerExited += (_, _) => Model?.ResetFocusColumn(item);
+        border.PointerPressed += (_, e) => Model?.SetSelectedColumn(e, item);
+
+        var splitter = GetGridSplitter();
+        splitter.DragStarted += (_, _) => Model?.ColumnDragStartedChange?.Invoke(Orientation.Vertical, item.PositionX, item.Right);
+        splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.X, splitter.Width, item);
+        splitter.DragCompleted += (_, e) => Model?.ColumnDragCompletedChange?.Invoke(Orientation.Vertical, item);
+        splitter.DoubleTapped += (_, e) => Model?.ColumnSplitterDoubleTappedChange?.Invoke(item);
+        return new() { Children = { border, splitter, GetViewwSplitter() } };
+
+
+
+        //var control = new TextBlock()
+        //{
+        //    DataContext = Item,
+        //    Text = Item.Header,
+        //    HorizontalAlignment = HorizontalAlignment.Center,
+        //    VerticalAlignment = VerticalAlignment.Center,
+        //    FontFamily = Item.CellStyle.FontFamily,
+        //    FontSize = Item.CellStyle.FontSize,
+        //    FontWeight = Item.CellStyle.IsBold ? FontWeight.Bold : FontWeight.Normal
+        //};
+        //control.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground"));
+
+        //return control;
+
+
+
+        //var splitter = GetGridSplitter();
+        //var separator = GetViewwSplitter();
+        //var border = new Border()
+        //{
+        //    DataContext = item,
+        //    Child = GetItemControl(item),
+        //    VerticalAlignment = VerticalAlignment.Stretch
+        //};
+        //border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
+        //border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
+        //border.PointerPressed += (_, e) => Model?.SetSelectedColumn(e, item);
+        //border.PointerEntered += (_, _) => Model?.SetFocusColumn(item);
+        //border.PointerExited += (_, _) => Model?.ResetFocusColumn(item);
+
+        //Grid.SetColumn(border, item.Index);
+        //Grid.SetColumn(splitter, item.Index);
+        //Grid.SetColumn(separator, item.Index);
+        //grid.Children.Add(border);
+        //grid.Children.Add(splitter);
+        //grid.Children.Add(separator);
+
+        //splitter.DragStarted += (_, _) => Model?.ColumnDragStartedChange?.Invoke(Orientation.Vertical, item.PositionX, item.Right);
+        //splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.X, splitter.Width, item);
+        //splitter.DragCompleted += (_, e) => Model?.ColumnDragCompletedChange?.Invoke(Orientation.Vertical, item);
+        //splitter.DoubleTapped += (_, e) => Model?.ColumnSplitterDoubleTappedChange?.Invoke(item);
     }
     #endregion
 
-    #region Обработка смены выбора элемента
-    /// <summary>
-    /// Обработка смены выбора элемента
-    /// </summary>
-    /// <param name="e"></param>
-    /// <param name="item"></param>
-    private void OnSelectedItemChanged(PointerPressedEventArgs e, ModelColumn item)
-    {
-        if (!e.Properties.IsLeftButtonPressed || item is not { })
-            return;
-
-        SelectedItemChanged?.Invoke(e, item);
-    }
-    #endregion
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
-        if (ItemsSource is not { } || ItemsSource.Count <= 0)
+        if (Model is not { } || Model.Columns.Count <= 0)
             return;
 
-        presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
-        presenter.RenderTransform = transform;
-        Content ??= InitializeContent();
+        RebuildContent();
+
+        //presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
+        //presenter.RenderTransform = transform;
+
+        //Content ??= InitializeContent();
+        //Content = Model.Columns;
     }
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
-
         if (!e.Properties.IsLeftButtonPressed)
             return;
 
@@ -377,16 +536,14 @@ public class PresenterColumns : BaseTemplatedControl
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
-
         IsMousePressed = false;
     }
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
-
         if (!IsMousePressed)
             return;
 
-        PointerMovedEventChange?.Invoke(presenter, e);
+        Model?.ColumnsPointerMovedEvent(presenter, e);
     }
 }

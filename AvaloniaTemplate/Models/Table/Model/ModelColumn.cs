@@ -70,6 +70,18 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Выбрана как заголовок
+        private bool isHeader;
+        /// <summary>
+        /// Выбрана как заголовок
+        /// </summary>
+        public bool IsHeader
+        {
+            get => isHeader;
+            set => SetProperty(ref isHeader, value);
+        }
+        #endregion
+
         #region Результирующее занчение ширины
         private double widthResult;
         /// <summary>
@@ -90,28 +102,70 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             if (IsFocused)
             {
-                if (IsSelected)
-                    CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString();
-                else
+                if (!IsSelected)
+                {
                     CellStyle.Background = OnHoverBackground.ToString();
-
+                }
+                else
+                {
+                    CellStyle.Background = IsHeader
+                        ? CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString()
+                        : CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(DefaultForeground.ToString()), 0.05).ToString();
+                }
                 CellStyle.Foreground = Brushes.White.ToString();
             }
             else
             {
-                if (IsSelected)
-                {
-                    CellStyle.Foreground = Brushes.White.ToString();
-                    CellStyle.Background = OnHoverBackground.ToString();
-                }
+                CellStyle.Foreground = IsSelected
+                    ? Brushes.White.ToString()
+                    : DefaultForeground.ToString();
 
-                else
+                if (!IsSelected)
                 {
-                    CellStyle.Foreground = DefaultForeground.ToString();
                     CellStyle.Background = DefaultBackground.ToString();
                 }
-
+                else
+                {
+                    CellStyle.Background = IsHeader
+                        ? CellStyle.Background = OnHoverBackground.ToString()
+                        : Helper.GetAutoHighlight(Color.Parse(DefaultBackground.ToString()), 0.05).ToString();
+                }
             }
+
+
+            //if (IsFocused)
+            //{
+            //    if (IsSelected)
+            //    {
+            //        if (IsHeader)
+            //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(OnHoverBackground.ToString()), 0.05).ToString();
+            //        else
+            //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(DefaultForeground.ToString()), 0.05).ToString();
+            //    }
+                    
+            //    else
+            //        CellStyle.Background = OnHoverBackground.ToString();
+
+            //    CellStyle.Foreground = Brushes.White.ToString();
+            //}
+            //else
+            //{
+            //    if (IsSelected)
+            //    {
+            //        if (IsHeader)
+            //            CellStyle.Background = Helper.GetAutoHighlight(Color.Parse(DefaultBackground.ToString()), 0.05).ToString();
+            //        else
+            //            CellStyle.Background = OnHoverBackground.ToString();
+
+            //        CellStyle.Foreground = Brushes.White.ToString();
+            //    }
+
+            //    else
+            //    {
+            //        CellStyle.Foreground = DefaultForeground.ToString();
+            //        CellStyle.Background = DefaultBackground.ToString();
+            //    }
+            //}
         }
         #endregion
     }

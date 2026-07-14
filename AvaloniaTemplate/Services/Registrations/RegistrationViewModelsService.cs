@@ -7,8 +7,9 @@ namespace AvaloniaTemplate.Services.Registrations
     {
         public static void AddViewModels(this IServiceCollection services) => services
             .AddSingleton<MainWindowViewModel>()
+            .AddSingleton<PresenterTableViewModel>()
 
-            //.AddSingleton<MainWindowViewModel>()
+            //.AddSingleton<PresenterTableViewModel>()
             ;
     }
 }
