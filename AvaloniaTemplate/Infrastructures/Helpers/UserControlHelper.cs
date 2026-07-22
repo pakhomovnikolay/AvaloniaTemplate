@@ -33,12 +33,14 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
             {
                 control.SizeChanged += (_, args) =>
                 {
-                    var connectorService = App.GetService<IUIConnectorService>();
+                    if (control.DataContext is not { }
+                    || App.GetService<IUIConnectorService>() is not { } connectorService
+                    || App.GetService<ITableGenerateFactory>() is not { } factory
+                    ) return;
+
                     connectorService.WindowHeight = args.NewSize.Height;
                     connectorService.WindowWidth = args.NewSize.Width;
-                    
-                    App.GetService<ITableGenerateFactory>()?
-                    .UpdateViewport();
+                    factory.UpdateViewport();
 
                     //TablesFactory { get; } = App.GetService<ITableGenerateFactory>();
 

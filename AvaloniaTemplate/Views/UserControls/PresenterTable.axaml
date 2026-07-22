@@ -33,7 +33,6 @@
 								Grid.Row="0"
 								Model="{Binding TablesFactory.SelectedModel}"
 								SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelColumn}"
-								Frame="{Binding TablesFactory.FrameColumns}"
 								PositionY="0"
 								PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
 								Scale="{Binding ZoomService.Scale}"
@@ -61,9 +60,6 @@
 									SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelCell}"
 									PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
 									PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"
-									DragArea="{Binding TablesFactory.DragArea}"
-									ActiveArea="{Binding TablesFactory.ActiveArea}"
-									AnchorArea="{Binding TablesFactory.AnchorArea}"
 									/>
 			
 			<crd:SelectorScrollBar Grid.Column="1"

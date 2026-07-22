@@ -29,62 +29,6 @@ public class PresenterCells : BaseTemplatedControl
         ScaleProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
     }
 
-    #region Событие изменения текущего элемента
-    /// <summary>
-    /// Событие изменения текущего элемента
-    /// </summary>
-    public event Action<PointerPressedEventArgs, ModelCell> SelectedItemChanged;
-    #endregion
-
-    #region Событие перемещения мыши по панели
-    /// <summary>
-    /// Событие перемещения мыши по панели
-    /// </summary>
-    public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
-    #endregion
-
-    #region Область диапазона изменения размера
-    public static readonly StyledProperty<LayoutDragArea> DragAreaProperty =
-        AvaloniaProperty.Register<PresenterCells, LayoutDragArea>(nameof(DragArea));
-
-    /// <summary>
-    /// Область диапазона изменения размера
-    /// </summary>
-    public LayoutDragArea DragArea
-    {
-        get => GetValue(DragAreaProperty);
-        set => SetValue(DragAreaProperty, value);
-    }
-    #endregion
-
-    #region Активная область
-    public static readonly StyledProperty<LayoutActiveArea> ActiveAreaProperty =
-        AvaloniaProperty.Register<PresenterCells, LayoutActiveArea>(nameof(ActiveArea));
-
-    /// <summary>
-    /// Активная область
-    /// </summary>
-    public LayoutActiveArea ActiveArea
-    {
-        get => GetValue(ActiveAreaProperty);
-        set => SetValue(ActiveAreaProperty, value);
-    }
-    #endregion
-
-    #region Стартовая область
-    public static readonly StyledProperty<LayoutAnchorArea> AnchorAreaProperty =
-        AvaloniaProperty.Register<PresenterCells, LayoutAnchorArea>(nameof(AnchorArea));
-
-    /// <summary>
-    /// Стартовая область
-    /// </summary>
-    public LayoutAnchorArea AnchorArea
-    {
-        get => GetValue(AnchorAreaProperty);
-        set => SetValue(AnchorAreaProperty, value);
-    }
-    #endregion
-
     #region Источник данных
     public static readonly StyledProperty<ModelTable> ModelProperty =
         AvaloniaProperty.Register<PresenterCells, ModelTable>(nameof(Model));
@@ -281,7 +225,7 @@ public class PresenterCells : BaseTemplatedControl
         if (!e.Properties.IsLeftButtonPressed || item is not { })
             return;
 
-        SelectedItemChanged?.Invoke(e, item);
+        //SelectedItemChanged?.Invoke(e, item);
     }
     #endregion
 
@@ -315,6 +259,6 @@ public class PresenterCells : BaseTemplatedControl
         if (!IsMousePressed)
             return;
 
-        PointerMovedEventChange?.Invoke(presenter, e);
+        //PointerMovedEventChange?.Invoke(presenter, e);
     }
 }
