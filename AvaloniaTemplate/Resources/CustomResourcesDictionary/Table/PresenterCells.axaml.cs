@@ -219,7 +219,7 @@ public class PresenterCells : BaseTemplatedControl
         {
             foreach (var cell in row.CellsVisible)
             {
-                var presenter = new ModelPresentationCell() { Model = Model, ItemSource = cell };
+                var presenter = CreateModelPresentationColumn(cell);
                 presenters.Add(presenter);
                 panel.Children.Add(presenter);
             }
@@ -241,7 +241,7 @@ public class PresenterCells : BaseTemplatedControl
             {
                 if (index >= presenters.Count)
                 {
-                    var cell = new ModelPresentationCell() { Model = Model, ItemSource = Model?.RowsVisible[i].CellsVisible[j] };
+                    var cell = CreateModelPresentationColumn(Model?.RowsVisible[i].CellsVisible[j]);
                     presenters.Add(cell);
                     presenter.Children.Add(cell);
                 }
@@ -254,6 +254,20 @@ public class PresenterCells : BaseTemplatedControl
         }
         presenter.InvalidateArrange();
     }
+    #endregion
+
+    #region Создать модель представления строки
+    /// <summary>
+    /// Создать модель представления строки
+    /// </summary>
+    /// <param name="item"></param>
+    /// <returns></returns>
+    private ModelPresentationCell CreateModelPresentationColumn(ModelCell item)
+        => new()
+        {
+            Model = Model,
+            ItemSource = item
+        };
     #endregion
 
     #region Обработка смены выбора элемента

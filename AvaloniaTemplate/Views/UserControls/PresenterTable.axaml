@@ -64,8 +64,6 @@
 									DragArea="{Binding TablesFactory.DragArea}"
 									ActiveArea="{Binding TablesFactory.ActiveArea}"
 									AnchorArea="{Binding TablesFactory.AnchorArea}"
-
-									helpers:PresenterCellsHelper.SelectedChangeControl="True"
 									/>
 			
 			<crd:SelectorScrollBar Grid.Column="1"

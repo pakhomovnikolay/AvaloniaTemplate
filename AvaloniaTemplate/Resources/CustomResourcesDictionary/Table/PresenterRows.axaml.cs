@@ -1,14 +1,11 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
-using System;
 using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
@@ -27,34 +24,6 @@ public class PresenterRows : BaseTemplatedControl
         PositionYProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.UpdateTransform());
         ScaleProperty.Changed.AddClassHandler<PresenterRows>((x, _) => x.RebuildContent());
     }
-
-    #region Событие изменения текущего элемента
-    /// <summary>
-    /// Событие изменения текущего элемента
-    /// </summary>
-    public event Action<PointerPressedEventArgs, ModelRow> SelectedItemChanged;
-    #endregion
-
-    #region Событие устанвоки фокуса элемента
-    /// <summary>
-    /// Событие устанвоки фокуса элемента
-    /// </summary>
-    public event Action<ModelRow> SetFocusItem;
-    #endregion
-
-    #region Событие снятия фокуса элемента
-    /// <summary>
-    /// Событие снятия фокуса элемента
-    /// </summary>
-    public event Action<ModelRow> ResetFocusItem;
-    #endregion
-
-    #region Событие перемещения мыши по панели
-    /// <summary>
-    /// Событие перемещения мыши по панели
-    /// </summary>
-    public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
-    #endregion
 
     #region Контент
     public static readonly StyledProperty<object?> ContentProperty =
@@ -126,19 +95,6 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
-    #region Пересобрать контент
-    /// <summary>
-    /// Пересобрать контент
-    /// </summary>
-    private void RebuildContent()
-    {
-        presenter = InitializeContent();
-        presenter.RenderTransform = transform;
-        Content = presenter;
-        Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
-    }
-    #endregion
-
     #region Масштаб
     public static readonly StyledProperty<double> ScaleProperty =
         AvaloniaProperty.Register<PresenterRows, double>(nameof(Scale), defaultValue: 1);
@@ -169,9 +125,22 @@ public class PresenterRows : BaseTemplatedControl
     /// <summary>
     /// Обновление положений завершено
     /// </summary>
-    private void OnUpdateGeometryCellsFinished()
+    private void OnUpdateGeometryRowsFinished()
     {
         UpdateVisibleContent();
+    }
+    #endregion
+
+    #region Пересобрать контент
+    /// <summary>
+    /// Пересобрать контент
+    /// </summary>
+    private void RebuildContent()
+    {
+        presenter = InitializeContent();
+        presenter.RenderTransform = transform;
+        Content = presenter;
+        Model.UpdateGeometryRowsFinished += OnUpdateGeometryRowsFinished;
     }
     #endregion
 
@@ -188,7 +157,7 @@ public class PresenterRows : BaseTemplatedControl
         panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
         foreach (var row in Model?.RowsVisible)
         {
-            var presenter = new ModelPresentationRow() { Model = Model, ItemSource = row };
+            var presenter = CreateModelPresentationColumn(row);
             presenters.Add(presenter);
             panel.Children.Add(presenter);
         }
@@ -206,7 +175,7 @@ public class PresenterRows : BaseTemplatedControl
         {
             if (i >= presenters.Count)
             {
-                var row = new ModelPresentationRow() { Model = Model, ItemSource = Model?.RowsVisible[i] };
+                var row = CreateModelPresentationColumn(Model?.RowsVisible[i]);
                 presenters.Add(row);
                 presenter.Children.Add(row);
             }
@@ -219,37 +188,18 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
-    #region Обработка смены выбора элемента
+    #region Создать модель представления строки
     /// <summary>
-    /// Обработка смены выбора элемента
+    /// Создать модель представления строки
     /// </summary>
-    /// <param name="e"></param>
     /// <param name="item"></param>
-    private void OnSelectedItemChanged(PointerPressedEventArgs e, ModelRow item)
-    {
-        if (!e.Properties.IsLeftButtonPressed || item is not { })
-            return;
-
-        SelectedItemChanged?.Invoke(e, item);
-    }
-    #endregion
-
-    #region Изменение размера колонки
-    /// <summary>
-    /// Изменение размера колонки
-    /// </summary>
-    /// <param name="delta"></param>
-    /// <param name="item"></param>
-    private void OnDragDelta(double delta, double minHeight, ModelRow item)
-    {
-        var minDelta = 0.5;
-        if (Math.Abs(delta) < minDelta || item.Geometry.Height <= minHeight)
-            return;
-
-        Model.Resize(item, delta);
-        Model?.DragStartedChange?.Invoke(Orientation.Horizontal, item.Geometry.PositionY, item.Geometry.Bottom);
-        presenter.InvalidateArrange();
-    }
+    /// <returns></returns>
+    private ModelPresentationRow CreateModelPresentationColumn(ModelRow item)
+        => new()
+        {
+            Model = Model,
+            ItemSource = item
+        };
     #endregion
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
@@ -272,7 +222,6 @@ public class PresenterRows : BaseTemplatedControl
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
         base.OnPointerReleased(e);
-
         IsMousePressed = false;
     }
     protected override void OnPointerMoved(PointerEventArgs e)
@@ -282,6 +231,6 @@ public class PresenterRows : BaseTemplatedControl
         if (!IsMousePressed)
             return;
 
-        PointerMovedEventChange?.Invoke(presenter, e);
+        Model?.RowsPointerMovedEvent(presenter, e);
     }
 }

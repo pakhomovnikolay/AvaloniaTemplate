@@ -2,18 +2,23 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
+using Avalonia.Layout;
 using AvaloniaTemplate.Infrastructures.Converters;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
+using System;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
 
 public class ModelPresentationRow : BaseTemplatedControl
 {
+    #region Статический конструктор класса
+    /// <summary>
+    /// Статический конструктор класса
+    /// </summary>
     static ModelPresentationRow()
-    {
-        ItemSourceProperty.Changed.AddClassHandler<ModelPresentationRow>((x, _) => x.DataContext = x.ItemSource);
-    }
+        => AddClassHandlers();
+    #endregion
 
     #region Источник данных
     public static readonly StyledProperty<ModelRow> ItemSourceProperty =
@@ -43,27 +48,46 @@ public class ModelPresentationRow : BaseTemplatedControl
     }
     #endregion
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    #region Инициализация компонентов
+    /// <summary>
+    /// Инициализация компонентов
+    /// </summary>
+    private void InitializeComponents()
     {
-        base.OnApplyTemplate(e);
+        InitializeBorder(FindPartById<Border>(CurrTemplateAppliedEventArgs, "PART_Border"));
+        InitializeViewPanel(FindPartById<TextBlock>(CurrTemplateAppliedEventArgs, "PART_ViewPanel"));
+        var splitter = FindPartById<GridSplitter>(CurrTemplateAppliedEventArgs, "PART_GridSplitter");
 
-        InitializeBorder(FindPartById<Border>(e, "PART_Border"));
-        InitializeViewPanel(FindPartById<TextBlock>(e, "PART_ViewPanel"));
+        splitter.DragStarted += (_, _) => Model?.DragStartedChange?.Invoke(Orientation.Horizontal, ItemSource.Geometry.PositionY, ItemSource.Geometry.Bottom);
+        splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.Y, splitter.Height, ItemSource);
+        splitter.DragCompleted += (_, e) => Model?.RowDragCompletedChange?.Invoke(Orientation.Vertical, ItemSource);
+        splitter.DoubleTapped += (_, e) => Model?.RowSplitterDoubleTappedChange?.Invoke(ItemSource);
     }
+    #endregion
 
+    #region Инициализация границ элемента
+    /// <summary>
+    /// Инициализация границ элемента
+    /// </summary>
+    /// <param name="border"></param>
     private void InitializeBorder(Border border)
     {
         if (border is not { })
             return;
 
-        //border.Bind(DataContextProperty, new Binding(nameof(ItemSource)));
         border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new ColorStringToSolidColorBrushConverter() });
         border.Bind(IsVisibleProperty, new Binding("IsVisible"));
         border.PointerEntered += (_, _) => Model?.SetFocus(ItemSource);
         border.PointerExited += (_, _) => Model?.ResetFocus(ItemSource);
         border.PointerPressed += (_, e) => Model?.SetSelected(e, ItemSource);
     }
+    #endregion
 
+    #region Инициализация панели отображения данных
+    /// <summary>
+    /// Инициализация панели отображения данных
+    /// </summary>
+    /// <param name="viewPanel"></param>
     private static void InitializeViewPanel(TextBlock viewPanel)
     {
         if (viewPanel is not { })
@@ -75,4 +99,45 @@ public class ModelPresentationRow : BaseTemplatedControl
         viewPanel.Bind(TextBlock.FontWeightProperty, new Binding("CellStyle.IsBold") { Converter = new FontWeightBoldConverter() });
         viewPanel.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground") { Converter = new ColorStringToSolidColorBrushConverter() });
     }
+    #endregion
+
+    #region Изменение размера строки
+    /// <summary>
+    /// Изменение размера строки
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <param name="item"></param>
+    private void OnDragDelta(double delta, double minHeight, ModelRow item)
+    {
+        var minDelta = 0.5;
+        if (Math.Abs(delta) < minDelta || item.Geometry.Height <= minHeight)
+            return;
+
+        Model.Resize(item, delta);
+        Model?.DragStartedChange?.Invoke(Orientation.Horizontal, item.Geometry.PositionY, item.Geometry.Bottom);
+    }
+    #endregion
+
+    #region Метод создания обработчиков событий
+    /// <summary>
+    /// Метод создания обработчиков событий
+    /// </summary>
+    private static void AddClassHandlers()
+    {
+        ItemSourceProperty.Changed.AddClassHandler<ModelPresentationRow>((x, _) => x.DataContext = x.ItemSource);
+    }
+    #endregion
+
+    #region Обработка события применения шаблона
+    /// <summary>
+    /// Обработка события применения шаблона
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        SetTemplateAppliedEventArgs(e);
+        InitializeComponents();
+    }
+    #endregion
 }

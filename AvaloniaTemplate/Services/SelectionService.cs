@@ -96,7 +96,7 @@ namespace AvaloniaTemplate.Services
                 else
                     UpdateMultiSelects(item);
 
-                baseSelections = source().Where(x => x.IsSelected)?.ToHashSet();
+                baseSelections = source().Where(x => x.IsHeader)?.ToHashSet();
                 selections.Clear();
                 if (!statusSelected.IsWasSelected)
                     statusSelected.StartIndex = statusSelected.CurrentIndex;
@@ -231,7 +231,7 @@ namespace AvaloniaTemplate.Services
         private bool IsWasSelected(T item)
         {
             statusSelected.CurrentIndex = selector(item);
-            return source().FirstOrDefault(x => x.IsSelected && x.Equals(item)) is { };
+            return source().FirstOrDefault(x => x.IsHeader && x.Equals(item)) is { };
         }
         #endregion
 
@@ -280,8 +280,8 @@ namespace AvaloniaTemplate.Services
                 newSelection.UnionWith(current);
 
             // считаем разницу относительно ПРЕДЫДУЩЕГО итогового состояния
-            var add = newSelection.Except(source().Where(x => x.IsSelected)?.ToHashSet()).ToList();
-            var remove = source().Where(x => x.IsSelected)?.ToHashSet().Except(newSelection).ToList();
+            var add = newSelection.Except(source().Where(x => x.IsHeader)?.ToHashSet()).ToList();
+            var remove = source().Where(x => x.IsHeader)?.ToHashSet().Except(newSelection).ToList();
 
             // обновляем lastRange
             selections.Clear();

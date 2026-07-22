@@ -25,7 +25,8 @@
                                    VerticalAlignment="Center"
                                    />
                     </Border>
-                    <GridSplitter BorderThickness="1"
+                    <GridSplitter x:Name="PART_GridSplitter"
+                                  BorderThickness="1"
                                   BorderBrush="Transparent"
                                   Background="Transparent"
                                   ResizeDirection="Columns"

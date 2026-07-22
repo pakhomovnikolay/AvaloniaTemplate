@@ -1,15 +1,11 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
-using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
-using System;
 using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
@@ -28,20 +24,6 @@ public class PresenterColumns : BaseTemplatedControl
         PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
         ScaleProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
     }
-
-    #region Активная область
-    public static readonly StyledProperty<LayoutFrame> FrameProperty =
-        AvaloniaProperty.Register<PresenterColumns, LayoutFrame>(nameof(Frame));
-
-    /// <summary>
-    /// Активная область
-    /// </summary>
-    public LayoutFrame Frame
-    {
-        get => GetValue(FrameProperty);
-        set => SetValue(FrameProperty, value);
-    }
-    #endregion
 
     #region Контент
     public static readonly StyledProperty<object?> ContentProperty =
@@ -158,7 +140,7 @@ public class PresenterColumns : BaseTemplatedControl
         presenter = InitializeContent();
         presenter.RenderTransform = transform;
         Content = presenter;
-        Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
+        Model.UpdateGeometryColumnsFinished += OnUpdateGeometryCellsFinished;
     }
     #endregion
 
@@ -175,7 +157,7 @@ public class PresenterColumns : BaseTemplatedControl
         panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
         foreach (var column in Model?.ColumnsVisible)
         {
-            var presenter = new ModelPresentationColumn() { Model = Model, ItemSource = column };
+            var presenter = CreateModelPresentationColumn(column);
             presenters.Add(presenter);
             panel.Children.Add(presenter);
         }
@@ -193,7 +175,7 @@ public class PresenterColumns : BaseTemplatedControl
         {
             if (i >= presenters.Count)
             {
-                var col = new ModelPresentationColumn() { Model = Model, ItemSource = Model?.ColumnsVisible[i] };
+                var col = CreateModelPresentationColumn(Model?.ColumnsVisible[i]);
                 presenters.Add(col);
                 presenter.Children.Add(col);
             }
@@ -206,22 +188,18 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
-    #region Изменение размера колонки
+    #region Создать модель представления колонки
     /// <summary>
-    /// Изменение размера колонки
+    /// Создать модель представления колонки
     /// </summary>
-    /// <param name="delta"></param>
     /// <param name="item"></param>
-    private void OnDragDelta(double delta, double minWidth, ModelColumn item)
-    {
-        var minDelta = 0.5;
-        if (Math.Abs(delta) < minDelta || item.Geometry.Width <= minWidth)
-            return;
-
-        Model.Resize(item, delta);
-        Model?.DragStartedChange?.Invoke(Orientation.Vertical, item.Geometry.PositionX, item.Geometry.Right);
-        presenter.InvalidateArrange();
-    }
+    /// <returns></returns>
+    private ModelPresentationColumn CreateModelPresentationColumn(ModelColumn item)
+        => new()
+        {
+            Model = Model,
+            ItemSource = item
+        };
     #endregion
 
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)

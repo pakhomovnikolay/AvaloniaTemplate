@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.PortableExecutable;
 
 namespace AvaloniaTemplate.Models.SourceTable.Model
 {
@@ -50,10 +51,29 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         /// <summary>
         /// События двойного клика по разделителю колонки
         /// </summary>
+        public Action<ModelRow> RowSplitterDoubleTappedChange;
+        #endregion
+
+        #region События завершения обновления позиций ячеек
+        /// <summary>
+        /// События завершения обновления позиций ячеек
+        /// </summary>
         public Action UpdateGeometryCellsFinished;
         #endregion
 
+        #region События завершения обновления позиций колонок
+        /// <summary>
+        /// События завершения обновления позиций колонок
+        /// </summary>
+        public Action UpdateGeometryColumnsFinished;
+        #endregion
 
+        #region События завершения обновления позиций строк
+        /// <summary>
+        /// События завершения обновления позиций строк
+        /// </summary>
+        public Action UpdateGeometryRowsFinished;
+        #endregion
 
 
         #region Конструктор
@@ -69,10 +89,10 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             SelectorColumns.SelectedAreaChanged += OnSelectedColumnAreaChanged;
 
             SelectorRows = new SelectionService<ModelRow>(() => Rows, x => x.Index);
-            //SelectorRows.SelectedChangedItem += OnSelectedColumnChanged;
-            //SelectorRows.SelectedChangedItems += OnSelectedColumnsChanged;
-            //SelectorRows.MultiSelectedChangedItem += OnMultiSelectedColumnChanged;
-            //SelectorRows.SelectedAreaChanged += OnSelectedColumnAreaChanged;
+            SelectorRows.SelectedChangedItem += OnSelectedRowChanged;
+            SelectorRows.SelectedChangedItems += OnSelectedRowsChanged;
+            SelectorRows.MultiSelectedChangedItem += OnMultiSelectedRowChanged;
+            SelectorRows.SelectedAreaChanged += OnSelectedRowAreaChanged;
         }
         #endregion
 
@@ -388,55 +408,9 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
         #endregion
 
-        #region Обновить выделенные колонки модели
-        /// <summary>
-        /// Обновить выделенные колонки модели
-        /// </summary>
-        public void UpdateSelectedModelColumns(bool isHeader)
-        {
-            SelectedModelColumns?.Where(x => !x.IsSelected)?
-                .ToList()?
-                .ForEach(x =>
-                {
-                    x.IsHeader = isHeader;
-                    x.IsSelected = true;
-                });
+        
 
-            Columns.Where(x => x.IsSelected)?
-                .Except(SelectedModelColumns)?
-                .ToList()?
-                .ForEach(x =>
-                {
-                    x.IsHeader = false;
-                    x.IsSelected = false;
-                });
-        }
-        #endregion
-
-        #region Обновить выделенные строк модели
-        /// <summary>
-        /// Обновить выделенные строк модели
-        /// </summary>
-        public void UpdateSelectedModelRows(bool isHeader)
-        {
-            SelectedModelRows?.Where(x => !x.IsSelected)?
-                .ToList()?
-                .ForEach(x =>
-                {
-                    x.IsHeader = isHeader;
-                    x.IsSelected = true;
-                });
-
-            Rows.Where(x => x.IsSelected)?
-                .Except(SelectedModelRows)?
-                .ToList()?
-                .ForEach(x =>
-                {
-                    x.IsHeader = false;
-                    x.IsSelected = false;
-                });
-        }
-        #endregion
+        
 
         #region Обновить размеры текущего элемента
         /// <summary>
@@ -493,6 +467,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
                 }
             }
             UpdateGeometryCellsFinished?.Invoke();
+
         } 
         #endregion
 
@@ -528,9 +503,9 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
         #endregion
 
-        #region Событие перемещения указателя по заголовкам колонок
+        #region Событие перемещения указателя по заголовкам
         /// <summary>
-        /// Событие перемещения указателя по заголовкам колонок
+        /// Событие перемещения указателя по заголовкам
         /// </summary>
         /// <param name="s"></param>
         /// <param name="e"></param>
@@ -545,10 +520,24 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
 
             SelectorColumns.SetRangeSelected(CurrentIndex.CurrentColumn);
         }
+
+        /// <summary>
+        /// Событие перемещения указателя по заголовкам
+        /// </summary>
+        /// <param name="s"></param>
+        /// <param name="e"></param>
+        public void RowsPointerMovedEvent(Control? s, PointerEventArgs e)
+        {
+            var point = e.GetPosition(s);
+            if (CurrentIndex.IsEqaulRow(GetRow(point.Y))
+                || CurrentIndex.CurrentRow < 0
+                || CurrentIndex.CurrentRow >= Rows.Count
+                )
+                return;
+
+            SelectorRows.SetRangeSelected(CurrentIndex.CurrentRow);
+        }
         #endregion
-
-
-
 
         #region Установить фокус
         /// <summary>
@@ -582,6 +571,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             => SelectorRows.ResetFocus(item);
         #endregion
 
+
         #region Событие изменения текущей колонки
         /// <summary>
         /// Событие изменения текущей колонки
@@ -589,22 +579,38 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         /// <param name="item"></param>
         private void OnSelectedColumnChanged(ModelColumn item)
         {
-            SelectedModelColumns.Clear();
+            ClearSelectedModelColumns();
             SelectedModelColumns.Add(item);
             SelectedModelColumn = item;
-            UpdateSelectedModelColumns(true);
+            UpdateSelectedModelColumns();
 
-            SelectedModelRows.Clear();
+            ClearSelectedModelRows();
             SelectedModelRows = [.. Rows];
             SelectedModelRow = Rows[0];
-            UpdateSelectedModelRows(false);
+            UpdateSelectedModelRows();
 
-            foreach (var row in SelectedModelRows)
-            {
-                SelectedModelCells.Clear();
-                SelectedModelCells.Add(row.Cells[item.Index]);
-            }
-            SelectedModelCell = SelectedModelRows[0].Cells[0];
+
+            //SelectedModelRows.Clear();
+            //SelectedModelRows = [.. Rows];
+            //SelectedModelRow = Rows[0];
+            //SelectedModelRow.IsHeader = false;
+
+            //SelectedModelColumns.Clear();
+            //SelectedModelColumns.Add(item);
+            //SelectedModelColumn = item;
+            ////UpdateSelectedModelColumns(true);
+
+            //SelectedModelRows.Clear();
+            //SelectedModelRows = [.. Rows];
+            //SelectedModelRow = Rows[0];
+            //SelectedModelRow.IsHeader = true;
+            //UpdateSelectedModelRows();
+
+            //SelectedModelCells.Clear();
+            //foreach (var row in SelectedModelRows)
+            //    SelectedModelCells.Add(row.Cells[item.Index]);
+
+            //SelectedModelCell = SelectedModelRows[0].Cells[0];
         }
         #endregion
 
@@ -617,14 +623,23 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         private void OnSelectedColumnsChanged(IEnumerable<ModelColumn> added, IEnumerable<ModelColumn> removed)
         {
             if (removed is { } && removed.Any())
+            {
                 foreach (var item in removed)
+                {
+                    item.IsHeader = false;
                     SelectedModelColumns.Remove(item);
+                }
+            }
 
             if (added is { } && added.Any())
+            {
                 foreach (var item in added)
+                {
+                    item.IsHeader = true;
                     SelectedModelColumns.Add(item);
-
-            UpdateSelectedModelColumns(true);
+                }
+            }
+            UpdateSelectedModelColumns();
         }
         #endregion
 
@@ -707,6 +722,22 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
         #endregion
 
+        #region Сбросить выбранные колонок
+        /// <summary>
+        /// Сбросить выбранные колонок
+        /// </summary>
+        private void ClearSelectedModelColumns()
+        {
+            foreach (var item in SelectedModelColumns)
+            {
+                item.IsSelected = false;
+                item.IsFocused = false;
+                item.IsHeader = false;
+            }
+            SelectedModelColumns.Clear();
+        }
+        #endregion
+
         #region Получить индекс колонки
         /// <summary>
         /// Получить индекс колонки
@@ -730,6 +761,254 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
                     return mid;
             }
             return -1;
+        }
+        #endregion
+
+        #region Обновить выделенные колонки модели
+        /// <summary>
+        /// Обновить выделенные колонки модели
+        /// </summary>
+        public void UpdateSelectedModelColumns()
+        {
+            SelectedModelColumns?.Where(x => !x.IsSelected)?
+                .ToList()?
+                .ForEach(x => x.IsSelected = true);
+
+            Columns.Where(x => x.IsSelected)?
+                .Except(SelectedModelColumns)?
+                .ToList()?
+                .ForEach(x =>
+                {
+                    x.IsHeader = false;
+                    x.IsSelected = false;
+                });
+        }
+        #endregion
+
+
+
+
+
+        #region Событие изменения текущей строки
+        /// <summary>
+        /// Событие изменения текущей строки
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnSelectedRowChanged(ModelRow item)
+        {
+            ClearSelectedModelRows();
+            SelectedModelRows.Add(item);
+            SelectedModelRow = item;
+            UpdateSelectedModelRows();
+
+            ClearSelectedModelColumns();
+            SelectedModelColumns = [.. Columns];
+            SelectedModelColumn = Columns[0];
+            UpdateSelectedModelColumns();
+
+
+
+
+
+            //ClearSelectedModelColumns();
+            //SelectedModelColumns.Add(item);
+            //SelectedModelColumn = item;
+            //SelectedModelColumn.IsHeader = true;
+            //UpdateSelectedModelColumns();
+
+            //ClearSelectedModelRows();
+            //SelectedModelRows = [.. Rows];
+            //SelectedModelRow = Rows[0];
+            //SelectedModelRow.IsHeader = false;
+            //UpdateSelectedModelRows();
+
+
+
+            //SelectedModelColumns.Clear();
+            //SelectedModelColumns = [.. Columns];
+            //SelectedModelColumn = Columns[0];
+            //SelectedModelColumn.IsHeader = false;
+            //UpdateSelectedModelColumns();
+
+            //SelectedModelRows.Clear();
+            //SelectedModelRows.Add(item);
+            //SelectedModelRow = item;
+            ////UpdateSelectedModelRows(true);
+
+            //SelectedModelCells.Clear();
+            //SelectedModelCells = [.. item.Cells];
+            //SelectedModelCell = item.Cells[0];
+        }
+        #endregion
+
+        #region Событие изменения выбранных строк
+        /// <summary>
+        /// Событие изменения выбранных строк
+        /// </summary>
+        /// <param name="added"></param>
+        /// <param name="removed"></param>
+        private void OnSelectedRowsChanged(IEnumerable<ModelRow> added, IEnumerable<ModelRow> removed)
+        {
+            if (removed is { } && removed.Any())
+            {
+                foreach (var item in removed)
+                {
+                    item.IsHeader = false;
+                    SelectedModelRows.Remove(item);
+                }
+            }
+
+            if (added is { } && added.Any())
+            {
+                foreach (var item in added)
+                {
+                    item.IsHeader = true;
+                    SelectedModelRows.Add(item);
+                }
+            }
+            UpdateSelectedModelRows();
+        }
+        #endregion
+
+        #region Событие изменения выбранной строки
+        /// <summary>
+        /// Событие изменения выбранной строки
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnMultiSelectedRowChanged(ModelRow item, bool remove)
+        {
+            if (!remove)
+                SelectedModelRow = item;
+            else
+            {
+                while (SelectedModelRows.Contains(item))
+                    SelectedModelRows.Remove(item);
+
+                if (SelectedModelRow.Equals(item))
+                    SelectedModelRow = SelectedModelRows?.LastOrDefault();
+            }
+        }
+        #endregion
+
+        #region Событие изменения выделенной области колонок
+        /// <summary>
+        /// Событие изменения выделенной области колонок
+        /// </summary>
+        /// <param name="arg1"></param>
+        /// <param name="delete"></param>
+        private void OnSelectedRowAreaChanged(Rect? arg1, bool delete)
+        {
+
+            //Rect? rect = new(arg1.Value.X, 0, arg1.Value.Width, TableFactory.SelectedModel.Height);
+            //TableFactory?.UpdateSelectedArea(rect);
+
+
+            //if (delete)
+            //{
+            //    var rect = new Rect(arg1.Value.X, arg1.Value.Y, arg1.Value.Width, Rows.Sum(x => x.Height.Value));
+            //    MainFrame.RemoveArea ??= new()
+            //    {
+            //        RectPen = new Pen(new SolidColorBrush(Helper.GetAutoHighlight(Brushes.LightGray)), 2),
+            //        RectFill = new SolidColorBrush(Helper.GetAutoHighlight(Brushes.LightGray), 0.1)
+            //    };
+            //    MainFrame.RemoveArea.Area = rect;
+            //    MainFrame.InvalidateVisual();
+            //}
+            //else
+            //{
+            //    if (MainFrame?.RemoveArea?.Area is { } area)
+            //    {
+            //        var arrayCells = SelectedCells?
+            //            .Where(x => (x.PositionX < area.X || x.PositionX >= area.Right) && (x.IsSelected || x.IsFocused))?
+            //            .ToList();
+            //        SelectedCells.Clear();
+
+            //        if (arrayCells is { } && arrayCells.Count > 0)
+            //            UpdateSelectedCells([.. arrayCells], []);
+
+            //        var arrayCols = SelectedColumns?
+            //            .Where(x => (x.PositionX < area.X || x.PositionX >= area.Right) && x.IsFocused)?
+            //            .ToList();
+            //        SelectedColumns.Clear();
+            //        if (arrayCols is { } && arrayCols.Count > 0)
+            //            UpdateFocusColumns([.. arrayCols], []);
+
+            //        arrayCols = Columns?
+            //            .Where(x => (x.PositionX < area.X || x.PositionX >= area.Right) && x.IsSelected)?
+            //            .ToList();
+            //        UpdateSelectedColumns([.. arrayCols]);
+
+            //        UpdateSelectedAreaCells(SelectorColumns.GetIsCtrl(), SelectorCells.BuildBoundingRect([SelectedCell]));
+            //        MainFrame.RemoveArea = null;
+            //        MainFrame.InvalidateVisual();
+
+            //        if (SelectedColumns.Count <= 0 && SelectedCells.Count <= 0)
+            //            UpdateSelectedRows([]);
+            //    }
+            //}
+        }
+        #endregion
+
+        #region Сбросить выбранные строки
+        /// <summary>
+        /// Сбросить выбранные строки
+        /// </summary>
+        private void ClearSelectedModelRows()
+        {
+            foreach (var item in SelectedModelRows)
+            {
+                item.IsSelected = false;
+                item.IsFocused = false;
+                item.IsHeader = false;
+            }
+            SelectedModelRows.Clear();
+        }
+        #endregion
+
+        #region Получить индекс колонки
+        /// <summary>
+        /// Получить индекс колонки
+        /// </summary>
+        /// <returns></returns>
+        private int GetRow(double posY)
+        {
+            int top = 0;
+            int bottom = Rows.Count - 1;
+
+            while (top <= bottom)
+            {
+                int mid = (top + bottom) / 2;
+                var row = Rows[mid];
+
+                if (posY < row.Geometry.PositionY)
+                    bottom = mid - 1;
+                else if (posY > row.Geometry.Bottom)
+                    top = mid + 1;
+                else
+                    return mid;
+            }
+            return -1;
+        }
+        #endregion
+
+        #region Обновить выделенные строк модели
+        /// <summary>
+        /// Обновить выделенные строк модели
+        /// </summary>
+        public void UpdateSelectedModelRows()
+        {
+            SelectedModelRows?.Where(x => !x.IsSelected)?
+                .ToList()?
+                .ForEach(x => x.IsSelected = true);
+
+            Rows.Where(x => x.IsSelected)?
+                .Except(SelectedModelRows)?
+                .ToList()?
+                .ForEach(x =>
+                {
+                    x.IsHeader = false;
+                    x.IsSelected = false;
+                });
         }
         #endregion
     }

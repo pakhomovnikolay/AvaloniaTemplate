@@ -1,13 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
-using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.SourceTable.Base;
 using AvaloniaTemplate.Models.SourceTable.Base.Interfaces;
-using AvaloniaTemplate.Models.SourceTable.Model;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Xml.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Base
 {
@@ -27,6 +20,12 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Base
         }
         #endregion
 
+        #region Переопределить положения элементов
+        /// <summary>
+        /// Переопределить положения элементов
+        /// </summary>
+        /// <param name="finalSize"></param>
+        /// <returns></returns>
         protected override Size ArrangeOverride(Size finalSize)
         {
             foreach (var child in Children)
@@ -42,5 +41,6 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Base
             }
             return finalSize;
         }
+        #endregion
     }
 }

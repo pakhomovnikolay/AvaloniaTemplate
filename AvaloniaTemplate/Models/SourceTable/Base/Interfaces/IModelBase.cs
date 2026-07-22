@@ -30,6 +30,13 @@
         bool IsFocused { get; set; }
         #endregion
 
+        #region Выбрана как заголовок
+        /// <summary>
+        /// Выбрана как заголовок
+        /// </summary>
+        bool IsHeader { get; set; }
+        #endregion
+
         #region Стиль ячейки
         /// <summary>
         /// Стиль ячейки

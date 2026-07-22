@@ -60,6 +60,18 @@ namespace AvaloniaTemplate.Models.SourceTable.Base
         }
         #endregion
 
+        #region Выбрана как заголовок
+        private bool isHeader;
+        /// <summary>
+        /// Выбрана как заголовок
+        /// </summary>
+        public virtual bool IsHeader
+        {
+            get => isHeader;
+            set => SetProperty(ref isHeader, value);
+        }
+        #endregion
+
         #region Стиль ячейки
         private ModelCellStyle cellStyle;
         /// <summary>

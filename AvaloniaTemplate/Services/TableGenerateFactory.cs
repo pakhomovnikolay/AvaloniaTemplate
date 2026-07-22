@@ -11,6 +11,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 
@@ -262,10 +263,14 @@ namespace AvaloniaTemplate.Services
             };
 
             model.DragStartedChange += UpdateLayoutDrag;
+
             model.ColumnDragCompletedChange += UpdateLayoutDragComplete;
             model.ColumnSplitterDoubleTappedChange += SetSizeColumnToContent;
 
             model.RowDragCompletedChange += UpdateLayoutDragComplete;
+            model.RowSplitterDoubleTappedChange += SetSizeRowToContent;
+
+
             //UpdateLayoutFrameColumns(model);
             return model;
         }
@@ -662,7 +667,10 @@ namespace AvaloniaTemplate.Services
                  );
 
 
+            SelectedModel?.UpdateGeometryColumnsFinished?.Invoke();
+            SelectedModel?.UpdateGeometryRowsFinished?.Invoke();
             SelectedModel?.UpdateGeometryCellsFinished?.Invoke();
+
             //SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(x => )];
 
 
@@ -689,29 +697,15 @@ namespace AvaloniaTemplate.Services
             DragArea.Area.End = GetRect(orientation, positionEnd);
             DragArea.InvalidateVisual();
 
-
-
-            //var colX = FrameColumns.ColsX.FirstOrDefault(x => x.PositionX == positionStart);
-            //colX.Right = DragArea.Area.End.Value.Right;
-            //FrameColumns.InvalidateVisual();
-
-            //UpdateLayoutFrameColumns(SelectedModel);
-
-
-            //FrameColumns.ColsX.Clear();
-            //foreach (var column in model.Columns.Where(x => x.IsVisible))
-            //{
-            //    FrameColumns.ColsX.Add(new()
-            //    {
-            //        PositionX = column.PositionX,
-            //        PositionY = column.PositionY,
-            //        Right = column.PositionX + column.Width,
-            //        Bottom = column.Bottom,
-            //        Size = column.Height,
-            //        LinePen = new(Brushes.WhiteSmoke)
-            //    });
-            //}
-            //FrameColumns.InvalidateVisual();
+            switch (orientation)
+            {
+                case Orientation.Vertical:
+                    SelectedModel.UpdateGeometryColumnsFinished.Invoke();
+                    break;
+                case Orientation.Horizontal:
+                    SelectedModel.UpdateGeometryRowsFinished.Invoke();
+                    break;
+            }
         }
         #endregion
 
@@ -723,7 +717,12 @@ namespace AvaloniaTemplate.Services
         /// <param name="item"></param>
         public void UpdateLayoutDragComplete(Orientation orientation, ModelColumn item)
         {
+            UpdateHorizontalPosition(item.Index);
+            SelectedModel.UpdateGeometryColumnsFinished.Invoke();
             SelectedModel.UpdateGeometryCells();
+
+            SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
+            UpdateViewport();
 
             //UpdateGeometryCells()
 
@@ -745,7 +744,12 @@ namespace AvaloniaTemplate.Services
         /// <param name="item"></param>
         public void UpdateLayoutDragComplete(Orientation orientation, ModelRow item)
         {
+            UpdateVerticalPosition(item.Index);
+            SelectedModel.UpdateGeometryRowsFinished.Invoke();
             SelectedModel.UpdateGeometryCells();
+
+            SelectedModel.Height = SelectedModel.Rows.Sum(x => x.Geometry.Height);
+            UpdateViewport();
 
             //item.WidthResult = item.Geometry.Width;
             //SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
@@ -798,12 +802,25 @@ namespace AvaloniaTemplate.Services
         /// <param name="item"></param>
         public void SetSizeColumnToContent(ModelColumn item)
         {
-            //var width = Helper.MeasureTextWidth(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
-            //item.Geometry.Width = width;
-            //item.WidthResult = width;
+            var width = Helper.MeasureTextWidth(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
+            item.Geometry.Width = width;
 
-            //UpdateHorizontalPosition(item.Index);
-        } 
+            UpdateHorizontalPosition(item.Index);
+        }
+        #endregion
+
+        #region Устаноаить размер строк по содержимому
+        /// <summary>
+        /// Устаноаить размер строк по содержимому
+        /// </summary>
+        /// <param name="item"></param>
+        public void SetSizeRowToContent(ModelRow item)
+        {
+            var height = Helper.MeasureTextHeight(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
+            item.Geometry.Height = height;
+
+            UpdateVerticalPosition(item.Index);
+        }
         #endregion
 
 
@@ -848,7 +865,6 @@ namespace AvaloniaTemplate.Services
                 foreach (var column in SelectedModel.SelectedModelColumns)
                 {
                     column.Geometry.Width = SelectedModel.Columns[index].Geometry.Width;
-                    //column.WidthResult = SelectedModel.Columns[index].Geometry.Width;
                 }
                 index = SelectedModel.SelectedModelColumns[0].Index;
             }
@@ -856,17 +872,62 @@ namespace AvaloniaTemplate.Services
             for (int i = index; i < SelectedModel.Columns.Count; i++)
             {
                 SelectedModel.Columns[i].Geometry.PositionX = posX;
-                //SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
                 for (int j = 0; j < SelectedModel.Rows.Count; j++)
                 {
                     SelectedModel.Rows[j].Cells[i].Geometry.PositionX = posX;
-                    //SelectedModel.Rows[j].Cells[i].Right = SelectedModel.Rows[j].Cells[i].PositionX + SelectedModel.Rows[j].Cells[i].Width;
                     posX = SelectedModel.Rows[j].Cells[i].Geometry.Right;
                 }
                 posX = SelectedModel.Columns[i].Geometry.Right;
             }
+        }
+        #endregion
 
-            //UpdateLayoutFrameColumns(SelectedModel);
+        #region Обновить вертикальные позиции после изменения размеров строк
+        /// <summary>
+        /// Обновить вертикальные позиции после изменения размеров строк
+        /// </summary>
+        /// <param name="index"></param>
+        private void UpdateVerticalPosition(int index)
+        {
+            if (SelectedModel.Rows[index].IsHeader)
+            {
+                foreach (var row in SelectedModel.SelectedModelRows)
+                {
+                    row.Geometry.Height = SelectedModel.Rows[index].Geometry.Height;
+                }
+                index = SelectedModel.SelectedModelRows[0].Index;
+            }
+
+            var posY = SelectedModel.Rows[index].Geometry.PositionY;
+            for (int i = index; i < SelectedModel.Rows.Count; i++)
+            {
+                SelectedModel.Rows[i].Geometry.PositionY = posY;
+                for (int j = 0; j < SelectedModel.Rows[i].Cells.Count; j++)
+                    SelectedModel.Rows[i].Cells[j].Geometry.PositionY = posY;
+
+                posY = SelectedModel.Rows[i].Geometry.Bottom;
+            }
+
+
+            //if (SelectedModel.Columns[index].IsHeader)
+            //{
+            //    foreach (var column in SelectedModel.SelectedModelColumns)
+            //    {
+            //        column.Geometry.Width = SelectedModel.Columns[index].Geometry.Width;
+            //    }
+            //    index = SelectedModel.SelectedModelColumns[0].Index;
+            //}
+            //var posX = SelectedModel.Columns[index].Geometry.PositionX;
+            //for (int i = index; i < SelectedModel.Columns.Count; i++)
+            //{
+            //    SelectedModel.Columns[i].Geometry.PositionX = posX;
+            //    for (int j = 0; j < SelectedModel.Rows.Count; j++)
+            //    {
+            //        SelectedModel.Rows[j].Cells[i].Geometry.PositionX = posX;
+            //        posX = SelectedModel.Rows[j].Cells[i].Geometry.Right;
+            //    }
+            //    posX = SelectedModel.Columns[i].Geometry.Right;
+            //}
         }
         #endregion
 
@@ -1011,7 +1072,7 @@ namespace AvaloniaTemplate.Services
             var posY = y - RowHeightDefault * 10;
 
             SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(col
-                => col.Geometry.PositionX >= posX && col.Geometry.Right <= viewWidth)];
+                => col.Geometry.PositionX >= posX && col.Geometry.Right <= viewWidth)?.ToList()];
 
 
             //SelectedModel.RowsVisible.Clear();
@@ -1021,7 +1082,7 @@ namespace AvaloniaTemplate.Services
             foreach (var row in SelectedModel.RowsVisible)
             {
                 row.CellsVisible = [.. row.Cells.Where(cell
-                => cell.Geometry.PositionX >= posX && cell.Geometry.Right <= viewWidth)];
+                => cell.Geometry.PositionX >= posX && cell.Geometry.Right <= viewWidth)?.ToList()];
             }
         }
     }
