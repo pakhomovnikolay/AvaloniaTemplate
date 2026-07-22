@@ -1,14 +1,11 @@
 using Avalonia;
-using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
-using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,6 +18,7 @@ public class PresenterCells : BaseTemplatedControl
     private SpreadsheetPanel presenter;
     private readonly List<ModelPresentationCell> presenters = [];
 
+
     static PresenterCells()
     {
         ModelProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
@@ -28,6 +26,8 @@ public class PresenterCells : BaseTemplatedControl
         PositionYProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.UpdateTransform());
         ScaleProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
     }
+
+
 
     #region Источник данных
     public static readonly StyledProperty<ModelTable> ModelProperty =
@@ -235,6 +235,10 @@ public class PresenterCells : BaseTemplatedControl
         if (Model is not { } || Model.Rows.Count <= 0 || Model.Rows.FirstOrDefault(r => r.Cells.Count > 0) is not { })
             return;
 
+
+
+
+        // Panel PART_RootPanel
         RebuildContent();
     }
     protected override void OnPointerPressed(PointerPressedEventArgs e)

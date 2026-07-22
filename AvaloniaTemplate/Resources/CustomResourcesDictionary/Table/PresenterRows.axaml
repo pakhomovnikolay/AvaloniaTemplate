@@ -26,15 +26,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
                         Child="{TemplateBinding Content}"
-                        >
-                    <!--<ContentPresenter x:Name="PART_ContentPresenter"
-                                      Content="{TemplateBinding Content}"
-                                      Foreground="{TemplateBinding Foreground}"
-                                      FontFamily="{TemplateBinding FontFamily}"
-                                      FontSize="{TemplateBinding FontSize}"
-                                      FontWeight="{TemplateBinding FontWeight}"
-                                      />-->
-                </Border>
+                        />
             </ControlTemplate>
         </Setter>
     </ControlTheme>

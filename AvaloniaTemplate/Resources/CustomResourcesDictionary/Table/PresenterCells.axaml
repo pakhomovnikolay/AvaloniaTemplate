@@ -23,17 +23,13 @@
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="Template">
             <ControlTemplate>
-                <Border BorderThickness="{TemplateBinding BorderThickness}"
-                        BorderBrush="{TemplateBinding BorderBrush}"
-                        Background="{TemplateBinding Background}"
-                        Child="{TemplateBinding Content}"
-                        >
-                    <!--<Panel x:Name="PART_RootPanel">
-                        <ContentPresenter x:Name="PART_ContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          />
-                    </Panel>-->
-                </Border>
+                <Panel x:Name="PART_RootPanel">
+                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            Child="{TemplateBinding Content}"
+                            />
+                </Panel>
             </ControlTemplate>
         </Setter>
     </ControlTheme>

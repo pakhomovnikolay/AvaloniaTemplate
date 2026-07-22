@@ -12,18 +12,35 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterColumns : BaseTemplatedControl
 {
-    private bool IsMousePressed;
-    private readonly TranslateTransform transform = new();
-    private SpreadsheetPanel presenter;
-    private readonly List<ModelPresentationColumn> presenters = [];
+    #region Свойства класса
+    /// <summary>
+    /// Состояние нажатой ЛКМ
+    /// </summary>
+    private bool IsMousePressed { get; set; }
 
+    /// <summary>
+    /// Элемент перемещения панели
+    /// </summary>
+    private TranslateTransform Transform { get; } = new();
+
+    /// <summary>
+    /// Панель представления данных
+    /// </summary>
+    private SpreadsheetPanel Presenter { get; } = new();
+
+    /// <summary>
+    /// Коллекция панелей представления данных
+    /// </summary>
+    private List<ModelPresentationColumn> Presenters { get; } = [];
+    #endregion
+
+    #region Статический констуктор класса
+    /// <summary>
+    /// Статический констуктор класса
+    /// </summary>
     static PresenterColumns()
-    {
-        ModelProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
-        PositionXProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
-        PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
-        ScaleProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.RebuildContent());
-    }
+        => AddClassHandlers();
+    #endregion
 
     #region Контент
     public static readonly StyledProperty<object?> ContentProperty =
@@ -115,8 +132,8 @@ public class PresenterColumns : BaseTemplatedControl
     /// </summary>
     private void UpdateTransform()
     {
-        transform.Y = PositionY;
-        transform.X = -PositionX;
+        Transform.Y = PositionY;
+        Transform.X = -PositionX;
         UpdateVisibleContent();
     }
     #endregion
@@ -137,9 +154,10 @@ public class PresenterColumns : BaseTemplatedControl
     /// </summary>
     private void RebuildContent()
     {
-        presenter = InitializeContent();
-        presenter.RenderTransform = transform;
-        Content = presenter;
+        InitializeContent();
+        Presenter.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+        Presenter.RenderTransform = Transform;
+        Content = Presenter;
         Model.UpdateGeometryColumnsFinished += OnUpdateGeometryCellsFinished;
     }
     #endregion
@@ -149,19 +167,16 @@ public class PresenterColumns : BaseTemplatedControl
     /// Инициализация контента
     /// </summary>
     /// <returns></returns>
-    private SpreadsheetPanel InitializeContent()
+    private void InitializeContent()
     {
-        presenters.Clear();
-        presenter?.Children.Clear();
-        var panel = new SpreadsheetPanel();
-        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+        Presenters.Clear();
+        Presenter?.Children.Clear();
         foreach (var column in Model?.ColumnsVisible)
         {
             var presenter = CreateModelPresentationColumn(column);
-            presenters.Add(presenter);
-            panel.Children.Add(presenter);
+            Presenters.Add(presenter);
+            Presenter.Children.Add(presenter);
         }
-        return panel;
     }
     #endregion
 
@@ -173,18 +188,18 @@ public class PresenterColumns : BaseTemplatedControl
     {
         for (int i = 0; i < Model?.ColumnsVisible.Count; i++)
         {
-            if (i >= presenters.Count)
+            if (i >= Presenters.Count)
             {
                 var col = CreateModelPresentationColumn(Model?.ColumnsVisible[i]);
-                presenters.Add(col);
-                presenter.Children.Add(col);
+                Presenters.Add(col);
+                Presenter.Children.Add(col);
             }
             else
             {
-                presenters[i].ItemSource = Model?.ColumnsVisible[i];
+                Presenters[i].ItemSource = Model?.ColumnsVisible[i];
             }
         }
-        presenter.InvalidateArrange();
+        Presenter.InvalidateArrange();
     }
     #endregion
 
@@ -202,6 +217,24 @@ public class PresenterColumns : BaseTemplatedControl
         };
     #endregion
 
+    #region Метод создания обработчиков событий
+    /// <summary>
+    /// Метод создания обработчиков событий
+    /// </summary>
+    private static void AddClassHandlers()
+    {
+        ModelProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.InitializeContent());
+        PositionXProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
+        PositionYProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.UpdateTransform());
+        ScaleProperty.Changed.AddClassHandler<PresenterColumns>((x, _) => x.InitializeContent());
+    }
+    #endregion
+
+    #region Обработка события применения шаблона
+    /// <summary>
+    /// Обработка события применения шаблона
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -210,6 +243,13 @@ public class PresenterColumns : BaseTemplatedControl
 
         RebuildContent();
     }
+    #endregion
+
+    #region Обработка события нажатия КМ
+    /// <summary>
+    /// Обработка события нажатия КМ
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
@@ -218,17 +258,35 @@ public class PresenterColumns : BaseTemplatedControl
 
         IsMousePressed = true;
     }
+    #endregion
+
+    #region Обработка события отпускания КМ
+    /// <summary>
+    /// Обработка события отпускания КМ
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
+        if (!IsMousePressed)
+            return;
+
         base.OnPointerReleased(e);
         IsMousePressed = false;
     }
+    #endregion
+
+    #region Обработка события перемещения казателя мыши на панеле представления
+    /// <summary>
+    /// Обработка события перемещения казателя мыши на панеле представления
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPointerMoved(PointerEventArgs e)
     {
         base.OnPointerMoved(e);
         if (!IsMousePressed)
             return;
 
-        Model?.ColumnsPointerMovedEvent(presenter, e);
+        Model?.ColumnsPointerMovedEvent(Presenter, e);
     }
+    #endregion
 }

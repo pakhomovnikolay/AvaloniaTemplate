@@ -1,8 +1,6 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:base="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Base"
                     xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table"
-                    xmlns:models="using:AvaloniaTemplate.Models.SourceTable.Model"
                     >
     
     <Design.PreviewWith>
@@ -28,45 +26,7 @@
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
                         Child="{TemplateBinding Content}"
-                        >
-
-
-                    <!--<base:SpreadsheetPanel Zoom="{Binding Scale, RelativeSource={RelativeSource TemplatedParent}}"
-                                           x:DataType="models:ModelColumn"
-                                           >
-                        --><!--<ContentPresenter x:Name="PART_ContentPresenter"
-
-                                          Content="{TemplateBinding Content}"
-                                          />--><!--
-
-
-
-                        --><!--<ContentPresenter x:Name="PART_ContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          >
-                            <ContentPresenter.ContentTemplate>
-                                <DataTemplate DataType="models:ModelColumn">
-                                    <Border Background="{Binding CellStyle.Background}"
-                                            BorderThickness="1"
-                                            BorderBrush="White"
-
-                                            >
-                                        <TextBlock Text="{Binding Header}"
-                                                   />
-                                    </Border>
-                                </DataTemplate>
-                            </ContentPresenter.ContentTemplate>
-                        </ContentPresenter>--><!--
-                    </base:SpreadsheetPanel>-->
-
-
-
-                    <!--<Panel x:Name="PART_RootPanel">
-                        <ContentPresenter x:Name="PART_ContentPresenter"
-                                          Content="{TemplateBinding Content}"
-                                          />
-                    </Panel>-->
-                </Border>
+                        />
             </ControlTemplate>
         </Setter>
     </ControlTheme>
