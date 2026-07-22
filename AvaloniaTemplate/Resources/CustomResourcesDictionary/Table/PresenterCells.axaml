@@ -26,12 +26,13 @@
                 <Border BorderThickness="{TemplateBinding BorderThickness}"
                         BorderBrush="{TemplateBinding BorderBrush}"
                         Background="{TemplateBinding Background}"
+                        Child="{TemplateBinding Content}"
                         >
-                    <Panel x:Name="PART_RootPanel">
+                    <!--<Panel x:Name="PART_RootPanel">
                         <ContentPresenter x:Name="PART_ContentPresenter"
                                           Content="{TemplateBinding Content}"
                                           />
-                    </Panel>
+                    </Panel>-->
                 </Border>
             </ControlTemplate>
         </Setter>

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace AvaloniaTemplate.Models.Table.Model
+namespace AvaloniaTemplate.Models.SourceTable.Model
 {
     public class ModelTable : ObservableObject
     {
@@ -22,7 +22,7 @@ namespace AvaloniaTemplate.Models.Table.Model
         /// <summary>
         /// Событие изменения размера колонки
         /// </summary>
-        public Action<Orientation, double, double> ColumnDragStartedChange;
+        public Action<Orientation, double, double> DragStartedChange;
         #endregion
 
         #region Событие завершения изменения размера колонки
@@ -32,6 +32,13 @@ namespace AvaloniaTemplate.Models.Table.Model
         public Action<Orientation, ModelColumn> ColumnDragCompletedChange;
         #endregion
 
+        #region Событие завершения изменения размера строки
+        /// <summary>
+        /// Событие завершения изменения размера строки
+        /// </summary>
+        public Action<Orientation, ModelRow> RowDragCompletedChange;
+        #endregion
+
         #region События двойного клика по разделителю колонки
         /// <summary>
         /// События двойного клика по разделителю колонки
@@ -39,8 +46,15 @@ namespace AvaloniaTemplate.Models.Table.Model
         public Action<ModelColumn> ColumnSplitterDoubleTappedChange;
         #endregion
 
+        #region События двойного клика по разделителю колонки
+        /// <summary>
+        /// События двойного клика по разделителю колонки
+        /// </summary>
+        public Action UpdateGeometryCellsFinished;
+        #endregion
 
-        
+
+
 
         #region Конструктор
         /// <summary>
@@ -53,6 +67,12 @@ namespace AvaloniaTemplate.Models.Table.Model
             SelectorColumns.SelectedChangedItems += OnSelectedColumnsChanged;
             SelectorColumns.MultiSelectedChangedItem += OnMultiSelectedColumnChanged;
             SelectorColumns.SelectedAreaChanged += OnSelectedColumnAreaChanged;
+
+            SelectorRows = new SelectionService<ModelRow>(() => Rows, x => x.Index);
+            //SelectorRows.SelectedChangedItem += OnSelectedColumnChanged;
+            //SelectorRows.SelectedChangedItems += OnSelectedColumnsChanged;
+            //SelectorRows.MultiSelectedChangedItem += OnMultiSelectedColumnChanged;
+            //SelectorRows.SelectedAreaChanged += OnSelectedColumnAreaChanged;
         }
         #endregion
 
@@ -260,6 +280,18 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Коллекция видимых колонок
+        private ObservableCollection<ModelColumn> columnsVisible = [];
+        /// <summary>
+        /// Коллекция видимых колонок
+        /// </summary>
+        public ObservableCollection<ModelColumn> ColumnsVisible
+        {
+            get => columnsVisible;
+            set => SetProperty(ref columnsVisible, value);
+        }
+        #endregion
+
         #region Выбранная колонка
         private ModelColumn selectedModelColumn;
         /// <summary>
@@ -293,6 +325,18 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             get => rows;
             set => SetProperty(ref rows, value);
+        }
+        #endregion
+
+        #region Коллекция видимых строк
+        private ObservableCollection<ModelRow> rowsVisible = [];
+        /// <summary>
+        /// Коллекция видимых строк
+        /// </summary>
+        public ObservableCollection<ModelRow> RowsVisible
+        {
+            get => rowsVisible;
+            set => SetProperty(ref rowsVisible, value);
         }
         #endregion
 
@@ -394,13 +438,71 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
-        #region Установить выбранную колонку
+        #region Обновить размеры текущего элемента
         /// <summary>
-        /// Установить выбранную колонку
+        /// Обновить размеры текущего элемента
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="delta"></param>
+        public void Resize(ModelColumn column, double delta)
+        {
+            column.Geometry.Width += delta;
+            var posX = column.Geometry.Right;
+            Columns.Where(x => x.Index > column.Index)?
+                .ToList()?
+                .ForEach(x =>
+                {
+                    x.Geometry.PositionX = posX;
+                    posX = x.Geometry.Right;
+                });
+        }
+
+        /// <summary>
+        /// Обновить размеры текущего элемента
+        /// </summary>
+        /// <param name="column"></param>
+        /// <param name="delta"></param>
+        public void Resize(ModelRow row, double delta)
+        {
+            row.Geometry.Height += delta;
+            var posY = row.Geometry.Bottom;
+            Rows.Where(x => x.Index > row.Index)?
+                .ToList()?
+                .ForEach(x =>
+                {
+                    x.Geometry.PositionY = posY;
+                    posY = x.Geometry.Bottom;
+                });
+        }
+        #endregion
+
+        #region Обновить позиционирование ячеек
+        /// <summary>
+        /// Обновить позиционирование ячеек
+        /// </summary>
+        public void UpdateGeometryCells()
+        {
+            foreach (var row in Rows)
+            {
+                foreach (var cell in row.Cells)
+                {
+                    cell.Geometry.Width = Columns[cell.ColumnIndex].Geometry.Width;
+                    cell.Geometry.PositionX = Columns[cell.ColumnIndex].Geometry.PositionX;
+                    cell.Geometry.Height = row.Geometry.Height;
+                    cell.Geometry.PositionY = row.Geometry.PositionY;
+                }
+            }
+            UpdateGeometryCellsFinished?.Invoke();
+        } 
+        #endregion
+
+        #region Установить выбранный элемент
+        /// <summary>
+        /// Установить выбранный элемент
         /// </summary>
         /// <param name="e"></param>
         /// <param name="item"></param>
-        public void SetSelectedColumn(PointerPressedEventArgs e, ModelColumn item)
+        public void SetSelected(PointerPressedEventArgs e, ModelColumn item)
         {
             if (!e.Properties.IsLeftButtonPressed || item is not { })
                 return;
@@ -408,6 +510,21 @@ namespace AvaloniaTemplate.Models.Table.Model
             CurrentIndex.IsEqaulColumn(item.Index);
             CurrentIndex.Column = item.Index;
             SelectorColumns.SetSelected(e, item);
+        }
+
+        /// <summary>
+        /// Установить выбранный элемент
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="item"></param>
+        public void SetSelected(PointerPressedEventArgs e, ModelRow item)
+        {
+            if (!e.Properties.IsLeftButtonPressed || item is not { })
+                return;
+
+            CurrentIndex.IsEqaulRow(item.Index);
+            CurrentIndex.Row = item.Index;
+            SelectorRows.SetSelected(e, item);
         }
         #endregion
 
@@ -438,8 +555,15 @@ namespace AvaloniaTemplate.Models.Table.Model
         /// Установить фокус
         /// </summary>
         /// <param name="item"></param>
-        public void SetFocusColumn(ModelColumn item)
+        public void SetFocus(ModelColumn item)
             => SelectorColumns.SetFocus(item);
+
+        /// <summary>
+        /// Установить фокус
+        /// </summary>
+        /// <param name="item"></param>
+        public void SetFocus(ModelRow item)
+            => SelectorRows.SetFocus(item);
         #endregion
 
         #region Снять фокус
@@ -447,8 +571,15 @@ namespace AvaloniaTemplate.Models.Table.Model
         /// Снять фокус
         /// </summary>
         /// <param name="item"></param>
-        public void ResetFocusColumn(ModelColumn item)
+        public void ResetFocus(ModelColumn item)
             => SelectorColumns.ResetFocus(item);
+
+        /// <summary>
+        /// Снять фокус
+        /// </summary>
+        /// <param name="item"></param>
+        public void ResetFocus(ModelRow item)
+            => SelectorRows.ResetFocus(item);
         #endregion
 
         #region Событие изменения текущей колонки
@@ -591,9 +722,9 @@ namespace AvaloniaTemplate.Models.Table.Model
                 int mid = (left + right) / 2;
                 var col = Columns[mid];
 
-                if (posX < col.PositionX)
+                if (posX < col.Geometry.PositionX)
                     right = mid - 1;
-                else if (posX > col.PositionX + col.Width)
+                else if (posX > col.Geometry.Right)
                     left = mid + 1;
                 else
                     return mid;

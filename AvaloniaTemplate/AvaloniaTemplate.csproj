@@ -28,23 +28,4 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Resources\CustomResourcesDictionary\ButtonTextPosition.axaml.cs">
-      <DependentUpon>ButtonTextPosition.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\CustomResourcesDictionary\DropDownPicker.axaml.cs">
-      <DependentUpon>DropDownPicker.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\CustomResourcesDictionary\FontStyleToolkit.axaml.cs">
-      <DependentUpon>FontStyleToolkit.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\CustomResourcesDictionary\HorizontalTabStrip.axaml.cs">
-      <DependentUpon>HorizontalTabStrip.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructures\Commands\UserCommands\" />
-  </ItemGroup>
 </Project>

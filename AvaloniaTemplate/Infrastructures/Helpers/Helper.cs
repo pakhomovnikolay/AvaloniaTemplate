@@ -11,6 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -315,6 +316,76 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 Orientation = orientation,
                 Spacing = spacing
             };
+        #endregion
+
+        #region Получить границы из строк
+        /// <summary>
+        /// Получить границы из строк
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="top"></param>
+        /// <param name="right"></param>
+        /// <param name="bottom"></param>
+        /// <returns></returns>
+        public static Thickness GetThickness(string left, string top, string right, string bottom)
+        {
+            _ = int.TryParse(left, out var thicknessLeft);
+            _ = int.TryParse(top, out var thicknessTop);
+            _ = int.TryParse(right, out var thicknessRight);
+            _ = int.TryParse(bottom, out var thicknessBottom);
+
+            return new(thicknessLeft, thicknessTop, thicknessRight, thicknessBottom);
+        }
+        #endregion
+
+        #region Получить шрифт из текста
+        /// <summary>
+        /// Получить шрифт из текста
+        /// </summary>
+        /// <param name="font"></param>
+        /// <returns></returns>
+        public static FontFamily GetFontFamily(string font)
+        {
+            return string.IsNullOrWhiteSpace(font)
+                ? FontFamilyHelper.FontDefault
+                : FontFamilyHelper.FontFamilies?.FirstOrDefault(x => x.Name == font) ?? new(font);
+        }
+        #endregion
+
+        #region Получить расположение по горизонтали из текста
+        /// <summary>
+        /// Получить расположение по горизонтали из текста
+        /// </summary>
+        /// <param name="font"></param>
+        /// <returns></returns>
+        public static HorizontalAlignment GetHorizontalAlignment(string alignment)
+        {
+            return alignment.ToLower() switch
+            {
+                "left" => HorizontalAlignment.Left,
+                "center" => HorizontalAlignment.Center,
+                "right" => HorizontalAlignment.Right,
+                _ => HorizontalAlignment.Stretch,
+            };
+        }
+        #endregion
+
+        #region Получить расположение по вертикали из текста
+        /// <summary>
+        /// Получить расположение по вертикали из текста
+        /// </summary>
+        /// <param name="font"></param>
+        /// <returns></returns>
+        public static VerticalAlignment GetVerticalAlignment(string alignment)
+        {
+            return alignment.ToLower() switch
+            {
+                "top" => VerticalAlignment.Top,
+                "center" => VerticalAlignment.Center,
+                "bottom" => VerticalAlignment.Bottom,
+                _ => VerticalAlignment.Stretch,
+            };
+        }
         #endregion
     }
 }

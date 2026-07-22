@@ -10,7 +10,7 @@ using Avalonia.Layout;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using System;
 using System.Collections;

@@ -1,16 +1,18 @@
-﻿using AvaloniaTemplate.Models.Table.Base.Interfaces;
+﻿using Avalonia;
+using Avalonia.Layout;
+using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaTemplate.Models.Table.Base
+namespace AvaloniaTemplate.Models.SourceTable.Base
 {
-    public class ModelCellStyle : ObservableObject, IModelCellStyle
+    public class TableCellStyle : ObservableObject
     {
         #region Цвет заднего фона
-        private string background;
+        private IBrush background;
         /// <summary>
         /// Цвет заднего фона
         /// </summary>
-        public string Background
+        public IBrush Background
         {
             get => background;
             set => SetProperty(ref background, value);
@@ -18,11 +20,11 @@ namespace AvaloniaTemplate.Models.Table.Base
         #endregion
 
         #region Цвет переднего фона
-        private string foreground;
+        private IBrush foreground;
         /// <summary>
         /// Цвет переднего фона
         /// </summary>
-        public string Foreground
+        public IBrush Foreground
         {
             get => foreground;
             set => SetProperty(ref foreground, value);
@@ -30,11 +32,11 @@ namespace AvaloniaTemplate.Models.Table.Base
         #endregion
 
         #region Цвет границ
-        private string borderBrush;
+        private IBrush borderBrush;
         /// <summary>
         /// Цвет границ
         /// </summary>
-        public string BorderBrush
+        public IBrush BorderBrush
         {
             get => borderBrush;
             set => SetProperty(ref borderBrush, value);
@@ -42,11 +44,11 @@ namespace AvaloniaTemplate.Models.Table.Base
         #endregion
 
         #region Шрифт
-        private string fontFamily;
+        private FontFamily fontFamily;
         /// <summary>
         /// Шрифт
         /// </summary>
-        public string FontFamily
+        public FontFamily FontFamily
         {
             get => fontFamily;
             set => SetProperty(ref fontFamily, value);
@@ -65,27 +67,27 @@ namespace AvaloniaTemplate.Models.Table.Base
         }
         #endregion
 
-        #region Полужирный
-        private bool bold;
+        #region Толщина шрифта
+        private FontWeight currentFontWeight;
         /// <summary>
-        /// Полужирный
+        /// Толщина шрифта
         /// </summary>
-        public bool IsBold
+        public FontWeight CurrentFontWeight
         {
-            get => bold;
-            set => SetProperty(ref bold, value);
+            get => currentFontWeight;
+            set => SetProperty(ref currentFontWeight, value);
         }
         #endregion
 
-        #region Курсивный
-        private bool italic;
+        #region Стиль шрифта
+        private FontStyle currentFontStyle;
         /// <summary>
-        /// Курсивный
+        /// Стиль шрифта
         /// </summary>
-        public bool IsItalic
+        public FontStyle CurrentFontStyle
         {
-            get => italic;
-            set => SetProperty(ref italic, value);
+            get => currentFontStyle;
+            set => SetProperty(ref currentFontStyle, value);
         }
         #endregion
 
@@ -101,60 +103,24 @@ namespace AvaloniaTemplate.Models.Table.Base
         }
         #endregion
 
-        #region Стиль нижний границы
-        private string borderBottomStyle;
+        #region Стиль границ
+        private Thickness borderThickness;
         /// <summary>
-        /// Стиль нижний границы
+        /// Стиль границ
         /// </summary>
-        public string BorderBottomStyle
+        public Thickness BorderThickness
         {
-            get => borderBottomStyle;
-            set => SetProperty(ref borderBottomStyle, value);
-        }
-        #endregion
-
-        #region Стиль верхней границы
-        private string borderTopStyle;
-        /// <summary>
-        /// Стиль верхней границы
-        /// </summary>
-        public string BorderTopStyle
-        {
-            get => borderTopStyle;
-            set => SetProperty(ref borderTopStyle, value);
-        }
-        #endregion
-
-        #region Стиль левой границы
-        private string borderLeftStyle;
-        /// <summary>
-        /// Стиль левой границы
-        /// </summary>
-        public string BorderLeftStyle
-        {
-            get => borderLeftStyle;
-            set => SetProperty(ref borderLeftStyle, value);
-        }
-        #endregion
-
-        #region Стиль правой границы
-        private string borderRightStyle;
-        /// <summary>
-        /// Стиль правой границы
-        /// </summary>
-        public string BorderRightStyle
-        {
-            get => borderRightStyle;
-            set => SetProperty(ref borderRightStyle, value);
+            get => borderThickness;
+            set => SetProperty(ref borderThickness, value);
         }
         #endregion
 
         #region Горизонтальное положение контента
-        private string horizontalContentAlignment;
+        private HorizontalAlignment horizontalContentAlignment;
         /// <summary>
         /// Горизонтальное положение контента
         /// </summary>
-        public string HorizontalContentAlignment
+        public HorizontalAlignment HorizontalContentAlignment
         {
             get => horizontalContentAlignment;
             set => SetProperty(ref horizontalContentAlignment, value);
@@ -162,11 +128,11 @@ namespace AvaloniaTemplate.Models.Table.Base
         #endregion
 
         #region Вертикальное положение контента
-        private string verticalContentAlignment;
+        private VerticalAlignment verticalContentAlignment;
         /// <summary>
         /// Вертикальное положение контента
         /// </summary>
-        public string VerticalContentAlignment
+        public VerticalAlignment VerticalContentAlignment
         {
             get => verticalContentAlignment;
             set => SetProperty(ref verticalContentAlignment, value);

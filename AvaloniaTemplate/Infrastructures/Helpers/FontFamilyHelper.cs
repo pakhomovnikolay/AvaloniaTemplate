@@ -31,7 +31,7 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
         /// <summary>
         /// Шрифт по умолчнию
         /// </summary>
-        public static FontFamily FontDefault { get; } = FontManager.Current.DefaultFontFamily ?? "";
+        public static FontFamily FontDefault { get; } = AppFontDefault ?? FontManager.Current.DefaultFontFamily ??  "";
         #endregion
 
         #region Шрифт приложения по умолчнию

@@ -1,21 +1,15 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Primitives;
-using Avalonia.Controls.Shapes;
-using Avalonia.Controls.Templates;
 using Avalonia.Data;
-using Avalonia.Data.Converters;
 using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
-using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
+using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
 using System;
-using System.Collections.ObjectModel;
-using System.Globalization;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
@@ -23,9 +17,8 @@ public class PresenterRows : BaseTemplatedControl
 {
     private static bool IsMousePressed;
     private readonly TranslateTransform transform = new();
-    private static readonly IBrush SeparatorBrush = Brushes.WhiteSmoke;
-    private static readonly double WidthSeparator = 1;
-    private ContentPresenter presenter;
+    private SpreadsheetPanel presenter;
+    private readonly List<ModelPresentationRow> presenters = [];
 
     static PresenterRows()
     {
@@ -63,48 +56,17 @@ public class PresenterRows : BaseTemplatedControl
     public event Action<Control?, PointerEventArgs> PointerMovedEventChange;
     #endregion
 
-    #region Конвертер заднего фона из строки
+    #region Контент
+    public static readonly StyledProperty<object?> ContentProperty =
+        AvaloniaProperty.Register<PresenterRows, object?>(nameof(Content));
+
     /// <summary>
-    /// Конвертер заднего фона из строки
+    /// Контент
     /// </summary>
-    private sealed class BackgroundConverter : IValueConverter
+    public object? Content
     {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            IBrush color = Brushes.Transparent;
-            if (value is string brush)
-                color = Helper.GetColor(brush);
-
-            return color;
-        }
-
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-            => BindingOperations.DoNothing;
-    }
-    #endregion
-
-    #region Конвертер высоты в GridLength
-    /// <summary>
-    /// Конвертер высоты в GridLength
-    /// </summary>
-    private sealed class RowDefinitionHeightConverter : IValueConverter
-    {
-        public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            var gridLength = new GridLength();
-            if (value is double height)
-                gridLength = new GridLength(height, GridUnitType.Pixel);
-
-            return gridLength;
-        }
-
-        public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
-        {
-            if (value is GridLength length)
-                return length.Value;
-
-            return BindingOperations.DoNothing;
-        }
+        get => GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
     #endregion
 
@@ -133,20 +95,6 @@ public class PresenterRows : BaseTemplatedControl
     {
         get => GetValue(SelectedItemProperty);
         set => SetValue(SelectedItemProperty, value);
-    }
-    #endregion
-
-    #region Контент
-    public static readonly StyledProperty<object?> ContentProperty =
-        AvaloniaProperty.Register<PresenterRows, object?>(nameof(Content));
-
-    /// <summary>
-    /// Контент
-    /// </summary>
-    public object? Content
-    {
-        get => GetValue(ContentProperty);
-        set => SetValue(ContentProperty, value);
     }
     #endregion
 
@@ -184,7 +132,11 @@ public class PresenterRows : BaseTemplatedControl
     /// </summary>
     private void RebuildContent()
     {
-        Content = InitializeContent();
+        presenter = InitializeContent();
+        presenter.RenderTransform = transform;
+        Content = presenter;
+
+        //Content = InitializeContent();
     }
     #endregion
 
@@ -202,71 +154,6 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
-    #region Инициализация контента
-    /// <summary>
-    /// Инициализация контента
-    /// </summary>
-    /// <returns></returns>
-    private SpreadsheetPanel InitializeContent()
-    {
-        var panel = new SpreadsheetPanel();
-        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
-
-        foreach (var column in Model?.Rows)
-        {
-            panel.Children.Add(new ContentPresenter()
-            {
-                Content = column,
-                ContentTemplate = new FuncDataTemplate<ModelRow>((item, _) =>
-                {
-                    return new Panel() { Children = { GetItemControl(item), GetViewwSplitter() } };
-                })
-            });
-        }
-        return panel;
-
-        //var rows = ItemsSource.Select(x =>
-        //{
-        //    var row = new RowDefinition();
-        //    row.Bind(
-        //        RowDefinition.HeightProperty,
-        //        new Binding(nameof(x.Height))
-        //        {
-        //            Source = x,
-        //            Mode = BindingMode.TwoWay,
-        //            Converter = new RowDefinitionHeightConverter()
-        //        });
-        //    return row;
-        //})?.ToList();
-        //rows.Add(new RowDefinition(5, GridUnitType.Pixel));
-
-        //var grid = new Grid() { RowDefinitions = [.. rows] };
-        //foreach (var item in ItemsSource)
-        //{
-        //    var splitter = GetGridSplitter();
-        //    var separator = GetViewwSplitter();
-        //    var border = new Border()
-        //    {
-        //        DataContext = item,
-        //        Child = GetItemControl(item)
-        //    };
-        //    border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new BackgroundConverter() });
-        //    border.Bind(IsVisibleProperty, new Binding(nameof(item.IsVisible)));
-        //    border.PointerPressed += (_, e) => OnSelectedItemChanged(e, item);
-        //    border.PointerEntered += (_, _) => SetFocusItem?.Invoke(item);
-        //    border.PointerExited += (_, _) => ResetFocusItem?.Invoke(item);
-
-        //    Grid.SetRow(border, item.Index);
-        //    Grid.SetRow(splitter, item.Index);
-        //    Grid.SetRow(separator, item.Index);
-        //    grid.Children.Add(border);
-        //    grid.Children.Add(splitter);
-        //    grid.Children.Add(separator);
-        //}
-        //return grid;
-    }
-    #endregion
-
     #region Обновить положение
     /// <summary>
     /// Обновить положение
@@ -275,67 +162,45 @@ public class PresenterRows : BaseTemplatedControl
     {
         transform.Y = -PositionY;
         transform.X = PositionX;
+        UpdateVisibleContent();
     }
     #endregion
 
-    #region Получить разделитель
+    #region Инициализация контента
     /// <summary>
-    /// Получить разделитель
+    /// Инициализация контента
     /// </summary>
     /// <returns></returns>
-    private static GridSplitter GetGridSplitter()
+    private SpreadsheetPanel InitializeContent()
     {
-        return new GridSplitter
+        presenters.Clear();
+        presenter?.Children.Clear();
+        var panel = new SpreadsheetPanel();
+        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+        foreach (var row in Model?.RowsVisible)
         {
-            Background = Brushes.Transparent,
-            BorderThickness = new(0),
-            ResizeDirection = GridResizeDirection.Rows,
-            VerticalAlignment = VerticalAlignment.Bottom,
-            MinWidth = 0,
-            Height = 5,
-            Margin = new(0, 0, 0, 0)
-        };
+            var presenter = new ModelPresentationRow() { Model = Model, ItemSource = row };
+            presenters.Add(presenter);
+            panel.Children.Add(presenter);
+        }
+        return panel;
     }
     #endregion
 
-    #region Получить визуальный разделитель
+    #region Обновить визуальное представление данных
     /// <summary>
-    /// Получить визуальный разделитель
+    /// Обновить визуальное представление данных
     /// </summary>
-    /// <returns></returns>
-    private static Rectangle GetViewwSplitter()
+    private void UpdateVisibleContent()
     {
-        return new Rectangle
+        for (int i = 0; i < Model?.RowsVisible.Count; i++)
         {
-            Fill = SeparatorBrush,
-            Height = WidthSeparator,
-            Margin = new(0, 0, 0, 0),
-            IsHitTestVisible = false,
-            VerticalAlignment = VerticalAlignment.Bottom
-        };
-    }
-    #endregion
+            if (i >= presenters.Count)
+                break;
 
-    #region Поулчить элемент управления
-    /// <summary>
-    /// Поулчить элемент управления
-    /// </summary>
-    /// <param name="Item"></param>
-    /// <returns></returns>
-    private static TextBlock GetItemControl(ModelRow Item)
-    {
-        var control = new TextBlock()
-        {
-            DataContext = Item,
-            Text = Item.Header,
-            HorizontalAlignment = HorizontalAlignment.Center,
-            VerticalAlignment = VerticalAlignment.Center,
-            FontFamily = Item.CellStyle.FontFamily,
-            FontSize = Item.CellStyle.FontSize,
-            FontWeight = Item.CellStyle.IsBold ? FontWeight.Bold : FontWeight.Normal
-        };
-        control.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground"));
-        return control;
+            presenters[i].ItemSource = Model?.RowsVisible[i];
+        }
+        presenter.InvalidateArrange();
     }
     #endregion
 
@@ -354,24 +219,31 @@ public class PresenterRows : BaseTemplatedControl
     }
     #endregion
 
+    #region Изменение размера колонки
+    /// <summary>
+    /// Изменение размера колонки
+    /// </summary>
+    /// <param name="delta"></param>
+    /// <param name="item"></param>
+    private void OnDragDelta(double delta, double minHeight, ModelRow item)
+    {
+        var minDelta = 0.5;
+        if (Math.Abs(delta) < minDelta || item.Geometry.Height <= minHeight)
+            return;
+
+        Model.Resize(item, delta);
+        Model?.DragStartedChange?.Invoke(Orientation.Horizontal, item.Geometry.PositionY, item.Geometry.Bottom);
+        presenter.InvalidateArrange();
+    }
+    #endregion
+
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
         if (Model is not { } || Model.Rows.Count <= 0)
             return;
 
-        presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
-        presenter.RenderTransform = transform;
-
-        Content ??= InitializeContent();
-
-        //base.OnApplyTemplate(e);
-        //if (ItemsSource is not { } || ItemsSource.Count <= 0)
-        //    return;
-
-        //presenter = FindPartById<ContentPresenter>(e, "PART_ContentPresenter");
-        //presenter.RenderTransform = transform;
-        //Content ??= InitializeContent();
+        RebuildContent();
     }
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {

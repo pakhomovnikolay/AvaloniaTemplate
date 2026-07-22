@@ -1,8 +1,8 @@
 ﻿using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models.Table.Base;
+using AvaloniaTemplate.Models.SourceTable.Base;
 
-namespace AvaloniaTemplate.Models.Table.Model
+namespace AvaloniaTemplate.Models.SourceTable.Model
 {
     public class ModelColumn : ModelBase<ModelColumn>
     {
@@ -79,18 +79,6 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             get => isHeader;
             set => SetProperty(ref isHeader, value);
-        }
-        #endregion
-
-        #region Результирующее занчение ширины
-        private double widthResult;
-        /// <summary>
-        /// Результирующее занчение ширины
-        /// </summary>
-        public double WidthResult
-        {
-            get => widthResult;
-            set => SetProperty(ref widthResult, value);
         }
         #endregion
 

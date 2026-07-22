@@ -1,9 +1,9 @@
 ﻿using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models.Table.Base;
+using AvaloniaTemplate.Models.SourceTable.Base;
 using System.Collections.ObjectModel;
 
-namespace AvaloniaTemplate.Models.Table.Model
+namespace AvaloniaTemplate.Models.SourceTable.Model
 {
     public class ModelRow : ModelBase<ModelRow>
     {
@@ -59,6 +59,18 @@ namespace AvaloniaTemplate.Models.Table.Model
         }
         #endregion
 
+        #region Коллекция видимых ячеек
+        private ObservableCollection<ModelCell> cellsVisible = [];
+        /// <summary>
+        /// Коллекция видимых ячеек
+        /// </summary>
+        public ObservableCollection<ModelCell> CellsVisible
+        {
+            get => cellsVisible;
+            set => SetProperty(ref cellsVisible, value);
+        }
+        #endregion
+
         #region Выбрана
         private bool selected;
         /// <summary>
@@ -92,18 +104,6 @@ namespace AvaloniaTemplate.Models.Table.Model
         {
             get => isHeader;
             set => SetProperty(ref isHeader, value);
-        }
-        #endregion
-
-        #region Результирующее занчение ширины
-        private double heightResult;
-        /// <summary>
-        /// Результирующее занчение ширины
-        /// </summary>
-        public double HeightResult
-        {
-            get => heightResult;
-            set => SetProperty(ref heightResult, value);
         }
         #endregion
 

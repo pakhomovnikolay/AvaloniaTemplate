@@ -1,0 +1,34 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model"
+                    >
+    <Design.PreviewWith>
+        <StackPanel Width="400" Spacing="10">
+            <StackPanel Background="{DynamicResource SystemRegionBrush}">
+                <controls:ModelPresentationCell />
+            </StackPanel>
+        </StackPanel>
+    </Design.PreviewWith>
+
+    <ControlTheme x:Key="{x:Type controls:ModelPresentationCell}"
+                  TargetType="controls:ModelPresentationCell"
+                  >
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel x:Name="PART_RootPanel"
+                       >
+                    <Border x:Name="PART_Border"
+                            DataContext="{TemplateBinding ItemSource}"
+                            BorderThickness="0 0 1 1"
+                            BorderBrush="LightGray"
+                            >
+                        <TextBlock x:Name="PART_ViewPanel"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   />
+                    </Border>
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

@@ -1,11 +1,12 @@
 ﻿using Avalonia;
 using Avalonia.Controls;
 using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.Table.Base;
-using AvaloniaTemplate.Models.Table.Base.Interfaces;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Base;
+using AvaloniaTemplate.Models.SourceTable.Base.Interfaces;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Xml.Linq;
 
 namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Base
@@ -33,52 +34,12 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Base
                 if (child.DataContext is ISpreadsheetElement item)
                 {
                     child.Arrange(new Rect(
-                        item.PositionX * Zoom,
-                        item.PositionY * Zoom,
-                        item.Width * Zoom,
-                        item.Height * Zoom));
+                        item.Geometry.PositionX * Zoom,
+                        item.Geometry.PositionY * Zoom,
+                        item.Geometry.Width * Zoom,
+                        item.Geometry.Height * Zoom));
                 }
             }
-
-            //foreach (var child in Children)
-            //{
-            //    if (child.DataContext is IList<ISpreadsheetElement> list)
-            //    {
-            //        child.Arrange(new Rect(
-            //            list.PositionX * Zoom,
-            //            list.PositionY * Zoom,
-            //            list.Width * Zoom,
-            //            list.Height * Zoom));
-
-            //        //                    if (list.DataContext is ISpreadsheetElement item) {
-
-            //        //{
-
-            //        //                    }
-
-            //        //foreach (var item in list)
-            //        //{
-            //        //    if (item is ISpreadsheetElement element)
-            //        //    {
-            //        //        child.Arrange(new Rect(
-            //        //            element.PositionX * Zoom,
-            //        //            element.PositionY * Zoom,
-            //        //            element.Width * Zoom,
-            //        //            element.Height * Zoom));
-            //        //    }
-            //        //}
-            //    }
-
-
-            //    //if (child.DataContext is ISpreadsheetElement item)
-            //    //{
-            //    //    child.Arrange(new Rect(
-            //    //        item.PositionX * Zoom,
-            //    //        item.PositionY * Zoom,
-            //    //        item.Width * Zoom,
-            //    //        item.Height * Zoom));
-            //    //}
-            //}
             return finalSize;
         }
     }

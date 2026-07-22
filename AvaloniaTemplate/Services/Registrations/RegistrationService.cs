@@ -1,4 +1,4 @@
-﻿using AvaloniaTemplate.Models.Table.Model;
+﻿using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Input;
 using AvaloniaTemplate.Models;
-using AvaloniaTemplate.Models.Table.Base.Interfaces;
+using AvaloniaTemplate.Models.SourceTable.Base.Interfaces;
 using AvaloniaTemplate.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -161,10 +161,7 @@ namespace AvaloniaTemplate.Services
         /// <param name="r"></param>
         /// <returns></returns>
         public bool Intersects(T c, Rect r)
-        {
-            var rect = new Rect(c.PositionX, c.PositionY, c.Width, c.Height);
-            return rect.Intersects(r);
-        }
+            => c.Geometry.Bounds.Intersects(r);
         #endregion
 
         #region Построить область выделения
@@ -178,10 +175,10 @@ namespace AvaloniaTemplate.Services
             if (cells is not { } || !cells.Any())
                 return new();
 
-            var left = cells.Min(c => c.PositionX);
-            var top = cells.Min(c => c.PositionY);
-            var right = cells.Max(c => c.PositionX + c.Width);
-            var bottom = cells.Max(c => c.PositionY + c.Height);
+            var left = cells.Min(c => c.Geometry.PositionX);
+            var top = cells.Min(c => c.Geometry.PositionY);
+            var right = cells.Max(c => c.Geometry.Right);
+            var bottom = cells.Max(c => c.Geometry.Bottom);
 
             return new Rect(left, top, right - left, bottom - top);
         }

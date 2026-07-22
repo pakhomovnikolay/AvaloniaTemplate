@@ -1,0 +1,48 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model"
+                    >
+    <Design.PreviewWith>
+        <StackPanel Width="400" Spacing="10">
+            <controls:ModelPresentationColumn />
+        </StackPanel>
+    </Design.PreviewWith>
+    
+    <ControlTheme x:Key="{x:Type controls:ModelPresentationColumn}"
+                  TargetType="controls:ModelPresentationColumn"
+                  >
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Panel x:Name="PART_RootPanel"
+                       >
+                    <Border x:Name="PART_Border"
+                            DataContext="{TemplateBinding ItemSource}"
+                            BorderThickness="1"
+                            BorderBrush="Transparent"
+                            >
+                        <TextBlock x:Name="PART_ViewPanel"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   />
+                    </Border>
+                    <GridSplitter BorderThickness="1"
+                                  BorderBrush="Transparent"
+                                  Background="Transparent"
+                                  ResizeDirection="Columns"
+                                  HorizontalAlignment="Right"
+                                  MinWidth="0"
+                                  Width="10"
+                                  Margin="0"
+                                  />
+
+                    <Rectangle Fill="WhiteSmoke"
+                               Width="1"
+                               Margin="0"
+                               HorizontalAlignment="Right"
+                               IsHitTestVisible="False"
+                               />
+                </Panel>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

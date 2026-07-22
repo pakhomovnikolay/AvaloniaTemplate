@@ -50,7 +50,11 @@
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterRows.axaml"/>
 				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/PresenterCells.axaml"/>
 
-				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/PresenterCells.axaml"/>-->
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/Model/ModelPresentationColumn.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/Model/ModelPresentationRow.axaml"/>
+				<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/Table/Model/ModelPresentationCell.axaml"/>
+				
+				<!--<ResourceInclude Source="avares://AvaloniaTemplate/Resources/CustomResourcesDictionary/ModelPresentationRow.axaml"/>-->
 			</ResourceDictionary.MergedDictionaries>
 		</ResourceDictionary>
 	</Application.Resources>

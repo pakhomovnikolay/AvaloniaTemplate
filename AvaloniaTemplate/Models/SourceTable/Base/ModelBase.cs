@@ -1,7 +1,7 @@
-﻿using AvaloniaTemplate.Models.Table.Base.Interfaces;
+﻿using AvaloniaTemplate.Models.SourceTable.Base.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace AvaloniaTemplate.Models.Table.Base
+namespace AvaloniaTemplate.Models.SourceTable.Base
 {
     public class ModelBase<T> : ObservableObject, IModelBase<T>
     {
@@ -17,76 +17,11 @@ namespace AvaloniaTemplate.Models.Table.Base
         }
         #endregion
 
-        #region Ширина
-        private double width;
+        #region Геометрия позиционирования
         /// <summary>
-        /// Ширина
+        /// Геометрия позиционирования
         /// </summary>
-        public double Width
-        {
-            get => width;
-            set => SetProperty(ref width, value);
-        }
-        #endregion
-
-        #region Высота
-        private double height;
-        /// <summary>
-        /// Высота
-        /// </summary>
-        public double Height
-        {
-            get => height;
-            set => SetProperty(ref height, value);
-        }
-        #endregion
-
-        #region Положение по оси X
-        private double positionX;
-        /// <summary>
-        /// Положение по оси X
-        /// </summary>
-        public double PositionX
-        {
-            get => positionX;
-            set => SetProperty(ref positionX, value);
-        }
-        #endregion
-
-        #region Положение по оси Y
-        private double positionY;
-        /// <summary>
-        /// Положение по оси Y
-        /// </summary>
-        public double PositionY
-        {
-            get => positionY;
-            set => SetProperty(ref positionY, value);
-        }
-        #endregion
-
-        #region Координата крайней точки по оси X
-        private double right;
-        /// <summary>
-        /// Координата крайней точки по оси X
-        /// </summary>
-        public double Right
-        {
-            get => right;
-            set => SetProperty(ref right, value);
-        }
-        #endregion
-
-        #region Координата крайней точки по оси Y
-        private double bottom;
-        /// <summary>
-        /// Координата крайней точки по оси Y
-        /// </summary>
-        public double Bottom
-        {
-            get => bottom;
-            set => SetProperty(ref bottom, value);
-        }
+        public Geometry Geometry { get; init; } = new();
         #endregion
 
         #region Видимость

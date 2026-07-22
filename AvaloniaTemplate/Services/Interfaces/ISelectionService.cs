@@ -1,6 +1,6 @@
 ﻿using Avalonia;
 using Avalonia.Input;
-using AvaloniaTemplate.Models.Table.Base.Interfaces;
+using AvaloniaTemplate.Models.SourceTable.Base.Interfaces;
 using System;
 using System.Collections.Generic;
 

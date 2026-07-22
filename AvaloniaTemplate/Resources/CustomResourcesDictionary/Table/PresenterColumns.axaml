@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:base="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Base"
                     xmlns:controls="using:AvaloniaTemplate.Resources.CustomResourcesDictionary.Table"
-                    xmlns:models="using:AvaloniaTemplate.Models.Table.Model"
+                    xmlns:models="using:AvaloniaTemplate.Models.SourceTable.Model"
                     >
     
     <Design.PreviewWith>

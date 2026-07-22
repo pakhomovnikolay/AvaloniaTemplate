@@ -1,6 +1,6 @@
-﻿using AvaloniaTemplate.Models.Table.Base;
+﻿using AvaloniaTemplate.Models.SourceTable.Base;
 
-namespace AvaloniaTemplate.Models.Table.Model
+namespace AvaloniaTemplate.Models.SourceTable.Model
 {
     public class ModelCell : ModelBase<ModelCell>
     {

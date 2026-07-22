@@ -852,7 +852,8 @@ public class DualListSelector : BaseTemplatedControl
         AddHandler(DragDrop.DropEvent, DropHandler, handledEventsToo: true);
 
         var itemType = SourceItems?.Cast<object>()?.FirstOrDefault()?.GetType();
-        accessorFactory = App.GetService<IPropertyAccessorFactory>().Create(itemType, SorterBy);
+        if (!Design.IsDesignMode)
+            accessorFactory = App.GetService<IPropertyAccessorFactory>().Create(itemType, SorterBy);
 
 
         if (SourceSelectedItem is not { })

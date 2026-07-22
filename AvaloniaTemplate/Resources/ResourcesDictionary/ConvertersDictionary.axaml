@@ -4,7 +4,10 @@
                     >
     
     <!-- Add Resources Here -->
+    <conv:ColorStringToSolidColorBrushConverter x:Key= "ColorStringToSolidColorBrushConverter"/>
     <conv:Converter_CurrentTextAlignmentToBool x:Key= "Converter_CurrentTextAlignmentToBool"/>
+    <conv:FontWeightBoldConverter x:Key= "FontWeightBoldConverter"/>
+    <conv:FontFamilyNameConverter x:Key= "FontFamilyNameConverter"/>
 
-    <!--<conv:Converter_CurrentTextAlignmentToBool x:Key= "Converter_CurrentTextAlignmentToBool"/>-->
+    <!--<conv:FontFamilyNameConverter x:Key= "FontFamilyNameConverter"/>-->
 </ResourceDictionary>

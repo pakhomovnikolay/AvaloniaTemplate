@@ -100,7 +100,6 @@ public class SelectorScrollBar : BaseTemplatedControl
     }
     #endregion
 
-
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -108,6 +107,6 @@ public class SelectorScrollBar : BaseTemplatedControl
         if (FindPartById<ScrollBar>(e, "PART_ScrollBar") is not { } scroll)
             return;
 
-        scroll.ValueChanged += (_, e) => ValueChanged?.Invoke(Value);
+        scroll.ValueChanged += (_, e) => ValueChanged?.Invoke(scroll.Value);
     }
 }

@@ -2,14 +2,16 @@
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.LayoutControls;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace AvaloniaTemplate.Services
@@ -20,8 +22,8 @@ namespace AvaloniaTemplate.Services
         private const double ColumnHeightDefault = 30;
         private const double RowWidthDefault = 30;
         private const double RowHeightDefault = 20;
-        private const int ColumnCountDefault = 50;
-        private const int RowCountDefault = 45;
+        private const int ColumnCountDefault = 200;
+        private const int RowCountDefault = 150;
 
         #region Сервис обработки состояний
         /// <summary>
@@ -69,6 +71,7 @@ namespace AvaloniaTemplate.Services
 
             ScrollBarService.PositionChange += (x, y) =>
             {
+                UpdateColumnsVisible(x, y, ConnectorService.WindowWidth, ConnectorService.WindowHeight);
                 SelectedModel.PositionX = x;
                 SelectedModel.PositionY = y;
             };
@@ -258,9 +261,11 @@ namespace AvaloniaTemplate.Services
                 Rows = [.. CreateModelRows(0, RowCountDefault)]
             };
 
-            model.ColumnDragStartedChange += UpdateLayoutDrag;
+            model.DragStartedChange += UpdateLayoutDrag;
             model.ColumnDragCompletedChange += UpdateLayoutDragComplete;
             model.ColumnSplitterDoubleTappedChange += SetSizeColumnToContent;
+
+            model.RowDragCompletedChange += UpdateLayoutDragComplete;
             //UpdateLayoutFrameColumns(model);
             return model;
         }
@@ -310,16 +315,16 @@ namespace AvaloniaTemplate.Services
                 Id = header,
                 Index = index,
                 Header = header,
-                Width = ColumnWidthDefault,
-                WidthResult = ColumnWidthDefault,
-                Height = ColumnHeightDefault,
-                PositionX = index * ColumnWidthDefault,
-                PositionY = 0,
-                Right = index * ColumnWidthDefault + ColumnWidthDefault,
-                Bottom = ColumnHeightDefault,
                 IsVisible = true,
                 IsSelected = false,
                 IsFocused = false,
+                Geometry = new Models.Geometry()
+                {
+                    Width = ColumnWidthDefault,
+                    Height = ColumnHeightDefault,
+                    PositionX = index * ColumnWidthDefault,
+                    PositionY = 0,
+                },
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
@@ -401,16 +406,17 @@ namespace AvaloniaTemplate.Services
                 Id = header,
                 Index = index,
                 Header = header,
-                Width = RowWidthDefault,
-                Height = RowHeightDefault,
-                PositionX = 0,
-                PositionY = index * RowHeightDefault,
-                Right = RowWidthDefault,
-                Bottom = index * RowHeightDefault + RowHeightDefault,
                 IsVisible = true,
                 IsSelected = false,
                 IsFocused = false,
                 Cells = [.. CreateModelCells(index, 0, ColumnCountDefault)],
+                Geometry = new Models.Geometry()
+                {
+                    Width = RowWidthDefault,
+                    Height = RowHeightDefault,
+                    PositionX = 0,
+                    PositionY = index * RowHeightDefault,
+                },
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
@@ -492,18 +498,19 @@ namespace AvaloniaTemplate.Services
             return new()
             {
                 Id = $"{GetHeaderColumn(indexCol + 1)}{indexRow}",
-                Width = ColumnWidthDefault,
-                Height = RowHeightDefault,
-                PositionX = indexCol * ColumnWidthDefault,
-                PositionY = indexRow * RowHeightDefault,
-                Right = indexCol * ColumnWidthDefault + ColumnWidthDefault,
-                Bottom = indexRow * RowHeightDefault + RowHeightDefault,
                 IsVisible = true,
                 IsSelected = false,
                 IsFocused = false,
                 ColumnIndex = indexCol,
                 RowIndex = indexRow,
                 RawValue = "",
+                Geometry = new Models.Geometry()
+                {
+                    Width = ColumnWidthDefault,
+                    Height = RowHeightDefault,
+                    PositionX = indexCol * ColumnWidthDefault,
+                    PositionY = indexRow * RowHeightDefault,
+                },
                 CellStyle = new()
                 {
                     Background = Helper.GetColor(Brushes.Transparent),
@@ -638,12 +645,31 @@ namespace AvaloniaTemplate.Services
         {
             //ScrollBarService.UpdateHorizontalScrollBarValue(SelectedModel.PositionX);
             //ScrollBarService.UpdateVerticalScrollBarValue(SelectedModel.PositionY);
+
+
+            UpdateColumnsVisible(
+                SelectedModel.PositionX,
+                SelectedModel.PositionY,
+                ConnectorService.WindowWidth,
+                ConnectorService.WindowHeight
+                );
+
             ScrollBarService.UpdateViewport(
                  ConnectorService.WindowWidth,
                  ConnectorService.WindowHeight,
                  SelectedModel.Width,
                  SelectedModel.Height
                  );
+
+
+
+            //SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(x => )];
+
+
+
+            //SelectedModel.PositionX = x;
+            //SelectedModel.PositionY = y;
+
         }
         #endregion
 
@@ -659,8 +685,8 @@ namespace AvaloniaTemplate.Services
             DragArea.Area ??= new();
             DragArea.Area.BorderBrush = Brushes.Black;
             DragArea.Area.Flow = orientation;
-            DragArea.Area.Start = GetRect(orientation, positionStart - ScrollBarService.HorizontalScrollBarValue);
-            DragArea.Area.End = GetRect(orientation, positionEnd - ScrollBarService.HorizontalScrollBarValue);
+            DragArea.Area.Start = GetRect(orientation, positionStart);
+            DragArea.Area.End = GetRect(orientation, positionEnd);
             DragArea.InvalidateVisual();
 
 
@@ -694,16 +720,40 @@ namespace AvaloniaTemplate.Services
         /// Изменение размера завершено
         /// </summary>
         /// <param name="orientation"></param>
-        /// <param name="ittem"></param>
+        /// <param name="item"></param>
         public void UpdateLayoutDragComplete(Orientation orientation, ModelColumn item)
         {
-            item.WidthResult = item.Width;
-            SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Width);
-            if (orientation == Orientation.Vertical)
-                UpdateHorizontalPosition(item.Index);
+            SelectedModel.UpdateGeometryCells();
 
-            DragArea.Area = null;
-            DragArea.InvalidateVisual();
+            //UpdateGeometryCells()
+
+
+
+            //item.WidthResult = item.Geometry.Width;
+            //SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
+            //if (orientation == Orientation.Vertical)
+            //    UpdateHorizontalPosition(item.Index);
+
+            //DragArea.Area = null;
+            //DragArea.InvalidateVisual();
+        }
+
+        /// <summary>
+        /// Изменение размера завершено
+        /// </summary>
+        /// <param name="orientation"></param>
+        /// <param name="item"></param>
+        public void UpdateLayoutDragComplete(Orientation orientation, ModelRow item)
+        {
+            SelectedModel.UpdateGeometryCells();
+
+            //item.WidthResult = item.Geometry.Width;
+            //SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
+            //if (orientation == Orientation.Vertical)
+            //    UpdateHorizontalPosition(item.Index);
+
+            //DragArea.Area = null;
+            //DragArea.InvalidateVisual();
         }
         #endregion
 
@@ -748,11 +798,11 @@ namespace AvaloniaTemplate.Services
         /// <param name="item"></param>
         public void SetSizeColumnToContent(ModelColumn item)
         {
-            var width = Helper.MeasureTextWidth(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
-            item.Width = width;
-            item.WidthResult = width;
+            //var width = Helper.MeasureTextWidth(item.Header, item.CellStyle.FontSize, item.CellStyle.FontFamily);
+            //item.Geometry.Width = width;
+            //item.WidthResult = width;
 
-            UpdateHorizontalPosition(item.Index);
+            //UpdateHorizontalPosition(item.Index);
         } 
         #endregion
 
@@ -773,13 +823,13 @@ namespace AvaloniaTemplate.Services
                 case Orientation.Vertical:
                     var width = 1d;
                     double height = ConnectorService.WindowHeight;
-                    rect = new(position, 0, width, height);
+                    rect = new(position - ScrollBarService.VerticalScrollBarValue, 0, width, height);
                     break;
 
                 case Orientation.Horizontal:
                     width = ConnectorService.WindowWidth;
                     height = 1d;
-                    rect = new(0, position, width, height);
+                    rect = new(0, position - ScrollBarService.HorizontalScrollBarValue, width, height);
                     break;
             }
             return rect;
@@ -797,23 +847,23 @@ namespace AvaloniaTemplate.Services
             {
                 foreach (var column in SelectedModel.SelectedModelColumns)
                 {
-                    column.Width = SelectedModel.Columns[index].Width;
-                    column.WidthResult = SelectedModel.Columns[index].Width;
+                    column.Geometry.Width = SelectedModel.Columns[index].Geometry.Width;
+                    //column.WidthResult = SelectedModel.Columns[index].Geometry.Width;
                 }
                 index = SelectedModel.SelectedModelColumns[0].Index;
             }
-            var posX = SelectedModel.Columns[index].PositionX;
+            var posX = SelectedModel.Columns[index].Geometry.PositionX;
             for (int i = index; i < SelectedModel.Columns.Count; i++)
             {
-                SelectedModel.Columns[i].PositionX = posX;
-                SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
+                SelectedModel.Columns[i].Geometry.PositionX = posX;
+                //SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
                 for (int j = 0; j < SelectedModel.Rows.Count; j++)
                 {
-                    SelectedModel.Rows[j].Cells[i].PositionX = posX;
-                    SelectedModel.Rows[j].Cells[i].Right = SelectedModel.Rows[j].Cells[i].PositionX + SelectedModel.Rows[j].Cells[i].Width;
-                    posX = SelectedModel.Rows[j].Cells[i].Right;
+                    SelectedModel.Rows[j].Cells[i].Geometry.PositionX = posX;
+                    //SelectedModel.Rows[j].Cells[i].Right = SelectedModel.Rows[j].Cells[i].PositionX + SelectedModel.Rows[j].Cells[i].Width;
+                    posX = SelectedModel.Rows[j].Cells[i].Geometry.Right;
                 }
-                posX = SelectedModel.Columns[i].Right;
+                posX = SelectedModel.Columns[i].Geometry.Right;
             }
 
             //UpdateLayoutFrameColumns(SelectedModel);
@@ -951,5 +1001,28 @@ namespace AvaloniaTemplate.Services
             //}
         }
         #endregion
+
+
+        private void UpdateColumnsVisible(double x, double y, double width, double height)
+        {
+            double viewWidth = x + width + ColumnWidthDefault * 10;
+            double viewHeight = y + height + RowHeightDefault * 20;
+            var posX = x - ColumnWidthDefault * 5;
+            var posY = y - RowHeightDefault * 10;
+
+            SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(col
+                => col.Geometry.PositionX >= posX && col.Geometry.Right <= viewWidth)];
+
+
+            //SelectedModel.RowsVisible.Clear();
+            SelectedModel.RowsVisible = [.. SelectedModel.Rows.Where(row
+                => row.Geometry.PositionY >= posY && row.Geometry.Bottom <= viewHeight)?.ToList()];
+
+            foreach (var row in SelectedModel.RowsVisible)
+            {
+                row.CellsVisible = [.. row.Cells.Where(cell
+                => cell.Geometry.PositionX >= posX && cell.Geometry.Right <= viewWidth)];
+            }
+        }
     }
 }

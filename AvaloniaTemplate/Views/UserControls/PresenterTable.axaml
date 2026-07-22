@@ -56,7 +56,6 @@
 								 PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
 								 PositionX="0"
 								 Scale="{Binding ZoomService.Scale}"
-								 helpers:PresenterRowsHelper.SelectedChangeControl="True"
 								 />
 
 			<!--CenterPanel-->
@@ -67,7 +66,7 @@
 				  >
 
 				<!--DataCells-->
-				<table:PresenterCells ItemsSource="{Binding TablesFactory.SelectedModel}"
+				<table:PresenterCells Model="{Binding TablesFactory.SelectedModel}"
 									  SelectedItem="{Binding TablesFactory.SelectedModel.SelectedModelCell}"
 									  PositionY="{Binding ScrollBarService.VerticalScrollBarValue}"
 									  PositionX="{Binding ScrollBarService.HorizontalScrollBarValue}"

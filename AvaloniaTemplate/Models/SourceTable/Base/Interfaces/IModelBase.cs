@@ -1,4 +1,4 @@
-﻿namespace AvaloniaTemplate.Models.Table.Base.Interfaces
+﻿namespace AvaloniaTemplate.Models.SourceTable.Base.Interfaces
 {
     public interface IModelBase<T> : ISpreadsheetElement
     {

@@ -36,7 +36,7 @@
                            Visibility="{TemplateBinding Visibility}"
                            AllowAutoHide="{TemplateBinding AllowAutoHide}"
                            CornerRadius="{TemplateBinding CornerRadius}"
-                           Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}}"
+                           Value="{Binding Value, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
                            />
             </ControlTemplate>
         </Setter>

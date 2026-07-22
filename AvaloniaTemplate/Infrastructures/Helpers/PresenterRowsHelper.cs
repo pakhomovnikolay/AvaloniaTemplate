@@ -2,7 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using AvaloniaTemplate.Models;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 using AvaloniaTemplate.Services;
 using AvaloniaTemplate.Services.Interfaces;
@@ -231,9 +231,9 @@ namespace AvaloniaTemplate.Infrastructures.Helpers
                 int mid = (top + bottom) / 2;
                 var row = TableFactory.SelectedModel.Rows[mid];
 
-                if (posY < row.PositionY)
+                if (posY < row.Geometry.PositionY)
                     bottom = mid - 1;
-                else if (posY > row.PositionY + row.Height)
+                else if (posY > row.Geometry.Bottom)
                     top = mid + 1;
                 else
                     return mid;

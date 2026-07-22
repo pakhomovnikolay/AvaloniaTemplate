@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using Avalonia.Layout;
 using AvaloniaTemplate.Models.LayoutControls;
-using AvaloniaTemplate.Models.Table.Model;
+using AvaloniaTemplate.Models.SourceTable.Model;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 

@@ -1,4 +1,4 @@
-﻿using AvaloniaTemplate.Models.Table.Model;
+﻿using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
 
@@ -88,7 +88,7 @@ namespace AvaloniaTemplate.ViewModels
                 if (SetProperty(ref windowWidth, value))
                 {
                     ConnectorService.WindowWidth = windowWidth;
-                    ScrollBarService.UpdateViewport(windowWidth, WindowHeight, TablesFactory.SelectedModel.Width, TablesFactory.SelectedModel.Height);
+                    TablesFactory.UpdateViewport();
                 }
             }
         }
