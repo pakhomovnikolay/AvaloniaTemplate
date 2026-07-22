@@ -85,7 +85,6 @@ public class PresenterCells : BaseTemplatedControl
     }
     #endregion
 
-
     #region Источник данных
     public static readonly StyledProperty<ModelTable> ModelProperty =
         AvaloniaProperty.Register<PresenterCells, ModelTable>(nameof(Model));
