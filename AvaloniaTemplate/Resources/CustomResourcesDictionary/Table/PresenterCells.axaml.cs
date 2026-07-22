@@ -188,7 +188,7 @@ public class PresenterCells : BaseTemplatedControl
     /// </summary>
     private void OnUpdateGeometryCellsFinished()
     {
-        presenter.InvalidateArrange();
+        UpdateVisibleContent();
     }
     #endregion
 
@@ -241,9 +241,16 @@ public class PresenterCells : BaseTemplatedControl
             for (int j = 0; j < Model?.ColumnsVisible.Count; j++)
             {
                 if (index >= presenters.Count)
-                    break;
-
-                presenters[index++].ItemSource = Model?.RowsVisible[i].CellsVisible[j];
+                {
+                    var cell = new ModelPresentationCell() { Model = Model, ItemSource = Model?.RowsVisible[i].CellsVisible[j] };
+                    presenters.Add(cell);
+                    presenter.Children.Add(cell);
+                }
+                else
+                {
+                    presenters[index].ItemSource = Model?.RowsVisible[i].CellsVisible[j];
+                }
+                index++;
             }
         }
         presenter.InvalidateArrange();

@@ -201,14 +201,14 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Высота окна
         /// </summary>
-        int WindowHeight { get; set; }
+        double WindowHeight { get; set; }
         #endregion
 
         #region Ширина окна
         /// <summary>
         /// Ширина окна
         /// </summary>
-        int WindowWidth { get; set; }
+        double WindowWidth { get; set; }
         #endregion
 
 

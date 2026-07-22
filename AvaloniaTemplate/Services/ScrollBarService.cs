@@ -6,8 +6,8 @@ namespace AvaloniaTemplate.Services
 {
     public class ScrollBarService : ObservableObject, IScrollBarService
     {
-        private const double verticalScrollStep = 25 * 3;
-        private const double horizontalScrollStep = 70 * 4;
+        private const double verticalScrollStep = 25 * 5;
+        private const double horizontalScrollStep = 70 * 3;
         private double verticalScrollBarOffset;
         private double horizontalScrollBarOffset;
 

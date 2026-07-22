@@ -1,4 +1,5 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
@@ -138,6 +139,16 @@ public class PresenterColumns : BaseTemplatedControl
     }
     #endregion
 
+    #region Обновление положений завершено
+    /// <summary>
+    /// Обновление положений завершено
+    /// </summary>
+    private void OnUpdateGeometryCellsFinished()
+    {
+        UpdateVisibleContent();
+    }
+    #endregion
+
     #region Пересобрать контент
     /// <summary>
     /// Пересобрать контент
@@ -147,6 +158,7 @@ public class PresenterColumns : BaseTemplatedControl
         presenter = InitializeContent();
         presenter.RenderTransform = transform;
         Content = presenter;
+        Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
     }
     #endregion
 
@@ -180,10 +192,15 @@ public class PresenterColumns : BaseTemplatedControl
         for (int i = 0; i < Model?.ColumnsVisible.Count; i++)
         {
             if (i >= presenters.Count)
-                break;
-            presenters[i].ItemSource = Model?.ColumnsVisible[i];
-            if (presenter.Children[i] is ModelPresentationColumn column)
-                column.ItemSource = Model?.ColumnsVisible[i];
+            {
+                var col = new ModelPresentationColumn() { Model = Model, ItemSource = Model?.ColumnsVisible[i] };
+                presenters.Add(col);
+                presenter.Children.Add(col);
+            }
+            else
+            {
+                presenters[i].ItemSource = Model?.ColumnsVisible[i];
+            }
         }
         presenter.InvalidateArrange();
     }

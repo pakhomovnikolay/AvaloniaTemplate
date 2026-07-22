@@ -135,8 +135,7 @@ public class PresenterRows : BaseTemplatedControl
         presenter = InitializeContent();
         presenter.RenderTransform = transform;
         Content = presenter;
-
-        //Content = InitializeContent();
+        Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
     }
     #endregion
 
@@ -162,6 +161,16 @@ public class PresenterRows : BaseTemplatedControl
     {
         transform.Y = -PositionY;
         transform.X = PositionX;
+        UpdateVisibleContent();
+    }
+    #endregion
+
+    #region Обновление положений завершено
+    /// <summary>
+    /// Обновление положений завершено
+    /// </summary>
+    private void OnUpdateGeometryCellsFinished()
+    {
         UpdateVisibleContent();
     }
     #endregion
@@ -196,9 +205,15 @@ public class PresenterRows : BaseTemplatedControl
         for (int i = 0; i < Model?.RowsVisible.Count; i++)
         {
             if (i >= presenters.Count)
-                break;
-
-            presenters[i].ItemSource = Model?.RowsVisible[i];
+            {
+                var row = new ModelPresentationRow() { Model = Model, ItemSource = Model?.RowsVisible[i] };
+                presenters.Add(row);
+                presenter.Children.Add(row);
+            }
+            else
+            {
+                presenters[i].ItemSource = Model?.RowsVisible[i];
+            }
         }
         presenter.InvalidateArrange();
     }

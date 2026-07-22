@@ -662,7 +662,7 @@ namespace AvaloniaTemplate.Services
                  );
 
 
-
+            SelectedModel?.UpdateGeometryCellsFinished?.Invoke();
             //SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(x => )];
 
 

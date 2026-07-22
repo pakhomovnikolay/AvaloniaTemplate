@@ -62,8 +62,8 @@ namespace AvaloniaTemplate.ViewModels
         #endregion
 
         #region Высота окна
-        private int windowHeight = 800;
-        public virtual int WindowHeight
+        private double windowHeight;
+        public double WindowHeight
         {
             get => windowHeight;
             set
@@ -79,8 +79,8 @@ namespace AvaloniaTemplate.ViewModels
         #endregion
 
         #region Ширина окна
-        private int windowWidth = 1600;
-        public virtual int WindowWidth
+        private double windowWidth;
+        public double WindowWidth
         {
             get => windowWidth;
             set

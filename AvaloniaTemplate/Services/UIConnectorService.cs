@@ -432,11 +432,11 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Высота окна
-        private int windowHeight = 800;
+        private double windowHeight;
         /// <summary>
         /// Высота окна
         /// </summary>
-        public virtual int WindowHeight
+        public double WindowHeight
         {
             get => windowHeight;
             set => SetProperty(ref windowHeight, value);
@@ -444,11 +444,11 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Ширина окна
-        private int windowWidth = 1600;
+        private double windowWidth;
         /// <summary>
         /// Ширина окна
         /// </summary>
-        public virtual int WindowWidth
+        public double WindowWidth
         {
             get => windowWidth;
             set => SetProperty(ref windowWidth, value);
