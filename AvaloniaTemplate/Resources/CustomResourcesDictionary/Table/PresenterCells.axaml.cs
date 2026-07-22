@@ -1,8 +1,10 @@
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
 using Avalonia.Media;
+using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
@@ -13,6 +15,7 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterCells : BaseTemplatedControl
 {
+    private readonly LayoutDragArea dragArea = new();
     private static bool IsMousePressed;
     private readonly TranslateTransform transform = new();
     private SpreadsheetPanel presenter;
@@ -145,6 +148,11 @@ public class PresenterCells : BaseTemplatedControl
         presenter.RenderTransform = transform;
         Content = presenter;
         Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
+        Model.DragAreaEvenChange += (arg) =>
+        {
+            dragArea.Area = arg;
+            dragArea.InvalidateVisual();
+        };
     }
     #endregion
 
@@ -235,10 +243,12 @@ public class PresenterCells : BaseTemplatedControl
         if (Model is not { } || Model.Rows.Count <= 0 || Model.Rows.FirstOrDefault(r => r.Cells.Count > 0) is not { })
             return;
 
+        var panel = FindPartById<Panel>(e, "PART_RootPanel");
+        panel.Children.Add(dragArea);
 
 
 
-        // Panel PART_RootPanel
+
         RebuildContent();
     }
     protected override void OnPointerPressed(PointerPressedEventArgs e)

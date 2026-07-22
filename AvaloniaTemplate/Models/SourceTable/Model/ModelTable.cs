@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
+using AvaloniaTemplate.Models.LayoutControls.Models;
 using AvaloniaTemplate.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
@@ -75,6 +76,13 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         public Action UpdateGeometryRowsFinished;
         #endregion
 
+
+        #region События обновления слоя DragArea
+        /// <summary>
+        /// События обновления слоя DragArea
+        /// </summary>
+        public Action<LayoutModelFrameDragArea> DragAreaEvenChange;
+        #endregion
 
         #region Конструктор
         /// <summary>

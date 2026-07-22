@@ -2,7 +2,6 @@
 using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Infrastructures.Helpers;
-using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
@@ -11,8 +10,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
-using System.Diagnostics;
 using System.Linq;
 
 namespace AvaloniaTemplate.Services
@@ -269,9 +266,6 @@ namespace AvaloniaTemplate.Services
 
             model.RowDragCompletedChange += UpdateLayoutDragComplete;
             model.RowSplitterDoubleTappedChange += SetSizeRowToContent;
-
-
-            //UpdateLayoutFrameColumns(model);
             return model;
         }
         #endregion
@@ -648,10 +642,6 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public void UpdateViewport()
         {
-            //ScrollBarService.UpdateHorizontalScrollBarValue(SelectedModel.PositionX);
-            //ScrollBarService.UpdateVerticalScrollBarValue(SelectedModel.PositionY);
-
-
             UpdateColumnsVisible(
                 SelectedModel.PositionX,
                 SelectedModel.PositionY,
@@ -670,14 +660,6 @@ namespace AvaloniaTemplate.Services
             SelectedModel?.UpdateGeometryColumnsFinished?.Invoke();
             SelectedModel?.UpdateGeometryRowsFinished?.Invoke();
             SelectedModel?.UpdateGeometryCellsFinished?.Invoke();
-
-            //SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(x => )];
-
-
-
-            //SelectedModel.PositionX = x;
-            //SelectedModel.PositionY = y;
-
         }
         #endregion
 
@@ -696,6 +678,7 @@ namespace AvaloniaTemplate.Services
             DragArea.Area.Start = GetRect(orientation, positionStart);
             DragArea.Area.End = GetRect(orientation, positionEnd);
             DragArea.InvalidateVisual();
+            SelectedModel.DragAreaEvenChange.Invoke(DragArea.Area);
 
             switch (orientation)
             {
@@ -724,17 +707,7 @@ namespace AvaloniaTemplate.Services
             SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
             UpdateViewport();
 
-            //UpdateGeometryCells()
-
-
-
-            //item.WidthResult = item.Geometry.Width;
-            //SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
-            //if (orientation == Orientation.Vertical)
-            //    UpdateHorizontalPosition(item.Index);
-
-            //DragArea.Area = null;
-            //DragArea.InvalidateVisual();
+            SelectedModel.DragAreaEvenChange.Invoke(null);
         }
 
         /// <summary>
@@ -751,13 +724,7 @@ namespace AvaloniaTemplate.Services
             SelectedModel.Height = SelectedModel.Rows.Sum(x => x.Geometry.Height);
             UpdateViewport();
 
-            //item.WidthResult = item.Geometry.Width;
-            //SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
-            //if (orientation == Orientation.Vertical)
-            //    UpdateHorizontalPosition(item.Index);
-
-            //DragArea.Area = null;
-            //DragArea.InvalidateVisual();
+            SelectedModel.DragAreaEvenChange.Invoke(null);
         }
         #endregion
 
@@ -996,7 +963,6 @@ namespace AvaloniaTemplate.Services
         //}
         #endregion
 
-
         #region Обновить сетку
         /// <summary>
         /// Обновить сетку
@@ -1074,8 +1040,6 @@ namespace AvaloniaTemplate.Services
             SelectedModel.ColumnsVisible = [.. SelectedModel.Columns.Where(col
                 => col.Geometry.PositionX >= posX && col.Geometry.Right <= viewWidth)?.ToList()];
 
-
-            //SelectedModel.RowsVisible.Clear();
             SelectedModel.RowsVisible = [.. SelectedModel.Rows.Where(row
                 => row.Geometry.PositionY >= posY && row.Geometry.Bottom <= viewHeight)?.ToList()];
 
