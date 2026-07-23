@@ -10,14 +10,17 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
 
 public class ModelPresentationCell : BaseTemplatedControl
 {
+    #region Статический конструктор класса
+    /// <summary>
+    /// Статический конструктор класса
+    /// </summary>
     static ModelPresentationCell()
-    {
-        ItemSourceProperty.Changed.AddClassHandler<ModelPresentationCell>((x, _) => x.DataContext = x.ItemSource);
-    }
+        => AddClassHandlers();
+    #endregion
 
     #region Источник данных
     public static readonly StyledProperty<ModelCell> ItemSourceProperty =
-        AvaloniaProperty.Register<ModelPresentationColumn, ModelCell>(nameof(ItemSource));
+        AvaloniaProperty.Register<ModelPresentationCell, ModelCell>(nameof(ItemSource));
 
     /// <summary>
     /// Источник данных
@@ -31,7 +34,7 @@ public class ModelPresentationCell : BaseTemplatedControl
 
     #region Модель данных
     public static readonly StyledProperty<ModelTable> ModelProperty =
-        AvaloniaProperty.Register<ModelPresentationColumn, ModelTable>(nameof(Model));
+        AvaloniaProperty.Register<ModelPresentationCell, ModelTable>(nameof(Model));
 
     /// <summary>
     /// Модель данных
@@ -43,36 +46,71 @@ public class ModelPresentationCell : BaseTemplatedControl
     }
     #endregion
 
-    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    #region Инициализация компонентов
+    /// <summary>
+    /// Инициализация компонентов
+    /// </summary>
+    private void InitializeComponents()
     {
-        base.OnApplyTemplate(e);
-
-        InitializeBorder(FindPartById<Border>(e, "PART_Border"));
-        InitializeViewPanel(FindPartById<TextBlock>(e, "PART_ViewPanel"));
+        InitializeBorder(FindPartById<Border>(CurrTemplateAppliedEventArgs, "PART_Border"));
+        InitializeViewPanel(FindPartById<TextBlock>(CurrTemplateAppliedEventArgs, "PART_ViewPanel"));
     }
+    #endregion
 
+    #region Инициализация границ элемента
+    /// <summary>
+    /// Инициализация границ элемента
+    /// </summary>
+    /// <param name="border"></param>
     private void InitializeBorder(Border border)
     {
         if (border is not { })
             return;
 
-        //border.Bind(DataContextProperty, new Binding(nameof(ItemSource)));
         border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new ColorStringToSolidColorBrushConverter() });
-        //border.Bind(IsVisibleProperty, new Binding("IsVisible"));
-        //border.PointerEntered += (_, _) => Model?.SetFocus(ItemSource);
-        //border.PointerExited += (_, _) => Model?.ResetFocus(ItemSource);
-        //border.PointerPressed += (_, e) => Model?.SetSelected(e, ItemSource);
+        border.Bind(IsVisibleProperty, new Binding("IsVisible"));
+        border.PointerPressed += (_, e) => Model?.SetSelected(e, ItemSource);
     }
+    #endregion
 
+    #region Инициализация панели отображения данных
+    /// <summary>
+    /// Инициализация панели отображения данных
+    /// </summary>
+    /// <param name="viewPanel"></param>
     private static void InitializeViewPanel(TextBlock viewPanel)
     {
         if (viewPanel is not { })
             return;
 
-        //viewPanel.Bind(TextBlock.TextProperty, new Binding("Header"));
+        viewPanel.Bind(TextBlock.TextProperty, new Binding("VisualValue"));
         viewPanel.Bind(TextBlock.FontFamilyProperty, new Binding("CellStyle.FontFamily") { Converter = new FontFamilyNameConverter() });
         viewPanel.Bind(TextBlock.FontSizeProperty, new Binding("CellStyle.FontSize"));
         viewPanel.Bind(TextBlock.FontWeightProperty, new Binding("CellStyle.IsBold") { Converter = new FontWeightBoldConverter() });
         viewPanel.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground") { Converter = new ColorStringToSolidColorBrushConverter() });
     }
+    #endregion
+
+    #region Метод создания обработчиков событий
+    /// <summary>
+    /// Метод создания обработчиков событий
+    /// </summary>
+    private static void AddClassHandlers()
+    {
+        ItemSourceProperty.Changed.AddClassHandler<ModelPresentationCell>((x, _) => x.DataContext = x.ItemSource);
+    }
+    #endregion
+
+    #region Обработка события применения шаблона
+    /// <summary>
+    /// Обработка события применения шаблона
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        SetTemplateAppliedEventArgs(e);
+        InitializeComponents();
+    }
+    #endregion
 }

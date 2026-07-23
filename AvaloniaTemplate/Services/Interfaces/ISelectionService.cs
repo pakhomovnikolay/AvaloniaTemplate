@@ -73,6 +73,13 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <param name="index"></param>
         void SetRangeSelected(int index);
+
+        /// <summary>
+        /// Выбрать диапазон текущих элементов
+        /// </summary>
+        /// <param name="currCol"></param>
+        /// <param name="currRow"></param>
+        void SetRangeSelected(int currCol, int currRow);
         #endregion
 
         #region Получить состояние нажатой клавиши Ctrl

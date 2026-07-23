@@ -11,7 +11,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         public ModelCell()
         {
             Owner = this;
-        } 
+        }
         #endregion
 
         #region Индекс колонки
@@ -47,6 +47,30 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         {
             get => rawValue;
             set => SetProperty(ref rawValue, value);
+        }
+        #endregion
+
+        #region Данные для отображения
+        private string visualValue;
+        /// <summary>
+        /// Данные для отображения
+        /// </summary>
+        public string VisualValue
+        {
+            get => visualValue;
+            set => SetProperty(ref visualValue, value);
+        }
+        #endregion
+
+        #region Сбросить статусы
+        /// <summary>
+        /// Сбросить статусы
+        /// </summary>
+        public void ResetStatus()
+        {
+            IsSelected = false;
+            IsFocused = false;
+            IsHeader = false;
         }
         #endregion
     }

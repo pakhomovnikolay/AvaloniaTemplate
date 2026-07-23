@@ -59,9 +59,9 @@ public class ModelPresentationRow : BaseTemplatedControl
         var splitter = FindPartById<GridSplitter>(CurrTemplateAppliedEventArgs, "PART_GridSplitter");
 
         splitter.DragStarted += (_, _) => Model?.DragStartedChange?.Invoke(Orientation.Horizontal, ItemSource.Geometry.PositionY, ItemSource.Geometry.Bottom);
-        splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.Y, splitter.Height, ItemSource);
         splitter.DragCompleted += (_, e) => Model?.RowDragCompletedChange?.Invoke(Orientation.Vertical, ItemSource);
         splitter.DoubleTapped += (_, e) => Model?.RowSplitterDoubleTappedChange?.Invoke(ItemSource);
+        splitter.DragDelta += (_, e) => OnDragDelta(e.Vector.Y, splitter.Height, ItemSource);
     }
     #endregion
 
@@ -110,7 +110,7 @@ public class ModelPresentationRow : BaseTemplatedControl
     private void OnDragDelta(double delta, double minHeight, ModelRow item)
     {
         var minDelta = 0.5;
-        if (Math.Abs(delta) < minDelta || item.Geometry.Height <= minHeight)
+        if (Math.Abs(delta) < minDelta || item.Geometry.Height <= minHeight && delta < 0)
             return;
 
         Model.Resize(item, delta);

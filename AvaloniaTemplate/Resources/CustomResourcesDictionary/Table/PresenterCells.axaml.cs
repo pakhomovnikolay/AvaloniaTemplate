@@ -3,8 +3,10 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Data;
 using Avalonia.Input;
+using Avalonia.Layout;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.LayoutControls;
+using AvaloniaTemplate.Models.LayoutControls.Models;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
@@ -15,29 +17,83 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table;
 
 public class PresenterCells : BaseTemplatedControl
 {
-    private readonly LayoutDragArea dragArea = new();
-    private static bool IsMousePressed;
-    private readonly TranslateTransform transform = new();
-    private SpreadsheetPanel presenter;
-    private readonly List<ModelPresentationCell> presenters = [];
+    #region Поля класса
+    private Rect? _start;
+    private Rect? _end;
+    private Rect? _selectedArea;
+    private List<Rect?>? _selectedAreas = [];
+    #endregion
 
+    #region Свойства класса
+    /// <summary>
+    /// Состояние нажатой ЛКМ
+    /// </summary>
+    private bool IsMousePressed { get; set; }
 
+    /// <summary>
+    /// Элемент перемещения панели
+    /// </summary>
+    private TranslateTransform Transform { get; } = new();
+
+    /// <summary>
+    /// Панель представления данных
+    /// </summary>
+    private SpreadsheetPanel Presenter { get; } = new();
+
+    /// <summary>
+    /// Коллекция панелей представления данных
+    /// </summary>
+    private List<ModelPresentationCell> Presenters { get; } = [];
+
+    /// <summary>
+    /// Цвет границ веделнной области
+    /// </summary>
+    private IBrush BorderBrushActiveArea { get; } = new SolidColorBrush(Color.FromRgb(170, 110, 110));
+
+    /// <summary>
+    /// Слой отображения области изменения размеров
+    /// </summary>
+    private LayoutDragArea DragArea { get; } = new() { ZIndex = 9, IsHitTestVisible = false };
+
+    /// <summary>
+    /// Слой отображения выделенной области
+    /// </summary>
+    private LayoutSelectedArea SelectedArea { get; } = new() { ZIndex = 8, IsHitTestVisible = false };
+
+    /// <summary>
+    /// Слой отображения выбранных элементов
+    /// </summary>
+    private LayoutActiveArea ActiveArea { get; } = new() { ZIndex = 7, Opacity = 0.3, IsHitTestVisible = false };
+    #endregion
+
+    #region Статический констуктор класса
+    /// <summary>
+    /// Статический констуктор класса
+    /// </summary>
     static PresenterCells()
+        => AddClassHandlers();
+    #endregion
+
+    #region Контент
+    public static readonly StyledProperty<object?> ContentProperty =
+        AvaloniaProperty.Register<PresenterCells, object?>(nameof(Content));
+
+    /// <summary>
+    /// Контент
+    /// </summary>
+    public object? Content
     {
-        ModelProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
-        PositionXProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.UpdateTransform());
-        PositionYProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.UpdateTransform());
-        ScaleProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
+        get => GetValue(ContentProperty);
+        set => SetValue(ContentProperty, value);
     }
+    #endregion
 
-
-
-    #region Источник данных
+    #region Модель данных
     public static readonly StyledProperty<ModelTable> ModelProperty =
         AvaloniaProperty.Register<PresenterCells, ModelTable>(nameof(Model));
 
     /// <summary>
-    /// Источник данных
+    /// Модель данных
     /// </summary>
     public ModelTable Model
     {
@@ -57,20 +113,6 @@ public class PresenterCells : BaseTemplatedControl
     {
         get => GetValue(SelectedItemProperty);
         set => SetValue(SelectedItemProperty, value);
-    }
-    #endregion
-
-    #region Контент
-    public static readonly StyledProperty<object?> ContentProperty =
-        AvaloniaProperty.Register<PresenterCells, object?>(nameof(Content));
-
-    /// <summary>
-    /// Контент
-    /// </summary>
-    public object? Content
-    {
-        get => GetValue(ContentProperty);
-        set => SetValue(ContentProperty, value);
     }
     #endregion
 
@@ -122,8 +164,8 @@ public class PresenterCells : BaseTemplatedControl
     /// </summary>
     private void UpdateTransform()
     {
-        transform.Y = -PositionY;
-        transform.X = -PositionX;
+        Transform.Y = -PositionY;
+        Transform.X = -PositionX;
         UpdateVisibleContent();
     }
     #endregion
@@ -144,15 +186,14 @@ public class PresenterCells : BaseTemplatedControl
     /// </summary>
     private void RebuildContent()
     {
-        presenter = InitializeContent();
-        presenter.RenderTransform = transform;
-        Content = presenter;
+        InitializeContent();
+        Presenter.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
+        Presenter.RenderTransform = Transform;
+        Content = Presenter;
         Model.UpdateGeometryCellsFinished += OnUpdateGeometryCellsFinished;
-        Model.DragAreaEvenChange += (arg) =>
-        {
-            dragArea.Area = arg;
-            dragArea.InvalidateVisual();
-        };
+        Model.DragAreaChangeEvent += OnDragAreaChange;
+        Model.ActiveAreaChangeEvent += OnActiveAreaChange;
+        Model.SelectedAreaChangeEvent += OnSelectedAreaChange;
     }
     #endregion
 
@@ -161,22 +202,16 @@ public class PresenterCells : BaseTemplatedControl
     /// Инициализация контента
     /// </summary>
     /// <returns></returns>
-    private SpreadsheetPanel InitializeContent()
+    private void InitializeContent()
     {
-        presenters.Clear();
-        presenter?.Children.Clear();
-        var panel = new SpreadsheetPanel();
-        panel.Bind(SpreadsheetPanel.ZoomProperty, new Binding(nameof(Scale)) { Source = this });
-        foreach (var row in Model?.RowsVisible)
+        Presenters?.Clear();
+        Presenter?.Children.Clear();
+        foreach (var cell in Model?.CellsVisible)
         {
-            foreach (var cell in row.CellsVisible)
-            {
-                var presenter = CreateModelPresentationColumn(cell);
-                presenters.Add(presenter);
-                panel.Children.Add(presenter);
-            }
+            var presenter = CreateModelPresentationCell(cell);
+            Presenters.Add(presenter);
+            Presenter.Children.Add(presenter);
         }
-        return panel;
     }
     #endregion
 
@@ -186,25 +221,60 @@ public class PresenterCells : BaseTemplatedControl
     /// </summary>
     private void UpdateVisibleContent()
     {
-        var index = 0;
-        for (int i = 0; i < Model?.RowsVisible.Count; i++)
+        for (int i = 0; i < Model?.CellsVisible.Count; i++)
         {
-            for (int j = 0; j < Model?.ColumnsVisible.Count; j++)
+            if (i >= Presenters.Count)
             {
-                if (index >= presenters.Count)
-                {
-                    var cell = CreateModelPresentationColumn(Model?.RowsVisible[i].CellsVisible[j]);
-                    presenters.Add(cell);
-                    presenter.Children.Add(cell);
-                }
-                else
-                {
-                    presenters[index].ItemSource = Model?.RowsVisible[i].CellsVisible[j];
-                }
-                index++;
+                var cell = CreateModelPresentationCell(Model?.CellsVisible[i]);
+                Presenters.Add(cell);
+                Presenter.Children.Add(cell);
             }
+            else
+                Presenters[i].ItemSource = Model?.CellsVisible[i];
         }
-        presenter.InvalidateArrange();
+        Presenter.InvalidateArrange();
+
+        if (DragArea.Area is { })
+        {
+
+            DragArea.Area.Start = new(
+                _start.Value.X - PositionX,
+                _start.Value.Y - PositionY,
+                _start.Value.Width,
+                _start.Value.Height
+                );
+
+            DragArea.Area.End = new(
+                _end.Value.X - PositionX,
+                _end.Value.Y - PositionY,
+                _end.Value.Width,
+                _end.Value.Height
+                );
+
+            DragArea.InvalidateVisual();
+        }
+        if (SelectedArea.SelectedArea is { })
+        {
+            SelectedArea.SelectedArea.Area = new(
+                _selectedArea.Value.X - PositionX,
+                _selectedArea.Value.Y - PositionY,
+                _selectedArea.Value.Width,
+                _selectedArea.Value.Height);
+
+            SelectedArea.InvalidateVisual();
+        }
+        if (ActiveArea.SelectedAreas is { } && ActiveArea.SelectedAreas.Count > 0)
+        {
+            for (int i = 0; i < ActiveArea.SelectedAreas.Count; i++)
+            {
+                ActiveArea.SelectedAreas[i].Area = new(
+                    _selectedAreas[i].Value.X - PositionX,
+                    _selectedAreas[i].Value.Y - PositionY,
+                    _selectedAreas[i].Value.Width,
+                    _selectedAreas[i].Value.Height);
+            }
+            ActiveArea.InvalidateVisual();
+        }
     }
     #endregion
 
@@ -214,7 +284,7 @@ public class PresenterCells : BaseTemplatedControl
     /// </summary>
     /// <param name="item"></param>
     /// <returns></returns>
-    private ModelPresentationCell CreateModelPresentationColumn(ModelCell item)
+    private ModelPresentationCell CreateModelPresentationCell(ModelCell item)
         => new()
         {
             Model = Model,
@@ -222,21 +292,24 @@ public class PresenterCells : BaseTemplatedControl
         };
     #endregion
 
-    #region Обработка смены выбора элемента
+    #region Метод создания обработчиков событий
     /// <summary>
-    /// Обработка смены выбора элемента
+    /// Метод создания обработчиков событий
     /// </summary>
-    /// <param name="e"></param>
-    /// <param name="item"></param>
-    private void OnSelectedItemChanged(PointerPressedEventArgs e, ModelCell item)
+    private static void AddClassHandlers()
     {
-        if (!e.Properties.IsLeftButtonPressed || item is not { })
-            return;
-
-        //SelectedItemChanged?.Invoke(e, item);
+        ModelProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
+        PositionXProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.UpdateTransform());
+        PositionYProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.UpdateTransform());
+        ScaleProperty.Changed.AddClassHandler<PresenterCells>((x, _) => x.RebuildContent());
     }
     #endregion
 
+    #region Обработка события применения шаблона
+    /// <summary>
+    /// Обработка события применения шаблона
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
     {
         base.OnApplyTemplate(e);
@@ -244,13 +317,19 @@ public class PresenterCells : BaseTemplatedControl
             return;
 
         var panel = FindPartById<Panel>(e, "PART_RootPanel");
-        panel.Children.Add(dragArea);
-
-
-
+        panel.Children.Add(DragArea);
+        panel.Children.Add(SelectedArea);
+        panel.Children.Add(ActiveArea);
 
         RebuildContent();
     }
+    #endregion
+
+    #region Обработка события нажатия КМ
+    /// <summary>
+    /// Обработка события нажатия КМ
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPointerPressed(PointerPressedEventArgs e)
     {
         base.OnPointerPressed(e);
@@ -260,19 +339,104 @@ public class PresenterCells : BaseTemplatedControl
 
         IsMousePressed = true;
     }
+    #endregion
+
+    #region Обработка события отпускания КМ
+    /// <summary>
+    /// Обработка события отпускания КМ
+    /// </summary>
+    /// <param name="e"></param>
     protected override void OnPointerReleased(PointerReleasedEventArgs e)
     {
-        base.OnPointerReleased(e);
-
-        IsMousePressed = false;
-    }
-    protected override void OnPointerMoved(PointerEventArgs e)
-    {
-        base.OnPointerMoved(e);
-
         if (!IsMousePressed)
             return;
 
-        //PointerMovedEventChange?.Invoke(presenter, e);
+        base.OnPointerReleased(e);
+        IsMousePressed = false;
     }
+    #endregion
+
+    #region Обработка события перемещения казателя мыши на панеле представления
+    /// <summary>
+    /// Обработка события перемещения казателя мыши на панеле представления
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnPointerMoved(PointerEventArgs e)
+    {
+        base.OnPointerMoved(e);
+        if (!IsMousePressed)
+            return;
+
+        Model?.CellsPointerMovedEvent(Presenter, e);
+    }
+    #endregion
+
+    #region Обработка изменения области изменения размера
+    /// <summary>
+    /// Обработка изменения области изменения размера
+    /// </summary>
+    /// <param name="flow"></param>
+    /// <param name="start"></param>
+    /// <param name="end"></param>
+    private void OnDragAreaChange(Orientation flow, Rect? start, Rect? end)
+    {
+        _start = start;
+        _end = end;
+        DragArea.Area = null;
+        if (start is { } && end is { })
+        {
+            DragArea.Area = new()
+            {
+                BorderBrush = Brushes.Black,
+                Flow = flow,
+                Start = new(start.Value.X, start.Value.Y, start.Value.Width, start.Value.Height),
+                End = new(end.Value.X, end.Value.Y, end.Value.Width, end.Value.Height)
+            };
+        }
+        DragArea.InvalidateVisual();
+    }
+    #endregion
+
+    #region Обработка изменения области выбранной ячейки
+    /// <summary>
+    /// Обработка изменения области выбранной ячейки
+    /// </summary>
+    /// <param name="rect"></param>
+    private void OnSelectedAreaChange(Rect? rect)
+    {
+        _selectedArea = rect;
+        SelectedArea.SelectedArea = null;
+        if (rect is { })
+        {
+            var posX = rect.Value.X - PositionX;
+            var posY = rect.Value.Y - PositionY;
+            SelectedArea.SelectedArea = new()
+            {
+                Area = new(posX, posY, rect.Value.Width, rect.Value.Height),
+                RectFill = Brushes.Transparent,
+                RectPen = new(BorderBrushActiveArea)
+            };
+        }
+        SelectedArea.InvalidateVisual();
+    }
+    #endregion
+
+    #region Обработка изменения выделенной области
+    /// <summary>
+    /// Обработка изменения выделенной области
+    /// </summary>
+    /// <param name="rects"></param>
+    private void OnActiveAreaChange(List<Rect?>? rects)
+    {
+        _selectedAreas = rects;
+        ActiveArea?.SelectedAreas.Clear();
+        ActiveArea?.SelectedAreas?.AddRange(rects?.Select(x => new LayoutModelActiveArea()
+        {
+            Area = new Rect(x.Value.X - PositionX, x.Value.Y - PositionY, x.Value.Width, x.Value.Height),
+            RectPen = null,
+            RectFill = Brushes.LightGray
+        }));
+        ActiveArea.InvalidateVisual();
+    }
+    #endregion
 }

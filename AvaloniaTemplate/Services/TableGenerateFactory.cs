@@ -69,7 +69,7 @@ namespace AvaloniaTemplate.Services
 
             ScrollBarService.PositionChange += (x, y) =>
             {
-                UpdateColumnsVisible(x, y, ConnectorService.WindowWidth, ConnectorService.WindowHeight);
+                UpdateElementsVisible(x, y, ConnectorService.WindowWidth, ConnectorService.WindowHeight);
                 SelectedModel.PositionX = x;
                 SelectedModel.PositionY = y;
             };
@@ -164,7 +164,7 @@ namespace AvaloniaTemplate.Services
         #endregion
 
         #region Стартовая область
-        private LayoutAnchorArea anchorArea = new()
+        private LayoutSelectedArea anchorArea = new()
         {
             IsHitTestVisible = false,
             ZIndex = 2,
@@ -172,7 +172,7 @@ namespace AvaloniaTemplate.Services
         /// <summary>
         /// Стартовая область
         /// </summary>
-        public LayoutAnchorArea AnchorArea
+        public LayoutSelectedArea AnchorArea
         {
             get => anchorArea;
             set => SetProperty(ref anchorArea, value);
@@ -642,7 +642,7 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         public void UpdateViewport()
         {
-            UpdateColumnsVisible(
+            UpdateElementsVisible(
                 SelectedModel.PositionX,
                 SelectedModel.PositionY,
                 ConnectorService.WindowWidth,
@@ -668,17 +668,15 @@ namespace AvaloniaTemplate.Services
         /// Обновить область отображения изменения размера
         /// </summary>
         /// <param name="orientation"></param>
-        /// <param name="PositionX"></param>
-        /// <param name="Right"></param>
+        /// <param name="positionStart"></param>
+        /// <param name="positionEnd"></param>
         public void UpdateLayoutDrag(Orientation orientation, double positionStart, double positionEnd)
         {
-            DragArea.Area ??= new();
-            DragArea.Area.BorderBrush = Brushes.Black;
-            DragArea.Area.Flow = orientation;
-            DragArea.Area.Start = GetRect(orientation, positionStart);
-            DragArea.Area.End = GetRect(orientation, positionEnd);
-            DragArea.InvalidateVisual();
-            SelectedModel.DragAreaEvenChange.Invoke(DragArea.Area);
+            SelectedModel.DragAreaChangeEvent.Invoke(
+                orientation,
+                GetRect(orientation, positionStart),
+                GetRect(orientation, positionEnd)
+                );
 
             switch (orientation)
             {
@@ -707,7 +705,7 @@ namespace AvaloniaTemplate.Services
             SelectedModel.Width = SelectedModel.Columns.Sum(x => x.Geometry.Width);
             UpdateViewport();
 
-            SelectedModel.DragAreaEvenChange.Invoke(null);
+            SelectedModel.DragAreaChangeEvent.Invoke(orientation, null, null);
         }
 
         /// <summary>
@@ -724,47 +722,13 @@ namespace AvaloniaTemplate.Services
             SelectedModel.Height = SelectedModel.Rows.Sum(x => x.Geometry.Height);
             UpdateViewport();
 
-            SelectedModel.DragAreaEvenChange.Invoke(null);
+            SelectedModel.DragAreaChangeEvent.Invoke(orientation, null, null);
         }
         #endregion
 
-        #region Обновить выделенную область
+        #region Установить размер колонок по содержимому
         /// <summary>
-        /// Обновить выделенную область
-        /// </summary>
-        /// <param name="rect"></param>
-        public void UpdateSelectedArea(Rect? rect)
-        {
-            ActiveArea.SelectedArea ??= new()
-            {
-                RectPen = new Pen(new SolidColorBrush(Color.FromRgb(170, 110, 110)), 2),
-                RectFill = Brushes.LightGray
-            };
-            ActiveArea.SelectedArea.Area = rect;
-            ActiveArea.InvalidateVisual();
-        }
-        #endregion
-
-        #region Обновить стартовую область
-        /// <summary>
-        /// Обновить стартовую область
-        /// </summary>
-        /// <param name="rect"></param>
-        public void UpdateAnchorArea(Rect? rect)
-        {
-            AnchorArea.SelectedArea ??= new()
-            {
-                RectPen = new Pen(new SolidColorBrush(Color.FromRgb(170, 110, 110)), 0),
-                RectFill = /*Helper.GetColor(SelectedModel.SelectedModelCell.CellStyle.Background)*/Brushes.White
-            };
-            AnchorArea.SelectedArea.Area = rect;
-            AnchorArea.InvalidateVisual();
-        }
-        #endregion
-
-        #region Устаноаить размер колонок по содержимому
-        /// <summary>
-        /// Устаноаить размер колонок по содержимому
+        /// Установить размер колонок по содержимому
         /// </summary>
         /// <param name="item"></param>
         public void SetSizeColumnToContent(ModelColumn item)
@@ -773,12 +737,13 @@ namespace AvaloniaTemplate.Services
             item.Geometry.Width = width;
 
             UpdateHorizontalPosition(item.Index);
+            UpdateLayoutDrag(Orientation.Vertical, item.Geometry.PositionX, item.Geometry.Right);
         }
         #endregion
 
-        #region Устаноаить размер строк по содержимому
+        #region Установить размер строк по содержимому
         /// <summary>
-        /// Устаноаить размер строк по содержимому
+        /// Установить размер строк по содержимому
         /// </summary>
         /// <param name="item"></param>
         public void SetSizeRowToContent(ModelRow item)
@@ -787,10 +752,9 @@ namespace AvaloniaTemplate.Services
             item.Geometry.Height = height;
 
             UpdateVerticalPosition(item.Index);
+            UpdateLayoutDrag(Orientation.Horizontal, item.Geometry.PositionY, item.Geometry.Bottom);
         }
         #endregion
-
-
 
         #region Получить Rect
         /// <summary>
@@ -807,13 +771,13 @@ namespace AvaloniaTemplate.Services
                 case Orientation.Vertical:
                     var width = 1d;
                     double height = ConnectorService.WindowHeight;
-                    rect = new(position - ScrollBarService.VerticalScrollBarValue, 0, width, height);
+                    rect = new(position - ScrollBarService.HorizontalScrollBarValue, 0, width, height);
                     break;
 
                 case Orientation.Horizontal:
                     width = ConnectorService.WindowWidth;
                     height = 1d;
-                    rect = new(0, position - ScrollBarService.HorizontalScrollBarValue, width, height);
+                    rect = new(0, position - ScrollBarService.VerticalScrollBarValue, width, height);
                     break;
             }
             return rect;
@@ -874,163 +838,18 @@ namespace AvaloniaTemplate.Services
 
                 posY = SelectedModel.Rows[i].Geometry.Bottom;
             }
-
-
-            //if (SelectedModel.Columns[index].IsHeader)
-            //{
-            //    foreach (var column in SelectedModel.SelectedModelColumns)
-            //    {
-            //        column.Geometry.Width = SelectedModel.Columns[index].Geometry.Width;
-            //    }
-            //    index = SelectedModel.SelectedModelColumns[0].Index;
-            //}
-            //var posX = SelectedModel.Columns[index].Geometry.PositionX;
-            //for (int i = index; i < SelectedModel.Columns.Count; i++)
-            //{
-            //    SelectedModel.Columns[i].Geometry.PositionX = posX;
-            //    for (int j = 0; j < SelectedModel.Rows.Count; j++)
-            //    {
-            //        SelectedModel.Rows[j].Cells[i].Geometry.PositionX = posX;
-            //        posX = SelectedModel.Rows[j].Cells[i].Geometry.Right;
-            //    }
-            //    posX = SelectedModel.Columns[i].Geometry.Right;
-            //}
         }
         #endregion
 
-        #region Обновить сетку
+        #region Обновить видимые элементы
         /// <summary>
-        /// Обновить сетку
+        /// Обновить видимые элементы
         /// </summary>
-        //private void UpdateLayoutFrameColumns(ModelTable model)
-        //{
-        //    FrameColumns.ColsX.Clear();
-        //    foreach (var column in model.Columns.Where(x => x.IsVisible))
-        //    {
-        //        FrameColumns.ColsX.Add(new()
-        //        {
-        //            PositionX = column.PositionX,
-        //            PositionY = column.PositionY,
-        //            Right = column.Right,
-        //            Bottom = column.Bottom,
-        //            Size = column.Height,
-        //            LinePen = new(Brushes.WhiteSmoke)
-        //        });
-        //    }
-        //    FrameColumns.InvalidateVisual();
-
-        //    //if (Rows is { } && Rows.Count > 0)
-        //    //{
-        //    //    foreach (var row in Rows)
-        //    //    {
-        //    //        foreach (var cell in row.Cells.Where(x => x.IsVisible))
-        //    //        {
-        //    //            MainFrame.ColsX.Add(new()
-        //    //            {
-        //    //                PositionX = cell.PositionX,
-        //    //                PositionY = cell.PositionY,
-        //    //                Right = cell.Right,
-        //    //                Bottom = cell.Bottom,
-        //    //                Size = cell.Height.Value,
-        //    //                LinePen = new(FrameBrush)
-        //    //            });
-        //    //            MainFrame.RowsY.Add(new()
-        //    //            {
-        //    //                PositionX = cell.PositionX,
-        //    //                PositionY = cell.PositionY,
-        //    //                Right = cell.Right,
-        //    //                Bottom = cell.Bottom,
-        //    //                Size = cell.Width.Value,
-        //    //                LinePen = new(FrameBrush)
-        //    //            });
-        //    //        }
-        //    //    }
-        //    //}
-        //    //MainFrame.InvalidateVisual();
-
-        //    //var startIndexCol = 0;
-        //    //var indexCol = 0;
-        //    //var startIndexRow = 0;
-        //    //var indexRow = 0;
-        //    //if (SelectedCells is { } && SelectedCells.Count > 0)
-        //    //{
-        //    //    startIndexCol = SelectedCells.FirstOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
-        //    //    indexCol = SelectedCells.LastOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
-        //    //    startIndexRow = SelectedCells.FirstOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
-        //    //    indexRow = SelectedCells.LastOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
-        //    //    DragAreaFrame.InvalidateVisual();
-        //    //}
-        //}
-        #endregion
-
-        #region Обновить сетку
-        /// <summary>
-        /// Обновить сетку
-        /// </summary>
-        private void UpdateScaleColumns(double scale)
-        {
-
-            //FrameColumns.ColsX.Clear();
-            //foreach (var column in model.Columns.Where(x => x.IsVisible))
-            //{
-            //    FrameColumns.ColsX.Add(new()
-            //    {
-            //        PositionX = column.PositionX,
-            //        PositionY = column.PositionY,
-            //        Right = column.Right,
-            //        Bottom = column.Bottom,
-            //        Size = column.Height,
-            //        LinePen = new(Brushes.WhiteSmoke)
-            //    });
-            //}
-            //FrameColumns.InvalidateVisual();
-
-            //if (Rows is { } && Rows.Count > 0)
-            //{
-            //    foreach (var row in Rows)
-            //    {
-            //        foreach (var cell in row.Cells.Where(x => x.IsVisible))
-            //        {
-            //            MainFrame.ColsX.Add(new()
-            //            {
-            //                PositionX = cell.PositionX,
-            //                PositionY = cell.PositionY,
-            //                Right = cell.Right,
-            //                Bottom = cell.Bottom,
-            //                Size = cell.Height.Value,
-            //                LinePen = new(FrameBrush)
-            //            });
-            //            MainFrame.RowsY.Add(new()
-            //            {
-            //                PositionX = cell.PositionX,
-            //                PositionY = cell.PositionY,
-            //                Right = cell.Right,
-            //                Bottom = cell.Bottom,
-            //                Size = cell.Width.Value,
-            //                LinePen = new(FrameBrush)
-            //            });
-            //        }
-            //    }
-            //}
-            //MainFrame.InvalidateVisual();
-
-            //var startIndexCol = 0;
-            //var indexCol = 0;
-            //var startIndexRow = 0;
-            //var indexRow = 0;
-            //if (SelectedCells is { } && SelectedCells.Count > 0)
-            //{
-            //    startIndexCol = SelectedCells.FirstOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
-            //    indexCol = SelectedCells.LastOrDefault(x => x.IndexRow == SelectedCells[0].IndexRow).IndexColumn;
-            //    startIndexRow = SelectedCells.FirstOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
-            //    indexRow = SelectedCells.LastOrDefault(x => x.IndexColumn == SelectedCells[0].IndexColumn).IndexRow;
-            //    DragAreaFrame.InvalidateVisual();
-            //}
-        }
-        #endregion
-
-
-        private void UpdateColumnsVisible(double x, double y, double width, double height)
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="width"></param>
+        /// <param name="height"></param>
+        private void UpdateElementsVisible(double x, double y, double width, double height)
         {
             double viewWidth = x + width + ColumnWidthDefault * 10;
             double viewHeight = y + height + RowHeightDefault * 20;
@@ -1043,11 +862,10 @@ namespace AvaloniaTemplate.Services
             SelectedModel.RowsVisible = [.. SelectedModel.Rows.Where(row
                 => row.Geometry.PositionY >= posY && row.Geometry.Bottom <= viewHeight)?.ToList()];
 
-            foreach (var row in SelectedModel.RowsVisible)
-            {
-                row.CellsVisible = [.. row.Cells.Where(cell
-                => cell.Geometry.PositionX >= posX && cell.Geometry.Right <= viewWidth)?.ToList()];
-            }
+            SelectedModel.CellsVisible = [.. SelectedModel.Cells.Where(cell
+                => cell.Geometry.PositionX >= posX && cell.Geometry.Right <= viewWidth
+                && cell.Geometry.PositionY >= posY && cell.Geometry.Bottom <= viewHeight)?.ToList()];
         }
+        #endregion
     }
 }

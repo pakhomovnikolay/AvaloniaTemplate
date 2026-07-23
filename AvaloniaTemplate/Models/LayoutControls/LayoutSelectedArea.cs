@@ -4,7 +4,7 @@ using AvaloniaTemplate.Models.LayoutControls.Models;
 
 namespace AvaloniaTemplate.Models.LayoutControls
 {
-    public class LayoutAnchorArea : Control
+    public class LayoutSelectedArea : Control
     {
         public LayoutModelActiveArea? SelectedArea { get; set; }
         public override void Render(DrawingContext context)

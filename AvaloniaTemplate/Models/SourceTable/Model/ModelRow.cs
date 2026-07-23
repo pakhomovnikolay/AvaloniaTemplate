@@ -250,5 +250,17 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             //}
         }
         #endregion
+
+        #region Сбросить статусы
+        /// <summary>
+        /// Сбросить статусы
+        /// </summary>
+        public void ResetStatus()
+        {
+            IsSelected = false;
+            IsFocused = false;
+            IsHeader = false;
+        }
+        #endregion
     }
 }

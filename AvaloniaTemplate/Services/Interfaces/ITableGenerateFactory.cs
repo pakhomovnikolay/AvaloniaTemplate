@@ -1,5 +1,4 @@
-﻿using Avalonia;
-using Avalonia.Layout;
+﻿using Avalonia.Layout;
 using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using System.Collections.Generic;
@@ -27,7 +26,7 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <summary>
         /// Стартовая область
         /// </summary>
-        LayoutAnchorArea AnchorArea { get; set; }
+        LayoutSelectedArea AnchorArea { get; set; }
         #endregion
 
         #region Сетка области колонок
@@ -217,9 +216,9 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// Обновить область отображения изменения размера
         /// </summary>
         /// <param name="orientation"></param>
-        /// <param name="PositionX"></param>
-        /// <param name="Right"></param>
-        void UpdateLayoutDrag(Orientation orientation, double PositionX, double Right);
+        /// <param name="positionStart"></param>
+        /// <param name="positionEnd"></param>
+        void UpdateLayoutDrag(Orientation orientation, double positionStart, double positionEnd);
         #endregion
 
         #region Изменение размера завершено
@@ -229,22 +228,6 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// <param name="orientation"></param>
         /// <param name="ittem"></param>
         void UpdateLayoutDragComplete(Orientation orientation, ModelColumn ittem);
-        #endregion
-
-        #region Обновить выделенную область
-        /// <summary>
-        /// Обновить выделенную область
-        /// </summary>
-        /// <param name="rect"></param>
-        void UpdateSelectedArea(Rect? rect);
-        #endregion
-
-        #region Обновить стартовую область
-        /// <summary>
-        /// Обновить стартовую область
-        /// </summary>
-        /// <param name="rect"></param>
-        void UpdateAnchorArea(Rect? rect);
         #endregion
 
         #region Устаноаить размер колонок по содержимому

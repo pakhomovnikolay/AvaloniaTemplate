@@ -1,12 +1,13 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Media;
 using AvaloniaTemplate.Models.LayoutControls.Models;
+using System.Collections.Generic;
 
 namespace AvaloniaTemplate.Models.LayoutControls
 {
     public class LayoutActiveArea : Control
     {
-        public LayoutModelActiveArea? SelectedArea { get; set; }
+        public List<LayoutModelActiveArea?>? SelectedAreas { get; set; } = [];
         public override void Render(DrawingContext context)
         {
             RenderSelectedArea(context);
@@ -19,11 +20,14 @@ namespace AvaloniaTemplate.Models.LayoutControls
         /// <param name="context"></param>
         private void RenderSelectedArea(DrawingContext context)
         {
-            if (SelectedArea is null)
+            if (SelectedAreas is null || SelectedAreas.Count <= 0)
                 return;
 
-            var rect = SelectedArea.Area ?? new();
-            context.DrawRectangle(SelectedArea.RectFill, SelectedArea.RectPen, rect);
+            foreach (var SelectedArea in SelectedAreas)
+            {
+                var rect = SelectedArea.Area ?? new();
+                context.DrawRectangle(SelectedArea.RectFill, SelectedArea.RectPen, rect);
+            }
         }
         #endregion
     }

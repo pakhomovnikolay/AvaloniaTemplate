@@ -39,6 +39,9 @@ namespace AvaloniaTemplate.Services
         /// <param name="e"></param>
         public void PointerWheelHandler(object? sender, PointerWheelEventArgs e)
         {
+            if (e.Properties.IsLeftButtonPressed || e.Properties.IsRightButtonPressed)
+                return;
+
             if (IsZoom(e))
                 zoomService.RecalculateScale(e.Delta.Y);
             else
