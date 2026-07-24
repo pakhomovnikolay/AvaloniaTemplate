@@ -1,4 +1,5 @@
 ﻿using Avalonia.Input;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Services.Interfaces;
 
 namespace AvaloniaTemplate.Services
@@ -8,26 +9,37 @@ namespace AvaloniaTemplate.Services
         private readonly IUIConnectorService connectorService = App.GetService<IUIConnectorService>();
         private readonly IScrollBarService scrollBarService = App.GetService<IScrollBarService>();
         private readonly IZoomService zoomService = App.GetService<IZoomService>();
+        private readonly ITableGenerateFactory tableGenerateFactory = App.GetService<ITableGenerateFactory>();
 
+        
         #region Обработка клавиш
         /// <summary>
         /// Обработка клавиш
         /// </summary>
         public void KeysHandler(object? sender, KeyEventArgs e)
         {
-            //if (IsInput(e))
-            //    stateService.AppActiveMode = AppActiveModeType.IsInput;
-            //else
-            //{
-            //    if (IsClipboard(e))
-            //        stateService.AppActiveMode = AppActiveModeType.Clipboard;
-            //    else if (IsNavigation(e))
-            //        stateService.AppActiveMode = AppActiveModeType.Navigation;
-            //    else if (IsInputMode(e))
-            //        stateService.AppActiveMode = AppActiveModeType.IsEditCell;
-            //    else if (IsCancel(e))
-            //        stateService.AppActiveMode = AppActiveModeType.Unknown;
-            //}
+            if (IsInput(e))
+            {
+                connectorService.AppActiveMode = AppActiveModeType.IsInput;
+                tableGenerateFactory?.InputValue(e);
+            }
+            else
+            {
+                if (IsClipboard(e))
+                    connectorService.AppActiveMode = AppActiveModeType.Clipboard;
+                else if (IsNavigation(e))
+                {
+                    connectorService.AppActiveMode = AppActiveModeType.Navigation;
+                    tableGenerateFactory?.NavigationTable(e);
+                }
+                else if (IsInputMode(e))
+                {
+                    connectorService.AppActiveMode = AppActiveModeType.IsEditCell;
+                    tableGenerateFactory?.InputValue(e);
+                }
+                else if (IsCancel(e))
+                    connectorService.AppActiveMode = AppActiveModeType.Unknown;
+            }
         }
         #endregion
 
@@ -61,29 +73,29 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        private bool IsInput(KeyEventArgs e) => false;
-        //=> stateService.AppActiveMode != AppActiveModeType.IsInput
-        //    && stateService.AppActiveMode != AppActiveModeType.IsEditCell
-        //    && e.KeyModifiers == KeyModifiers.None
-        //    && (e.Key >= Key.A && e.Key <= Key.Z
-        //    || e.Key == Key.Space
-        //    || e.Key == Key.Back
-        //    || e.Key >= Key.D0 && e.Key <= Key.D9
-        //    || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9
-        //    || e.Key == Key.Oem3 || e.Key == Key.Oem4
-        //    || e.Key == Key.OemMinus || e.Key == Key.Subtract
-        //    || e.Key == Key.OemPlus || e.Key == Key.Add
-        //    || e.Key == Key.Divide
-        //    || e.Key == Key.Multiply
-        //    || e.Key == Key.Decimal
-        //    || e.Key == Key.OemCloseBrackets
-        //    || e.Key == Key.OemPipe
-        //    || e.Key == Key.OemSemicolon
-        //    || e.Key == Key.OemQuotes
-        //    || e.Key == Key.OemComma
-        //    || e.Key == Key.OemPeriod
-        //    || e.Key == Key.OemQuestion);
-
+        private bool IsInput(KeyEventArgs e)
+            => connectorService.AppActiveMode != AppActiveModeType.IsInput
+            && connectorService.AppActiveMode != AppActiveModeType.IsEditCell
+            && e.KeyModifiers == KeyModifiers.None
+            && (e.Key >= Key.A && e.Key <= Key.Z
+            || e.Key == Key.Space
+            || e.Key == Key.Back
+            || e.Key >= Key.D0 && e.Key <= Key.D9
+            || e.Key >= Key.NumPad0 && e.Key <= Key.NumPad9
+            || e.Key == Key.Oem3 || e.Key == Key.Oem4
+            || e.Key == Key.OemMinus || e.Key == Key.Subtract
+            || e.Key == Key.OemPlus || e.Key == Key.Add
+            || e.Key == Key.Divide
+            || e.Key == Key.Multiply
+            || e.Key == Key.Decimal
+            || e.Key == Key.OemCloseBrackets
+            || e.Key == Key.OemPipe
+            || e.Key == Key.OemSemicolon
+            || e.Key == Key.OemQuotes
+            || e.Key == Key.OemComma
+            || e.Key == Key.OemPeriod
+            || e.Key == Key.OemQuestion
+            );
         #endregion
 
         #region Проверка необходимости обработки буфера обмена
@@ -103,15 +115,19 @@ namespace AvaloniaTemplate.Services
         /// </summary>
         /// <param name="e"></param>
         /// <returns></returns>
-        private bool IsNavigation(KeyEventArgs e) => false;
-        //{
-        //    return stateService.AppActiveMode != AppActiveModeType.IsInput
-        //        && (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down)
-        //        || e.Key == Key.Tab || e.Key == Key.Return
-        //        || (e.Key == Key.Delete
-        //            && stateService.AppActiveMode != AppActiveModeType.IsInput
-        //            && stateService.AppActiveMode != AppActiveModeType.IsEditCell);
-        //}
+        private bool IsNavigation(KeyEventArgs e)
+        {
+            return (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down
+                || e.Key == Key.Tab || e.Key == Key.Return
+                || e.Key == Key.Delete) && connectorService.AppActiveMode != AppActiveModeType.IsEditCell;
+
+            //return connectorService.AppActiveMode != AppActiveModeType.IsInput
+            //    && (e.Key == Key.Right || e.Key == Key.Left || e.Key == Key.Up || e.Key == Key.Down)
+            //    || e.Key == Key.Tab || e.Key == Key.Return
+            //    || (e.Key == Key.Delete
+            //        && connectorService.AppActiveMode != AppActiveModeType.IsInput
+            //        && connectorService.AppActiveMode != AppActiveModeType.IsEditCell);
+        }
         #endregion
 
         #region Проверка что нажатая клавиша - вход в режим редактирования

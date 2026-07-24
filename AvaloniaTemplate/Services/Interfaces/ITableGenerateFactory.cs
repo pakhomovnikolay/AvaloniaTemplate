@@ -1,4 +1,5 @@
-﻿using Avalonia.Layout;
+﻿using Avalonia.Input;
+using Avalonia.Layout;
 using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using System.Collections.Generic;
@@ -8,35 +9,6 @@ namespace AvaloniaTemplate.Services.Interfaces
 {
     public interface ITableGenerateFactory
     {
-        #region Область изменения размера
-        /// <summary>
-        /// Область изменения размера
-        /// </summary>
-        LayoutDragArea DragArea { get; set; }
-        #endregion
-
-        #region Активная область
-        /// <summary>
-        /// Активная область
-        /// </summary>
-        LayoutActiveArea ActiveArea { get; set; }
-        #endregion
-
-        #region Стартовая область
-        /// <summary>
-        /// Стартовая область
-        /// </summary>
-        LayoutSelectedArea AnchorArea { get; set; }
-        #endregion
-
-        #region Сетка области колонок
-        /// <summary>
-        /// Сетка области колонок
-        /// </summary>
-        LayoutFrame FrameColumns { get; set; }
-        #endregion
-
-
         #region Коллекция моделей
         /// <summary>
         /// Коллекция моделей
@@ -236,6 +208,22 @@ namespace AvaloniaTemplate.Services.Interfaces
         /// </summary>
         /// <param name="item"></param>
         void SetSizeColumnToContent(ModelColumn item);
+        #endregion
+
+        #region Навигация по таблице
+        /// <summary>
+        /// Навигация по таблице
+        /// </summary>
+        /// <param name="e"></param>
+        void NavigationTable(KeyEventArgs e);
+        #endregion
+
+        #region Ввод данных
+        /// <summary>
+        /// Ввод данных
+        /// </summary>
+        /// <param name="e"></param>
+        void InputValue(KeyEventArgs e);
         #endregion
     }
 }

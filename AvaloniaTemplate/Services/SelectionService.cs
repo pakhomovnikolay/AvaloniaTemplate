@@ -85,10 +85,38 @@ namespace AvaloniaTemplate.Services
             if (!e.Properties.IsLeftButtonPressed || item is not { })
                 return;
 
-            statusSelected.IsMoved = false;
-            statusSelected.IsPressed = true;
             statusSelected.IsCtrl = e.KeyModifiers == KeyModifiers.Control;
             statusSelected.IsShift = e.KeyModifiers == KeyModifiers.Shift;
+            SetSelected(item);
+
+            //statusSelected.IsMoved = false;
+            //statusSelected.IsPressed = true;
+            //statusSelected.IsCtrl = e.KeyModifiers == KeyModifiers.Control;
+            //statusSelected.IsShift = e.KeyModifiers == KeyModifiers.Shift;
+            //statusSelected.IsWasSelected = IsWasSelected(item) && statusSelected.IsCtrl;
+            //if (!statusSelected.IsShift)
+            //{
+            //    if (!statusSelected.IsCtrl)
+            //        SetSingleItem(item);
+            //    else
+            //        UpdateMultiSelects(item);
+
+            //    baseSelections = source().Where(x => x.IsHeader)?.ToHashSet();
+            //    selections.Clear();
+            //    if (!statusSelected.IsWasSelected)
+            //        statusSelected.StartIndex = statusSelected.CurrentIndex;
+            //}
+            //else
+            //{
+            //    var array = GetRange(statusSelected.StartIndex, statusSelected.CurrentIndex);
+            //    ApplyRange(array);
+            //}
+        }
+
+        public void SetSelected(T item)
+        {
+            statusSelected.IsMoved = false;
+            statusSelected.IsPressed = true;
             statusSelected.IsWasSelected = IsWasSelected(item) && statusSelected.IsCtrl;
             if (!statusSelected.IsShift)
             {
@@ -100,13 +128,28 @@ namespace AvaloniaTemplate.Services
                 baseSelections = source().Where(x => x.IsHeader)?.ToHashSet();
                 selections.Clear();
                 if (!statusSelected.IsWasSelected)
-                    statusSelected.StartIndex = statusSelected.CurrentIndex;
+                {
+                    if (selectorCell is { })
+                        statusSelected.StartCell = statusSelected.CurrentCell;
+                    else
+                        statusSelected.StartIndex = statusSelected.CurrentIndex;
+                }
             }
             else
             {
-                var array = GetRange(statusSelected.StartIndex, statusSelected.CurrentIndex);
-                ApplyRange(array);
+                if (selectorCell is { })
+                {
+                    var array = GetRange(statusSelected.StartCell, statusSelected.CurrentCell);
+                    ApplyRange(array);
+                }
+                else
+                {
+                    var array = GetRange(statusSelected.StartIndex, statusSelected.CurrentIndex);
+                    ApplyRange(array);
+                }
             }
+            statusSelected.IsCtrl = false;
+            statusSelected.IsShift = false;
         }
         #endregion
 

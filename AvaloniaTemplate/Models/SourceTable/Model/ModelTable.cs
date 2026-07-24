@@ -2,12 +2,12 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Layout;
+using AvaloniaTemplate.Models.Enums;
 using AvaloniaTemplate.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.Common;
 using System.Linq;
 
 namespace AvaloniaTemplate.Models.SourceTable.Model
@@ -96,6 +96,13 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         public Action<Rect?> SelectedAreaChangeEvent;
         #endregion
 
+        #region Событие начала редактирования ячейки
+        /// <summary>
+        /// Событие начала редактирования ячейки
+        /// </summary>
+        public Action<AppActiveModeType> EditChangeEvent;
+        #endregion
+
         #region Конструктор
         /// <summary>
         /// Конструктор
@@ -114,7 +121,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             SelectorRows.MultiSelectedChangedItem += OnMultiSelectedRowChanged;
             SelectorRows.SelectedAreaChanged += OnSelectedRowAreaChanged;
 
-            SelectorCells = new SelectionService<ModelCell>(() => Cells, _selectorCell:  x => (x.ColumnIndex, x.RowIndex));
+            SelectorCells = new SelectionService<ModelCell>(() => Cells, _selectorCell: x => (x.ColumnIndex, x.RowIndex));
             SelectorCells.SelectedChangedItem += OnSelectedCellChanged;
             SelectorCells.SelectedChangedItems += OnSelectedCellsChanged;
             SelectorCells.MultiSelectedChangedItem += OnMultiSelectedCellChanged;
@@ -483,7 +490,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
 
         /// <summary>
-        /// Обновить размеры текущего элемента
+        /// Обновить размеры текущего элемента TODO:
         /// </summary>
         /// <param name="column"></param>
         /// <param name="delta"></param>
@@ -570,7 +577,88 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
 
             SelectorCells.SetSelected(e, item);
         }
+
+        /// <summary>
+        /// Установить выбранный элемент
+        /// </summary>
+        /// <param name="e"></param>
+        /// <param name="item"></param>
+        public void SetSelected(ModelCell item)
+        {
+            CurrentIndex.IsEqaulRow(item.RowIndex);
+            CurrentIndex.IsEqaulColumn(item.ColumnIndex);
+            CurrentIndex.Row = item.RowIndex;
+            CurrentIndex.Column = item.ColumnIndex;
+
+            SelectorCells.SetSelected(item);
+        }
         #endregion
+
+        #region Установить следующую выбранную ячейку
+        /// <summary>
+        /// Установить следующую выбранную ячейку
+        /// </summary>
+        public void SelectNextCell(NavigationNextType type)
+        {
+            ModelCell result = null;
+            if (SelectedModelCell is not { })
+            {
+                result = Rows[0].Cells[0];
+            }
+            else
+            {
+                switch (type)
+                {
+                    case NavigationNextType.Right:
+                        var nextIndex = SelectedModelCell.ColumnIndex + 1;
+                        if (nextIndex < 0 || nextIndex >= Columns.Count)
+                            nextIndex = 0;
+
+                        var nextCell = Rows[SelectedModelCell.RowIndex].Cells[nextIndex];
+                        result = Rows[nextCell.Owner.RowIndex].Cells[nextCell.Owner.ColumnIndex];
+                        break;
+
+                    case NavigationNextType.Left:
+                        nextIndex = SelectedModelCell.ColumnIndex - 1;
+                        if (nextIndex < 0 || nextIndex >= Columns.Count)
+                            nextIndex = 0;
+
+                        nextCell = Rows[SelectedModelCell.RowIndex].Cells[nextIndex];
+                        result = Rows[nextCell.Owner.RowIndex].Cells[nextCell.Owner.ColumnIndex];
+                        break;
+
+                    case NavigationNextType.Bottom:
+                        nextIndex = SelectedModelCell.RowIndex + 1;
+                        if (nextIndex < 0 || nextIndex >= Rows.Count)
+                            nextIndex = 0;
+
+                        nextCell = Rows[nextIndex].Cells[SelectedModelCell.ColumnIndex];
+                        result = Rows[nextCell.Owner.RowIndex].Cells[nextCell.Owner.ColumnIndex];
+                        break;
+
+                    case NavigationNextType.Top:
+                        nextIndex = SelectedModelCell.RowIndex - 1;
+                        if (nextIndex < 0 || nextIndex >= Rows.Count)
+                            nextIndex = 0;
+
+                        nextCell = Rows[nextIndex].Cells[SelectedModelCell.ColumnIndex];
+                        result = Rows[nextCell.Owner.RowIndex].Cells[nextCell.Owner.ColumnIndex];
+                        break;
+                }
+            }
+            if (result is not { })
+                return;
+
+            CurrentIndex.IsEqaulRow(result.RowIndex);
+            CurrentIndex.IsEqaulColumn(result.ColumnIndex);
+            CurrentIndex.Row = result.RowIndex;
+            CurrentIndex.Column = result.ColumnIndex;
+            SelectorCells.SetSelected(result);
+        }
+        #endregion
+
+
+
 
         #region Событие перемещения указателя по заголовкам
         /// <summary>
@@ -882,7 +970,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
         #endregion
 
-        
+
 
 
 
@@ -902,6 +990,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             SelectedModelColumns = [.. Columns];
             UpdateSelectedModelColumns();
 
+            ClearSelectedModelCells();
             SelectedModelCell = item.Cells[0];
         }
         #endregion
@@ -1093,7 +1182,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
                 if (!SelectedModelColumns.Contains(Columns[cell.ColumnIndex]))
                     SelectedModelColumns.Add(Columns[cell.ColumnIndex]);
             }
-            
+
             UpdateSelectedModelCells();
             UpdateSelectedModelRows();
             UpdateSelectedModelColumns();
@@ -1169,8 +1258,12 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         private void ClearSelectedModelCells()
         {
             foreach (var cell in SelectedModelCells)
-                cell.ResetStatus();
+            {
+                if (SelectedModelCells.FirstOrDefault(x => x.IsEdit) is { })
+                    EditChangeEvent.Invoke(AppActiveModeType.Unknown);
 
+                cell.ResetStatus();
+            }
             SelectedModelCells.Clear();
         }
         #endregion

@@ -38,6 +38,18 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         }
         #endregion
 
+        #region Редактирование
+        private bool isEdit;
+        /// <summary>
+        /// Редактирование
+        /// </summary>
+        public bool IsEdit
+        {
+            get => isEdit;
+            set => SetProperty(ref isEdit, value);
+        }
+        #endregion
+
         #region Данные
         private string rawValue;
         /// <summary>
@@ -46,7 +58,7 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
         public string RawValue
         {
             get => rawValue;
-            set => SetProperty(ref rawValue, value);
+            set => SetProperty(rawValue, value, v => { rawValue = v; ControlInpitRawValue(); });
         }
         #endregion
 
@@ -71,7 +83,18 @@ namespace AvaloniaTemplate.Models.SourceTable.Model
             IsSelected = false;
             IsFocused = false;
             IsHeader = false;
+            IsEdit = false;
         }
+        #endregion
+
+        #region Контроль ввода данных
+        /// <summary>
+        /// Контроль ввода данных
+        /// </summary>
+        private void ControlInpitRawValue()
+        {
+            VisualValue = RawValue;
+        } 
         #endregion
     }
 }

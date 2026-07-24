@@ -52,12 +52,28 @@
         void UpdateVerticalScrollBarValue(double offset);
         #endregion
 
+        #region Установить положение вертикальной прокрутки
+        /// <summary>
+        /// Установить положение вертикальной прокрутки
+        /// </summary>
+        /// <param name="offset"></param>
+        void SetVerticalScrollBarValue(double offset);
+        #endregion
+
         #region Обновить положение горизонтальной прокрутки
         /// <summary>
         /// Обновить положение горизонтальной прокрутки
         /// </summary>
         /// <param name="offset"></param>
         void UpdateHorizontalScrollBarValue(double offset);
+        #endregion
+
+        #region Установить положение горизонтальной прокрутки
+        /// <summary>
+        /// Установить положение горизонтальной прокрутки
+        /// </summary>
+        /// <param name="offset"></param>
+        void SetHorizontalScrollBarValue(double offset);
         #endregion
 
         #region Обновить смещение вертикальной прокрутки

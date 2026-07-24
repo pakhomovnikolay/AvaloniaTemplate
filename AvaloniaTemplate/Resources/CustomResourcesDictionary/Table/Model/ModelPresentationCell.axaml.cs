@@ -1,8 +1,9 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
-using Avalonia.Data;
-using AvaloniaTemplate.Infrastructures.Converters;
+using Avalonia.Input;
+using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Resources.CustomResourcesDictionary.Base;
 
@@ -10,6 +11,10 @@ namespace AvaloniaTemplate.Resources.CustomResourcesDictionary.Table.Model;
 
 public class ModelPresentationCell : BaseTemplatedControl
 {
+    #region Поля класса
+    private bool isDoubleClick;
+    #endregion
+
     #region Статический конструктор класса
     /// <summary>
     /// Статический конструктор класса
@@ -51,10 +56,7 @@ public class ModelPresentationCell : BaseTemplatedControl
     /// Инициализация компонентов
     /// </summary>
     private void InitializeComponents()
-    {
-        InitializeBorder(FindPartById<Border>(CurrTemplateAppliedEventArgs, "PART_Border"));
-        InitializeViewPanel(FindPartById<TextBlock>(CurrTemplateAppliedEventArgs, "PART_ViewPanel"));
-    }
+        => InitializeBorder(FindPartById<Border>(CurrTemplateAppliedEventArgs, "PART_Border"));
     #endregion
 
     #region Инициализация границ элемента
@@ -67,27 +69,12 @@ public class ModelPresentationCell : BaseTemplatedControl
         if (border is not { })
             return;
 
-        border.Bind(Border.BackgroundProperty, new Binding("CellStyle.Background") { Converter = new ColorStringToSolidColorBrushConverter() });
-        border.Bind(IsVisibleProperty, new Binding("IsVisible"));
-        border.PointerPressed += (_, e) => Model?.SetSelected(e, ItemSource);
-    }
-    #endregion
+        var editPanel = FindPartById<TextBox>(CurrTemplateAppliedEventArgs, "PART_EditPanel");
+        editPanel.Tapped += (_, _) => OnEditPanelTapped();
+        editPanel.GetObservable(IsVisibleProperty).Subscribe(new Helper.Observer<bool>(isVisible => OnEditPanelVisible(editPanel)));
 
-    #region Инициализация панели отображения данных
-    /// <summary>
-    /// Инициализация панели отображения данных
-    /// </summary>
-    /// <param name="viewPanel"></param>
-    private static void InitializeViewPanel(TextBlock viewPanel)
-    {
-        if (viewPanel is not { })
-            return;
-
-        viewPanel.Bind(TextBlock.TextProperty, new Binding("VisualValue"));
-        viewPanel.Bind(TextBlock.FontFamilyProperty, new Binding("CellStyle.FontFamily") { Converter = new FontFamilyNameConverter() });
-        viewPanel.Bind(TextBlock.FontSizeProperty, new Binding("CellStyle.FontSize"));
-        viewPanel.Bind(TextBlock.FontWeightProperty, new Binding("CellStyle.IsBold") { Converter = new FontWeightBoldConverter() });
-        viewPanel.Bind(TextBlock.ForegroundProperty, new Binding("CellStyle.Foreground") { Converter = new ColorStringToSolidColorBrushConverter() });
+        border.PointerPressed += (_, e) => OnBorderPointerPressed(e);
+        border.DoubleTapped += (_, _) => OnBorderDoubleTapped(editPanel);
     }
     #endregion
 
@@ -111,6 +98,66 @@ public class ModelPresentationCell : BaseTemplatedControl
         base.OnApplyTemplate(e);
         SetTemplateAppliedEventArgs(e);
         InitializeComponents();
+    }
+    #endregion
+
+    #region Обработка события нажатия ЛКМ на ячейку
+    /// <summary>
+    /// Обработка события нажатия ЛКМ на ячейку
+    /// </summary>
+    /// <param name="e"></param>
+    private void OnBorderPointerPressed(PointerPressedEventArgs e)
+        => Model?.SetSelected(e, ItemSource);
+    #endregion
+
+    #region Обработка события двойного клика на ячейку
+    /// <summary>
+    /// Обработка события двойного клика на ячейку
+    /// </summary>
+    /// <param name="editPanel"></param>
+    private void OnBorderDoubleTapped(TextBox editPanel)
+    {
+        if (ItemSource.IsEdit)
+            return;
+
+        isDoubleClick = true;
+        ItemSource.IsEdit = true;
+        Model?.EditChangeEvent.Invoke(AppActiveModeType.IsInput);
+    }
+    #endregion
+
+    #region Обработка события клика ЛКМ на редактируемую ячейку
+    /// <summary>
+    /// Обработка события клика ЛКМ на редактируемую ячейку
+    /// </summary>
+    private void OnEditPanelTapped()
+    {
+        Model?.EditChangeEvent.Invoke(AppActiveModeType.IsEditCell);
+    }
+    #endregion
+
+    #region Обработка события изменения видимости панели редактирвоания
+    /// <summary>
+    /// Обработка события изменения видимости панели редактирвоания
+    /// </summary>
+    private void OnEditPanelVisible(TextBox editPanel)
+    {
+        if (!editPanel.IsVisible)
+        {
+            isDoubleClick = false;
+            return;
+        }
+
+        if (!isDoubleClick)
+        {
+            editPanel.SelectionStart = editPanel.Text == null ? 0 : editPanel.Text.Length;
+            editPanel.SelectionEnd = editPanel.Text == null ? 0 : editPanel.Text.Length;
+        }
+        else
+            editPanel.SelectAll();
+
+        editPanel.Focus();
+        Model?.EditChangeEvent.Invoke(AppActiveModeType.IsInput);
     }
     #endregion
 }

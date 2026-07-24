@@ -1,5 +1,6 @@
 ﻿using Avalonia.Layout;
 using Avalonia.Media;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
@@ -211,7 +212,12 @@ namespace AvaloniaTemplate.Services.Interfaces
         double WindowWidth { get; set; }
         #endregion
 
-
+        #region Текущий режим приложения
+        /// <summary>
+        /// Текущий режим приложения
+        /// </summary>
+        AppActiveModeType AppActiveMode { get; set; }
+        #endregion
 
 
 

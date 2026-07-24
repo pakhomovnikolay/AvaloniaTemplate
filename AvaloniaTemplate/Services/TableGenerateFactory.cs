@@ -1,9 +1,11 @@
 ﻿using Avalonia;
+using Avalonia.Input;
 using Avalonia.Layout;
 using Avalonia.Media;
+using Avalonia.Threading;
 using AvaloniaTemplate.Infrastructures.Helpers;
+using AvaloniaTemplate.Models;
 using AvaloniaTemplate.Models.Enums;
-using AvaloniaTemplate.Models.LayoutControls;
 using AvaloniaTemplate.Models.SourceTable.Model;
 using AvaloniaTemplate.Services.Interfaces;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -76,124 +78,6 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Обработка изменения масштаба
-        /// <summary>
-        /// Обработка изменения масштаба
-        /// </summary>
-        /// <param name="scale"></param>
-        private void OnScaleChange(double scale)
-        {
-            SelectedModel.Scale = Convert.ToInt32(scale / 100);
-            //SelectedModel.HeaderColumnsHeight = ColumnHeightDefault * scale;
-            //SelectedModel.HeaderRowsWidth = RowWidthDefault * scale;
-
-            //var posX = 0d;
-            //for (int i = 0; i < SelectedModel.Columns.Count; i++)
-            //{
-            //    SelectedModel.Columns[i].PositionX = posX;
-            //    SelectedModel.Columns[i].Width = SelectedModel.Columns[i].WidthResult * scale;
-            //    SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
-            //    posX = SelectedModel.Columns[i].Right;
-            //}
-
-            //UpdateHorizontalPosition(0);
-
-
-
-            //FrameColumns.ColsX.Clear();
-            //foreach (var column in model.Columns.Where(x => x.IsVisible))
-            //{
-            //    FrameColumns.ColsX.Add(new()
-            //    {
-            //        PositionX = column.PositionX,
-            //        PositionY = column.PositionY,
-            //        Right = column.Right,
-            //        Bottom = column.Bottom,
-            //        Size = column.Height,
-            //        LinePen = new(Brushes.WhiteSmoke)
-            //    });
-            //}
-            //FrameColumns.InvalidateVisual();
-
-        }
-        #endregion
-
-        #region Обработка изменения выбранного элемента
-        /// <summary>
-        /// Обработка изменения выбранного элемента
-        /// </summary>
-        /// <param name="item"></param>
-        private void OnSelectedItemChange(ModelTable item)
-        {
-            SelectedModel = item;
-            UpdateViewport();
-        }
-        #endregion
-
-        #region Область изменения размера
-        private LayoutDragArea dragArea = new()
-        {
-            IsHitTestVisible = false,
-            ZIndex = 3,
-        };
-        /// <summary>
-        /// Область изменения размера
-        /// </summary>
-        public LayoutDragArea DragArea
-        {
-            get => dragArea;
-            set => SetProperty(ref dragArea, value);
-        }
-        #endregion
-
-        #region Активная область
-        private LayoutActiveArea activeArea = new()
-        {
-            IsHitTestVisible = false,
-            ZIndex = 1,
-            Opacity = 0.5
-        };
-        /// <summary>
-        /// Активная область
-        /// </summary>
-        public LayoutActiveArea ActiveArea
-        {
-            get => activeArea;
-            set => SetProperty(ref activeArea, value);
-        }
-        #endregion
-
-        #region Стартовая область
-        private LayoutSelectedArea anchorArea = new()
-        {
-            IsHitTestVisible = false,
-            ZIndex = 2,
-        };
-        /// <summary>
-        /// Стартовая область
-        /// </summary>
-        public LayoutSelectedArea AnchorArea
-        {
-            get => anchorArea;
-            set => SetProperty(ref anchorArea, value);
-        }
-        #endregion
-
-        #region Сетка области колонок
-        private LayoutFrame frameColumns = new()
-        {
-            IsHitTestVisible = false
-        };
-        /// <summary>
-        /// Сетка области колонок
-        /// </summary>
-        public LayoutFrame FrameColumns
-        {
-            get => frameColumns;
-            set => SetProperty(ref frameColumns, value);
-        }
-        #endregion
-
         #region Коллекция моделей
         private ObservableCollection<ModelTable> models;
         /// <summary>
@@ -260,12 +144,14 @@ namespace AvaloniaTemplate.Services
             };
 
             model.DragStartedChange += UpdateLayoutDrag;
+            model.EditChangeEvent += OnEditChangeEvent;
 
             model.ColumnDragCompletedChange += UpdateLayoutDragComplete;
             model.ColumnSplitterDoubleTappedChange += SetSizeColumnToContent;
 
             model.RowDragCompletedChange += UpdateLayoutDragComplete;
             model.RowSplitterDoubleTappedChange += SetSizeRowToContent;
+
             return model;
         }
         #endregion
@@ -582,60 +468,6 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
-        #region Получить заголовок колонки
-        /// <summary>
-        /// Получить заголовок колонки
-        /// </summary>
-        /// <param name="index"></param>
-        /// <returns></returns>
-        private static string GetHeaderColumn(int index)
-        {
-            var name = string.Empty;
-            while (index > 0)
-            {
-                index--;
-                name = (char)('A' + (index % 26)) + name;
-                index /= 26;
-            }
-            return name;
-        }
-        #endregion
-
-        #region Получить заголовок строки
-        /// <summary>
-        /// Получить заголовок строки
-        /// </summary>
-        /// <returns></returns>
-        private static string GetHeaderRow(int index)
-            => $"{index}";
-        #endregion
-
-        #region Создать заголовок
-        /// <summary>
-        /// Создать заголовок
-        /// </summary>
-        /// <returns></returns>
-        private string CreateHeader()
-        {
-            var header = $"Таблица {Models.Count + 1}";
-            if (Models.FirstOrDefault(x => x.Id.Equals(header, StringComparison.InvariantCultureIgnoreCase)) is { })
-            {
-                var index = 1;
-                header = $"Таблица {index}";
-                while (IsEquals(header))
-                {
-                    index++;
-                    header = $"Таблица {index}";
-                }
-            }
-            return header;
-
-            bool IsEquals(string id)
-                => Models?
-                .FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase)) is { };
-        }
-        #endregion
-
         #region Обновить визульное пространство
         /// <summary>
         /// Обновить визульное пространство
@@ -688,6 +520,14 @@ namespace AvaloniaTemplate.Services
                     break;
             }
         }
+        #endregion
+
+        #region Обработка события начала редактирования ячейки
+        /// <summary>
+        /// Обработка события начала редактирования ячейки
+        /// </summary>
+        private void OnEditChangeEvent(AppActiveModeType activeMode)
+            => ConnectorService.AppActiveMode = activeMode;
         #endregion
 
         #region Изменение размера завершено
@@ -755,6 +595,167 @@ namespace AvaloniaTemplate.Services
             UpdateLayoutDrag(Orientation.Horizontal, item.Geometry.PositionY, item.Geometry.Bottom);
         }
         #endregion
+
+        #region Навигация по таблице
+        /// <summary>
+        /// Навигация по таблице
+        /// </summary>
+        /// <param name="e"></param>
+        public void NavigationTable(KeyEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Key != Key.Delete)
+            {
+                if (e.Key == Key.Right || e.Key == Key.Tab)
+                    SelectedModel.SelectNextCell(NavigationNextType.Right);
+                else if (e.Key == Key.Left)
+                    SelectedModel.SelectNextCell(NavigationNextType.Left);
+                else if (e.Key == Key.Up)
+                    SelectedModel.SelectNextCell(NavigationNextType.Top);
+                else if (e.Key == Key.Down || e.Key == Key.Return)
+                {
+                    if (e.KeyModifiers == KeyModifiers.None)
+                        SelectedModel.SelectNextCell(NavigationNextType.Bottom);
+                }
+
+                var posX = ScrollBarService.HorizontalScrollBarValue;
+                var right = ScrollBarService.HorizontalScrollViewportSize + posX;
+                if (SelectedModel.SelectedModelCell.Geometry.Right >= right - SelectedModel.SelectedModelCell.Geometry.Width)
+                {
+                    var offset = posX + SelectedModel.SelectedModelCell.Geometry.Width * 3;
+                    ScrollBarService.SetHorizontalScrollBarValue(offset);
+                }
+                else if (SelectedModel.SelectedModelCell.Geometry.PositionX <= posX)
+                {
+                    var offset = posX - SelectedModel.SelectedModelCell.Geometry.Width * 3;
+                    ScrollBarService.SetHorizontalScrollBarValue(offset);
+                }
+
+                var posY = ScrollBarService.VerticalScrollBarValue;
+                var bottom = ScrollBarService.VerticalScrollViewportSize + posY - 50;
+                if (SelectedModel.SelectedModelCell.Geometry.Bottom >= bottom - SelectedModel.SelectedModelCell.Geometry.Height)
+                {
+                    var offset = posY + SelectedModel.SelectedModelCell.Geometry.Height * 5;
+                    ScrollBarService.SetVerticalScrollBarValue(offset);
+                }
+                else if (SelectedModel.SelectedModelCell.Geometry.PositionY <= posY)
+                {
+                    var offset = posY - SelectedModel.SelectedModelCell.Geometry.Height * 3;
+                    ScrollBarService.SetVerticalScrollBarValue(offset);
+                }
+            }
+            else
+            {
+                SelectedModel.SelectedModelCells?.Where(x => !string.IsNullOrWhiteSpace(x.RawValue))?
+                    .ToList()?
+                    .ForEach(x => x.RawValue = "");
+            }
+        }
+        #endregion
+
+        #region Ввод данных
+        /// <summary>
+        /// Ввод данных
+        /// </summary>
+        /// <param name="e"></param>
+        public void InputValue(KeyEventArgs e)
+        {
+            e.Handled = true;
+            if (e.Key == Key.F2)
+                SelectedModel.SelectedModelCell.IsEdit = true;
+            else
+            {
+                var value = "";
+                if (e.Key != Key.Space && e.Key != Key.Back)
+                    value = e.KeySymbol;
+
+                SelectedModel.SelectedModelCell.RawValue = value;
+                SelectedModel.SelectedModelCell.IsEdit = true;
+            }
+        }
+        #endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        #region Получить заголовок колонки
+        /// <summary>
+        /// Получить заголовок колонки
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
+        private static string GetHeaderColumn(int index)
+        {
+            var name = string.Empty;
+            while (index > 0)
+            {
+                index--;
+                name = (char)('A' + (index % 26)) + name;
+                index /= 26;
+            }
+            return name;
+        }
+        #endregion
+
+        #region Получить заголовок строки
+        /// <summary>
+        /// Получить заголовок строки
+        /// </summary>
+        /// <returns></returns>
+        private static string GetHeaderRow(int index)
+            => $"{index}";
+        #endregion
+
+        #region Создать заголовок
+        /// <summary>
+        /// Создать заголовок
+        /// </summary>
+        /// <returns></returns>
+        private string CreateHeader()
+        {
+            var header = $"Таблица {Models.Count + 1}";
+            if (Models.FirstOrDefault(x => x.Id.Equals(header, StringComparison.InvariantCultureIgnoreCase)) is { })
+            {
+                var index = 1;
+                header = $"Таблица {index}";
+                while (IsEquals(header))
+                {
+                    index++;
+                    header = $"Таблица {index}";
+                }
+            }
+            return header;
+
+            bool IsEquals(string id)
+                => Models?
+                .FirstOrDefault(x => x.Id.Equals(id, StringComparison.InvariantCultureIgnoreCase)) is { };
+        }
+        #endregion
+
+
+
+
+
+
+
+
 
         #region Получить Rect
         /// <summary>
@@ -867,5 +868,71 @@ namespace AvaloniaTemplate.Services
                 && cell.Geometry.PositionY >= posY && cell.Geometry.Bottom <= viewHeight)?.ToList()];
         }
         #endregion
+
+        #region Обработка изменения масштаба
+        /// <summary>
+        /// Обработка изменения масштаба
+        /// </summary>
+        /// <param name="scale"></param>
+        private void OnScaleChange(double scale)
+        {
+            SelectedModel.Scale = Convert.ToInt32(scale / 100);
+            //SelectedModel.HeaderColumnsHeight = ColumnHeightDefault * scale;
+            //SelectedModel.HeaderRowsWidth = RowWidthDefault * scale;
+
+            //var posX = 0d;
+            //for (int i = 0; i < SelectedModel.Columns.Count; i++)
+            //{
+            //    SelectedModel.Columns[i].PositionX = posX;
+            //    SelectedModel.Columns[i].Width = SelectedModel.Columns[i].WidthResult * scale;
+            //    SelectedModel.Columns[i].Right = SelectedModel.Columns[i].PositionX + SelectedModel.Columns[i].Width;
+            //    posX = SelectedModel.Columns[i].Right;
+            //}
+
+            //UpdateHorizontalPosition(0);
+
+
+
+            //FrameColumns.ColsX.Clear();
+            //foreach (var column in model.Columns.Where(x => x.IsVisible))
+            //{
+            //    FrameColumns.ColsX.Add(new()
+            //    {
+            //        PositionX = column.PositionX,
+            //        PositionY = column.PositionY,
+            //        Right = column.Right,
+            //        Bottom = column.Bottom,
+            //        Size = column.Height,
+            //        LinePen = new(Brushes.WhiteSmoke)
+            //    });
+            //}
+            //FrameColumns.InvalidateVisual();
+
+        }
+        #endregion
+
+        #region Обработка изменения выбранного элемента
+        /// <summary>
+        /// Обработка изменения выбранного элемента
+        /// </summary>
+        /// <param name="item"></param>
+        private void OnSelectedItemChange(ModelTable item)
+        {
+            SelectedModel = item;
+            if (SelectedModel.SelectedModelCell is not { })
+            {
+                Dispatcher.UIThread.Post(() =>
+                {
+                    SelectedModel.SetSelected(SelectedModel.Cells[0]);
+
+                }, DispatcherPriority.ContextIdle);
+            }
+            UpdateViewport();
+        }
+        #endregion
+
+
+
+
     }
 }

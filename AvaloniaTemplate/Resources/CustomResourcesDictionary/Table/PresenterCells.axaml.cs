@@ -414,7 +414,7 @@ public class PresenterCells : BaseTemplatedControl
             {
                 Area = new(posX, posY, rect.Value.Width, rect.Value.Height),
                 RectFill = Brushes.Transparent,
-                RectPen = new(BorderBrushActiveArea)
+                RectPen = new(BorderBrushActiveArea, 2)
             };
         }
         SelectedArea.InvalidateVisual();

@@ -95,6 +95,18 @@ namespace AvaloniaTemplate.Services
         }
         #endregion
 
+        #region Установить положение вертикальной прокрутки
+        /// <summary>
+        /// Установить положение вертикальной прокрутки
+        /// </summary>
+        public void SetVerticalScrollBarValue(double offset)
+        {
+            VerticalScrollBarValue = offset;
+            if (VerticalScrollBarValue < 0)
+                VerticalScrollBarValue = 0;
+        }
+        #endregion
+
         #region Обновить положение горизонтальной прокрутки
         /// <summary>
         /// Обновить положение горизонтальной прокрутки
@@ -102,6 +114,18 @@ namespace AvaloniaTemplate.Services
         public void UpdateHorizontalScrollBarValue(double offset)
         {
             HorizontalScrollBarValue = horizontalScrollBarOffset - offset * horizontalScrollStep;
+            if (HorizontalScrollBarValue < 0)
+                HorizontalScrollBarValue = 0;
+        }
+        #endregion
+
+        #region Установить положение горизонтальной прокрутки
+        /// <summary>
+        /// Установить положение горизонтальной прокрутки
+        /// </summary>
+        public void SetHorizontalScrollBarValue(double offset)
+        {
+            HorizontalScrollBarValue = offset;
             if (HorizontalScrollBarValue < 0)
                 HorizontalScrollBarValue = 0;
         }

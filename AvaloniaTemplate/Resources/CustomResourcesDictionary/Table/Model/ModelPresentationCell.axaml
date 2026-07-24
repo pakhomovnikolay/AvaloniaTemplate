@@ -19,13 +19,35 @@
                        >
                     <Border x:Name="PART_Border"
                             DataContext="{TemplateBinding ItemSource}"
+                            Background="{Binding ItemSource.CellStyle.Background, RelativeSource={RelativeSource TemplatedParent}}"
+                            IsVisible="{Binding ItemSource.IsVisible, RelativeSource={RelativeSource TemplatedParent}}"
                             BorderThickness="0 0 1 1"
                             BorderBrush="LightGray"
+                            
                             >
-                        <TextBlock x:Name="PART_ViewPanel"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   />
+                        <Panel>
+                            <TextBlock x:Name="PART_ViewPanel"
+                                       IsVisible="{Binding !ItemSource.IsEdit, RelativeSource={RelativeSource TemplatedParent}}"
+                                       Text="{Binding ItemSource.VisualValue, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                       FontSize="{Binding ItemSource.CellStyle.FontSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                       FontFamily="{Binding ItemSource.CellStyle.FontFamily, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource FontFamilyNameConverter}}"
+                                       FontWeight="{Binding ItemSource.CellStyle.IsBold, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource FontWeightBoldConverter}}"
+                                       Foreground="{Binding ItemSource.CellStyle.Foreground, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ColorStringToSolidColorBrushConverter}}"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Margin="1 0 0 0"
+                                       />
+
+                            <TextBox x:Name="PART_EditPanel"
+                                     IsVisible="{Binding ItemSource.IsEdit, RelativeSource={RelativeSource TemplatedParent}}"
+                                     Text="{Binding ItemSource.RawValue, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                     FontSize="{Binding ItemSource.CellStyle.FontSize, RelativeSource={RelativeSource TemplatedParent}}"
+                                     FontFamily="{Binding ItemSource.CellStyle.FontFamily, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource FontFamilyNameConverter}}"
+                                     FontWeight="{Binding ItemSource.CellStyle.IsBold, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource FontWeightBoldConverter}}"
+                                     Foreground="{Binding ItemSource.CellStyle.Foreground, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource ColorStringToSolidColorBrushConverter}}"
+                                     Classes="focusCell"
+                                     />
+                        </Panel>
                     </Border>
                 </Panel>
             </ControlTemplate>
